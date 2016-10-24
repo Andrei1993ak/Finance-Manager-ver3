@@ -12,7 +12,7 @@
         android:layout_marginBottom="10dp">
 
         <Button
-            android:id="@+id/buttona_add_edit_income_category"
+            android:id="@+id/button_add_edit_category"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -24,7 +24,7 @@
             android:textSize="40sp" />
 
         <TextView
-            android:id="@+id/title_income_category"
+            android:id="@+id/title_category"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"

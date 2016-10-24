@@ -22,4 +22,6 @@
     <string name="parent">Родитель</string>
     <string name="edit">Редактировать</string>
     <string name="add_button_text">+</string>
+    <string name="costCategories">Категории расходов</string>
+    <string name="edit_button_text"></string>
 </resources>

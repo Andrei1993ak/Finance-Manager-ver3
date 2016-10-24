@@ -77,7 +77,7 @@ public class DBHelperCategoryIncome implements DBHelperPojo<IncomeCategory> {
     public int delete(long id) {
         int result = 0;
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        if (get(id).getParent_id()==-1);
+        if (get(id).getParent_id()==-1)
             result = deleteAllByParentId(id);
         return db.delete(DBHelper.TABLE_INCOME_CATEGORIES, DBHelper.INCOME_CATEGORY_KEY_ID + "=?", new String[] {String.valueOf(id)})+result;
     }
@@ -118,7 +118,7 @@ public class DBHelperCategoryIncome implements DBHelperPojo<IncomeCategory> {
         return db.rawQuery(selectQuery,null);
     }
 
-    public List<IncomeCategory> getAlltoListByParentId(long id) {
+    public List<IncomeCategory> getAllToListByParentId(long id) {
         List<IncomeCategory> list = new ArrayList<>();
         String selectQuery = "SELECT * FROM " + DBHelper.TABLE_INCOME_CATEGORIES + " WHERE " + DBHelper.INCOME_CATEGORY_KEY_PARENT_ID + " = " + id ;
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -136,17 +136,4 @@ public class DBHelperCategoryIncome implements DBHelperPojo<IncomeCategory> {
         return list;
     }
 
-    //    public int getIdByName(String s) {
-//        SQLiteDatabase db = dbHelper.getReadableDatabase();
-//        String selectQuery = "SELECT * FROM " + DBHelper.TABLE_INCOME_PARENTS_CATEGORY + " WHERE "
-//                + DBHelper.INCOME_PARENTS_CATEGORY_KEY_NAME + " = '" + s +"'";
-//        Cursor cursor = db.rawQuery(selectQuery, null);
-//        if (cursor != null)
-//            cursor.moveToFirst();
-//        else
-//            return -1;
-//        int id = cursor.getInt(0);
-//        cursor.close();
-//        return id;
-//    }
 }

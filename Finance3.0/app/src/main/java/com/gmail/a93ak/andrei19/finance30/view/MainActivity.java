@@ -15,7 +15,7 @@ import com.gmail.a93ak.andrei19.finance30.R;
 import com.gmail.a93ak.andrei19.finance30.control.ItemsTouchHeplers.RecViewPursesSwissHelper;
 import com.gmail.a93ak.andrei19.finance30.control.Loaders.PurseCursorLoader;
 import com.gmail.a93ak.andrei19.finance30.control.adapters.PursesRecycleViewAdapter;
-import com.gmail.a93ak.andrei19.finance30.view.Activities.CategoryActivity;
+import com.gmail.a93ak.andrei19.finance30.view.Activities.CategoryStartingActivity;
 import com.gmail.a93ak.andrei19.finance30.view.Activities.CurrencyActivity;
 import com.gmail.a93ak.andrei19.finance30.view.Activities.PurseActivity;
 
@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 startActivity(new Intent(this, PurseActivity.class));
                 break;
             case R.id.tvCategories:
-                startActivity(new Intent(this, CategoryActivity.class));
+                startActivity(new Intent(this, CategoryStartingActivity.class));
                 break;
         }
     }

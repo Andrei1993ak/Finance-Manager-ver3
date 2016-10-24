@@ -22,10 +22,14 @@
         <activity android:name=".view.Activities.PurseActivity"/>
         <activity android:name=".view.addEditActivities.PurseAddActivity"/>
         <activity android:name=".view.addEditActivities.PurseEditActivity"/>
-        <activity android:name=".view.Activities.CategoryActivity"/>
-        <activity android:name=".view.Activities.IncomeCategoryActivity"/>
+        <activity android:name=".view.Activities.CategoryStartingActivity"/>
+        <activity android:name=".view.Activities.CategoryIncomeActivity"/>
+        <activity android:name=".view.Activities.CategryCostActivity"/>
         <activity android:name=".view.addEditActivities.IncomeCategoryAddActivity"/>
+        <activity android:name=".view.addEditActivities.CostCategoryAddActivity"/>
         <activity android:name=".view.addEditActivities.IncomeCategoryEditActivity"/>
+        <activity android:name=".view.addEditActivities.CostCategoryEditActivity"/>
+
 
 
     </application>

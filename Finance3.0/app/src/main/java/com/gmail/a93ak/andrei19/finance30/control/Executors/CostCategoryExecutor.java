@@ -6,35 +6,36 @@ import com.gmail.a93ak.andrei19.finance30.control.base.OnTaskCompleted;
 import com.gmail.a93ak.andrei19.finance30.control.base.PojoExecutor;
 import com.gmail.a93ak.andrei19.finance30.control.base.Result;
 import com.gmail.a93ak.andrei19.finance30.model.base.DBHelper;
-import com.gmail.a93ak.andrei19.finance30.model.dbhelpers.DBHelperCategoryIncome;
-import com.gmail.a93ak.andrei19.finance30.model.pojos.IncomeCategory;
+import com.gmail.a93ak.andrei19.finance30.model.dbhelpers.DBHelperCategoryCost;
+import com.gmail.a93ak.andrei19.finance30.model.pojos.CostCategory;
+
 
 import java.util.List;
 
-public class IncomeCategoryExecutor extends PojoExecutor<IncomeCategory> {
+public class CostCategoryExecutor extends PojoExecutor<CostCategory> {
 
-    public static final int KEY_RESULT_ADD = 401;
-    public static final int KEY_RESULT_EDIT = 402;
-    public static final int KEY_RESULT_DELETE = 403;
-    public static final int KEY_RESULT_GET = 404;
-    public static final int KEY_RESULT_GET_ALL = 405;
-    public static final int KEY_RESULT_DELETE_ALL = 406;
-    public static final int KEY_RESULT_GET_ALL_TO_LIST = 407;
+    public static final int KEY_RESULT_ADD = 501;
+    public static final int KEY_RESULT_EDIT = 502;
+    public static final int KEY_RESULT_DELETE = 503;
+    public static final int KEY_RESULT_GET = 504;
+    public static final int KEY_RESULT_GET_ALL = 505;
+    public static final int KEY_RESULT_DELETE_ALL = 506;
+    public static final int KEY_RESULT_GET_ALL_TO_LIST = 507;
 
-    private DBHelperCategoryIncome dbHelper = DBHelperCategoryIncome.getInstance(DBHelper.getInstance(context));
+    private DBHelperCategoryCost dbHelper = DBHelperCategoryCost.getInstance(DBHelper.getInstance(context));
 
-    public IncomeCategoryExecutor(OnTaskCompleted listener) {
+    public CostCategoryExecutor(OnTaskCompleted listener) {
         super(listener);
     }
 
     @Override
-    public Result<IncomeCategory> getPojo(long id) {
+    public Result<CostCategory> getPojo(long id) {
         return new Result<>(KEY_RESULT_GET, dbHelper.get(id));
     }
 
     @Override
-    public Result<Long> addPojo(IncomeCategory incomeCategory) {
-        return new Result<>(KEY_RESULT_ADD, dbHelper.add(incomeCategory));
+    public Result<Long> addPojo(CostCategory costCategory) {
+        return new Result<>(KEY_RESULT_ADD, dbHelper.add(costCategory));
     }
 
     @Override
@@ -43,8 +44,8 @@ public class IncomeCategoryExecutor extends PojoExecutor<IncomeCategory> {
     }
 
     @Override
-    public Result<Integer> updatePojo(IncomeCategory incomeCategory) {
-        return new Result<>(KEY_RESULT_EDIT, dbHelper.update(incomeCategory));
+    public Result<Integer> updatePojo(CostCategory costCategory) {
+        return new Result<>(KEY_RESULT_EDIT, dbHelper.update(costCategory));
     }
 
     @Override
@@ -58,7 +59,7 @@ public class IncomeCategoryExecutor extends PojoExecutor<IncomeCategory> {
     }
 
     @Override
-    public Result<List<IncomeCategory>> getAllToList(int selection) {
+    public Result<List<CostCategory>> getAllToList(int selection) {
         if (selection == 0) {
 //            all categories
             return new Result<>(KEY_RESULT_GET_ALL_TO_LIST, dbHelper.getAllToList());

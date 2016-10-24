@@ -11,20 +11,20 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.gmail.a93ak.andrei19.finance30.R;
-import com.gmail.a93ak.andrei19.finance30.control.Executors.IncomeCategoryExecutor;
+import com.gmail.a93ak.andrei19.finance30.control.Executors.CostCategoryExecutor;
 import com.gmail.a93ak.andrei19.finance30.control.base.OnTaskCompleted;
 import com.gmail.a93ak.andrei19.finance30.control.base.RequestHolder;
 import com.gmail.a93ak.andrei19.finance30.control.base.Result;
 import com.gmail.a93ak.andrei19.finance30.model.base.DBHelper;
-import com.gmail.a93ak.andrei19.finance30.model.pojos.IncomeCategory;
+import com.gmail.a93ak.andrei19.finance30.model.pojos.CostCategory;
 
 import java.util.List;
 
-public class IncomeCategoryAddActivity extends AppCompatActivity implements OnTaskCompleted {
+public class CostCategoryAddActivity extends AppCompatActivity implements OnTaskCompleted {
 
     private EditText newCategoryName;
     private AppCompatSpinner parentCategories;
-    private List<IncomeCategory> parentsList;
+    private List<CostCategory> parentsList;
     private ArrayAdapter<String> spinnerAdapter;
 
     @Override
@@ -34,9 +34,9 @@ public class IncomeCategoryAddActivity extends AppCompatActivity implements OnTa
         newCategoryName = (EditText) findViewById(R.id.add_edit_category_name);
         parentCategories = (AppCompatSpinner) findViewById(R.id.spinnerParentCategories);
         ((Button)findViewById(R.id.button_add_edit_category)).setText(R.string.add_button_text);
-        RequestHolder<IncomeCategory> requestHolder = new RequestHolder<>();
+        RequestHolder<CostCategory> requestHolder = new RequestHolder<>();
         requestHolder.setGetAllToListRequest(1);
-        new IncomeCategoryExecutor(this).execute(requestHolder.getGetAllToListRequest());
+        new CostCategoryExecutor(this).execute(requestHolder.getGetAllToListRequest());
     }
 
     public void addEditCategory(View view) {
@@ -47,11 +47,11 @@ public class IncomeCategoryAddActivity extends AppCompatActivity implements OnTa
         } else {
             if (spinnerAdapter != null) {
                 Intent intent = new Intent();
-                intent.putExtra(DBHelper.INCOME_CATEGORY_KEY_NAME, name);
+                intent.putExtra(DBHelper.COST_CATEGORY_KEY_NAME, name);
                 if (parentCategories.getSelectedItemPosition() == spinnerAdapter.getCount() - 1) {
-                    intent.putExtra(DBHelper.INCOME_CATEGORY_KEY_PARENT_ID, -1L);
+                    intent.putExtra(DBHelper.COST_CATEGORY_KEY_PARENT_ID, -1L);
                 } else {
-                    intent.putExtra(DBHelper.INCOME_CATEGORY_KEY_PARENT_ID,parentsList.get(parentCategories.getSelectedItemPosition()).getId());
+                    intent.putExtra(DBHelper.COST_CATEGORY_KEY_PARENT_ID,parentsList.get(parentCategories.getSelectedItemPosition()).getId());
                 }
                 setResult(RESULT_OK, intent);
                 finish();
@@ -62,12 +62,12 @@ public class IncomeCategoryAddActivity extends AppCompatActivity implements OnTa
     @Override
     public void onTaskCompleted(Result result) {
         switch (result.getId()) {
-            case IncomeCategoryExecutor.KEY_RESULT_GET_ALL_TO_LIST:
-                parentsList = (List<IncomeCategory>) result.getT();
+            case CostCategoryExecutor.KEY_RESULT_GET_ALL_TO_LIST:
+                parentsList = (List<CostCategory>) result.getT();
                 String[] names = new String[parentsList.size() + 1];
                 int i = 0;
-                for (IncomeCategory incomeCategory : parentsList) {
-                    names[i++] = incomeCategory.getName();
+                for (CostCategory costCategory : parentsList) {
+                    names[i++] = costCategory.getName();
                 }
                 names[i] = "-";
                 spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, names);
