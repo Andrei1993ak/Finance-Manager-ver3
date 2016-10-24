@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.gmail.a93ak.andrei19.finance30">
+
+    <application
+        android:name=".App"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".view.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".view.Activities.CurrencyActivity" />
+        <activity android:name=".view.addEditActivities.CurrencyAddActivity" />
+        <activity android:name=".view.addEditActivities.CurrencyEditActivity" />
+        <activity android:name=".view.Activities.PurseActivity"/>
+        <activity android:name=".view.addEditActivities.PurseAddActivity"/>
+        <activity android:name=".view.addEditActivities.PurseEditActivity"/>
+        <activity android:name=".view.Activities.CategoryActivity"/>
+        <activity android:name=".view.Activities.IncomeCategoryActivity"/>
+        <activity android:name=".view.addEditActivities.IncomeCategoryAddActivity"/>
+        <activity android:name=".view.addEditActivities.IncomeCategoryEditActivity"/>
+
+
+    </application>
+
+</manifest>

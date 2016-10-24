@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Финансовфй менеджер</string>
+    <string name="currencies">Валюты</string>
+    <string name="delete">Удалить</string>
+    <string name="rename">Переименовать</string>
+    <string name="name">Имя</string>
+    <string name="code">Код</string>
+    <string name="editing">Редактирование</string>
+    <string name="purses">Кошельки</string>
+    <string name="incomes">Доходы</string>
+    <string name="costs">Расходы</string>
+    <string name="transfers">Переводы</string>
+    <string name="reports">Отчёты</string>
+    <string name="categories">Категории</string>
+    <string name="settings">Настройки</string>
+    <string name="newPurse">Новый кошелек</string>
+    <string name="amount">Баланс</string>
+    <string name="currency">Валюта</string>
+    <string name="incomeCategories">Категории доходов</string>
+    <string name="newCategory">Новая категория</string>
+    <string name="parent">Родитель</string>
+    <string name="edit">Редактировать</string>
+    <string name="add_button_text">+</string>
+</resources>
