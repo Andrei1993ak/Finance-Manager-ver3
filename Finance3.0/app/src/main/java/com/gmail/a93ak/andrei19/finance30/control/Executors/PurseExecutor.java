@@ -10,7 +10,7 @@ import com.gmail.a93ak.andrei19.finance30.model.dbhelpers.DBHelperPurse;
 import com.gmail.a93ak.andrei19.finance30.model.pojos.Purse;
 
 import java.util.List;
-
+//
 public class PurseExecutor extends PojoExecutor<Purse> {
 
     public static final int KEY_RESULT_ADD = 301;

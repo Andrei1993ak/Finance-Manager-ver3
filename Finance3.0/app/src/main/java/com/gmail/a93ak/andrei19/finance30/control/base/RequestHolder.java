@@ -1,7 +1,7 @@
 package com.gmail.a93ak.andrei19.finance30.control.base;
 
 public class RequestHolder<Pojo> {
-
+//
     private static final int KEY_ADD = 1;
     private static final int KEY_EDIT = 2;
     private static final int KEY_DELETE = 3;

@@ -1,6 +1,7 @@
 package com.gmail.a93ak.andrei19.finance30.control.base;
 
 public class Request {
+//
     private int id;
     private Object o;
 

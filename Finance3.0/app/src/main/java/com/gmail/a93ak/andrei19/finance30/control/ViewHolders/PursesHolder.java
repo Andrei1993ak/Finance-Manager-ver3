@@ -7,7 +7,7 @@ import android.widget.TextView;
 import com.gmail.a93ak.andrei19.finance30.R;
 
 public class PursesHolder extends RecyclerView.ViewHolder{
-
+//
     public TextView purseName;
     public TextView purseAmount;
     public TextView purseCurrency;

@@ -1,6 +1,5 @@
 package com.gmail.a93ak.andrei19.finance30.model.pojos;
 
-
 public class Purse {
     private long id;
     private String name;

@@ -12,7 +12,6 @@ import com.gmail.a93ak.andrei19.finance30.model.pojos.Purse;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class DBHelperPurse implements DBHelperPojo<Purse> {
 
     public static final String CURRENCY_NAME = "currency";

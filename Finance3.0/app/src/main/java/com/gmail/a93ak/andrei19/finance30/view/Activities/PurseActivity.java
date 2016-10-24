@@ -28,13 +28,12 @@ import com.gmail.a93ak.andrei19.finance30.view.addEditActivities.PurseAddActivit
 import com.gmail.a93ak.andrei19.finance30.view.addEditActivities.PurseEditActivity;
 
 public class PurseActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, OnTaskCompleted {
-
+//
     private static final int CM_EDIT_ID = 1;
     private static final int CM_DELETE_ID = 2;
 
     private static final int ADD_PURSE_REQUEST = 1;
     private static final int EDIT_PURSE_REQUEST = 2;
-
 
     private SimpleCursorAdapter simpleCursorAdapter;
     private RequestHolder<Purse> requestHolder;
@@ -51,7 +50,6 @@ public class PurseActivity extends AppCompatActivity implements LoaderManager.Lo
         purseListVIew.setAdapter(simpleCursorAdapter);
         registerForContextMenu(purseListVIew);
         getSupportLoaderManager().initLoader(0, null, this);
-        //TODO Добавить loader, executor, оформить listView и т.д. помнить про курсор
     }
 
     public void addPurse(View view) {

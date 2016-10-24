@@ -8,6 +8,7 @@ import com.gmail.a93ak.andrei19.finance30.model.base.DBHelper;
 import com.gmail.a93ak.andrei19.finance30.model.dbhelpers.DBHelperPurse;
 
 public class PurseCursorLoader extends CursorLoader{
+//
     private DBHelperPurse dbHelperPurse;
 
     public PurseCursorLoader(Context context) {

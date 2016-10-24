@@ -11,7 +11,7 @@ import com.gmail.a93ak.andrei19.finance30.util.ContextHolder;
 import java.util.List;
 
 public abstract class PojoExecutor<Pojo> extends AsyncTask<Request, Void, Result> {
-
+//
     private static final int KEY_ADD = 1;
     private static final int KEY_EDIT = 2;
     private static final int KEY_DELETE = 3;
@@ -70,7 +70,6 @@ public abstract class PojoExecutor<Pojo> extends AsyncTask<Request, Void, Result
     abstract public Result<Integer> deleteAll();
 
     abstract public Result<List<Pojo>> getAllToList(int selection);
-
 
     protected void onPostExecute(Result result) {
         if (listener != null)
