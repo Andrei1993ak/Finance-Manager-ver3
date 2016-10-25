@@ -9,9 +9,9 @@ import com.gmail.a93ak.andrei19.finance30.util.UniversalLoader.Loaders.BitmapLoa
 public class App extends Application {
     private BitmapLoader bitmapLoader;
 
-    public BitmapLoader getBitmapLoader(){
-        if (bitmapLoader==null){
-            bitmapLoader=new BitmapLoader(this);
+    public BitmapLoader getBitmapLoader() {
+        if (bitmapLoader == null) {
+            bitmapLoader = new BitmapLoader(this);
         }
         return bitmapLoader;
     }

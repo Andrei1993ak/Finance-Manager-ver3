@@ -34,14 +34,14 @@ public class ImagesActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.images_activity);
-        final BitmapLoader bitmapLoader = ((App)getApplication()).getBitmapLoader();
+        final BitmapLoader bitmapLoader = ((App) getApplication()).getBitmapLoader();
         final ListView listView = (ListView) findViewById(R.id.m_list);
         listView.setAdapter(new ArrayAdapter<String>(this, R.layout.adapter_image, R.id.m_text, IMAGE_URLS) {
             @Override
             public View getView(final int position, final View convertView, final ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);
                 ImageView imageView = (ImageView) view.findViewById(R.id.m_image);
-                bitmapLoader.load(IMAGE_URLS[position],imageView);
+                bitmapLoader.load(IMAGE_URLS[position], imageView);
                 return view;
             }
         });

@@ -55,7 +55,7 @@ abstract class MemoryCache<MyObj> {
         }
     }
 
-   void clear() {
+    void clear() {
         try {
             cache.clear();
             size = 0;
