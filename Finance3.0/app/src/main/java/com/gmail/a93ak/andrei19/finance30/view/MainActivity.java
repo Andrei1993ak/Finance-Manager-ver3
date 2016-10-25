@@ -17,6 +17,7 @@ import com.gmail.a93ak.andrei19.finance30.control.Loaders.PurseCursorLoader;
 import com.gmail.a93ak.andrei19.finance30.control.adapters.PursesRecycleViewAdapter;
 import com.gmail.a93ak.andrei19.finance30.view.Activities.CategoryStartingActivity;
 import com.gmail.a93ak.andrei19.finance30.view.Activities.CurrencyActivity;
+import com.gmail.a93ak.andrei19.finance30.view.Activities.ImagesActivity;
 import com.gmail.a93ak.andrei19.finance30.view.Activities.PurseActivity;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -55,6 +56,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             case R.id.tvCategories:
                 startActivity(new Intent(this, CategoryStartingActivity.class));
                 break;
+            case R.id.tvSettings:
+                startActivity(new Intent(this, ImagesActivity.class));
         }
     }
 
