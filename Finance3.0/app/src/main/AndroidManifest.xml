@@ -34,6 +34,7 @@
         <activity android:name=".view.addEditActivities.CostCategoryEditActivity"/>
         <activity android:name=".view.Activities.ImagesActivity"/>
         <activity android:name=".view.Activities.IncomeActivity"/>
+        <activity android:name=".view.addEditActivities.IncomeAddActivity"/>
 
 
 

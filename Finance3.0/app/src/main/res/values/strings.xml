@@ -23,4 +23,9 @@
     <string name="edit_button_text">"\u2714"</string>
     <string name="add_button_text">+</string>
     <string name="costCategories">Cost Categories</string>
+    <string name="newIncome">new income</string>
+    <string name="purse">purse</string>
+    <string name="date">date</string>
+    <string name="subCategory">sub Category</string>
+    <string name="category">Category</string>
 </resources>
