@@ -36,6 +36,14 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String COST_CATEGORY_KEY_NAME = "name";
     public static final String COST_CATEGORY_KEY_PARENT_ID = "parent_id";
 
+    public static final String TABLE_INCOMES = "incomes";
+    public static final String INCOME_KEY_ID = "_id";
+    public static final String INCOME_KEY_NAME = "name";
+    public static final String INCOME_KEY_PURSE_ID = "purse_id";
+    public static final String INCOME_KEY_AMOUNT = "amount";
+    public static final String INCOME_KEY_CATEGORY_ID = "category_id";
+    public static final String INCOME_KEY_DATE = "date";
+
 //    public static final String TABLE_TRANSFERS = "transfers";
 //    public static final String TRANSFER_KEY_ID = "_id";
 //    public static final String TRANSFER_KEY_NAME = "name";
@@ -45,14 +53,6 @@ public class DBHelper extends SQLiteOpenHelper {
 //    public static final String TRANSFER_KEY_FROM_AMOUNT = "fromAmount";
 //    public static final String TRANSFER_KEY_TO_AMOUNT = "toAmount";
 //
-//    public static final String TABLE_INCOMES = "incomes";
-//    public static final String INCOME_KEY_ID = "_id";
-//    public static final String INCOME_KEY_NAME = "name";
-//    public static final String INCOME_KEY_PURSE_ID = "purse_id";
-//    public static final String INCOME_KEY_AMOUNT = "amount";
-//    public static final String INCOME_KEY_CATEGORY_ID = "category_id";
-//    public static final String INCOME_KEY_PARENT_CATEGORY_ID = "parent_category_id";
-//    public static final String INCOME_KEY_DATE = "date";
 
 
     private static DBHelper instance;
@@ -92,6 +92,11 @@ public class DBHelper extends SQLiteOpenHelper {
                 + COST_CATEGORY_KEY_ID + " INTEGER PRIMARY KEY, " + COST_CATEGORY_KEY_NAME + " TEXT,"
                 + COST_CATEGORY_KEY_PARENT_ID + " INTEGER" + ")";
 
+        String CREATE_INCOMES_TABLE = "CREATE TABLE " + TABLE_INCOMES + " ("
+                + INCOME_KEY_ID + " INTEGER PRIMARY KEY, " + INCOME_KEY_NAME + " TEXT, "
+                + INCOME_KEY_PURSE_ID + " INTEGER, " + INCOME_KEY_AMOUNT + " REAL, "
+                + INCOME_KEY_CATEGORY_ID + " INTEGER, " + INCOME_KEY_DATE + " INTEGER" + ")";
+
 //
 //        String CREATE_TRANSFER_TABLE = "CREATE TABLE " + TABLE_TRANSFERS + " ("
 //                + TRANSFER_KEY_ID + " INTEGER PRIMARY KEY, " + TRANSFER_KEY_NAME + " TEXT, "
@@ -99,19 +104,14 @@ public class DBHelper extends SQLiteOpenHelper {
 //                + TRANSFER_KEY_TO_PURSE + " INTEGER, " + TRANSFER_KEY_FROM_AMOUNT + " INTEGER, "
 //                + TRANSFER_KEY_TO_AMOUNT + " INTEGER" + ")";
 //
-//        String CREATE_INCOME_TABLE = "CREATE TABLE " + TABLE_INCOMES + " ("
-//                + INCOME_KEY_ID + " INTEGER PRIMARY KEY, " + INCOME_KEY_NAME + " TEXT, "
-//                + INCOME_KEY_PURSE_ID + " INTEGER, " + INCOME_KEY_AMOUNT + " REAL, "
-//                + INCOME_KEY_CATEGORY_ID + " INTEGER, " + INCOME_KEY_PARENT_CATEGORY_ID + " INTEGER, "
-//                + INCOME_KEY_DATE + " INTEGER" + ")";
 
 
 //        sqLiteDatabase.execSQL(CREATE_CURRENCIES_TABLE);
 //        sqLiteDatabase.execSQL(CREATE_CURRENCIES_FROM_WEB_TABLE);
 //        sqLiteDatabase.execSQL(CREATE_PURSES_TABLE);
 //        sqLiteDatabase.execSQL(CREATE_INCOME_CATEGORIES_TABLE);
-        sqLiteDatabase.execSQL(CREATE_COST_CATEGORIES_TABLE);
-
+//        sqLiteDatabase.execSQL(CREATE_COST_CATEGORIES_TABLE);
+        sqLiteDatabase.execSQL(CREATE_INCOMES_TABLE);
 //            sqLiteDatabase.execSQL(CREATE_TRANSFER_TABLE);
 
     }
