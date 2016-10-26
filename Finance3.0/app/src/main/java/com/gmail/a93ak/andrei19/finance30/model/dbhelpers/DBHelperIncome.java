@@ -8,6 +8,7 @@ import com.gmail.a93ak.andrei19.finance30.model.base.DBHelper;
 import com.gmail.a93ak.andrei19.finance30.model.base.DBHelperPojo;
 import com.gmail.a93ak.andrei19.finance30.model.pojos.Income;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -53,7 +54,7 @@ public class DBHelperIncome implements DBHelperPojo<Income> {
             income.setPurse_id(cursor.getLong(2));
             income.setAmount(cursor.getDouble(3));
             income.setCategory_id(cursor.getLong(4));
-            income.setDate(cursor.getLong(6));
+            income.setDate(cursor.getLong(5));
             cursor.close();
             return income;
         } else {
@@ -103,6 +104,27 @@ public class DBHelperIncome implements DBHelperPojo<Income> {
     @Override
     public int deleteAll() {
         return 0;
+    }
+
+    public List<Income> getAllToList() {
+        List<Income> incomeList = new ArrayList<Income>();
+        String selectQuery = "SELECT * FROM " + DBHelper.TABLE_INCOMES;
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if (cursor.moveToFirst()) {
+            do {
+                Income income = new Income();
+                income.setId(cursor.getLong(0));
+                income.setName(cursor.getString(1));
+                income.setPurse_id(cursor.getLong(2));
+                income.setAmount(cursor.getDouble(3));
+                income.setCategory_id(cursor.getLong(4));
+                income.setDate(cursor.getLong(5));
+                incomeList.add(income);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return incomeList;
     }
 
     public List<Income> getAllToListByCategoryId(long id){

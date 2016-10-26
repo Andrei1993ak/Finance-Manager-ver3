@@ -8,7 +8,7 @@ public class DBHelper extends SQLiteOpenHelper {
 //
     private static final String DATABASE_NAME = "financePm";
 
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 6;
 
     public static final String TABLE_CURRENCIES = "currencies";
     public static final String CURRENCY_KEY_ID = "_id";

@@ -115,7 +115,7 @@ public class DBHelperPurse implements DBHelperPojo<Purse> {
         if (cursor.moveToFirst()) {
             do {
                 Purse purse = new Purse();
-                purse.setId(cursor.getInt(0));
+                purse.setId(cursor.getLong(0));
                 purse.setName(cursor.getString(1));
                 purse.setCurrency_id(cursor.getLong(2));
                 purse.setAmount(cursor.getDouble(3));
