@@ -20,6 +20,7 @@ public class IncomeCategoryExecutor extends PojoExecutor<IncomeCategory> {
     public static final int KEY_RESULT_GET_ALL = 405;
     public static final int KEY_RESULT_DELETE_ALL = 406;
     public static final int KEY_RESULT_GET_ALL_TO_LIST = 407;
+    public static final int KEY_RESULT_GET_ALL_TO_LIST_BY_PARENT_ID = 408;
 
     private DBHelperCategoryIncome dbHelper = DBHelperCategoryIncome.getInstance(DBHelper.getInstance(context));
 
@@ -67,5 +68,10 @@ public class IncomeCategoryExecutor extends PojoExecutor<IncomeCategory> {
             return new Result<>(KEY_RESULT_GET_ALL_TO_LIST, dbHelper.getAllToListByParentId(-1));
         }
             else return null;
+    }
+
+    @Override
+    protected Result<List<IncomeCategory>> getAllToListByCategoryId(Long id) {
+        return new Result<>(KEY_RESULT_GET_ALL_TO_LIST_BY_PARENT_ID,dbHelper.getAllToListByParentId(id));
     }
 }

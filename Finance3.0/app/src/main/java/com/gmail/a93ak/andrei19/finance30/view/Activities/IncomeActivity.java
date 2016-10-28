@@ -21,10 +21,12 @@ import com.gmail.a93ak.andrei19.finance30.control.adapters.IncomeCursorAdapter;
 import com.gmail.a93ak.andrei19.finance30.control.base.OnTaskCompleted;
 import com.gmail.a93ak.andrei19.finance30.control.base.RequestHolder;
 import com.gmail.a93ak.andrei19.finance30.control.base.Result;
+import com.gmail.a93ak.andrei19.finance30.model.base.DBHelper;
 import com.gmail.a93ak.andrei19.finance30.model.pojos.Income;
 import com.gmail.a93ak.andrei19.finance30.view.addEditActivities.IncomeAddActivity;
+import com.gmail.a93ak.andrei19.finance30.view.addEditActivities.IncomeEditActivity;
 
-public class IncomeActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, OnTaskCompleted{
+public class IncomeActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, OnTaskCompleted {
 
     private static final int CM_EDIT_ID = 1;
     private static final int CM_DELETE_ID = 2;
@@ -63,10 +65,10 @@ public class IncomeActivity extends AppCompatActivity implements LoaderManager.L
                 new IncomeExecutor(this).execute(requestHolder.getDeleteRequest());
                 break;
             case CM_EDIT_ID:
-//                Intent intent = new Intent(this, PurseEditActivity.class);
-//                intent.putExtra(DBHelper.PURSES_KEY_ID, info.id);
-//                startActivityForResult(intent, EDIT_PURSE_REQUEST);
-//                break;
+                Intent intent = new Intent(this, IncomeEditActivity.class);
+                intent.putExtra(DBHelper.INCOME_KEY_ID, info.id);
+                startActivityForResult(intent, EDIT_INCOME_REQUEST);
+                break;
         }
         return super.onContextItemSelected(item);
     }
@@ -76,21 +78,27 @@ public class IncomeActivity extends AppCompatActivity implements LoaderManager.L
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case ADD_INCOME_REQUEST:
-//                    Purse newPurse = new Purse();
-//                    newPurse.setName(data.getStringExtra(DBHelper.PURSES_KEY_NAME));
-//                    newPurse.setAmount(data.getDoubleExtra(DBHelper.PURSES_KEY_AMOUNT, -1.0));
-//                    newPurse.setCurrency_id(data.getLongExtra(DBHelper.PURSES_KEY_CURRENCY_ID, -1));
-//                    requestHolder.setAddRequest(newPurse);
-//                    new PurseExecutor(this).execute(requestHolder.getAddRequest());
+                    Income newIncome = new Income();
+                    newIncome.setName(data.getStringExtra(DBHelper.INCOME_KEY_NAME));
+                    newIncome.setDate(data.getLongExtra(DBHelper.INCOME_KEY_DATE, -1L));
+                    newIncome.setAmount(data.getDoubleExtra(DBHelper.INCOME_KEY_AMOUNT, -1.0));
+                    newIncome.setPurse_id(data.getLongExtra(DBHelper.INCOME_KEY_PURSE_ID, -1));
+                    newIncome.setCategory_id(data.getLongExtra(DBHelper.INCOME_KEY_CATEGORY_ID, -1L));
+                    RequestHolder<Income> requestHolder = new RequestHolder<>();
+                    requestHolder.setAddRequest(newIncome);
+                    new IncomeExecutor(this).execute(requestHolder.getAddRequest());
                     break;
                 case EDIT_INCOME_REQUEST:
-//                    Purse editPurse = new Purse();
-//                    editPurse.setId(data.getLongExtra(DBHelper.PURSES_KEY_ID, -1));
-//                    editPurse.setName(data.getStringExtra(DBHelper.PURSES_KEY_NAME));
-//                    editPurse.setAmount(data.getDoubleExtra(DBHelper.PURSES_KEY_AMOUNT, -1.0));
-//                    editPurse.setCurrency_id(data.getLongExtra(DBHelper.PURSES_KEY_CURRENCY_ID, -1));
-//                    requestHolder.setEditRequest(editPurse);
-//                    new PurseExecutor(this).execute(requestHolder.getEditRequest());
+                    Income editIncome = new Income();
+                    editIncome.setId(data.getLongExtra(DBHelper.INCOME_KEY_ID, -1L));
+                    editIncome.setName(data.getStringExtra(DBHelper.INCOME_KEY_NAME));
+                    editIncome.setDate(data.getLongExtra(DBHelper.INCOME_KEY_DATE, -1L));
+                    editIncome.setAmount(data.getDoubleExtra(DBHelper.INCOME_KEY_AMOUNT, -1.0));
+                    editIncome.setPurse_id(data.getLongExtra(DBHelper.INCOME_KEY_PURSE_ID, -1));
+                    editIncome.setCategory_id(data.getLongExtra(DBHelper.INCOME_KEY_CATEGORY_ID, -1L));
+                    requestHolder = new RequestHolder<>();
+                    requestHolder.setEditRequest(editIncome);
+                    new IncomeExecutor(this).execute(requestHolder.getEditRequest());
                     break;
                 default:
                     break;
@@ -141,13 +149,5 @@ public class IncomeActivity extends AppCompatActivity implements LoaderManager.L
     public void addIncome(View view) {
         Intent intent = new Intent(this, IncomeAddActivity.class);
         startActivityForResult(intent, ADD_INCOME_REQUEST);
-//        Income income = new Income();
-//        income.setName("Зарплата июнь");
-//        income.setDate(1476835200000L);
-//        income.setAmount(1000.50);
-//        income.setPurse_id(1);
-//        income.setCategory_id(6);
-//        DBHelperIncome.getInstance(DBHelper.getInstance(this)).add(income);
-//        getSupportLoaderManager().getLoader(0).forceLoad();
     }
 }

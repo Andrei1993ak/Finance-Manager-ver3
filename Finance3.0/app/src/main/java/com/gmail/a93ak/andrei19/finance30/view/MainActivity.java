@@ -23,7 +23,7 @@ import com.gmail.a93ak.andrei19.finance30.view.Activities.IncomeActivity;
 import com.gmail.a93ak.andrei19.finance30.view.Activities.PurseActivity;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
-
+//TODO исправить баг с редатированием суммы дохода
     public static final int LOADER_ID = 0;
     private RecyclerView recyclerView;
     PursesRecycleViewAdapter adapter;

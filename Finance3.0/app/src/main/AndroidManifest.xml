@@ -35,6 +35,7 @@
         <activity android:name=".view.Activities.ImagesActivity"/>
         <activity android:name=".view.Activities.IncomeActivity"/>
         <activity android:name=".view.addEditActivities.IncomeAddActivity"/>
+        <activity android:name=".view.addEditActivities.IncomeEditActivity"/>
 
 
 
