@@ -22,24 +22,20 @@
         <activity android:name=".view.Activities.CurrencyActivity" />
         <activity android:name=".view.addEditActivities.CurrencyAddActivity" />
         <activity android:name=".view.addEditActivities.CurrencyEditActivity" />
-        <activity android:name=".view.Activities.PurseActivity"/>
-        <activity android:name=".view.addEditActivities.PurseAddActivity"/>
-        <activity android:name=".view.addEditActivities.PurseEditActivity"/>
-        <activity android:name=".view.Activities.CategoryStartingActivity"/>
-        <activity android:name=".view.Activities.CategoryIncomeActivity"/>
-        <activity android:name=".view.Activities.CategryCostActivity"/>
-        <activity android:name=".view.addEditActivities.IncomeCategoryAddActivity"/>
-        <activity android:name=".view.addEditActivities.CostCategoryAddActivity"/>
-        <activity android:name=".view.addEditActivities.IncomeCategoryEditActivity"/>
-        <activity android:name=".view.addEditActivities.CostCategoryEditActivity"/>
-        <activity android:name=".view.Activities.ImagesActivity"/>
-        <activity android:name=".view.Activities.IncomeActivity"/>
-        <activity android:name=".view.addEditActivities.IncomeAddActivity"/>
-        <activity android:name=".view.addEditActivities.IncomeEditActivity"/>
-
-
-
-
+        <activity android:name=".view.Activities.PurseActivity" />
+        <activity android:name=".view.addEditActivities.PurseAddActivity" />
+        <activity android:name=".view.addEditActivities.PurseEditActivity" />
+        <activity android:name=".view.Activities.CategoryStartingActivity" />
+        <activity android:name=".view.Activities.CategoryIncomeActivity" />
+        <activity android:name=".view.Activities.CategryCostActivity" />
+        <activity android:name=".view.addEditActivities.IncomeCategoryAddActivity" />
+        <activity android:name=".view.addEditActivities.CostCategoryAddActivity" />
+        <activity android:name=".view.addEditActivities.IncomeCategoryEditActivity" />
+        <activity android:name=".view.addEditActivities.CostCategoryEditActivity" />
+        <activity android:name=".view.Activities.ImagesActivity" />
+        <activity android:name=".view.Activities.IncomeActivity" />
+        <activity android:name=".view.addEditActivities.IncomeAddActivity" />
+        <activity android:name=".view.addEditActivities.IncomeEditActivity" />
     </application>
 
 </manifest>

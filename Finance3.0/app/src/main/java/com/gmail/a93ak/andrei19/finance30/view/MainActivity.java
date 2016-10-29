@@ -10,8 +10,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
+import android.widget.Toast;
 
 import com.gmail.a93ak.andrei19.finance30.R;
+import com.gmail.a93ak.andrei19.finance30.api.HelloEndpoint;
 import com.gmail.a93ak.andrei19.finance30.control.ItemsTouchHeplers.RecViewPursesSwissHelper;
 import com.gmail.a93ak.andrei19.finance30.control.Loaders.PurseCursorLoader;
 import com.gmail.a93ak.andrei19.finance30.control.adapters.PursesRecycleViewAdapter;
@@ -23,7 +25,7 @@ import com.gmail.a93ak.andrei19.finance30.view.Activities.IncomeActivity;
 import com.gmail.a93ak.andrei19.finance30.view.Activities.PurseActivity;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
-//TODO исправить баг с редатированием суммы дохода
+    //TODO исправить баг с редатированием суммы дохода
     public static final int LOADER_ID = 0;
     private RecyclerView recyclerView;
     PursesRecycleViewAdapter adapter;
@@ -37,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         getSupportLoaderManager().initLoader(LOADER_ID, null, this);
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new RecViewPursesSwissHelper(this, LOADER_ID));
         itemTouchHelper.attachToRecyclerView(recyclerView);
+        new HelloEndpoint().execute(this);
     }
 
     @Override
