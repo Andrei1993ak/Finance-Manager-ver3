@@ -37,9 +37,17 @@ public class DBHelperIncome implements DBHelperPojo<Income> {
         values.put(DBHelper.INCOME_KEY_AMOUNT, income.getAmount());
         values.put(DBHelper.INCOME_KEY_CATEGORY_ID, income.getCategory_id());
         values.put(DBHelper.INCOME_KEY_DATE, income.getDate());
-        DBHelperPurse helperPurse = DBHelperPurse.getInstance(dbHelper);
-        helperPurse.addAmount(income.getPurse_id(), income.getAmount());
-        return db.insert(DBHelper.TABLE_INCOMES, null, values);
+        long id;
+        try {
+            db.beginTransaction();
+            DBHelperPurse helperPurse = DBHelperPurse.getInstance(dbHelper);
+            helperPurse.addAmount(income.getPurse_id(), income.getAmount());
+            id = db.insert(DBHelper.TABLE_INCOMES, null, values);
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+        }
+        return id;
     }
 
     @Override
@@ -80,16 +88,23 @@ public class DBHelperIncome implements DBHelperPojo<Income> {
         values.put(DBHelper.INCOME_KEY_AMOUNT, income.getAmount());
         values.put(DBHelper.INCOME_KEY_CATEGORY_ID, income.getCategory_id());
         values.put(DBHelper.INCOME_KEY_DATE, income.getDate());
-        int result = db.update(DBHelper.TABLE_INCOMES, values, DBHelper.INCOME_KEY_ID + "=?", new String[]{String.valueOf(income.getId())});
-        Income newIncome = get(income.getId());
-        DBHelperPurse helperPurse = DBHelperPurse.getInstance(dbHelper);
-        if (oldIncome.getPurse_id() != newIncome.getPurse_id()) {
-            helperPurse.takeAmount(oldIncome.getPurse_id(), oldIncome.getAmount());
-            helperPurse.addAmount(newIncome.getPurse_id(), newIncome.getAmount());
-        } else if(newIncome.getAmount()!=oldIncome.getAmount()){
-            helperPurse.addAmount(newIncome.getId(),(newIncome.getAmount()-oldIncome.getAmount()));
+        int count;
+        try {
+            db.beginTransaction();
+            count = db.update(DBHelper.TABLE_INCOMES, values, DBHelper.INCOME_KEY_ID + "=?", new String[]{String.valueOf(income.getId())});
+            Income newIncome = get(income.getId());
+            DBHelperPurse helperPurse = DBHelperPurse.getInstance(dbHelper);
+            if (oldIncome.getPurse_id() != newIncome.getPurse_id()) {
+                helperPurse.takeAmount(oldIncome.getPurse_id(), oldIncome.getAmount());
+                helperPurse.addAmount(newIncome.getPurse_id(), newIncome.getAmount());
+            } else if (newIncome.getAmount() != oldIncome.getAmount()) {
+                helperPurse.addAmount(newIncome.getId(), (newIncome.getAmount() - oldIncome.getAmount()));
+            }
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
         }
-        return result;
+        return count;
     }
 
     @Override
@@ -97,13 +112,22 @@ public class DBHelperIncome implements DBHelperPojo<Income> {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         DBHelperPurse helperPurse = DBHelperPurse.getInstance(dbHelper);
         Income income = get(id);
-        helperPurse.takeAmount(income.getPurse_id(),income.getAmount());
-        return db.delete(DBHelper.TABLE_INCOMES, DBHelper.INCOME_KEY_ID + " = " + id,null);
+        int count;
+        try {
+            db.beginTransaction();
+            helperPurse.takeAmount(income.getPurse_id(), income.getAmount());
+            count = db.delete(DBHelper.TABLE_INCOMES, DBHelper.INCOME_KEY_ID + " = " + id, null);
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+        }
+        return count;
     }
 
     @Override
     public int deleteAll() {
-        return 0;
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        return db.delete(DBHelper.TABLE_INCOMES, null, null);
     }
 
     public List<Income> getAllToList() {
@@ -127,15 +151,15 @@ public class DBHelperIncome implements DBHelperPojo<Income> {
         return incomeList;
     }
 
-    public List<Income> getAllToListByCategoryId(long id){
+    public List<Income> getAllToListByCategoryId(long id) {
         return null;
     }
 
-    public List<Income> getAllToListByPurseId(long id){
+    public List<Income> getAllToListByPurseId(long id) {
         return null;
     }
 
-    public List<Income> getAllToListByDates(long from, long to){
+    public List<Income> getAllToListByDates(long from, long to) {
         return null;
     }
 }

@@ -33,7 +33,15 @@ public class DBHelperCurrency implements DBHelperPojo<Currency> {
         ContentValues values = new ContentValues();
         values.put(DBHelper.CURRENCY_KEY_CODE, currency.getCode());
         values.put(DBHelper.CURRENCY_KEY_NAME, currency.getName());
-        return db.insert(DBHelper.TABLE_CURRENCIES, null, values);
+        long id;
+        try {
+            db.beginTransaction();
+            id = db.insert(DBHelper.TABLE_CURRENCIES, null, values);
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+        }
+        return id;
     }
 
     @Override
@@ -102,19 +110,44 @@ public class DBHelperCurrency implements DBHelperPojo<Currency> {
         ContentValues values = new ContentValues();
         values.put(DBHelper.CURRENCY_KEY_CODE, currency.getCode());
         values.put(DBHelper.CURRENCY_KEY_NAME, currency.getName());
-        return db.update(DBHelper.TABLE_CURRENCIES, values, DBHelper.CURRENCY_KEY_ID + "=?", new String[]{String.valueOf(currency.getId())});
+        int count;
+        try {
+            db.beginTransaction();
+            count = db.update(DBHelper.TABLE_CURRENCIES, values, DBHelper.CURRENCY_KEY_ID + "=?", new String[]{String.valueOf(currency.getId())});
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+        }
+        return count;
+
     }
 
     @Override
     public int delete(long id) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        return db.delete(DBHelper.TABLE_CURRENCIES, DBHelper.CURRENCY_KEY_ID + " = " + id, null);
+        int count;
+        try {
+            db.beginTransaction();
+            count = db.delete(DBHelper.TABLE_CURRENCIES, DBHelper.CURRENCY_KEY_ID + " = " + id, null);
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+        }
+        return count;
     }
 
     @Override
     public int deleteAll() {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        return db.delete(DBHelper.TABLE_CURRENCIES, null, null);
+        int count;
+        try {
+            db.beginTransaction();
+            count = db.delete(DBHelper.TABLE_CURRENCIES, null, null);
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+        }
+        return count;
     }
 
 }

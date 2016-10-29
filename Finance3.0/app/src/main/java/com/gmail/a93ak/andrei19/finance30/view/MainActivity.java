@@ -17,6 +17,8 @@ import com.gmail.a93ak.andrei19.finance30.api.HelloEndpoint;
 import com.gmail.a93ak.andrei19.finance30.control.ItemsTouchHeplers.RecViewPursesSwissHelper;
 import com.gmail.a93ak.andrei19.finance30.control.Loaders.PurseCursorLoader;
 import com.gmail.a93ak.andrei19.finance30.control.adapters.PursesRecycleViewAdapter;
+import com.gmail.a93ak.andrei19.finance30.model.base.DBHelper;
+import com.gmail.a93ak.andrei19.finance30.model.dbhelpers.DBHelperIncome;
 import com.gmail.a93ak.andrei19.finance30.model.pojos.IncomeCategory;
 import com.gmail.a93ak.andrei19.finance30.view.Activities.CategoryStartingActivity;
 import com.gmail.a93ak.andrei19.finance30.view.Activities.CurrencyActivity;
@@ -37,9 +39,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         getSupportLoaderManager().initLoader(LOADER_ID, null, this);
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new RecViewPursesSwissHelper(this, LOADER_ID));
-        itemTouchHelper.attachToRecyclerView(recyclerView);
-        new HelloEndpoint().execute(this);
+//        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new RecViewPursesSwissHelper(this, LOADER_ID));
+//        itemTouchHelper.attachToRecyclerView(recyclerView);
+//        new HelloEndpoint().execute(this);
     }
 
     @Override

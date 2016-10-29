@@ -37,7 +37,16 @@ public class DBHelperPurse implements DBHelperPojo<Purse> {
         values.put(DBHelper.PURSES_KEY_NAME, purse.getName());
         values.put(DBHelper.PURSES_KEY_CURRENCY_ID, purse.getCurrency_id());
         values.put(DBHelper.PURSES_KEY_AMOUNT, purse.getAmount());
-        return db.insert(DBHelper.TABLE_PURSES, null, values);
+
+        long id;
+        try {
+            db.beginTransaction();
+            id = db.insert(DBHelper.TABLE_PURSES, null, values);
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+        }
+        return id;
     }
 
     @Override
@@ -80,19 +89,43 @@ public class DBHelperPurse implements DBHelperPojo<Purse> {
         values.put(DBHelper.PURSES_KEY_NAME, purse.getName());
         values.put(DBHelper.PURSES_KEY_CURRENCY_ID, purse.getCurrency_id());
         values.put(DBHelper.PURSES_KEY_AMOUNT, purse.getAmount());
-        return db.update(DBHelper.TABLE_PURSES, values, DBHelper.PURSES_KEY_ID + "=?", new String[]{String.valueOf(purse.getId())});
+        int count;
+        try {
+            db.beginTransaction();
+            count = db.update(DBHelper.TABLE_PURSES, values, DBHelper.PURSES_KEY_ID + "=?", new String[]{String.valueOf(purse.getId())});
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+        }
+        return count;
     }
 
     @Override
     public int delete(long id) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        return db.delete(DBHelper.TABLE_PURSES, DBHelper.PURSES_KEY_ID + " = " + id, null);
+        int count;
+        try {
+            db.beginTransaction();
+            count = db.delete(DBHelper.TABLE_PURSES, DBHelper.PURSES_KEY_ID + " = " + id, null);
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+        }
+        return count;
     }
 
     @Override
     public int deleteAll() {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        return db.delete(DBHelper.TABLE_PURSES, null, null);
+        int count;
+        try {
+            db.beginTransaction();
+            count = db.delete(DBHelper.TABLE_PURSES, null, null);
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+        }
+        return count;
     }
 
     public void addAmount(long id, double amount) {

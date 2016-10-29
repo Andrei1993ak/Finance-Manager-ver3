@@ -20,7 +20,7 @@ public class DBHelperCategoryIncome implements DBHelperPojo<IncomeCategory> {
     private static DBHelperCategoryIncome instance;
 
     public static DBHelperCategoryIncome getInstance(DBHelper dbHelper) {
-        if (instance==null)
+        if (instance == null)
             instance = new DBHelperCategoryIncome(dbHelper);
         return instance;
     }
@@ -30,28 +30,35 @@ public class DBHelperCategoryIncome implements DBHelperPojo<IncomeCategory> {
     }
 
     @Override
-    public long add( IncomeCategory incomeCategory) {
+    public long add(IncomeCategory incomeCategory) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(DBHelper.INCOME_CATEGORY_KEY_NAME,incomeCategory.getName());
-        values.put(DBHelper.INCOME_CATEGORY_KEY_PARENT_ID,incomeCategory.getParent_id());
-        return db.insert(DBHelper.TABLE_INCOME_CATEGORIES,null,values);
+        values.put(DBHelper.INCOME_CATEGORY_KEY_NAME, incomeCategory.getName());
+        values.put(DBHelper.INCOME_CATEGORY_KEY_PARENT_ID, incomeCategory.getParent_id());
+        long id;
+        try {
+            db.beginTransaction();
+            id = db.insert(DBHelper.TABLE_INCOME_CATEGORIES, null, values);
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+        }
+        return id;
     }
 
     @Override
     public IncomeCategory get(long id) {
-        String selectQuery = "SELECT * FROM " + DBHelper.TABLE_INCOME_CATEGORIES + " WHERE _id = " + id ;
+        String selectQuery = "SELECT * FROM " + DBHelper.TABLE_INCOME_CATEGORIES + " WHERE _id = " + id;
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        Cursor cursor =  db.rawQuery(selectQuery,null);
-        if(cursor.moveToFirst()){
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if (cursor.moveToFirst()) {
             IncomeCategory incomeCategory = new IncomeCategory();
             incomeCategory.setId(cursor.getLong(0));
             incomeCategory.setName(cursor.getString(1));
             incomeCategory.setParent_id(cursor.getLong(2));
             cursor.close();
             return incomeCategory;
-        }
-        else{
+        } else {
             cursor.close();
             return null;
         }
@@ -61,76 +68,109 @@ public class DBHelperCategoryIncome implements DBHelperPojo<IncomeCategory> {
     public Cursor getAll() {
         String selectQuery = "SELECT * FROM " + DBHelper.TABLE_INCOME_CATEGORIES;
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        return db.rawQuery(selectQuery,null);
+        return db.rawQuery(selectQuery, null);
     }
 
     @Override
     public int update(IncomeCategory incomeCategory) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(DBHelper.INCOME_CATEGORY_KEY_NAME,incomeCategory.getName());
-        values.put(DBHelper.INCOME_CATEGORY_KEY_PARENT_ID,incomeCategory.getParent_id());
-        return db.update(DBHelper.TABLE_INCOME_CATEGORIES,values,DBHelper.INCOME_CATEGORY_KEY_ID + "=?", new String[] {String.valueOf(incomeCategory.getId())});
-}
+        values.put(DBHelper.INCOME_CATEGORY_KEY_NAME, incomeCategory.getName());
+        values.put(DBHelper.INCOME_CATEGORY_KEY_PARENT_ID, incomeCategory.getParent_id());
+        int count;
+        try {
+            db.beginTransaction();
+            count = db.update(DBHelper.TABLE_INCOME_CATEGORIES, values, DBHelper.INCOME_CATEGORY_KEY_ID + "=?", new String[]{String.valueOf(incomeCategory.getId())});
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+        }
+        return count;
+    }
 
     @Override
     public int delete(long id) {
         int result = 0;
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        if (get(id).getParent_id()==-1)
-            result = deleteAllByParentId(id);
-        return db.delete(DBHelper.TABLE_INCOME_CATEGORIES, DBHelper.INCOME_CATEGORY_KEY_ID + "=?", new String[] {String.valueOf(id)})+result;
+        int count = 0;
+        try {
+            db.beginTransaction();
+            if (get(id).getParent_id() == -1) {
+                count += deleteAllByParentId(id);
+            }
+            count += db.delete(DBHelper.TABLE_INCOME_CATEGORIES, DBHelper.INCOME_CATEGORY_KEY_ID + "=?", new String[]{String.valueOf(id)});
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+        }
+        return count;
     }
 
     public int deleteAllByParentId(long id) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        return db.delete(DBHelper.TABLE_INCOME_CATEGORIES, DBHelper.INCOME_CATEGORY_KEY_PARENT_ID + "=?", new String[] {String.valueOf(id)});
+        int count;
+        try {
+            db.beginTransaction();
+            count = db.delete(DBHelper.TABLE_INCOME_CATEGORIES, DBHelper.INCOME_CATEGORY_KEY_PARENT_ID + "=?", new String[]{String.valueOf(id)});
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+        }
+        return count;
     }
 
 
     @Override
     public int deleteAll() {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        return db.delete(DBHelper.TABLE_INCOME_CATEGORIES,null,null);
+        int count;
+        try {
+            db.beginTransaction();
+            count = db.delete(DBHelper.TABLE_INCOME_CATEGORIES, null, null);
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+        }
+        return count;
     }
 
     public List<IncomeCategory> getAllToList() {
         List<IncomeCategory> list = new ArrayList<>();
         String selectQuery = "SELECT * FROM " + DBHelper.TABLE_INCOME_CATEGORIES;
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery,null);
-        if(cursor.moveToFirst()){
-            do{
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if (cursor.moveToFirst()) {
+            do {
                 IncomeCategory incomeCategory = new IncomeCategory();
                 incomeCategory.setId(cursor.getLong(0));
                 incomeCategory.setName(cursor.getString(1));
                 incomeCategory.setParent_id(cursor.getLong(2));
                 list.add(incomeCategory);
-            }while (cursor.moveToNext());
+            } while (cursor.moveToNext());
         }
         cursor.close();
         return list;
     }
 
     public Cursor getAllByParentId(long id) {
-        String selectQuery = "SELECT * FROM " + DBHelper.TABLE_INCOME_CATEGORIES + " WHERE " + DBHelper.INCOME_CATEGORY_KEY_PARENT_ID + " = " + id ;
+        String selectQuery = "SELECT * FROM " + DBHelper.TABLE_INCOME_CATEGORIES + " WHERE " + DBHelper.INCOME_CATEGORY_KEY_PARENT_ID + " = " + id;
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        return db.rawQuery(selectQuery,null);
+        return db.rawQuery(selectQuery, null);
     }
 
     public List<IncomeCategory> getAllToListByParentId(long id) {
         List<IncomeCategory> list = new ArrayList<>();
-        String selectQuery = "SELECT * FROM " + DBHelper.TABLE_INCOME_CATEGORIES + " WHERE " + DBHelper.INCOME_CATEGORY_KEY_PARENT_ID + " = " + id ;
+        String selectQuery = "SELECT * FROM " + DBHelper.TABLE_INCOME_CATEGORIES + " WHERE " + DBHelper.INCOME_CATEGORY_KEY_PARENT_ID + " = " + id;
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery,null);
-        if(cursor.moveToFirst()){
-            do{
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if (cursor.moveToFirst()) {
+            do {
                 IncomeCategory incomeCategory = new IncomeCategory();
                 incomeCategory.setId(cursor.getLong(0));
                 incomeCategory.setName(cursor.getString(1));
                 incomeCategory.setParent_id(cursor.getLong(2));
                 list.add(incomeCategory);
-            }while (cursor.moveToNext());
+            } while (cursor.moveToNext());
         }
         cursor.close();
         return list;
