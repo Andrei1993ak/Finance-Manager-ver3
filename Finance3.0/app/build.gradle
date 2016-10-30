@@ -27,6 +27,7 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:24.2.0'
     compile 'com.android.support:appcompat-v7:24.2.0'
     compile 'com.google.code.findbugs:jsr305:2.0.1'
+    compile group: 'commons-net', name: 'commons-net', version: '3.3'
     testCompile 'junit:junit:4.12'
     compile project(path: ':backend', configuration: 'android-endpoints')
 }

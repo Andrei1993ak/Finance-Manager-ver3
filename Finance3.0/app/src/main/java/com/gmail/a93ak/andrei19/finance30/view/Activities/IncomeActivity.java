@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.gmail.a93ak.andrei19.finance30.R;
 import com.gmail.a93ak.andrei19.finance30.control.Executors.IncomeExecutor;
@@ -68,6 +69,7 @@ public class IncomeActivity extends AppCompatActivity implements LoaderManager.L
                 Intent intent = new Intent(this, IncomeEditActivity.class);
                 intent.putExtra(DBHelper.INCOME_KEY_ID, info.id);
                 startActivityForResult(intent, EDIT_INCOME_REQUEST);
+                Toast.makeText(this,String.valueOf(info.id),Toast.LENGTH_LONG).show();
                 break;
         }
         return super.onContextItemSelected(item);

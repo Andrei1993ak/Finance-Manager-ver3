@@ -20,6 +20,7 @@ import com.gmail.a93ak.andrei19.finance30.control.adapters.PursesRecycleViewAdap
 import com.gmail.a93ak.andrei19.finance30.model.base.DBHelper;
 import com.gmail.a93ak.andrei19.finance30.model.dbhelpers.DBHelperIncome;
 import com.gmail.a93ak.andrei19.finance30.model.pojos.IncomeCategory;
+import com.gmail.a93ak.andrei19.finance30.view.Activities.CameraActivity;
 import com.gmail.a93ak.andrei19.finance30.view.Activities.CategoryStartingActivity;
 import com.gmail.a93ak.andrei19.finance30.view.Activities.CurrencyActivity;
 import com.gmail.a93ak.andrei19.finance30.view.Activities.ImagesActivity;
@@ -68,6 +69,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 break;
             case R.id.tvSettings:
                 startActivity(new Intent(this, ImagesActivity.class));
+                break;
+            case R.id.tvTransfers:
+                startActivity(new Intent(this, CameraActivity.class));
         }
     }
 

@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-feature android:name="android.hardware.camera"/>
 
     <application
         android:name=".App"
@@ -36,6 +37,7 @@
         <activity android:name=".view.Activities.IncomeActivity" />
         <activity android:name=".view.addEditActivities.IncomeAddActivity" />
         <activity android:name=".view.addEditActivities.IncomeEditActivity" />
+        <activity android:name=".view.Activities.CameraActivity" />
     </application>
 
 </manifest>

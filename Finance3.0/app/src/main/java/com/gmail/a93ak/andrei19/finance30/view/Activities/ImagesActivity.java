@@ -2,19 +2,21 @@ package com.gmail.a93ak.andrei19.finance30.view.Activities;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 
-
+import android.support.v7.app.AppCompatActivity;
 import com.gmail.a93ak.andrei19.finance30.App;
 import com.gmail.a93ak.andrei19.finance30.R;
 import com.gmail.a93ak.andrei19.finance30.util.UniversalLoader.Loaders.BitmapLoader;
 
 public class ImagesActivity extends AppCompatActivity {
+
+    public static final String demoImage = "ftp://adk:1111111@93.125.42.84:21/images/FileToSend.jpg";
 
     private static String[] IMAGE_URLS =
             {
@@ -42,9 +44,11 @@ public class ImagesActivity extends AppCompatActivity {
             public View getView(final int position, final View convertView, final ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);
                 ImageView imageView = (ImageView) view.findViewById(R.id.m_image);
-                bitmapLoader.load(IMAGE_URLS[position], imageView);
+//                bitmapLoader.load(IMAGE_URLS[position], imageView);
+                bitmapLoader.load(demoImage, imageView);
                 return view;
             }
         });
+
     }
 }

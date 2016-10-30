@@ -29,4 +29,5 @@
     <string name="date">Дата</string>
     <string name="subCategory">Подкатегория</string>
     <string name="category">Категория</string>
+    <string name="photo">Фото</string>
 </resources>
