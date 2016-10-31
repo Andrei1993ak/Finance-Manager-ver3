@@ -54,7 +54,7 @@
                 android:textSize="16sp" />
 
             <EditText
-                android:id="@+id/new_income_name"
+                android:id="@+id/edit_income_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dp"
@@ -74,7 +74,7 @@
                 android:textSize="16sp" />
 
             <android.support.v7.widget.AppCompatSpinner
-                android:id="@+id/new_income_purse"
+                android:id="@+id/edit_income_purse"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:layout_marginLeft="30dp"
@@ -95,7 +95,7 @@
                 android:textSize="16sp" />
 
             <EditText
-                android:id="@+id/new_income_amount"
+                android:id="@+id/edit_income_amount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dp"
@@ -119,7 +119,7 @@
                 android:textSize="16sp" />
 
             <TextView
-                android:id="@+id/new_income_date"
+                android:id="@+id/edit_income_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dp"
@@ -140,7 +140,7 @@
                 android:textSize="16sp" />
 
             <android.support.v7.widget.AppCompatSpinner
-                android:id="@+id/new_income_category"
+                android:id="@+id/edit_income_category"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:layout_marginLeft="30dp"
@@ -161,7 +161,7 @@
                 android:textSize="16sp" />
 
             <android.support.v7.widget.AppCompatSpinner
-                android:id="@+id/new_income_subCategory"
+                android:id="@+id/edit_income_subCategory"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:layout_marginLeft="30dp"

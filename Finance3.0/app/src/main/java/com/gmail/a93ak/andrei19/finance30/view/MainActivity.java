@@ -22,6 +22,7 @@ import com.gmail.a93ak.andrei19.finance30.model.dbhelpers.DBHelperIncome;
 import com.gmail.a93ak.andrei19.finance30.model.pojos.IncomeCategory;
 import com.gmail.a93ak.andrei19.finance30.view.Activities.CameraActivity;
 import com.gmail.a93ak.andrei19.finance30.view.Activities.CategoryStartingActivity;
+import com.gmail.a93ak.andrei19.finance30.view.Activities.CostActivity;
 import com.gmail.a93ak.andrei19.finance30.view.Activities.CurrencyActivity;
 import com.gmail.a93ak.andrei19.finance30.view.Activities.ImagesActivity;
 import com.gmail.a93ak.andrei19.finance30.view.Activities.IncomeActivity;
@@ -67,11 +68,15 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             case R.id.tvIncomes:
                 startActivity(new Intent(this, IncomeActivity.class));
                 break;
+            case R.id.tvCosts:
+                startActivity(new Intent(this, CostActivity.class));
+                break;
             case R.id.tvSettings:
                 startActivity(new Intent(this, ImagesActivity.class));
                 break;
             case R.id.tvTransfers:
                 startActivity(new Intent(this, CameraActivity.class));
+                break;
         }
     }
 

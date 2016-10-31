@@ -14,13 +14,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.gmail.a93ak.andrei19.finance30.R;
-import com.gmail.a93ak.andrei19.finance30.control.Executors.IncomeCategoryExecutor;
+import com.gmail.a93ak.andrei19.finance30.control.Executors.CostCategoryExecutor;
 import com.gmail.a93ak.andrei19.finance30.control.Executors.PurseExecutor;
 import com.gmail.a93ak.andrei19.finance30.control.base.OnTaskCompleted;
 import com.gmail.a93ak.andrei19.finance30.control.base.RequestHolder;
 import com.gmail.a93ak.andrei19.finance30.control.base.Result;
 import com.gmail.a93ak.andrei19.finance30.model.base.DBHelper;
-import com.gmail.a93ak.andrei19.finance30.model.pojos.IncomeCategory;
+import com.gmail.a93ak.andrei19.finance30.model.pojos.CostCategory;
 import com.gmail.a93ak.andrei19.finance30.model.pojos.Purse;
 
 import java.text.ParseException;
@@ -29,30 +29,30 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class IncomeAddActivity extends AppCompatActivity implements OnTaskCompleted {
+public class CostAddActivity extends AppCompatActivity implements OnTaskCompleted {
 
-    private EditText newIncomeName;
-    private EditText newIncomeAmount;
-    private TextView newIncomeDate;
-    private AppCompatSpinner newIncomePurse;
-    private AppCompatSpinner newIncomeCategory;
-    private AppCompatSpinner newIncomeSubCategory;
+    private EditText newCostName;
+    private EditText newCostAmount;
+    private TextView newCostDate;
+    private AppCompatSpinner newCostPurse;
+    private AppCompatSpinner newCostCategory;
+    private AppCompatSpinner newCostSubCategory;
     private List<Purse> pursesList;
-    private List<IncomeCategory> categoriesList;
-    private List<IncomeCategory> subCategoriesList;
+    private List<CostCategory> categoriesList;
+    private List<CostCategory> subCategoriesList;
     private SimpleDateFormat dateFormatter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.income_add_activity);
+        setContentView(R.layout.cost_add_activity);
         findViewsBuId();
         RequestHolder<Purse> purseRequestHolder = new RequestHolder<>();
         purseRequestHolder.setGetAllToListRequest(0);
         new PurseExecutor(this).execute(purseRequestHolder.getGetAllToListRequest());
-        RequestHolder<IncomeCategory> categoryRequestHolder = new RequestHolder<>();
+        RequestHolder<CostCategory> categoryRequestHolder = new RequestHolder<>();
         categoryRequestHolder.setGetAllToListRequest(1);
-        new IncomeCategoryExecutor(this).execute(categoryRequestHolder.getGetAllToListRequest());
+        new CostCategoryExecutor(this).execute(categoryRequestHolder.getGetAllToListRequest());
         setDatePickerDialog();
     }
 
@@ -64,11 +64,11 @@ public class IncomeAddActivity extends AppCompatActivity implements OnTaskComple
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 Calendar newDate = Calendar.getInstance();
                 newDate.set(year, month, dayOfMonth);
-                newIncomeDate.setText(dateFormatter.format(newDate.getTime()));
+                newCostDate.setText(dateFormatter.format(newDate.getTime()));
             }
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
-        newIncomeDate.setText(dateFormatter.format(newCalendar.getTime()));
-        newIncomeDate.setOnClickListener(new View.OnClickListener() {
+        newCostDate.setText(dateFormatter.format(newCalendar.getTime()));
+        newCostDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.show();
@@ -88,24 +88,24 @@ public class IncomeAddActivity extends AppCompatActivity implements OnTaskComple
                 }
                 ArrayAdapter<String> spinnerPursesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, pursesNames);
                 spinnerPursesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                newIncomePurse.setAdapter(spinnerPursesAdapter);
+                newCostPurse.setAdapter(spinnerPursesAdapter);
                 break;
-            case IncomeCategoryExecutor.KEY_RESULT_GET_ALL_TO_LIST:
-                categoriesList = (List<IncomeCategory>) result.getT();
+            case CostCategoryExecutor.KEY_RESULT_GET_ALL_TO_LIST:
+                categoriesList = (List<CostCategory>) result.getT();
                 String[] categoriesNames = new String[categoriesList.size()];
                 int j = 0;
-                for (IncomeCategory incomeCategory : categoriesList) {
-                    categoriesNames[j++] = incomeCategory.getName();
+                for (CostCategory costCategory : categoriesList) {
+                    categoriesNames[j++] = costCategory.getName();
                 }
                 ArrayAdapter<String> spinnerCategoriesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categoriesNames);
                 spinnerCategoriesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                newIncomeCategory.setAdapter(spinnerCategoriesAdapter);
-                newIncomeCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                newCostCategory.setAdapter(spinnerCategoriesAdapter);
+                newCostCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        RequestHolder<IncomeCategory> categoryRequestHolder = new RequestHolder<>();
+                        RequestHolder<CostCategory> categoryRequestHolder = new RequestHolder<>();
                         categoryRequestHolder.setGetAllToListByCategoryId(categoriesList.get(position).getId());
-                        new IncomeCategoryExecutor(IncomeAddActivity.this).execute(categoryRequestHolder.getGetAllToListByCategoryId());
+                        new CostCategoryExecutor(CostAddActivity.this).execute(categoryRequestHolder.getGetAllToListByCategoryId());
                     }
 
                     @Override
@@ -114,21 +114,21 @@ public class IncomeAddActivity extends AppCompatActivity implements OnTaskComple
                     }
                 });
                 break;
-            case IncomeCategoryExecutor.KEY_RESULT_GET_ALL_TO_LIST_BY_PARENT_ID:
-                subCategoriesList = (List<IncomeCategory>) result.getT();
+            case CostCategoryExecutor.KEY_RESULT_GET_ALL_TO_LIST_BY_PARENT_ID:
+                subCategoriesList = (List<CostCategory>) result.getT();
                 int length = subCategoriesList.size();
                 if (length == 0) {
-                    newIncomeSubCategory.setVisibility(View.GONE);
+                    newCostSubCategory.setVisibility(View.GONE);
                 } else {
-                    newIncomeSubCategory.setVisibility(View.VISIBLE);
+                    newCostSubCategory.setVisibility(View.VISIBLE);
                     String[] subCategoriesNames = new String[subCategoriesList.size()];
                     int k = 0;
-                    for (IncomeCategory incomeCategory : subCategoriesList) {
-                        subCategoriesNames[k++] = incomeCategory.getName();
+                    for (CostCategory costCategory : subCategoriesList) {
+                        subCategoriesNames[k++] = costCategory.getName();
                     }
                     ArrayAdapter<String> spinnerSubCategoriesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, subCategoriesNames);
                     spinnerSubCategoriesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    newIncomeSubCategory.setAdapter(spinnerSubCategoriesAdapter);
+                    newCostSubCategory.setAdapter(spinnerSubCategoriesAdapter);
                 }
                 break;
         }
@@ -136,31 +136,32 @@ public class IncomeAddActivity extends AppCompatActivity implements OnTaskComple
     }
 
     private void findViewsBuId() {
-        newIncomeName = (EditText) findViewById(R.id.edit_income_name);
-        newIncomeAmount = (EditText) findViewById(R.id.edit_income_amount);
-        newIncomeDate = (TextView) findViewById(R.id.edit_income_date);
-        newIncomePurse = (AppCompatSpinner) findViewById(R.id.edit_income_purse);
-        newIncomeCategory = (AppCompatSpinner) findViewById(R.id.edit_income_category);
-        newIncomeSubCategory = (AppCompatSpinner) findViewById(R.id.edit_income_subCategory);
+        newCostName = (EditText) findViewById(R.id.new_cost_name);
+        newCostAmount = (EditText) findViewById(R.id.new_cost_amount);
+        newCostDate = (TextView) findViewById(R.id.new_cost_date);
+        newCostPurse = (AppCompatSpinner) findViewById(R.id.new_cost_purse);
+        newCostCategory = (AppCompatSpinner) findViewById(R.id.new_cost_category);
+        newCostSubCategory = (AppCompatSpinner) findViewById(R.id.new_cost_subCategory);
     }
 
-
-    public void addNewIncome(View view) {
+    public void addNewCost(View view) {
         if (checkFields()) {
             try {
                 Intent intent = new Intent();
-                intent.putExtra(DBHelper.INCOME_KEY_NAME, newIncomeName.getText().toString());
-                intent.putExtra(DBHelper.INCOME_KEY_AMOUNT, Double.parseDouble(newIncomeAmount.getText().toString()));
-                intent.putExtra(DBHelper.INCOME_KEY_DATE, dateFormatter.parse(newIncomeDate.getText().toString()).getTime());
-                intent.putExtra(DBHelper.INCOME_KEY_PURSE_ID, pursesList.get(newIncomePurse.getSelectedItemPosition()).getId());
-                if (newIncomeSubCategory.getVisibility() == View.GONE) {
-                    intent.putExtra(DBHelper.INCOME_KEY_CATEGORY_ID, categoriesList.get(newIncomeCategory.getSelectedItemPosition()).getId());
+                intent.putExtra(DBHelper.COST_KEY_NAME, newCostName.getText().toString());
+                intent.putExtra(DBHelper.COST_KEY_AMOUNT, Double.parseDouble(newCostAmount.getText().toString()));
+                intent.putExtra(DBHelper.COST_KEY_DATE, dateFormatter.parse(newCostDate.getText().toString()).getTime());
+                intent.putExtra(DBHelper.COST_KEY_PURSE_ID, pursesList.get(newCostPurse.getSelectedItemPosition()).getId());
+                if (newCostSubCategory.getVisibility() == View.GONE) {
+                    intent.putExtra(DBHelper.COST_KEY_CATEGORY_ID, categoriesList.get(newCostCategory.getSelectedItemPosition()).getId());
                 } else {
-                    intent.putExtra(DBHelper.INCOME_KEY_CATEGORY_ID, subCategoriesList.get(newIncomeSubCategory.getSelectedItemPosition()).getId());
+                    intent.putExtra(DBHelper.COST_KEY_CATEGORY_ID, subCategoriesList.get(newCostSubCategory.getSelectedItemPosition()).getId());
                 }
+                intent.putExtra(DBHelper.COST_KEY_PHOTO, 0);
                 setResult(RESULT_OK, intent);
                 finish();
             } catch (ParseException e) {
+                e.printStackTrace();
                 e.printStackTrace();
                 return;
             }
@@ -169,18 +170,18 @@ public class IncomeAddActivity extends AppCompatActivity implements OnTaskComple
 
     private boolean checkFields() {
         boolean flag = true;
-        if (newIncomeName.getText().toString().length() == 0) {
-            newIncomeName.setBackground(getResources().getDrawable(R.drawable.shape_red_field));
+        if (newCostName.getText().toString().length() == 0) {
+            newCostName.setBackground(getResources().getDrawable(R.drawable.shape_red_field));
             flag = false;
         } else {
-            newIncomeName.setBackground(getResources().getDrawable(R.drawable.shape_green_field));
+            newCostName.setBackground(getResources().getDrawable(R.drawable.shape_green_field));
 
         }
-        if (newIncomeAmount.getText().length() == 0) {
-            newIncomeAmount.setBackground(getResources().getDrawable(R.drawable.shape_red_field));
+        if (newCostAmount.getText().length() == 0) {
+            newCostAmount.setBackground(getResources().getDrawable(R.drawable.shape_red_field));
             flag = false;
         } else {
-            newIncomeAmount.setBackground(getResources().getDrawable(R.drawable.shape_green_field));
+            newCostAmount.setBackground(getResources().getDrawable(R.drawable.shape_green_field));
 
         }
         return flag;

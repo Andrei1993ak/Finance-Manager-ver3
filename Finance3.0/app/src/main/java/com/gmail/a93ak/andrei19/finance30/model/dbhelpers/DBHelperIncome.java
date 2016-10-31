@@ -98,7 +98,7 @@ public class DBHelperIncome implements DBHelperPojo<Income> {
                 helperPurse.takeAmount(oldIncome.getPurse_id(), oldIncome.getAmount());
                 helperPurse.addAmount(newIncome.getPurse_id(), newIncome.getAmount());
             } else if (newIncome.getAmount() != oldIncome.getAmount()) {
-                helperPurse.addAmount(newIncome.getId(), (newIncome.getAmount() - oldIncome.getAmount()));
+                helperPurse.addAmount(newIncome.getPurse_id(), (newIncome.getAmount() - oldIncome.getAmount()));
             }
             db.setTransactionSuccessful();
         } finally {

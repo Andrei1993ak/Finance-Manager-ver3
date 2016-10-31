@@ -8,6 +8,7 @@ import com.gmail.a93ak.andrei19.finance30.control.base.Result;
 import com.gmail.a93ak.andrei19.finance30.model.base.DBHelper;
 import com.gmail.a93ak.andrei19.finance30.model.dbhelpers.DBHelperCategoryCost;
 import com.gmail.a93ak.andrei19.finance30.model.pojos.CostCategory;
+import com.gmail.a93ak.andrei19.finance30.model.pojos.IncomeCategory;
 
 
 import java.util.List;
@@ -21,6 +22,7 @@ public class CostCategoryExecutor extends PojoExecutor<CostCategory> {
     public static final int KEY_RESULT_GET_ALL = 505;
     public static final int KEY_RESULT_DELETE_ALL = 506;
     public static final int KEY_RESULT_GET_ALL_TO_LIST = 507;
+    public static final int KEY_RESULT_GET_ALL_TO_LIST_BY_PARENT_ID = 508;
 
     private DBHelperCategoryCost dbHelper = DBHelperCategoryCost.getInstance(DBHelper.getInstance(context));
 
@@ -68,5 +70,10 @@ public class CostCategoryExecutor extends PojoExecutor<CostCategory> {
             return new Result<>(KEY_RESULT_GET_ALL_TO_LIST, dbHelper.getAllToListByParentId(-1));
         }
             else return null;
+    }
+
+    @Override
+    protected Result<List<CostCategory>> getAllToListByCategoryId(Long id) {
+        return new Result<>(KEY_RESULT_GET_ALL_TO_LIST_BY_PARENT_ID,dbHelper.getAllToListByParentId(id));
     }
 }
