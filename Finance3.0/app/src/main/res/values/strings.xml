@@ -30,4 +30,5 @@
     <string name="category">Category</string>
     <string name="photo">photo</string>
     <string name="newCost">new cost</string>
+    <string name="addPhoto">add photo</string>
 </resources>

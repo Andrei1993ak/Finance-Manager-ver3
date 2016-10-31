@@ -2,6 +2,7 @@ package com.gmail.a93ak.andrei19.finance30.view.addEditActivities;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.gmail.a93ak.andrei19.finance30.R;
@@ -22,7 +24,9 @@ import com.gmail.a93ak.andrei19.finance30.control.base.Result;
 import com.gmail.a93ak.andrei19.finance30.model.base.DBHelper;
 import com.gmail.a93ak.andrei19.finance30.model.pojos.CostCategory;
 import com.gmail.a93ak.andrei19.finance30.model.pojos.Purse;
+import com.gmail.a93ak.andrei19.finance30.util.ImageUploader;
 
+import java.io.ByteArrayOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -31,6 +35,7 @@ import java.util.Locale;
 
 public class CostAddActivity extends AppCompatActivity implements OnTaskCompleted {
 
+    private static final int CAMERA_REQUEST = 1;
     private EditText newCostName;
     private EditText newCostAmount;
     private TextView newCostDate;
@@ -41,6 +46,7 @@ public class CostAddActivity extends AppCompatActivity implements OnTaskComplete
     private List<CostCategory> categoriesList;
     private List<CostCategory> subCategoriesList;
     private SimpleDateFormat dateFormatter;
+    private Bitmap photo;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -157,13 +163,20 @@ public class CostAddActivity extends AppCompatActivity implements OnTaskComplete
                 } else {
                     intent.putExtra(DBHelper.COST_KEY_CATEGORY_ID, subCategoriesList.get(newCostSubCategory.getSelectedItemPosition()).getId());
                 }
-                intent.putExtra(DBHelper.COST_KEY_PHOTO, 0);
+                if (photo == null) {
+                    intent.putExtra(DBHelper.COST_KEY_PHOTO, 0);
+                }
+                else {
+                    intent.putExtra(DBHelper.COST_KEY_PHOTO,1);
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    photo.compress(Bitmap.CompressFormat.JPEG,100,stream);
+                    byte[] byteArray = stream.toByteArray();
+                    intent.putExtra("photoArray",byteArray);
+                }
                 setResult(RESULT_OK, intent);
                 finish();
             } catch (ParseException e) {
                 e.printStackTrace();
-                e.printStackTrace();
-                return;
             }
         }
     }
@@ -185,5 +198,18 @@ public class CostAddActivity extends AppCompatActivity implements OnTaskComplete
 
         }
         return flag;
+    }
+
+    public void add_photo(View view) {
+        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(cameraIntent, CAMERA_REQUEST);
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
+            photo = (Bitmap) data.getExtras().get("data");
+            ImageView view = (ImageView) findViewById(R.id.new_cost_photo);
+            view.setImageBitmap(photo);
+        }
     }
 }

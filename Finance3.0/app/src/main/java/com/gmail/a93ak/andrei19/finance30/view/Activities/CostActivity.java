@@ -2,6 +2,8 @@ package com.gmail.a93ak.andrei19.finance30.view.Activities;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
@@ -25,9 +27,9 @@ import com.gmail.a93ak.andrei19.finance30.control.base.Result;
 import com.gmail.a93ak.andrei19.finance30.model.base.DBHelper;
 
 import com.gmail.a93ak.andrei19.finance30.model.pojos.Cost;
+import com.gmail.a93ak.andrei19.finance30.util.ImageUploader;
 import com.gmail.a93ak.andrei19.finance30.view.addEditActivities.CostAddActivity;
 import com.gmail.a93ak.andrei19.finance30.view.addEditActivities.CostEditActivity;
-import com.gmail.a93ak.andrei19.finance30.view.addEditActivities.IncomeEditActivity;
 
 public class CostActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, OnTaskCompleted {
 
@@ -71,7 +73,7 @@ public class CostActivity extends AppCompatActivity implements LoaderManager.Loa
                 Intent intent = new Intent(this, CostEditActivity.class);
                 intent.putExtra(DBHelper.COST_KEY_ID, info.id);
                 startActivityForResult(intent, EDIT_COST_REQUEST);
-                Toast.makeText(this,String.valueOf(info.id),Toast.LENGTH_LONG).show();
+                Toast.makeText(this, String.valueOf(info.id), Toast.LENGTH_LONG).show();
                 break;
         }
         return super.onContextItemSelected(item);
@@ -82,17 +84,27 @@ public class CostActivity extends AppCompatActivity implements LoaderManager.Loa
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case ADD_COST_REQUEST:
+                    //TODO сделать асинхронную загрузку картинки на фтп или на диск
                     Cost newCost = new Cost();
                     newCost.setName(data.getStringExtra(DBHelper.COST_KEY_NAME));
                     newCost.setDate(data.getLongExtra(DBHelper.COST_KEY_DATE, -1L));
                     newCost.setAmount(data.getDoubleExtra(DBHelper.COST_KEY_AMOUNT, -1.0));
                     newCost.setPurse_id(data.getLongExtra(DBHelper.COST_KEY_PURSE_ID, -1));
                     newCost.setCategory_id(data.getLongExtra(DBHelper.COST_KEY_CATEGORY_ID, -1L));
-                    newCost.setPhoto(data.getIntExtra(DBHelper.COST_KEY_PHOTO,-2));
-                    RequestHolder<Cost> requestHolder = new RequestHolder<>();
-                    requestHolder.setAddRequest(newCost);
-                    new CostExecutor(this).execute(requestHolder.getAddRequest());
-                    break;
+                    if (data.getIntExtra(DBHelper.COST_KEY_PHOTO, -2) == 1) {
+                        byte[] byteArray = data.getByteArrayExtra("photoArray");
+                        Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+                        int id = DBHelper.getInstance(this).getNextId();
+                        ImageUploader.uploadToFTP(bitmap,id);
+                    } else {
+
+                        newCost.setPhoto(data.getIntExtra(DBHelper.COST_KEY_PHOTO, -2));
+                        RequestHolder<Cost> requestHolder = new RequestHolder<>();
+                        requestHolder.setAddRequest(newCost);
+                        new CostExecutor(this).execute(requestHolder.getAddRequest());
+                        break;
+                    }
+
                 case EDIT_COST_REQUEST:
                     Cost editCost = new Cost();
                     editCost.setId(data.getLongExtra(DBHelper.COST_KEY_ID, -1L));
@@ -101,7 +113,7 @@ public class CostActivity extends AppCompatActivity implements LoaderManager.Loa
                     editCost.setAmount(data.getDoubleExtra(DBHelper.COST_KEY_AMOUNT, -1.0));
                     editCost.setPurse_id(data.getLongExtra(DBHelper.COST_KEY_PURSE_ID, -1));
                     editCost.setCategory_id(data.getLongExtra(DBHelper.COST_KEY_CATEGORY_ID, -1L));
-                    editCost.setPhoto(data.getIntExtra(DBHelper.COST_KEY_PHOTO,-2));
+                    editCost.setPhoto(data.getIntExtra(DBHelper.COST_KEY_PHOTO, -2));
                     requestHolder = new RequestHolder<>();
                     requestHolder.setEditRequest(editCost);
                     new CostExecutor(this).execute(requestHolder.getEditRequest());

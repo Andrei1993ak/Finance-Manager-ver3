@@ -46,7 +46,8 @@ public class ImageUploader {
                 ftpClient.enterLocalPassiveMode();
                 ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
                 FileInputStream in = new FileInputStream(file.getPath());
-                boolean result = ftpClient.storeFile("images/FileToSend.jpg", in);
+                String path = "images/"+String.valueOf(id)+".jpg";
+                boolean result = ftpClient.storeFile(path, in);
                 in.close();
                 if (result)
                     Log.v("upload result", "succeeded");

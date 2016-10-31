@@ -1,6 +1,7 @@
 package com.gmail.a93ak.andrei19.finance30.model.base;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -141,5 +142,17 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
         onCreate(sqLiteDatabase);
     }
+
+    public int getNextId() {
+        Cursor cursor = getReadableDatabase().rawQuery("SELECT SEQ FROM SQLITE_SEQUENCE WHERE NAME = 'costs'", null);
+        if (cursor.moveToFirst()) {
+            int a = Integer.parseInt(cursor.getString(0));
+            a++;
+            return a;
+        } else {
+            return -1;
+
+    }
+}
 
 }
