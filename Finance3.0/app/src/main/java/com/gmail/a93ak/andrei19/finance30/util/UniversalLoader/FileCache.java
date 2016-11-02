@@ -3,6 +3,7 @@ package com.gmail.a93ak.andrei19.finance30.util.UniversalLoader;
 import android.content.Context;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.net.URLEncoder;
 
 class FileCache {
@@ -34,5 +35,16 @@ class FileCache {
             return;
         for (File f : files)
             f.delete();
+    }
+
+    void clear(String url){
+        final String filename = URLEncoder.encode(url);
+        File[] file = cacheDir.listFiles(new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String name) {
+                return name.equals(filename);
+            }
+        });
+        file[0].delete();
     }
 }

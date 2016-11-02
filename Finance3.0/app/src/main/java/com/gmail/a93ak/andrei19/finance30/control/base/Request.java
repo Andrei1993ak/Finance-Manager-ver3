@@ -1,11 +1,11 @@
 package com.gmail.a93ak.andrei19.finance30.control.base;
 
-public class Request {
+public class Request<T> {
 //
     private int id;
-    private Object o;
+    private T o;
 
-    public Request(int id, Object o) {
+    public Request(int id, T o) {
         this.id = id;
         this.o = o;
     }
@@ -18,11 +18,11 @@ public class Request {
         this.id = id;
     }
 
-    public Object getO() {
+    public T getO() {
         return o;
     }
 
-    public void setO(Object o) {
+    public void setO(T o) {
         this.o = o;
     }
 }

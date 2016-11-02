@@ -37,7 +37,7 @@ public abstract class UniversalLoader<MyObj, Destination> {
     public UniversalLoader(Context context) {
         connectTimeout=3000;
         readTimeout = 3000;
-        maxPreSize = 100;
+        maxPreSize = 400;
         this.context = context;
         fileCache = FileCache.getInstance(context);
         memoryCache = new MemoryCache<MyObj>() {
@@ -62,6 +62,11 @@ public abstract class UniversalLoader<MyObj, Destination> {
             }
         };
         executorService = Executors.newFixedThreadPool(threadsCount);
+    }
+
+    public void clearCashes(String url){
+        memoryCache.clear(url);
+        fileCache.clear(url);
     }
 
     public void load(String url, Destination destination) {

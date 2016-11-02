@@ -32,4 +32,6 @@
     <string name="photo">Фото</string>
     <string name="newCost">Новый расход</string>
     <string name="addPhoto">Добавить фото</string>
+    <string name="showPhoto">Фото</string>
+    <string name="noPhoto">К сожалению, вы не делали фото к этому расходу</string>
 </resources>

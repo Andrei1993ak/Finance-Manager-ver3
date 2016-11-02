@@ -3,7 +3,11 @@ package com.gmail.a93ak.andrei19.finance30.view.addEditActivities;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatSpinner;
@@ -24,9 +28,10 @@ import com.gmail.a93ak.andrei19.finance30.control.base.Result;
 import com.gmail.a93ak.andrei19.finance30.model.base.DBHelper;
 import com.gmail.a93ak.andrei19.finance30.model.pojos.CostCategory;
 import com.gmail.a93ak.andrei19.finance30.model.pojos.Purse;
-import com.gmail.a93ak.andrei19.finance30.util.ImageUploader;
+import com.gmail.a93ak.andrei19.finance30.view.Activities.CostActivity;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -168,10 +173,6 @@ public class CostAddActivity extends AppCompatActivity implements OnTaskComplete
                 }
                 else {
                     intent.putExtra(DBHelper.COST_KEY_PHOTO,1);
-                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    photo.compress(Bitmap.CompressFormat.JPEG,100,stream);
-                    byte[] byteArray = stream.toByteArray();
-                    intent.putExtra("photoArray",byteArray);
                 }
                 setResult(RESULT_OK, intent);
                 finish();
@@ -201,13 +202,16 @@ public class CostAddActivity extends AppCompatActivity implements OnTaskComplete
     }
 
     public void add_photo(View view) {
+        File file = new File(CostActivity.TEMP_PATH);
+        Uri outputFileUri = Uri.fromFile(file);
         Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT,outputFileUri);
         startActivityForResult(cameraIntent, CAMERA_REQUEST);
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
-            photo = (Bitmap) data.getExtras().get("data");
+            photo = (Bitmap) BitmapFactory.decodeFile(CostActivity.TEMP_PATH);
             ImageView view = (ImageView) findViewById(R.id.new_cost_photo);
             view.setImageBitmap(photo);
         }

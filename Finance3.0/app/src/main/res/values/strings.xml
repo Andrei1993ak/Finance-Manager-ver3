@@ -31,4 +31,6 @@
     <string name="photo">photo</string>
     <string name="newCost">new cost</string>
     <string name="addPhoto">add photo</string>
+    <string name="showPhoto">show photo</string>
+    <string name="noPhoto">sorry it is no photo for this cost</string>
 </resources>

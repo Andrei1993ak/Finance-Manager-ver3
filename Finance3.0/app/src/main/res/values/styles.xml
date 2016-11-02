@@ -7,4 +7,7 @@
         <item name="colorAccent">@android:color/background_light</item>
     </style>
 
+    <style name="AppTheme.GreyAccent">
+        <item name="colorAccent">@color/colorGrayText</item>
+    </style>
 </resources>

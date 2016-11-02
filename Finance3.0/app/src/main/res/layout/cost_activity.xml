@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
@@ -10,12 +10,9 @@
 
     <ListView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:id="@+id/costListView"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/button_add_cost"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="70dp"
         android:background="@drawable/shape"/>
 
     <Button
@@ -26,20 +23,25 @@
         android:textSize="40sp"
         android:onClick="addCost"
         android:background="@drawable/shape_add_button"
-        android:layout_alignParentTop="true"
-        android:layout_alignRight="@+id/costListView"
-        android:layout_alignEnd="@+id/costListView" />
+        android:layout_gravity="right" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         android:text="@string/costs"
         android:textSize="30sp"
         android:textIsSelectable="false"
         android:textColor="@android:color/black"
-        android:layout_alignBaseline="@+id/button_add_cost"
-        android:layout_alignBottom="@+id/button_add_cost"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        />
 
-</RelativeLayout>
+    <ProgressBar
+        android:id="@+id/costProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:theme="@style/AppTheme.GreyAccent"
+        android:visibility="invisible"
+        android:layout_centerHorizontal="true" />
+
+</FrameLayout>

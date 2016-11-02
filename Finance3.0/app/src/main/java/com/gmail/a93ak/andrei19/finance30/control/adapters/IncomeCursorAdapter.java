@@ -58,7 +58,6 @@ public class IncomeCursorAdapter extends CursorAdapter {
         Currency currency = helperCurrency.get(purse.getCurrency_id());
         Double amount = cursor.getDouble(cursor.getColumnIndex(DBHelper.INCOME_KEY_AMOUNT));
         String amountString = String.format("%.2f",amount);
-        //TODO Добавить форматирование
         amountString+=" ";
         amountString+=currency.getCode();
         tvAmount.setText(amountString);

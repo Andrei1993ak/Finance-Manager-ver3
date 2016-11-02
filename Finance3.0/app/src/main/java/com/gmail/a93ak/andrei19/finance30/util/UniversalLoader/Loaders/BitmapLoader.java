@@ -13,7 +13,16 @@ import java.io.FileNotFoundException;
 
 public class BitmapLoader extends UniversalLoader<Bitmap, ImageView> {
 
-    public BitmapLoader(Context context) {
+
+    private static BitmapLoader instance;
+
+    public static BitmapLoader getInstance(Context context) {
+        if (instance == null)
+            instance = new BitmapLoader(context);
+        return instance;
+    }
+
+    private BitmapLoader(Context context) {
         super(context);
     }
 

@@ -2,7 +2,11 @@ package com.gmail.a93ak.andrei19.finance30.view.addEditActivities;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatSpinner;
@@ -11,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.gmail.a93ak.andrei19.finance30.R;
@@ -25,7 +30,10 @@ import com.gmail.a93ak.andrei19.finance30.model.base.DBHelper;
 import com.gmail.a93ak.andrei19.finance30.model.pojos.Cost;
 import com.gmail.a93ak.andrei19.finance30.model.pojos.CostCategory;
 import com.gmail.a93ak.andrei19.finance30.model.pojos.Purse;
+import com.gmail.a93ak.andrei19.finance30.util.UniversalLoader.Loaders.BitmapLoader;
+import com.gmail.a93ak.andrei19.finance30.view.Activities.CostActivity;
 
+import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -44,9 +52,13 @@ public class CostEditActivity extends AppCompatActivity implements OnTaskComplet
     private List<Purse> pursesList;
     private List<CostCategory> categoriesList;
     private List<CostCategory> subCategoriesList;
+    private ImageView imageView;
     private SimpleDateFormat dateFormatter;
     private long parentId;
     private long id;
+    private Bitmap photo;
+    public static final int CAMERA_REQUEST = 1;
+    private boolean isPhotoChange = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -90,6 +102,11 @@ public class CostEditActivity extends AppCompatActivity implements OnTaskComplet
                 editCostName.setText(cost.getName());
                 editCostAmount.setText(String.valueOf(cost.getAmount()));
                 editCostDate.setText(dateFormatter.format(cost.getDate()));
+                if (cost.getPhoto() == 1) {
+                    String url = CostActivity.FTP_PATH + String.valueOf(id) + ".jpg";
+                    BitmapLoader bitmapLoader = BitmapLoader.getInstance(this);
+                    bitmapLoader.load(url, imageView);
+                }
                 RequestHolder<Purse> purseRequestHolder = new RequestHolder<>();
                 purseRequestHolder.setGetAllToListRequest(0);
                 new PurseExecutor(this).execute(purseRequestHolder.getGetAllToListRequest());
@@ -194,6 +211,7 @@ public class CostEditActivity extends AppCompatActivity implements OnTaskComplet
         editCostPurse = (AppCompatSpinner) findViewById(R.id.edit_cost_purse);
         editCostCategory = (AppCompatSpinner) findViewById(R.id.edit_cost_category);
         editCostSubCategory = (AppCompatSpinner) findViewById(R.id.edit_cost_subCategory);
+        imageView = (ImageView) findViewById(R.id.edit_cost_photo);
     }
 
     public void editCost(View view) {
@@ -210,7 +228,12 @@ public class CostEditActivity extends AppCompatActivity implements OnTaskComplet
                 } else {
                     intent.putExtra(DBHelper.COST_KEY_CATEGORY_ID, subCategoriesList.get(editCostSubCategory.getSelectedItemPosition()).getId());
                 }
-                intent.putExtra(DBHelper.COST_KEY_PHOTO, 0);
+                if (photo == null) {
+                    intent.putExtra(DBHelper.COST_KEY_PHOTO, 0);
+                } else {
+                    intent.putExtra(DBHelper.COST_KEY_PHOTO, 1);
+                    intent.putExtra("isChanged",isPhotoChange);
+                }
                 setResult(RESULT_OK, intent);
                 finish();
             } catch (ParseException e) {
@@ -237,5 +260,22 @@ public class CostEditActivity extends AppCompatActivity implements OnTaskComplet
 
         }
         return flag;
+    }
+
+    public void edit_photo(View view) {
+        File file = new File(CostActivity.TEMP_PATH);
+        Uri outputFileUri = Uri.fromFile(file);
+        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
+        startActivityForResult(cameraIntent, CAMERA_REQUEST);
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
+            photo = (Bitmap) BitmapFactory.decodeFile(CostActivity.TEMP_PATH);
+            ImageView view = (ImageView) findViewById(R.id.edit_cost_photo);
+            view.setImageBitmap(photo);
+            isPhotoChange = true;
+        }
     }
 }

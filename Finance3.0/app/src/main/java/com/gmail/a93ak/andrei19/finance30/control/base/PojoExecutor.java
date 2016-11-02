@@ -11,7 +11,7 @@ import com.gmail.a93ak.andrei19.finance30.util.ContextHolder;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class PojoExecutor<Pojo> extends AsyncTask<Request, Void, Result> {
+public abstract class PojoExecutor<Pojo> extends AsyncTask<Request<Pojo>, Void, Result> {
 //
     private static final int KEY_ADD = 1;
     private static final int KEY_EDIT = 2;
@@ -33,17 +33,17 @@ public abstract class PojoExecutor<Pojo> extends AsyncTask<Request, Void, Result
     }
 
     @Override
-    protected Result doInBackground(Request... requests) {
+    protected Result doInBackground(Request<Pojo>... requests) {
         Result result = null;
         switch (requests[0].getId()) {
             case KEY_ADD:
-                result =  addPojo((Pojo) requests[0].getO());
+                result =  addPojo(requests[0].getO());
                 break;
             case KEY_DELETE:
                 result = deletePojo((Long) requests[0].getO());
                 break;
             case KEY_EDIT:
-                result = updatePojo((Pojo) requests[0].getO());
+                result = updatePojo(requests[0].getO());
                 break;
             case KEY_GET:
                 result = getPojo((Long) requests[0].getO());
@@ -95,6 +95,7 @@ public abstract class PojoExecutor<Pojo> extends AsyncTask<Request, Void, Result
 
     abstract public Result<List<Pojo>> getAllToList(int selection);
 
+    @Override
     protected void onPostExecute(Result result) {
         if (listener != null)
             listener.onTaskCompleted(result);

@@ -64,6 +64,11 @@ abstract class MemoryCache<MyObj> {
         }
     }
 
+    void clear(String url){
+        if (cache.containsKey(url)){
+            cache.remove(url);
+        }
+    }
     private long getSizeInBytes(MyObj myObj) {
         if (myObj == null)
             return 0;
