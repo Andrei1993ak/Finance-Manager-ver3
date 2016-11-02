@@ -34,7 +34,7 @@ import com.gmail.a93ak.andrei19.finance30.model.base.DBHelper;
 
 import com.gmail.a93ak.andrei19.finance30.model.dbhelpers.DBHelperCost;
 import com.gmail.a93ak.andrei19.finance30.model.pojos.Cost;
-import com.gmail.a93ak.andrei19.finance30.util.bitmapOperations.BitmapOperations;
+import com.gmail.a93ak.andrei19.finance30.util.bitmapOperations.CostOperations;
 import com.gmail.a93ak.andrei19.finance30.util.bitmapOperations.SetBitmap;
 import com.gmail.a93ak.andrei19.finance30.util.UniversalLoader.Loaders.BitmapLoader;
 import com.gmail.a93ak.andrei19.finance30.util.bitmapOperations.UpdateBitmap;
@@ -42,6 +42,7 @@ import com.gmail.a93ak.andrei19.finance30.view.addEditActivities.CostAddActivity
 import com.gmail.a93ak.andrei19.finance30.view.addEditActivities.CostEditActivity;
 
 import java.io.File;
+import java.net.MalformedURLException;
 
 public class CostActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, OnTaskCompleted {
 
@@ -53,14 +54,14 @@ public class CostActivity extends AppCompatActivity implements LoaderManager.Loa
     private static final int EDIT_COST_REQUEST = 2;
 
     public static final String FTP_PATH = "ftp://adk:1111111@93.125.42.84:21/images/";
-
-    private CostCursorAdapter costCursorAdapter;
-    private RequestHolder<Cost> requestHolder;
-
-    private Cost mNewCost;
-    private Cost mEditCost;
-
     public static final String TEMP_PATH = "/storage/emulated/0/temp.jpg";
+    public static final String INTERNAL_PATH = "/data/data/com.gmail.a93ak.andrei19.finance30/files/images";
+    private CostCursorAdapter costCursorAdapter;
+
+    private RequestHolder<Cost> requestHolder;
+    private Cost mNewCost;
+
+    private Cost mEditCost;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -89,13 +90,11 @@ public class CostActivity extends AppCompatActivity implements LoaderManager.Loa
             case CM_DELETE_ID:
                 requestHolder.setDeleteRequest(info.id);
                 new CostExecutor(this).execute(requestHolder.getDeleteRequest());
-                BitmapOperations.deleteBitmap(info.id);
                 break;
             case CM_EDIT_ID:
                 Intent intent = new Intent(this, CostEditActivity.class);
                 intent.putExtra(DBHelper.COST_KEY_ID, info.id);
                 startActivityForResult(intent, EDIT_COST_REQUEST);
-                Toast.makeText(this, String.valueOf(info.id), Toast.LENGTH_LONG).show();
                 break;
             case CM_PHOTO_ID:
                 Cost cost = DBHelperCost.getInstance(DBHelper.getInstance(this)).get(info.id);
@@ -116,7 +115,22 @@ public class CostActivity extends AppCompatActivity implements LoaderManager.Loa
                 } else if (cost.getPhoto() == 0) {
                     Toast.makeText(this, R.string.noPhoto, Toast.LENGTH_LONG).show();
                 } else if (cost.getPhoto() == -1) {
-                    Toast.makeText(this, "Еще не сделал", Toast.LENGTH_LONG).show();
+                    String filePath = INTERNAL_PATH + "/" + String.valueOf(info.id) + ".jpg";
+                    File file = new File(filePath);
+                    Dialog builder = new Dialog(this);
+                    builder.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                    builder.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    ImageView imageView = new ImageView(this);
+                    BitmapLoader bitmapLoader = BitmapLoader.getInstance(this);
+                    try {
+                        bitmapLoader.load(file.toURI().toURL().toString(), imageView);
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    }
+                    builder.addContentView(imageView, new RelativeLayout.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.MATCH_PARENT));
+                    builder.show();
                 }
                 break;
         }
@@ -138,7 +152,7 @@ public class CostActivity extends AppCompatActivity implements LoaderManager.Loa
                     mNewCost.setCategory_id(data.getLongExtra(DBHelper.COST_KEY_CATEGORY_ID, -1L));
                     if (data.getIntExtra(DBHelper.COST_KEY_PHOTO, -2) == 1) {
                         File file = new File(TEMP_PATH);
-                        BitmapOperations.uploadBitmap(file, this);
+                        CostOperations.uploadBitmap(file, this);
                         break;
                     } else {
                         mNewCost.setPhoto(0);
@@ -160,25 +174,29 @@ public class CostActivity extends AppCompatActivity implements LoaderManager.Loa
                     mEditCost.setPurse_id(data.getLongExtra(DBHelper.COST_KEY_PURSE_ID, -1));
                     mEditCost.setCategory_id(data.getLongExtra(DBHelper.COST_KEY_CATEGORY_ID, -1L));
                     mEditCost.setPhoto(data.getIntExtra(DBHelper.COST_KEY_PHOTO, -2));
-                    if (data.getIntExtra(DBHelper.COST_KEY_PHOTO, -2) == 1) {
-                        if (data.getBooleanExtra("isChanged", false)) {
-                            File file = new File(TEMP_PATH);
-                            BitmapOperations.changeBitmap(id, file, this);
-                            break;
-                        } else {
-                            mNewCost.setPhoto(1);
-                            RequestHolder<Cost> requestHolder = new RequestHolder<>();
-                            requestHolder.setEditRequest(mEditCost);
-                            new CostExecutor(this).execute(requestHolder.getEditRequest());
-                            break;
-                        }
-                    } else {
-                        mEditCost.setPhoto(0);
-                        RequestHolder<Cost> requestHolder = new RequestHolder<>();
-                        requestHolder.setEditRequest(mEditCost);
-                        new CostExecutor(this).execute(requestHolder.getEditRequest());
-                        break;
-                    }
+                    RequestHolder<Cost> requestHolder = new RequestHolder<>();
+                    requestHolder.setEditRequest(mEditCost);
+                    new CostExecutor(this).execute(requestHolder.getEditRequest());
+                    break;
+//                    if (data.getIntExtra(DBHelper.COST_KEY_PHOTO, -2) == 1) {
+//                        if (data.getBooleanExtra("isChanged", false)) {
+//                            File file = new File(TEMP_PATH);
+//                            CostOperations.changeBitmap(id, file, this);
+//                            break;
+//                        } else {
+//                            mNewCost.setPhoto(1);
+//                            RequestHolder<Cost> requestHolder = new RequestHolder<>();
+//                            requestHolder.setEditRequest(mEditCost);
+//                            new CostExecutor(this).execute(requestHolder.getEditRequest());
+//                            break;
+//                        }
+//                    } else {
+//                        mEditCost.setPhoto(0);
+//                        RequestHolder<Cost> requestHolder = new RequestHolder<>();
+//                        requestHolder.setEditRequest(mEditCost);
+//                        new CostExecutor(this).execute(requestHolder.getEditRequest());
+//                        break;
+//                    }
                 default:
                     break;
             }
@@ -230,24 +248,32 @@ public class CostActivity extends AppCompatActivity implements LoaderManager.Loa
                 requestHolder.setAddRequest(mNewCost);
                 new CostExecutor(this).execute(requestHolder.getAddRequest());
                 break;
-            case SetBitmap.ERROR:
-                mNewCost.setPhoto(0);
+            case SetBitmap.FILE_ID:
+                mNewCost.setPhoto(-1);
                 requestHolder = new RequestHolder<>();
                 requestHolder.setAddRequest(mNewCost);
                 new CostExecutor(this).execute(requestHolder.getAddRequest());
                 break;
-            case UpdateBitmap.FTP_ID:
-                mEditCost.setPhoto(1);
+            case SetBitmap.ERROR_ID:
+                mNewCost.setPhoto(0);
                 requestHolder = new RequestHolder<>();
-                requestHolder.setEditRequest(mEditCost);
-                new CostExecutor(this).execute(requestHolder.getEditRequest());
+                requestHolder.setAddRequest(mNewCost);
+                new CostExecutor(this).execute(requestHolder.getAddRequest());
+                Toast.makeText(this, R.string.addError, Toast.LENGTH_LONG).show();
                 break;
-            case UpdateBitmap.ERROR:
-                mEditCost.setPhoto(0);
-                requestHolder = new RequestHolder<>();
-                requestHolder.setEditRequest(mEditCost);
-                new CostExecutor(this).execute(requestHolder.getEditRequest());
-                break;
+
+//            case UpdateBitmap.FTP_ID:
+//                mEditCost.setPhoto(1);
+//                requestHolder = new RequestHolder<>();
+//                requestHolder.setEditRequest(mEditCost);
+//                new CostExecutor(this).execute(requestHolder.getEditRequest());
+//                break;
+//            case UpdateBitmap.ERROR:
+//                mEditCost.setPhoto(0);
+//                requestHolder = new RequestHolder<>();
+//                requestHolder.setEditRequest(mEditCost);
+//                new CostExecutor(this).execute(requestHolder.getEditRequest());
+//                break;
             default:
                 Log.e("FinancePMError", "Unknown result code: " + id);
         }

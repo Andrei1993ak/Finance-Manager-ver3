@@ -6,11 +6,7 @@ import com.gmail.a93ak.andrei19.finance30.control.base.OnTaskCompleted;
 
 import java.io.File;
 
-public class BitmapOperations {
-
-    public static void deleteBitmap(long id){
-        new DeleteBitmap().execute(id);
-    }
+public class CostOperations {
 
     public static void uploadBitmap(File file, OnTaskCompleted onTaskCompleted){
         new SetBitmap(onTaskCompleted).execute(file);

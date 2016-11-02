@@ -34,4 +34,5 @@
     <string name="addPhoto">Добавить фото</string>
     <string name="showPhoto">Фото</string>
     <string name="noPhoto">К сожалению, вы не делали фото к этому расходу</string>
+    <string name="addError">Невозможно добать фото, проверьте соединение и проверьте свободное место на устройстве</string>
 </resources>

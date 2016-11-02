@@ -33,4 +33,5 @@
     <string name="addPhoto">add photo</string>
     <string name="showPhoto">show photo</string>
     <string name="noPhoto">sorry it is no photo for this cost</string>
+    <string name="addError">sorry, cant add photo check internet and free space</string>
 </resources>

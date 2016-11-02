@@ -2,6 +2,9 @@ package com.gmail.a93ak.andrei19.finance30.model.pojos;
 
 public class Cost {
 
+    public static final int PHOTO_IN_STORAGE = -1;
+    public static final int PHOTO_IN_FTP = 1;
+
     private long _id;
     private String name;
     private long purse_id;
