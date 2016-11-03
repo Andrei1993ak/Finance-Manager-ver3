@@ -1,13 +1,13 @@
-package com.gmail.a93ak.andrei19.finance30.pojosVer2.pojos;
+package com.gmail.a93ak.andrei19.finance30.modelVer2.pojos;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.gmail.a93ak.andrei19.finance30.pojosVer2.annotations.Table;
-import com.gmail.a93ak.andrei19.finance30.pojosVer2.annotations.types.DBDouble;
-import com.gmail.a93ak.andrei19.finance30.pojosVer2.annotations.types.DBInteger;
-import com.gmail.a93ak.andrei19.finance30.pojosVer2.annotations.types.DBIntegerPrimaryKey;
-import com.gmail.a93ak.andrei19.finance30.pojosVer2.annotations.types.DBString;
+import com.gmail.a93ak.andrei19.finance30.modelVer2.annotations.Table;
+import com.gmail.a93ak.andrei19.finance30.modelVer2.annotations.types.DBDouble;
+import com.gmail.a93ak.andrei19.finance30.modelVer2.annotations.types.DBInteger;
+import com.gmail.a93ak.andrei19.finance30.modelVer2.annotations.types.DBIntegerPrimaryKey;
+import com.gmail.a93ak.andrei19.finance30.modelVer2.annotations.types.DBString;
 
 @Table(name = "transfers")
 public final class Transfer implements TableClass,Parcelable {

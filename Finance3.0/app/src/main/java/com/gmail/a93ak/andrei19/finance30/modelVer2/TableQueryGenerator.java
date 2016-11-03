@@ -1,14 +1,14 @@
-package com.gmail.a93ak.andrei19.finance30.pojosVer2;
+package com.gmail.a93ak.andrei19.finance30.modelVer2;
 
 
 import android.support.annotation.Nullable;
 
-import com.gmail.a93ak.andrei19.finance30.pojosVer2.annotations.Table;
-import com.gmail.a93ak.andrei19.finance30.pojosVer2.annotations.types.DBDouble;
-import com.gmail.a93ak.andrei19.finance30.pojosVer2.annotations.types.DBInteger;
-import com.gmail.a93ak.andrei19.finance30.pojosVer2.annotations.types.DBIntegerPrimaryKey;
-import com.gmail.a93ak.andrei19.finance30.pojosVer2.annotations.types.DBString;
-import com.gmail.a93ak.andrei19.finance30.pojosVer2.pojos.TableClass;
+import com.gmail.a93ak.andrei19.finance30.modelVer2.annotations.Table;
+import com.gmail.a93ak.andrei19.finance30.modelVer2.annotations.types.DBDouble;
+import com.gmail.a93ak.andrei19.finance30.modelVer2.annotations.types.DBInteger;
+import com.gmail.a93ak.andrei19.finance30.modelVer2.annotations.types.DBIntegerPrimaryKey;
+import com.gmail.a93ak.andrei19.finance30.modelVer2.annotations.types.DBString;
+import com.gmail.a93ak.andrei19.finance30.modelVer2.pojos.TableClass;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;

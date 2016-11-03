@@ -5,8 +5,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.gmail.a93ak.andrei19.finance30.pojosVer2.TableQueryGenerator;
-import com.gmail.a93ak.andrei19.finance30.pojosVer2.pojos.Transfer;
+import com.gmail.a93ak.andrei19.finance30.modelVer2.TableQueryGenerator;
+import com.gmail.a93ak.andrei19.finance30.modelVer2.pojos.Transfer;
 
 public class DBHelper extends SQLiteOpenHelper {
 

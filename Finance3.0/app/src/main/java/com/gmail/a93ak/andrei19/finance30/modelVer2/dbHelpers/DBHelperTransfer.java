@@ -1,4 +1,4 @@
-package com.gmail.a93ak.andrei19.finance30.pojosVer2.dbHelpers;
+package com.gmail.a93ak.andrei19.finance30.modelVer2.dbHelpers;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -6,8 +6,8 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.gmail.a93ak.andrei19.finance30.model.base.DBHelper;
 import com.gmail.a93ak.andrei19.finance30.model.dbhelpers.DBHelperPurse;
-import com.gmail.a93ak.andrei19.finance30.pojosVer2.TableQueryGenerator;
-import com.gmail.a93ak.andrei19.finance30.pojosVer2.pojos.Transfer;
+import com.gmail.a93ak.andrei19.finance30.modelVer2.TableQueryGenerator;
+import com.gmail.a93ak.andrei19.finance30.modelVer2.pojos.Transfer;
 import com.gmail.a93ak.andrei19.finance30.util.ContextHolder;
 
 import java.util.ArrayList;

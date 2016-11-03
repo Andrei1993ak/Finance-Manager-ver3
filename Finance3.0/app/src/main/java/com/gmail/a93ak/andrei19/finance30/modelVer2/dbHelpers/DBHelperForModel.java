@@ -1,4 +1,4 @@
-package com.gmail.a93ak.andrei19.finance30.pojosVer2.dbHelpers;
+package com.gmail.a93ak.andrei19.finance30.modelVer2.dbHelpers;
 
 import android.database.Cursor;
 

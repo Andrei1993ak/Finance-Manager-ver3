@@ -1,4 +1,4 @@
-package com.gmail.a93ak.andrei19.finance30.pojosVer2.annotations.types;
+package com.gmail.a93ak.andrei19.finance30.modelVer2.annotations.types;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
