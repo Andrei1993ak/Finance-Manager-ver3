@@ -36,8 +36,8 @@ public class TransferExecutor extends PojoExecutor<Transfer> {
     }
 
     @Override
-    public Result<Long> addPojo(Transfer income) {
-        return new Result<>(KEY_RESULT_ADD, DBHelperTransfer.getInstance().add(income));
+    public Result<Long> addPojo(Transfer transfer) {
+        return new Result<>(KEY_RESULT_ADD, DBHelperTransfer.getInstance().add(transfer));
     }
 
     @Override
@@ -46,8 +46,8 @@ public class TransferExecutor extends PojoExecutor<Transfer> {
     }
 
     @Override
-    public Result<Integer> updatePojo(Transfer income) {
-        return new Result<>(KEY_RESULT_EDIT, DBHelperTransfer.getInstance().update(income));
+    public Result<Integer> updatePojo(Transfer transfer) {
+        return new Result<>(KEY_RESULT_EDIT, DBHelperTransfer.getInstance().update(transfer));
     }
 
     @Override

@@ -12,7 +12,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "financePm";
 
-    private static final int DATABASE_VERSION = 9;
+    private static final int DATABASE_VERSION = 10;
 
     public static final String TABLE_CURRENCIES = "currencies";
     public static final String CURRENCY_KEY_ID = "_id";
@@ -138,7 +138,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
-        TableQueryGenerator.getTableDeleteQuery(Transfer.class);
+        sqLiteDatabase.execSQL(TableQueryGenerator.getTableDeleteQuery(Transfer.class));
         onCreate(sqLiteDatabase);
     }
 

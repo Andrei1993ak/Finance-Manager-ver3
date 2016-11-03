@@ -8,28 +8,18 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
-import android.widget.Toast;
 
-import com.gmail.a93ak.andrei19.finance30.App;
 import com.gmail.a93ak.andrei19.finance30.R;
-import com.gmail.a93ak.andrei19.finance30.api.HelloEndpoint;
-import com.gmail.a93ak.andrei19.finance30.control.ItemsTouchHeplers.RecViewPursesSwissHelper;
 import com.gmail.a93ak.andrei19.finance30.control.Loaders.PurseCursorLoader;
 import com.gmail.a93ak.andrei19.finance30.control.adapters.PursesRecycleViewAdapter;
-import com.gmail.a93ak.andrei19.finance30.model.base.DBHelper;
-import com.gmail.a93ak.andrei19.finance30.model.dbhelpers.DBHelperIncome;
-import com.gmail.a93ak.andrei19.finance30.model.pojos.IncomeCategory;
-import com.gmail.a93ak.andrei19.finance30.view.Activities.CameraActivity;
 import com.gmail.a93ak.andrei19.finance30.view.Activities.CategoryStartingActivity;
 import com.gmail.a93ak.andrei19.finance30.view.Activities.CostActivity;
 import com.gmail.a93ak.andrei19.finance30.view.Activities.CurrencyActivity;
 import com.gmail.a93ak.andrei19.finance30.view.Activities.ImagesActivity;
 import com.gmail.a93ak.andrei19.finance30.view.Activities.IncomeActivity;
 import com.gmail.a93ak.andrei19.finance30.view.Activities.PurseActivity;
-
-import java.io.File;
+import com.gmail.a93ak.andrei19.finance30.view.Activities.TransferActivity;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
     public static final int LOADER_ID = 0;
@@ -57,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         }
     }
 
-    public void selectCategory(View view) {
+    public void selectCategory(final View view) {
         switch (view.getId()) {
             case R.id.tvCurrency:
                 startActivity(new Intent(this, CurrencyActivity.class));
@@ -78,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 startActivity(new Intent(this, ImagesActivity.class));
                 break;
             case R.id.tvTransfers:
-                startActivity(new Intent(this, CameraActivity.class));
+                startActivity(new Intent(this, TransferActivity.class));
                 break;
         }
     }
