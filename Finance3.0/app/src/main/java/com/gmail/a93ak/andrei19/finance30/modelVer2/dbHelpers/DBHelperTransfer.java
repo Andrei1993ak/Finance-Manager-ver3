@@ -154,4 +154,16 @@ public class DBHelperTransfer implements DBHelperForModel<Transfer> {
         return 0;
     }
 
+    public List<Transfer> getAllToListByDates(Long aLong, Long aLong1) {
+        return null;
+    }
+
+
+    public List<Transfer> getAllToListByPurseId(Long id) {
+        return null;
+    }
+
+    public List<Transfer> getAllToListByCategoryId(Long id) {
+        return null;
+    }
 }
