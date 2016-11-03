@@ -1,11 +1,15 @@
-package com.gmail.a93ak.andrei19.finance30.model.base;
+package com.gmail.a93ak.andrei19.finance30.pojosVer2.dbHelpers;
 
 import android.database.Cursor;
+
+import java.util.List;
+
 //
-public interface DBHelperPojo<T> {
+public interface DBHelperForModel<T> {
     long add(T t);
     T get(long id);
     Cursor getAll();
+    List<T> getAllToList();
     int update(T t);
     int delete(long id);
     int deleteAll();

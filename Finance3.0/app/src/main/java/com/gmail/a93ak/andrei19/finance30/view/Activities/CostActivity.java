@@ -19,7 +19,6 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -31,13 +30,9 @@ import com.gmail.a93ak.andrei19.finance30.control.base.OnTaskCompleted;
 import com.gmail.a93ak.andrei19.finance30.control.base.RequestHolder;
 import com.gmail.a93ak.andrei19.finance30.control.base.Result;
 import com.gmail.a93ak.andrei19.finance30.model.base.DBHelper;
-
 import com.gmail.a93ak.andrei19.finance30.model.dbhelpers.DBHelperCost;
 import com.gmail.a93ak.andrei19.finance30.model.pojos.Cost;
-import com.gmail.a93ak.andrei19.finance30.util.bitmapOperations.CostOperations;
-import com.gmail.a93ak.andrei19.finance30.util.bitmapOperations.SetBitmap;
 import com.gmail.a93ak.andrei19.finance30.util.UniversalLoader.Loaders.BitmapLoader;
-import com.gmail.a93ak.andrei19.finance30.util.bitmapOperations.UpdateBitmap;
 import com.gmail.a93ak.andrei19.finance30.view.addEditActivities.CostAddActivity;
 import com.gmail.a93ak.andrei19.finance30.view.addEditActivities.CostEditActivity;
 
@@ -53,9 +48,9 @@ public class CostActivity extends AppCompatActivity implements LoaderManager.Loa
     private static final int ADD_COST_REQUEST = 1;
     private static final int EDIT_COST_REQUEST = 2;
 
-    public static final String FTP_PATH = "ftp://adk:1111111@93.125.42.84:21/images/";
     public static final String TEMP_PATH = "/storage/emulated/0/temp.jpg";
-    public static final String INTERNAL_PATH = "/data/data/com.gmail.a93ak.andrei19.finance30/files/images";
+    public static final String INTERNAL_PATH = "/data/data/com.gmail.a93ak.andrei19.finance30/files/images/";
+
     private CostCursorAdapter costCursorAdapter;
 
     private RequestHolder<Cost> requestHolder;
@@ -98,24 +93,10 @@ public class CostActivity extends AppCompatActivity implements LoaderManager.Loa
                 break;
             case CM_PHOTO_ID:
                 Cost cost = DBHelperCost.getInstance(DBHelper.getInstance(this)).get(info.id);
-                if (cost.getPhoto() == 1) {
-                    String url = FTP_PATH;
-                    url += String.valueOf(info.id);
-                    url += ".jpg";
-                    Dialog builder = new Dialog(this);
-                    builder.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                    builder.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                    ImageView imageView = new ImageView(this);
-                    BitmapLoader bitmapLoader = BitmapLoader.getInstance(this);
-                    bitmapLoader.load(url, imageView);
-                    builder.addContentView(imageView, new RelativeLayout.LayoutParams(
-                            ViewGroup.LayoutParams.MATCH_PARENT,
-                            ViewGroup.LayoutParams.MATCH_PARENT));
-                    builder.show();
-                } else if (cost.getPhoto() == 0) {
+                if (cost.getPhoto() == 0) {
                     Toast.makeText(this, R.string.noPhoto, Toast.LENGTH_LONG).show();
-                } else if (cost.getPhoto() == -1) {
-                    String filePath = INTERNAL_PATH + "/" + String.valueOf(info.id) + ".jpg";
+                } else if (cost.getPhoto() == 1) {
+                    String filePath = INTERNAL_PATH + String.valueOf(info.id) + ".jpg";
                     File file = new File(filePath);
                     Dialog builder = new Dialog(this);
                     builder.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -142,29 +123,18 @@ public class CostActivity extends AppCompatActivity implements LoaderManager.Loa
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case ADD_COST_REQUEST:
-                    ProgressBar pb = (ProgressBar) findViewById(R.id.costProgressBar);
-                    pb.setVisibility(View.VISIBLE);
                     mNewCost = new Cost();
                     mNewCost.setName(data.getStringExtra(DBHelper.COST_KEY_NAME));
                     mNewCost.setDate(data.getLongExtra(DBHelper.COST_KEY_DATE, -1L));
                     mNewCost.setAmount(data.getDoubleExtra(DBHelper.COST_KEY_AMOUNT, -1.0));
                     mNewCost.setPurse_id(data.getLongExtra(DBHelper.COST_KEY_PURSE_ID, -1));
                     mNewCost.setCategory_id(data.getLongExtra(DBHelper.COST_KEY_CATEGORY_ID, -1L));
-                    if (data.getIntExtra(DBHelper.COST_KEY_PHOTO, -2) == 1) {
-                        File file = new File(TEMP_PATH);
-                        CostOperations.uploadBitmap(file, this);
-                        break;
-                    } else {
-                        mNewCost.setPhoto(0);
-                        RequestHolder<Cost> requestHolder = new RequestHolder<>();
-                        requestHolder.setAddRequest(mNewCost);
-                        new CostExecutor(this).execute(requestHolder.getAddRequest());
-                        break;
-                    }
-
+                    mNewCost.setPhoto(data.getIntExtra(DBHelper.COST_KEY_PHOTO, 0));
+                    RequestHolder<Cost> requestHolder = new RequestHolder<>();
+                    requestHolder.setAddRequest(mNewCost);
+                    new CostExecutor(this).execute(requestHolder.getAddRequest());
+                    break;
                 case EDIT_COST_REQUEST:
-                    ProgressBar pb2 = (ProgressBar) findViewById(R.id.costProgressBar);
-                    pb2.setVisibility(View.VISIBLE);
                     mEditCost = new Cost();
                     long id = data.getLongExtra(DBHelper.COST_KEY_ID, -1L);
                     mEditCost.setId(id);
@@ -173,30 +143,11 @@ public class CostActivity extends AppCompatActivity implements LoaderManager.Loa
                     mEditCost.setAmount(data.getDoubleExtra(DBHelper.COST_KEY_AMOUNT, -1.0));
                     mEditCost.setPurse_id(data.getLongExtra(DBHelper.COST_KEY_PURSE_ID, -1));
                     mEditCost.setCategory_id(data.getLongExtra(DBHelper.COST_KEY_CATEGORY_ID, -1L));
-                    mEditCost.setPhoto(data.getIntExtra(DBHelper.COST_KEY_PHOTO, -2));
-                    RequestHolder<Cost> requestHolder = new RequestHolder<>();
+                    mEditCost.setPhoto(data.getIntExtra(DBHelper.COST_KEY_PHOTO, 0));
+                    requestHolder = new RequestHolder<>();
                     requestHolder.setEditRequest(mEditCost);
                     new CostExecutor(this).execute(requestHolder.getEditRequest());
                     break;
-//                    if (data.getIntExtra(DBHelper.COST_KEY_PHOTO, -2) == 1) {
-//                        if (data.getBooleanExtra("isChanged", false)) {
-//                            File file = new File(TEMP_PATH);
-//                            CostOperations.changeBitmap(id, file, this);
-//                            break;
-//                        } else {
-//                            mNewCost.setPhoto(1);
-//                            RequestHolder<Cost> requestHolder = new RequestHolder<>();
-//                            requestHolder.setEditRequest(mEditCost);
-//                            new CostExecutor(this).execute(requestHolder.getEditRequest());
-//                            break;
-//                        }
-//                    } else {
-//                        mEditCost.setPhoto(0);
-//                        RequestHolder<Cost> requestHolder = new RequestHolder<>();
-//                        requestHolder.setEditRequest(mEditCost);
-//                        new CostExecutor(this).execute(requestHolder.getEditRequest());
-//                        break;
-//                    }
                 default:
                     break;
             }
@@ -229,51 +180,15 @@ public class CostActivity extends AppCompatActivity implements LoaderManager.Loa
                 }
                 break;
             case CostExecutor.KEY_RESULT_ADD:
-                ProgressBar pb = (ProgressBar) findViewById(R.id.costProgressBar);
-                pb.setVisibility(View.INVISIBLE);
                 if (getSupportLoaderManager().getLoader(0) != null) {
                     getSupportLoaderManager().getLoader(0).forceLoad();
                 }
                 break;
             case CostExecutor.KEY_RESULT_EDIT:
-                pb = (ProgressBar) findViewById(R.id.costProgressBar);
-                pb.setVisibility(View.INVISIBLE);
                 if (getSupportLoaderManager().getLoader(0) != null) {
                     getSupportLoaderManager().getLoader(0).forceLoad();
                 }
                 break;
-            case SetBitmap.FTP_ID:
-                mNewCost.setPhoto(1);
-                RequestHolder<Cost> requestHolder = new RequestHolder<>();
-                requestHolder.setAddRequest(mNewCost);
-                new CostExecutor(this).execute(requestHolder.getAddRequest());
-                break;
-            case SetBitmap.FILE_ID:
-                mNewCost.setPhoto(-1);
-                requestHolder = new RequestHolder<>();
-                requestHolder.setAddRequest(mNewCost);
-                new CostExecutor(this).execute(requestHolder.getAddRequest());
-                break;
-            case SetBitmap.ERROR_ID:
-                mNewCost.setPhoto(0);
-                requestHolder = new RequestHolder<>();
-                requestHolder.setAddRequest(mNewCost);
-                new CostExecutor(this).execute(requestHolder.getAddRequest());
-                Toast.makeText(this, R.string.addError, Toast.LENGTH_LONG).show();
-                break;
-
-//            case UpdateBitmap.FTP_ID:
-//                mEditCost.setPhoto(1);
-//                requestHolder = new RequestHolder<>();
-//                requestHolder.setEditRequest(mEditCost);
-//                new CostExecutor(this).execute(requestHolder.getEditRequest());
-//                break;
-//            case UpdateBitmap.ERROR:
-//                mEditCost.setPhoto(0);
-//                requestHolder = new RequestHolder<>();
-//                requestHolder.setEditRequest(mEditCost);
-//                new CostExecutor(this).execute(requestHolder.getEditRequest());
-//                break;
             default:
                 Log.e("FinancePMError", "Unknown result code: " + id);
         }

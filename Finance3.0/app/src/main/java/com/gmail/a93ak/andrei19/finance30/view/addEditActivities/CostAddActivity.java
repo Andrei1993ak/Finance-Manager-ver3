@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -29,9 +28,10 @@ import com.gmail.a93ak.andrei19.finance30.model.base.DBHelper;
 import com.gmail.a93ak.andrei19.finance30.model.pojos.CostCategory;
 import com.gmail.a93ak.andrei19.finance30.model.pojos.Purse;
 import com.gmail.a93ak.andrei19.finance30.view.Activities.CostActivity;
+import com.google.common.io.Files;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -52,6 +52,7 @@ public class CostAddActivity extends AppCompatActivity implements OnTaskComplete
     private List<CostCategory> subCategoriesList;
     private SimpleDateFormat dateFormatter;
     private Bitmap photo;
+    private int id;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -65,6 +66,7 @@ public class CostAddActivity extends AppCompatActivity implements OnTaskComplete
         categoryRequestHolder.setGetAllToListRequest(1);
         new CostCategoryExecutor(this).execute(categoryRequestHolder.getGetAllToListRequest());
         setDatePickerDialog();
+        id = DBHelper.getInstance(this).getNextId();
     }
 
     private void setDatePickerDialog() {
@@ -170,9 +172,8 @@ public class CostAddActivity extends AppCompatActivity implements OnTaskComplete
                 }
                 if (photo == null) {
                     intent.putExtra(DBHelper.COST_KEY_PHOTO, 0);
-                }
-                else {
-                    intent.putExtra(DBHelper.COST_KEY_PHOTO,1);
+                } else {
+                    intent.putExtra(DBHelper.COST_KEY_PHOTO, 1);
                 }
                 setResult(RESULT_OK, intent);
                 finish();
@@ -205,7 +206,7 @@ public class CostAddActivity extends AppCompatActivity implements OnTaskComplete
         File file = new File(CostActivity.TEMP_PATH);
         Uri outputFileUri = Uri.fromFile(file);
         Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT,outputFileUri);
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
         startActivityForResult(cameraIntent, CAMERA_REQUEST);
     }
 
@@ -214,6 +215,13 @@ public class CostAddActivity extends AppCompatActivity implements OnTaskComplete
             photo = (Bitmap) BitmapFactory.decodeFile(CostActivity.TEMP_PATH);
             ImageView view = (ImageView) findViewById(R.id.new_cost_photo);
             view.setImageBitmap(photo);
+            String path = CostActivity.INTERNAL_PATH + String.valueOf(id) + ".jpg";
+            File toFile = new File(path);
+            try {
+                Files.move(new File(CostActivity.TEMP_PATH), toFile);
+            } catch (IOException e) {
+                photo = null;
+            }
         }
     }
 }

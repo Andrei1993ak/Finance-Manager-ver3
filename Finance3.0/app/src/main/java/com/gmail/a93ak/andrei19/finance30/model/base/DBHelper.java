@@ -5,11 +5,14 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.gmail.a93ak.andrei19.finance30.pojosVer2.TableQueryGenerator;
+import com.gmail.a93ak.andrei19.finance30.pojosVer2.pojos.Transfer;
+
 public class DBHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "financePm";
 
-    private static final int DATABASE_VERSION = 8;
+    private static final int DATABASE_VERSION = 9;
 
     public static final String TABLE_CURRENCIES = "currencies";
     public static final String CURRENCY_KEY_ID = "_id";
@@ -59,14 +62,14 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String QUEUE_KEY_COST_ID = "cost_id";
     public static final String QUEUE_KEY_OPERATION = "type";
 
-    public static final String TABLE_TRANSFERS = "transfers";
-    public static final String TRANSFER_KEY_ID = "_id";
-    public static final String TRANSFER_KEY_NAME = "name";
-    public static final String TRANSFER_KEY_DATE = "date";
-    public static final String TRANSFER_KEY_FROM_PURSE = "fromPurse";
-    public static final String TRANSFER_KEY_TO_PURSE = "toPurse";
-    public static final String TRANSFER_KEY_FROM_AMOUNT = "fromAmount";
-    public static final String TRANSFER_KEY_TO_AMOUNT = "toAmount";
+//    public static final String TABLE_TRANSFERS = "transfers";
+//    public static final String TRANSFER_KEY_ID = "_id";
+//    public static final String TRANSFER_KEY_NAME = "name";
+//    public static final String TRANSFER_KEY_DATE = "date";
+//    public static final String TRANSFER_KEY_FROM_PURSE = "fromPurse";
+//    public static final String TRANSFER_KEY_TO_PURSE = "toPurse";
+//    public static final String TRANSFER_KEY_FROM_AMOUNT = "fromAmount";
+//    public static final String TRANSFER_KEY_TO_AMOUNT = "toAmount";
 
 
     private static DBHelper instance;
@@ -117,15 +120,11 @@ public class DBHelper extends SQLiteOpenHelper {
                 + COST_KEY_CATEGORY_ID + " INTEGER, " + COST_KEY_DATE + " INTEGER, "
                 + COST_KEY_PHOTO + " INTEGER" + ")";
 
-        String CREATE_QUEUE_TABLE = "CREATE TABLE " + TABLE_QUEUE + " ("
-                + QUEUE_KEY_ID + " INTEGER PRIMARY KEY, " + QUEUE_KEY_COST_ID + " INTEGER, "
-                + QUEUE_KEY_OPERATION + " INTEGER" + ")";
-
-        String CREATE_TRANSFER_TABLE = "CREATE TABLE " + TABLE_TRANSFERS + " ("
-                + TRANSFER_KEY_ID + " INTEGER PRIMARY KEY, " + TRANSFER_KEY_NAME + " TEXT, "
-                + TRANSFER_KEY_DATE + " INTEGER, " + TRANSFER_KEY_FROM_PURSE + " INTEGER, "
-                + TRANSFER_KEY_TO_PURSE + " INTEGER, " + TRANSFER_KEY_FROM_AMOUNT + " INTEGER, "
-                + TRANSFER_KEY_TO_AMOUNT + " INTEGER" + ")";
+//        String CREATE_TRANSFER_TABLE = "CREATE TABLE " + TABLE_TRANSFERS + " ("
+//                + TRANSFER_KEY_ID + " INTEGER PRIMARY KEY, " + TRANSFER_KEY_NAME + " TEXT, "
+//                + TRANSFER_KEY_DATE + " INTEGER, " + TRANSFER_KEY_FROM_PURSE + " INTEGER, "
+//                + TRANSFER_KEY_TO_PURSE + " INTEGER, " + TRANSFER_KEY_FROM_AMOUNT + " INTEGER, "
+//                + TRANSFER_KEY_TO_AMOUNT + " INTEGER" + ")";
 
 //        sqLiteDatabase.execSQL(CREATE_CURRENCIES_TABLE);
 //        sqLiteDatabase.execSQL(CREATE_CURRENCIES_FROM_WEB_TABLE);
@@ -133,13 +132,13 @@ public class DBHelper extends SQLiteOpenHelper {
 //        sqLiteDatabase.execSQL(CREATE_INCOME_CATEGORIES_TABLE);
 //        sqLiteDatabase.execSQL(CREATE_COST_CATEGORIES_TABLE);
 //        sqLiteDatabase.execSQL(CREATE_INCOMES_TABLE);
-        sqLiteDatabase.execSQL(CREATE_COSTS_TABLE);
-        sqLiteDatabase.execSQL(CREATE_QUEUE_TABLE);
-        sqLiteDatabase.execSQL(CREATE_TRANSFER_TABLE);
+//        sqLiteDatabase.execSQL(CREATE_COSTS_TABLE);
+        sqLiteDatabase.execSQL(TableQueryGenerator.getTableCreateQuery(Transfer.class));
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
+        TableQueryGenerator.getTableDeleteQuery(Transfer.class);
         onCreate(sqLiteDatabase);
     }
 
@@ -152,7 +151,7 @@ public class DBHelper extends SQLiteOpenHelper {
         } else {
             return -1;
 
+        }
     }
-}
 
 }

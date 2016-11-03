@@ -5,13 +5,13 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.gmail.a93ak.andrei19.finance30.model.base.DBHelper;
-import com.gmail.a93ak.andrei19.finance30.model.base.DBHelperPojo;
+import com.gmail.a93ak.andrei19.finance30.model.base.DBHelperInterface;
 import com.gmail.a93ak.andrei19.finance30.model.pojos.CurrencyOfficial;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class DBHelperCurrencyOfficial implements DBHelperPojo<CurrencyOfficial> {
+public class DBHelperCurrencyOfficial implements DBHelperInterface<CurrencyOfficial> {
 
     private DBHelper dbHelper;
 

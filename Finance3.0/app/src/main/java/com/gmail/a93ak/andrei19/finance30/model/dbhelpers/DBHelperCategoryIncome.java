@@ -6,13 +6,13 @@ import android.database.sqlite.SQLiteDatabase;
 
 
 import com.gmail.a93ak.andrei19.finance30.model.base.DBHelper;
-import com.gmail.a93ak.andrei19.finance30.model.base.DBHelperPojo;
+import com.gmail.a93ak.andrei19.finance30.model.base.DBHelperInterface;
 import com.gmail.a93ak.andrei19.finance30.model.pojos.IncomeCategory;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class DBHelperCategoryIncome implements DBHelperPojo<IncomeCategory> {
+public class DBHelperCategoryIncome implements DBHelperInterface<IncomeCategory> {
 
 
     private DBHelper dbHelper;

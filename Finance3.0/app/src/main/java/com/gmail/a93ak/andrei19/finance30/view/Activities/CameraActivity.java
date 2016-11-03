@@ -9,7 +9,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import com.gmail.a93ak.andrei19.finance30.R;
-import com.gmail.a93ak.andrei19.finance30.util.ImageUploader;
 
 
 public class CameraActivity extends AppCompatActivity {
@@ -21,7 +20,7 @@ public class CameraActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.camera_activity_layout);
-        this.imageView = (ImageView)this.findViewById(R.id.imageView1);
+        this.imageView = (ImageView) this.findViewById(R.id.imageView1);
         Button photoButton = (Button) this.findViewById(R.id.button1);
         photoButton.setOnClickListener(new View.OnClickListener() {
 
@@ -37,12 +36,6 @@ public class CameraActivity extends AppCompatActivity {
         if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
             final Bitmap photo = (Bitmap) data.getExtras().get("data");
             imageView.setImageBitmap(photo);
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    ImageUploader.uploadToFTP(photo,1);
-                }
-            }).start();
         }
     }
 }

@@ -5,14 +5,14 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.gmail.a93ak.andrei19.finance30.model.base.DBHelper;
-import com.gmail.a93ak.andrei19.finance30.model.base.DBHelperPojo;
+import com.gmail.a93ak.andrei19.finance30.model.base.DBHelperInterface;
 import com.gmail.a93ak.andrei19.finance30.model.pojos.Income;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class DBHelperIncome implements DBHelperPojo<Income> {
+public class DBHelperIncome implements DBHelperInterface<Income> {
 
     private DBHelper dbHelper;
 
