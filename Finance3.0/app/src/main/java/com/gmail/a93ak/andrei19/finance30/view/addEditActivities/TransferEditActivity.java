@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.gmail.a93ak.andrei19.finance30.control.base.OnTaskCompleted;
 import com.gmail.a93ak.andrei19.finance30.control.base.Result;
+import com.gmail.a93ak.andrei19.finance30.modelVer2.TableQueryGenerator;
 import com.gmail.a93ak.andrei19.finance30.modelVer2.pojos.Transfer;
 
 public class TransferEditActivity extends AppCompatActivity implements OnTaskCompleted {
@@ -24,7 +25,7 @@ public class TransferEditActivity extends AppCompatActivity implements OnTaskCom
         transfer.setFromPurseId(1);
         transfer.setToPurseId(2);
         Intent intent = new Intent();
-        intent.putExtra("transfer",transfer);
+        intent.putExtra(TableQueryGenerator.getTableName(Transfer.class),transfer);
         setResult(RESULT_OK, intent);
         finish();
     }

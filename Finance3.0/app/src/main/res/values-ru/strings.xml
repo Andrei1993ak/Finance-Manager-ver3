@@ -35,4 +35,8 @@
     <string name="showPhoto">Фото</string>
     <string name="noPhoto">К сожалению, вы не делали фото к этому расходу</string>
     <string name="addError">Невозможно добать фото, проверьте соединение и проверьте свободное место на устройстве</string>
+    <string name="newTransfer">Новый перевод</string>
+    <string name="fromPurse">C кошелька</string>
+    <string name="toPurse">На кошелек</string>
+    <string name="official_rate">Официальный курс</string>
 </resources>

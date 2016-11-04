@@ -34,4 +34,8 @@
     <string name="showPhoto">show photo</string>
     <string name="noPhoto">sorry it is no photo for this cost</string>
     <string name="addError">sorry, cant add photo check internet and free space</string>
+    <string name="newTransfer">new transfer</string>
+    <string name="fromPurse">From purse</string>
+    <string name="toPurse">To Purse</string>
+    <string name="official_rate">Official rate</string>
 </resources>
