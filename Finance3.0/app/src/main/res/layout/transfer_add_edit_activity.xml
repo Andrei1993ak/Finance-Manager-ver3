@@ -18,7 +18,7 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:background="@drawable/shape_add_button"
-            android:onClick="addNewTransfer"
+            android:onClick="addEditTransfer"
             android:text="+"
             android:textSize="40sp" />
 
@@ -54,7 +54,7 @@
                 android:textSize="16sp" />
 
             <EditText
-                android:id="@+id/new_transfer_name"
+                android:id="@+id/transfer_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dp"
@@ -74,7 +74,7 @@
                 android:textSize="16sp" />
 
             <android.support.v7.widget.AppCompatSpinner
-                android:id="@+id/new_transfer_from_purse"
+                android:id="@+id/transfer_from_purse"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:layout_marginLeft="30dp"
@@ -95,7 +95,7 @@
                 android:textSize="16sp" />
 
             <EditText
-                android:id="@+id/new_transfer_from_amount"
+                android:id="@+id/transfer_from_amount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dp"
@@ -117,7 +117,7 @@
                 android:textSize="16sp" />
 
             <android.support.v7.widget.AppCompatSpinner
-                android:id="@+id/new_transfer_to_purse"
+                android:id="@+id/transfer_to_purse"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:layout_marginLeft="30dp"
@@ -138,7 +138,7 @@
                 android:textSize="16sp" />
 
             <EditText
-                android:id="@+id/new_transfer_to_amount"
+                android:id="@+id/transfer_to_amount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dp"
@@ -162,7 +162,7 @@
                 android:textSize="16sp" />
 
             <TextView
-                android:id="@+id/new_transfer_date"
+                android:id="@+id/transfer_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dp"

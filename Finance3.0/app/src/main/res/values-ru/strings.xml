@@ -39,4 +39,5 @@
     <string name="fromPurse">C кошелька</string>
     <string name="toPurse">На кошелек</string>
     <string name="official_rate">Официальный курс</string>
+    <string name="checkInternet">Проверьте соединение</string>
 </resources>

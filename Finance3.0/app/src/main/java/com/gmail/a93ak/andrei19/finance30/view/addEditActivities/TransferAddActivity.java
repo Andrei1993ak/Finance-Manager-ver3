@@ -1,11 +1,13 @@
 package com.gmail.a93ak.andrei19.finance30.view.addEditActivities;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatSpinner;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -17,13 +19,18 @@ import com.gmail.a93ak.andrei19.finance30.control.base.OnTaskCompleted;
 import com.gmail.a93ak.andrei19.finance30.control.base.RequestHolder;
 import com.gmail.a93ak.andrei19.finance30.control.base.Result;
 import com.gmail.a93ak.andrei19.finance30.model.pojos.Purse;
+import com.gmail.a93ak.andrei19.finance30.modelVer2.TableQueryGenerator;
+import com.gmail.a93ak.andrei19.finance30.modelVer2.pojos.Transfer;
+import com.gmail.a93ak.andrei19.finance30.util.TransferRateParser.OnParseCompleted;
+import com.gmail.a93ak.andrei19.finance30.util.TransferRateParser.RateSjonParser;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class TransferAddActivity extends AppCompatActivity implements OnTaskCompleted {
+public class TransferAddActivity extends AppCompatActivity implements OnTaskCompleted, OnParseCompleted {
 
     private EditText newTransferName;
     private TextView newTransferDate;
@@ -33,30 +40,18 @@ public class TransferAddActivity extends AppCompatActivity implements OnTaskComp
     private EditText newTransferToAmount;
     private List<Purse> allPurses;
     private SimpleDateFormat dateFormatter;
+    private TextView officialRate;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.transfer_add_activity);
+        setContentView(R.layout.transfer_add_edit_activity);
         findViewsByIds();
+        setDatePickerDialog();
         RequestHolder<Purse> purseRequestHolder = new RequestHolder<>();
         purseRequestHolder.setGetAllToListRequest(0);
         new PurseExecutor(this).execute(purseRequestHolder.getGetAllToListRequest());
-        setDatePickerDialog();
-
-//        Transfer transfer = new Transfer();
-//        transfer.setName("Test");
-//        transfer.setDate(1478198100000L);
-//        transfer.setFromAmount(100.10);
-//        transfer.setToAmount(200.20);
-//        transfer.setFromPurseId(1);
-//        transfer.setToPurseId(2);
-//        Intent intent = new Intent();
-//        intent.putExtra(TableQueryGenerator.getTableName(Transfer.class),transfer);
-//        setResult(RESULT_OK, intent);
-//        finish();
     }
-
 
     private boolean checkFields() {
         boolean flag = true;
@@ -122,12 +117,13 @@ public class TransferAddActivity extends AppCompatActivity implements OnTaskComp
     }
 
     private void findViewsByIds() {
-        newTransferName = (EditText) findViewById(R.id.new_transfer_name);
-        newTransferDate = (TextView) findViewById(R.id.new_transfer_date);
-        newTransferFromPurse = (AppCompatSpinner) findViewById(R.id.new_transfer_from_purse);
-        newTransferToPurse = (AppCompatSpinner) findViewById(R.id.new_transfer_to_purse);
-        newTransferFromAmount = (EditText) findViewById(R.id.new_transfer_from_amount);
-        newTransferToAmount = (EditText) findViewById(R.id.new_transfer_to_amount);
+        newTransferName = (EditText) findViewById(R.id.transfer_name);
+        newTransferDate = (TextView) findViewById(R.id.transfer_date);
+        newTransferFromPurse = (AppCompatSpinner) findViewById(R.id.transfer_from_purse);
+        newTransferToPurse = (AppCompatSpinner) findViewById(R.id.transfer_to_purse);
+        newTransferFromAmount = (EditText) findViewById(R.id.transfer_from_amount);
+        newTransferToAmount = (EditText) findViewById(R.id.transfer_to_amount);
+        officialRate = (TextView) findViewById(R.id.official_rate);
     }
 
     @Override
@@ -140,15 +136,64 @@ public class TransferAddActivity extends AppCompatActivity implements OnTaskComp
                 for (Purse purse : allPurses) {
                     pursesNames[i++] = purse.getName();
                 }
-                ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, pursesNames);
+                final ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, pursesNames);
                 spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 newTransferFromPurse.setAdapter(spinnerAdapter);
                 newTransferToPurse.setAdapter(spinnerAdapter);
+                newTransferToPurse.setOnItemSelectedListener(new MyItemSelectedListener());
+                newTransferFromPurse.setOnItemSelectedListener(new MyItemSelectedListener());
                 break;
         }
     }
 
-    public void addNewTransfer(View view) {
-        checkFields();
+    public void addEditTransfer(View view) {
+
+        if (checkFields()) {
+            try {
+                final Transfer transfer = new Transfer();
+                transfer.setName(newTransferName.getText().toString());
+                transfer.setDate(dateFormatter.parse(newTransferDate.getText().toString()).getTime());
+                transfer.setFromPurseId(allPurses.get(newTransferFromPurse.getSelectedItemPosition()).getId());
+                transfer.setToPurseId(allPurses.get(newTransferToPurse.getSelectedItemPosition()).getId());
+                transfer.setFromAmount(Double.parseDouble(newTransferFromAmount.getText().toString()));
+                transfer.setToAmount(Double.parseDouble(newTransferToAmount.getText().toString()));
+                Intent intent = new Intent();
+                intent.putExtra(TableQueryGenerator.getTableName(Transfer.class), transfer);
+                setResult(RESULT_OK, intent);
+                finish();
+            } catch (ParseException e) {
+                checkFields();
+            }
+        }
     }
+
+    @Override
+    public void onParseCompleted(Double result) {
+        if (result < 0) {
+            officialRate.setText(R.string.checkInternet);
+
+        } else {
+            officialRate.setText(String.format("%.4f", result));
+        }
+    }
+
+    private class MyItemSelectedListener implements AdapterView.OnItemSelectedListener {
+
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            if (newTransferFromPurse.getSelectedItemPosition() == newTransferToPurse.getSelectedItemPosition()) {
+                officialRate.setText("");
+            } else {
+                final long idFrom = (allPurses.get(newTransferFromPurse.getSelectedItemPosition()).getCurrency_id());
+                final long idTo = (allPurses.get(newTransferToPurse.getSelectedItemPosition()).getCurrency_id());
+                new RateSjonParser(TransferAddActivity.this).execute(idFrom, idTo);
+            }
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) {
+
+        }
+    }
+
 }
