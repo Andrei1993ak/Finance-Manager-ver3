@@ -9,6 +9,7 @@ import android.support.v7.widget.AppCompatSpinner;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -22,7 +23,7 @@ import com.gmail.a93ak.andrei19.finance30.model.pojos.Purse;
 import com.gmail.a93ak.andrei19.finance30.modelVer2.TableQueryGenerator;
 import com.gmail.a93ak.andrei19.finance30.modelVer2.pojos.Transfer;
 import com.gmail.a93ak.andrei19.finance30.util.TransferRateParser.OnParseCompleted;
-import com.gmail.a93ak.andrei19.finance30.util.TransferRateParser.RateSjonParser;
+import com.gmail.a93ak.andrei19.finance30.util.TransferRateParser.RateJsonParser;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -124,6 +125,7 @@ public class TransferAddActivity extends AppCompatActivity implements OnTaskComp
         newTransferFromAmount = (EditText) findViewById(R.id.transfer_from_amount);
         newTransferToAmount = (EditText) findViewById(R.id.transfer_to_amount);
         officialRate = (TextView) findViewById(R.id.official_rate);
+        ((Button) findViewById(R.id.transfer_add_edit_button)).setText(R.string.add_button_text);
     }
 
     @Override
@@ -186,7 +188,7 @@ public class TransferAddActivity extends AppCompatActivity implements OnTaskComp
             } else {
                 final long idFrom = (allPurses.get(newTransferFromPurse.getSelectedItemPosition()).getCurrency_id());
                 final long idTo = (allPurses.get(newTransferToPurse.getSelectedItemPosition()).getCurrency_id());
-                new RateSjonParser(TransferAddActivity.this).execute(idFrom, idTo);
+                new RateJsonParser(TransferAddActivity.this).execute(idFrom, idTo);
             }
         }
 

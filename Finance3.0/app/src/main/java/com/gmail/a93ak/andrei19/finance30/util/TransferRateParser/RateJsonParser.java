@@ -9,13 +9,13 @@ import com.gmail.a93ak.andrei19.finance30.util.MyHttpClient;
 
 import org.json.JSONObject;
 
-public class RateSjonParser extends AsyncTask<Long, Void, Double> {
+public class RateJsonParser extends AsyncTask<Long, Void, Double> {
 
     private static final String URL = "http://floatrates.com/daily/";
 
     private OnParseCompleted listener;
 
-    public RateSjonParser(OnParseCompleted view) {
+    public RateJsonParser(OnParseCompleted view) {
         listener = view;
     }
 
