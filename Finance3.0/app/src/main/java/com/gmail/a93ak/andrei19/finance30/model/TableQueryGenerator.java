@@ -1,14 +1,14 @@
-package com.gmail.a93ak.andrei19.finance30.modelVer2;
+package com.gmail.a93ak.andrei19.finance30.model;
 
 
 import android.support.annotation.Nullable;
 
-import com.gmail.a93ak.andrei19.finance30.modelVer2.annotations.Table;
-import com.gmail.a93ak.andrei19.finance30.modelVer2.annotations.types.DBDouble;
-import com.gmail.a93ak.andrei19.finance30.modelVer2.annotations.types.DBInteger;
-import com.gmail.a93ak.andrei19.finance30.modelVer2.annotations.types.DBIntegerPrimaryKey;
-import com.gmail.a93ak.andrei19.finance30.modelVer2.annotations.types.DBString;
-import com.gmail.a93ak.andrei19.finance30.modelVer2.pojos.TableClass;
+import com.gmail.a93ak.andrei19.finance30.model.annotations.Table;
+import com.gmail.a93ak.andrei19.finance30.model.annotations.types.DBDouble;
+import com.gmail.a93ak.andrei19.finance30.model.annotations.types.DBInteger;
+import com.gmail.a93ak.andrei19.finance30.model.annotations.types.DBIntegerPrimaryKey;
+import com.gmail.a93ak.andrei19.finance30.model.annotations.types.DBString;
+import com.gmail.a93ak.andrei19.finance30.model.models.TableClass;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -32,9 +32,7 @@ public class TableQueryGenerator {
                 final StringBuilder builder = new StringBuilder();
                 final Field[] fields = clazz.getFields();
                 boolean firstField = true;
-                for (int i = 0; i < fields.length; i++) {
-                    final Field field = fields[i];
-
+                for (final Field field : fields) {
                     final Annotation[] annotations = field.getAnnotations();
 
                     if (annotations == null) {

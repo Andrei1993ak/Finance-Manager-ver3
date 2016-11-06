@@ -23,7 +23,7 @@ public class ApiManager {
 
     public MyApi myApi() {
         if (myApi == null) {
-            MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(),
+            final MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(),
                     JacksonFactory.getDefaultInstance(), null)
                     .setRootUrl(APP_ENGINE_BASE_URL);
             myApi = builder.build();

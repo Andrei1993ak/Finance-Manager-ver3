@@ -14,7 +14,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.gmail.a93ak.andrei19.finance30.R;
 import com.gmail.a93ak.andrei19.finance30.control.Executors.PurseExecutor;
@@ -22,9 +21,8 @@ import com.gmail.a93ak.andrei19.finance30.control.Loaders.PurseCursorLoader;
 import com.gmail.a93ak.andrei19.finance30.control.base.OnTaskCompleted;
 import com.gmail.a93ak.andrei19.finance30.control.base.RequestHolder;
 import com.gmail.a93ak.andrei19.finance30.control.base.Result;
-import com.gmail.a93ak.andrei19.finance30.model.base.DBHelper;
-import com.gmail.a93ak.andrei19.finance30.model.dbhelpers.DBHelperPurse;
-import com.gmail.a93ak.andrei19.finance30.model.pojos.Purse;
+import com.gmail.a93ak.andrei19.finance30.model.dbHelpers.DBHelperPurse;
+import com.gmail.a93ak.andrei19.finance30.model.models.Purse;
 import com.gmail.a93ak.andrei19.finance30.view.addEditActivities.PurseAddActivity;
 import com.gmail.a93ak.andrei19.finance30.view.addEditActivities.PurseEditActivity;
 
@@ -45,7 +43,7 @@ public class PurseActivity extends AppCompatActivity implements LoaderManager.Lo
         setContentView(R.layout.purse_activity);
         requestHolder = new RequestHolder<>();
         ListView purseListVIew = (ListView) findViewById(R.id.purseListView);
-        String[] from = new String[]{DBHelper.PURSES_KEY_NAME, DBHelper.PURSES_KEY_AMOUNT, DBHelperPurse.CURRENCY_NAME};
+        String[] from = new String[]{Purse.NAME, Purse.AMOUNT, DBHelperPurse.CURRENCY_NAME};
         int[] to = new int[]{R.id.purseName, R.id.purseAmount, R.id.purseCurrency};
         simpleCursorAdapter = new SimpleCursorAdapter(this, R.layout.purse_listitem, null, from, to, 0);
         purseListVIew.setAdapter(simpleCursorAdapter);
@@ -70,12 +68,11 @@ public class PurseActivity extends AppCompatActivity implements LoaderManager.Lo
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
             case CM_DELETE_ID:
-                requestHolder.setDeleteRequest(info.id);
-                new PurseExecutor(this).execute(requestHolder.getDeleteRequest());
+                new PurseExecutor(this).execute(requestHolder.delete(info.id));
                 break;
             case CM_EDIT_ID:
                 Intent intent = new Intent(this, PurseEditActivity.class);
-                intent.putExtra(DBHelper.PURSES_KEY_ID, info.id);
+                intent.putExtra(Purse.ID, info.id);
                 startActivityForResult(intent, EDIT_PURSE_REQUEST);
                 break;
         }
@@ -88,20 +85,18 @@ public class PurseActivity extends AppCompatActivity implements LoaderManager.Lo
             switch (requestCode) {
                 case ADD_PURSE_REQUEST:
                     Purse newPurse = new Purse();
-                    newPurse.setName(data.getStringExtra(DBHelper.PURSES_KEY_NAME));
-                    newPurse.setAmount(data.getDoubleExtra(DBHelper.PURSES_KEY_AMOUNT, -1.0));
-                    newPurse.setCurrency_id(data.getLongExtra(DBHelper.PURSES_KEY_CURRENCY_ID, -1));
-                    requestHolder.setAddRequest(newPurse);
-                    new PurseExecutor(this).execute(requestHolder.getAddRequest());
+                    newPurse.setName(data.getStringExtra(Purse.NAME));
+                    newPurse.setAmount(data.getDoubleExtra(Purse.AMOUNT, -1.0));
+                    newPurse.setCurrency_id(data.getLongExtra(Purse.CURRENCY_ID, -1));
+                    new PurseExecutor(this).execute(requestHolder.add(newPurse));
                     break;
                 case EDIT_PURSE_REQUEST:
                     Purse editPurse = new Purse();
-                    editPurse.setId(data.getLongExtra(DBHelper.PURSES_KEY_ID, -1));
-                    editPurse.setName(data.getStringExtra(DBHelper.PURSES_KEY_NAME));
-                    editPurse.setAmount(data.getDoubleExtra(DBHelper.PURSES_KEY_AMOUNT, -1.0));
-                    editPurse.setCurrency_id(data.getLongExtra(DBHelper.PURSES_KEY_CURRENCY_ID, -1));
-                    requestHolder.setEditRequest(editPurse);
-                    new PurseExecutor(this).execute(requestHolder.getEditRequest());
+                    editPurse.setId(data.getLongExtra(Purse.ID, -1));
+                    editPurse.setName(data.getStringExtra(Purse.NAME));
+                    editPurse.setAmount(data.getDoubleExtra(Purse.AMOUNT, -1.0));
+                    editPurse.setCurrency_id(data.getLongExtra(Purse.CURRENCY_ID, -1));
+                    new PurseExecutor(this).execute(requestHolder.edit(editPurse));
                     break;
                 default:
                     break;

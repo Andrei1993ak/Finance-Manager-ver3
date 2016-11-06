@@ -4,8 +4,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.support.v4.content.CursorLoader;
 
-import com.gmail.a93ak.andrei19.finance30.model.base.DBHelper;
-import com.gmail.a93ak.andrei19.finance30.model.dbhelpers.DBHelperIncome;
+import com.gmail.a93ak.andrei19.finance30.model.DBHelper;
+import com.gmail.a93ak.andrei19.finance30.model.dbHelpers.DBHelperIncome;
 
 public class IncomeCursorLoader extends CursorLoader {
 
@@ -13,7 +13,7 @@ public class IncomeCursorLoader extends CursorLoader {
 
     public IncomeCursorLoader(Context context) {
         super(context);
-        this.dbHelperIncome = DBHelperIncome.getInstance(DBHelper.getInstance(context));
+        this.dbHelperIncome = DBHelperIncome.getInstance();
     }
 
     @Override

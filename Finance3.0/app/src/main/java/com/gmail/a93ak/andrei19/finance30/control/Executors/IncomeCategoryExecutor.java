@@ -5,9 +5,9 @@ import android.database.Cursor;
 import com.gmail.a93ak.andrei19.finance30.control.base.OnTaskCompleted;
 import com.gmail.a93ak.andrei19.finance30.control.base.PojoExecutor;
 import com.gmail.a93ak.andrei19.finance30.control.base.Result;
-import com.gmail.a93ak.andrei19.finance30.model.base.DBHelper;
-import com.gmail.a93ak.andrei19.finance30.model.dbhelpers.DBHelperCategoryIncome;
-import com.gmail.a93ak.andrei19.finance30.model.pojos.IncomeCategory;
+import com.gmail.a93ak.andrei19.finance30.model.dbHelpers.DBHelperCategoryIncome;
+import com.gmail.a93ak.andrei19.finance30.model.models.IncomeCategory;
+
 
 import java.util.List;
 
@@ -22,7 +22,7 @@ public class IncomeCategoryExecutor extends PojoExecutor<IncomeCategory> {
     public static final int KEY_RESULT_GET_ALL_TO_LIST = 407;
     public static final int KEY_RESULT_GET_ALL_TO_LIST_BY_PARENT_ID = 408;
 
-    private DBHelperCategoryIncome dbHelper = DBHelperCategoryIncome.getInstance(DBHelper.getInstance(context));
+    private DBHelperCategoryIncome dbHelper = DBHelperCategoryIncome.getInstance();
 
     public IncomeCategoryExecutor(OnTaskCompleted listener) {
         super(listener);

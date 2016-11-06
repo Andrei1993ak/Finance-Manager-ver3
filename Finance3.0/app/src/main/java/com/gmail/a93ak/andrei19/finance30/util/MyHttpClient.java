@@ -9,25 +9,23 @@ import java.net.URL;
 
 public class MyHttpClient {
 
-    public String get(String url) {
-        String response = null;
-
+    public String get(final String url) {
+        final String response;
         try {
-            URL reqUrl = new URL(url);
-            HttpURLConnection connection = (HttpURLConnection) reqUrl.openConnection();
+            final URL reqUrl = new URL(url);
+            final HttpURLConnection connection = (HttpURLConnection) reqUrl.openConnection();
             connection.setRequestMethod("GET");
-
-            InputStream inputStream = connection.getInputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-            StringBuilder builder = new StringBuilder();
+            final InputStream inputStream = connection.getInputStream();
+            final BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+            final StringBuilder builder = new StringBuilder();
             String line;
             while ((line = reader.readLine()) != null) {
                 builder.append(line);
             }
             response = builder.toString();
             inputStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (final IOException e) {
+            return null;
         }
         return response;
     }

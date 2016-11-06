@@ -20,8 +20,8 @@ import com.gmail.a93ak.andrei19.finance30.control.adapters.TransferCursorAdapter
 import com.gmail.a93ak.andrei19.finance30.control.base.OnTaskCompleted;
 import com.gmail.a93ak.andrei19.finance30.control.base.RequestHolder;
 import com.gmail.a93ak.andrei19.finance30.control.base.Result;
-import com.gmail.a93ak.andrei19.finance30.modelVer2.TableQueryGenerator;
-import com.gmail.a93ak.andrei19.finance30.modelVer2.pojos.Transfer;
+import com.gmail.a93ak.andrei19.finance30.model.TableQueryGenerator;
+import com.gmail.a93ak.andrei19.finance30.model.models.Transfer;
 import com.gmail.a93ak.andrei19.finance30.view.addEditActivities.TransferAddActivity;
 import com.gmail.a93ak.andrei19.finance30.view.addEditActivities.TransferEditActivity;
 
@@ -33,17 +33,21 @@ public class TransferActivity extends AppCompatActivity implements LoaderManager
     private static final int ADD_TRANSFER_REQUEST = 1;
     private static final int EDIT_TRANSFER_REQUEST = 2;
 
+    private static final int MAIN_LOADER_ID = 0;
+
     private TransferCursorAdapter transferCursorAdapter;
+    private RequestHolder<Transfer> requestHolder;
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.transfer_activity);
         transferCursorAdapter = new TransferCursorAdapter(this, null);
+        requestHolder = new RequestHolder<>();
         final ListView transferListView = (ListView) findViewById(R.id.transferListView);
         transferListView.setAdapter(transferCursorAdapter);
         registerForContextMenu(transferListView);
-        getSupportLoaderManager().initLoader(0, null, this);
+        getSupportLoaderManager().initLoader(MAIN_LOADER_ID, null, this);
     }
 
     public void addTransfer(final View view) {
@@ -63,9 +67,7 @@ public class TransferActivity extends AppCompatActivity implements LoaderManager
         final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
             case CM_DELETE_ID:
-                final RequestHolder<Transfer> requestHolder = new RequestHolder<>();
-                requestHolder.setDeleteRequest(info.id);
-                new TransferExecutor(this).execute(requestHolder.getDeleteRequest());
+                new TransferExecutor(this).execute(requestHolder.delete(info.id));
                 break;
             case CM_EDIT_ID:
                 final Intent intent = new Intent(this, TransferEditActivity.class);
@@ -82,15 +84,11 @@ public class TransferActivity extends AppCompatActivity implements LoaderManager
             switch (requestCode) {
                 case ADD_TRANSFER_REQUEST:
                     final Transfer newTransfer = data.getParcelableExtra(TableQueryGenerator.getTableName(Transfer.class));
-                    RequestHolder<Transfer> requestHolder = new RequestHolder<>();
-                    requestHolder.setAddRequest(newTransfer);
-                    new TransferExecutor(this).execute(requestHolder.getAddRequest());
+                    new TransferExecutor(this).execute(requestHolder.add(newTransfer));
                     break;
                 case EDIT_TRANSFER_REQUEST:
                     final Transfer editTransfer = data.getParcelableExtra(TableQueryGenerator.getTableName(Transfer.class));
-                    requestHolder = new RequestHolder<>();
-                    requestHolder.setEditRequest(editTransfer);
-                    new TransferExecutor(this).execute(requestHolder.getEditRequest());
+                    new TransferExecutor(this).execute(requestHolder.edit(editTransfer));
                     break;
                 default:
                     break;
@@ -117,10 +115,9 @@ public class TransferActivity extends AppCompatActivity implements LoaderManager
     public void onTaskCompleted(final Result result) {
         final int id = result.getId();
         if (id == TransferExecutor.KEY_RESULT_DELETE || id == TransferExecutor.KEY_RESULT_ADD || id == TransferExecutor.KEY_RESULT_EDIT) {
-            if (getSupportLoaderManager().getLoader(0) != null) {
-                getSupportLoaderManager().getLoader(0).forceLoad();
+            if (getSupportLoaderManager().getLoader(MAIN_LOADER_ID) != null) {
+                getSupportLoaderManager().getLoader(MAIN_LOADER_ID).forceLoad();
             }
         }
     }
-
 }

@@ -7,19 +7,20 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.SimpleCursorTreeAdapter;
 
-import com.gmail.a93ak.andrei19.finance30.model.base.DBHelper;
+import com.gmail.a93ak.andrei19.finance30.model.models.IncomeCategory;
 
 import java.util.HashMap;
 
 public class ExpListAdapter extends SimpleCursorTreeAdapter {
 
-    private Context context;
-    private HashMap<Integer, Integer> idToPos;
-    private HashMap<Integer, Integer> posToId;
+    private final Context context;
+    private final HashMap<Integer, Integer> idToPos;
+    private final HashMap<Integer, Integer> posToId;
 
 
-    public ExpListAdapter(Context context, Cursor c, int parentsLayout, String[] parentsFrom, int[] parentsTo,
-                          int childLayout, String[] childFrom, int[] childTo) {
+    public ExpListAdapter(final Context context, final Cursor c, final int parentsLayout,
+                          final String[] parentsFrom, final int[] parentsTo, final int childLayout,
+                          final String[] childFrom, final int[] childTo) {
         super(context, c, parentsLayout, parentsFrom, parentsTo, childLayout, childFrom, childTo);
         this.context = context;
         posToId = new HashMap<>();
@@ -28,11 +29,11 @@ public class ExpListAdapter extends SimpleCursorTreeAdapter {
     }
 
     @Override
-    protected Cursor getChildrenCursor(Cursor parentCursor) {
-        int groupPos = parentCursor.getPosition();
-        int groupId = parentCursor.getInt(parentCursor.getColumnIndex(DBHelper.INCOME_CATEGORY_KEY_ID));
-        LoaderManager supportLoaderManager = ((AppCompatActivity) context).getSupportLoaderManager();
-        Loader loader = supportLoaderManager.getLoader(groupId);
+    protected Cursor getChildrenCursor(final Cursor parentCursor) {
+        final int groupPos = parentCursor.getPosition();
+        final int groupId = parentCursor.getInt(parentCursor.getColumnIndex(IncomeCategory.ID));
+        final LoaderManager supportLoaderManager = ((AppCompatActivity) context).getSupportLoaderManager();
+        final Loader loader = supportLoaderManager.getLoader(groupId);
         posToId.put(groupId, groupPos);
         idToPos.put(groupPos, groupId);
         if (loader != null && !loader.isReset()) {

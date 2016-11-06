@@ -10,13 +10,13 @@ import com.gmail.a93ak.andrei19.finance30.R;
 public class CategoryStartingActivity extends AppCompatActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.category_starting_activity);
     }
 
 
-    public void selectCategory(View view) {
+    public void selectCategory(final View view) {
         switch (view.getId()) {
             case R.id.tvIncome:
                 startActivity(new Intent(this, CategoryIncomeActivity.class));

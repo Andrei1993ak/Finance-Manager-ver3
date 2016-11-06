@@ -13,8 +13,8 @@ import com.gmail.a93ak.andrei19.finance30.control.Executors.CurrencyExecutor;
 import com.gmail.a93ak.andrei19.finance30.control.base.OnTaskCompleted;
 import com.gmail.a93ak.andrei19.finance30.control.base.RequestHolder;
 import com.gmail.a93ak.andrei19.finance30.control.base.Result;
-import com.gmail.a93ak.andrei19.finance30.model.base.DBHelper;
-import com.gmail.a93ak.andrei19.finance30.model.pojos.Currency;
+import com.gmail.a93ak.andrei19.finance30.model.models.Currency;
+import com.gmail.a93ak.andrei19.finance30.model.models.Purse;
 
 import java.util.List;
 
@@ -34,8 +34,7 @@ public class PurseAddActivity extends AppCompatActivity implements OnTaskComplet
         newPurseName = (EditText)findViewById(R.id.new_purse_name);
         newPurseAmount = (EditText)findViewById(R.id.new_purse_amount);
         RequestHolder<Currency> requestHolder = new RequestHolder<>();
-        requestHolder.setGetAllToListRequest(0);
-        new CurrencyExecutor(this).execute(requestHolder.getGetAllToListRequest());
+        new CurrencyExecutor(this).execute(requestHolder.getAllToList(0));
     }
 
     public void addNewPurse(View view) {
@@ -55,9 +54,9 @@ public class PurseAddActivity extends AppCompatActivity implements OnTaskComplet
             return;
         } else {
             Intent intent = new Intent();
-            intent.putExtra(DBHelper.PURSES_KEY_NAME,name);
-            intent.putExtra(DBHelper.PURSES_KEY_AMOUNT, amount);
-            intent.putExtra(DBHelper.PURSES_KEY_CURRENCY_ID, currencyId);
+            intent.putExtra(Purse.NAME,name);
+            intent.putExtra(Purse.AMOUNT, amount);
+            intent.putExtra(Purse.CURRENCY_ID, currencyId);
             setResult(RESULT_OK, intent);
             finish();
         }
@@ -67,7 +66,7 @@ public class PurseAddActivity extends AppCompatActivity implements OnTaskComplet
     public void onTaskCompleted(Result result) {
         switch (result.getId()){
             case CurrencyExecutor.KEY_RESULT_GET_ALL_TO_LIST:
-                currencies = (List<Currency>) result.getT();
+                currencies = (List<Currency>) result.getObject();
                 String[] names = new String[currencies.size()];
                 int i = 0;
                 for (Currency currency : currencies) {

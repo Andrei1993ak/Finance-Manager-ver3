@@ -5,9 +5,8 @@ import android.database.Cursor;
 import com.gmail.a93ak.andrei19.finance30.control.base.OnTaskCompleted;
 import com.gmail.a93ak.andrei19.finance30.control.base.PojoExecutor;
 import com.gmail.a93ak.andrei19.finance30.control.base.Result;
-import com.gmail.a93ak.andrei19.finance30.model.base.DBHelper;
-import com.gmail.a93ak.andrei19.finance30.modelVer2.dbHelpers.DBHelperTransfer;
-import com.gmail.a93ak.andrei19.finance30.modelVer2.pojos.Transfer;
+import com.gmail.a93ak.andrei19.finance30.model.dbHelpers.DBHelperTransfer;
+import com.gmail.a93ak.andrei19.finance30.model.models.Transfer;
 
 
 import java.util.ArrayList;
@@ -66,8 +65,8 @@ public class TransferExecutor extends PojoExecutor<Transfer> {
     }
 
     @Override
-    protected Result<List<Transfer>> getAllToListByDates(ArrayList<Long> diapason) {
-        return new Result<>(KEY_RESULT_GET_ALL_TO_LIST_BY_DATES,DBHelperTransfer.getInstance().getAllToListByDates(diapason.get(0),diapason.get(1)));
+    protected Result<List<Transfer>> getAllToListByDates(ArrayList<Long> dates) {
+        return new Result<>(KEY_RESULT_GET_ALL_TO_LIST_BY_DATES,DBHelperTransfer.getInstance().getAllToListByDates(dates.get(0), dates.get(1)));
     }
 
     @Override

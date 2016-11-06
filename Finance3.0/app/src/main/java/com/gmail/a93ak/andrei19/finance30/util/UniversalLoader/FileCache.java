@@ -10,41 +10,43 @@ class FileCache {
 
     private static final String IMAGES_CACHE = "imagesCache";
     private static FileCache instance;
-    private File cacheDir;
+    private final File cacheDir;
 
-    public static FileCache getInstance(Context context) {
+    public static FileCache getInstance(final Context context) {
         if (instance == null)
             instance = new FileCache(context);
         return instance;
     }
 
-    private FileCache(Context context) {
+    private FileCache(final Context context) {
         cacheDir = new File(context.getCacheDir(), IMAGES_CACHE);
         if (!cacheDir.exists())
             cacheDir.mkdirs();
     }
 
-    File getFile(String url) {
-        String filename = URLEncoder.encode(url);
+    File getFile(final String url) {
+        final String filename = URLEncoder.encode(url);
         return new File(cacheDir, filename);
     }
 
     void clear() {
-        File[] files = cacheDir.listFiles();
+        final File[] files = cacheDir.listFiles();
         if (files == null)
             return;
-        for (File f : files)
+        for (final File f : files)
             f.delete();
     }
 
-    void clear(String url){
+    void clear(final String url) {
         final String filename = URLEncoder.encode(url);
-        File[] file = cacheDir.listFiles(new FilenameFilter() {
+        final File[] file = cacheDir.listFiles(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String name) {
                 return name.equals(filename);
             }
         });
-        file[0].delete();
+        if (file.length != 0) {
+            file[0].delete();
+        }
     }
 }

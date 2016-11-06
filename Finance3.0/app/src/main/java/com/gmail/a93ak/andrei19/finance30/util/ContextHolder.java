@@ -9,14 +9,12 @@ public class ContextHolder {
     private Context mContext;
 
     private ContextHolder() {
-
     }
 
     public static ContextHolder getInstance() {
         if (instance == null) {
             instance = new ContextHolder();
         }
-
         return instance;
     }
 

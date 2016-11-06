@@ -10,7 +10,7 @@ import com.gmail.a93ak.andrei19.finance30.control.ViewHolders.PursesHolder;
 import com.gmail.a93ak.andrei19.finance30.control.base.OnTaskCompleted;
 import com.gmail.a93ak.andrei19.finance30.control.base.RequestHolder;
 import com.gmail.a93ak.andrei19.finance30.control.base.Result;
-import com.gmail.a93ak.andrei19.finance30.model.pojos.Purse;
+import com.gmail.a93ak.andrei19.finance30.model.models.Purse;
 
 public class RecViewPursesSwissHelper extends ItemTouchHelper.SimpleCallback implements OnTaskCompleted {
     private int loaderId;
@@ -31,8 +31,7 @@ public class RecViewPursesSwissHelper extends ItemTouchHelper.SimpleCallback imp
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
         long id = ((PursesHolder) viewHolder).getPurseId();
         RequestHolder<Purse> requestHolder = new RequestHolder<>();
-        requestHolder.setDeleteRequest(id);
-        new PurseExecutor(this).execute(requestHolder.getDeleteRequest());
+        new PurseExecutor(this).execute(requestHolder.delete(id));
     }
 
     @Override

@@ -9,60 +9,58 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.gmail.a93ak.andrei19.finance30.R;
-import com.gmail.a93ak.andrei19.finance30.model.base.DBHelper;
-import com.gmail.a93ak.andrei19.finance30.model.dbhelpers.DBHelperCategoryCost;
-import com.gmail.a93ak.andrei19.finance30.model.dbhelpers.DBHelperCurrency;
-import com.gmail.a93ak.andrei19.finance30.model.dbhelpers.DBHelperPurse;
-import com.gmail.a93ak.andrei19.finance30.model.pojos.Currency;
-import com.gmail.a93ak.andrei19.finance30.model.pojos.Purse;
+import com.gmail.a93ak.andrei19.finance30.model.dbHelpers.DBHelperCategoryCost;
+import com.gmail.a93ak.andrei19.finance30.model.dbHelpers.DBHelperCurrency;
+import com.gmail.a93ak.andrei19.finance30.model.dbHelpers.DBHelperPurse;
+import com.gmail.a93ak.andrei19.finance30.model.models.Cost;
+import com.gmail.a93ak.andrei19.finance30.model.models.Currency;
+import com.gmail.a93ak.andrei19.finance30.model.models.Purse;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 public class CostCursorAdapter extends CursorAdapter {
 
-    private LayoutInflater inflater;
-    private DBHelperPurse helperPurse;
-    private DBHelperCurrency helperCurrency;
-    private DBHelperCategoryCost dbHelperCategoryCost;
+    private final LayoutInflater inflater;
+    private final DBHelperPurse helperPurse;
+    private final DBHelperCurrency helperCurrency;
+    private final DBHelperCategoryCost dbHelperCategoryCost;
 
-    public CostCursorAdapter(Context context, Cursor c) {
+    public CostCursorAdapter(final Context context, final Cursor c) {
         super(context, c, 0);
-        inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        DBHelper dbHelper = DBHelper.getInstance(context);
-        helperPurse = DBHelperPurse.getInstance(dbHelper);
-        helperCurrency = DBHelperCurrency.getInstance(dbHelper);
-        dbHelperCategoryCost = DBHelperCategoryCost.getInstance(dbHelper);
+        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        helperPurse = DBHelperPurse.getInstance();
+        helperCurrency = DBHelperCurrency.getInstance();
+        dbHelperCategoryCost = DBHelperCategoryCost.getInstance();
     }
 
     @Override
-    public View newView(Context context, Cursor cursor, ViewGroup parent) {
-        return inflater.inflate(R.layout.cost_listitem,parent,false);
+    public View newView(final Context context, final Cursor cursor, final ViewGroup parent) {
+        return inflater.inflate(R.layout.cost_listitem, parent, false);
     }
 
     @Override
-    public void bindView(View view, Context context, Cursor cursor) {
-        TextView textViewName = (TextView)view.findViewById(R.id.LICostName);
-        String name = cursor.getString(cursor.getColumnIndex(DBHelper.COST_KEY_NAME));
+    public void bindView(final View view, final Context context, final Cursor cursor) {
+        final TextView textViewName = (TextView) view.findViewById(R.id.LICostName);
+        final String name = cursor.getString(cursor.getColumnIndex(Cost.NAME));
         textViewName.setText(name);
 
-        TextView textViewDate = (TextView)view.findViewById(R.id.LICostDate);
-        SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
-        Long time = Long.parseLong(cursor.getString(cursor.getColumnIndex(DBHelper.COST_KEY_DATE)));
-        String date = dateFormatter.format(time);
+        final TextView textViewDate = (TextView) view.findViewById(R.id.LICostDate);
+        final SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+        final String date = dateFormatter.format(cursor.getLong(cursor.getColumnIndex(Cost.DATE)));
         textViewDate.setText(date);
 
-        TextView tvAmount = (TextView)view.findViewById(R.id.LICostPurseAmount);
-        Purse purse = helperPurse.get(cursor.getLong(cursor.getColumnIndex(DBHelper.COST_KEY_PURSE_ID)));
-        Currency currency = helperCurrency.get(purse.getCurrency_id());
-        Double amount = cursor.getDouble(cursor.getColumnIndex(DBHelper.COST_KEY_AMOUNT));
-        String amountString = String.format("%.2f",amount);
-        amountString+=" ";
-        amountString+=currency.getCode();
+        final TextView tvAmount = (TextView) view.findViewById(R.id.LICostPurseAmount);
+        final Purse purse = helperPurse.get(cursor.getLong(cursor.getColumnIndex(Cost.PURSE_ID)));
+        final Currency currency = helperCurrency.get(purse.getCurrency_id());
+        final Double amount = cursor.getDouble(cursor.getColumnIndex(Cost.AMOUNT));
+        String amountString = String.format(Locale.US, "%.2f", amount);
+        amountString += " ";
+        amountString += currency.getCode();
         tvAmount.setText(amountString);
 
-        TextView category = (TextView)view.findViewById(R.id.LiCostCategory);
-        long CategoryId = cursor.getLong(cursor.getColumnIndex(DBHelper.COST_KEY_CATEGORY_ID));
+        final TextView category = (TextView) view.findViewById(R.id.LiCostCategory);
+        final long CategoryId = cursor.getLong(cursor.getColumnIndex(Cost.CATEGORY_ID));
         category.setText(dbHelperCategoryCost.get(CategoryId).getName());
 
     }

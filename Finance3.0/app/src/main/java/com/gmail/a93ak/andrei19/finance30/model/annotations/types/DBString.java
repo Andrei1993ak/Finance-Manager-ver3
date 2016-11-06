@@ -1,4 +1,4 @@
-package com.gmail.a93ak.andrei19.finance30.modelVer2.annotations.types;
+package com.gmail.a93ak.andrei19.finance30.model.annotations.types;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,6 +7,6 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface DBDouble{
-    String value() default "REAL";
+public @interface DBString {
+    String value() default "TEXT";
 }

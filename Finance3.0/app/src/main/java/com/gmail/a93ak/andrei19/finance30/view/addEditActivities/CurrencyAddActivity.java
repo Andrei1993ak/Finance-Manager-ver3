@@ -17,13 +17,10 @@ import com.gmail.a93ak.andrei19.finance30.control.Loaders.CurrencyAllCursorLoade
 import com.gmail.a93ak.andrei19.finance30.control.base.OnTaskCompleted;
 import com.gmail.a93ak.andrei19.finance30.control.base.RequestHolder;
 import com.gmail.a93ak.andrei19.finance30.control.base.Result;
-import com.gmail.a93ak.andrei19.finance30.model.base.DBHelper;
-import com.gmail.a93ak.andrei19.finance30.model.pojos.CurrencyOfficial;
+import com.gmail.a93ak.andrei19.finance30.model.models.CurrencyOfficial;
 
-public class CurrencyAddActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>,OnTaskCompleted {
+public class CurrencyAddActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, OnTaskCompleted {
 
-    public static final String NAME = "name";
-    public static final String CODE = "code";
     private SimpleCursorAdapter simpleCursorAdapter;
     private RequestHolder<CurrencyOfficial> requestHolder;
 
@@ -31,7 +28,7 @@ public class CurrencyAddActivity extends AppCompatActivity implements LoaderMana
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.currency_add_activity);
-        String[] from = new String[]{DBHelper.CURRENCY_FROM_WEB_KEY_NAME};
+        String[] from = new String[]{CurrencyOfficial.NAME};
         int[] to = new int[]{R.id.currencyName};
         simpleCursorAdapter = new SimpleCursorAdapter(this, R.layout.currency_listitem, null, from, to, 0);
         ListView lvAllCurrencies = (ListView) findViewById(R.id.lvAllCurrencies);
@@ -40,8 +37,7 @@ public class CurrencyAddActivity extends AppCompatActivity implements LoaderMana
         lvAllCurrencies.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                requestHolder.setGetRequest(id);
-                new CurrencyOfficialExecutor(CurrencyAddActivity.this).execute(requestHolder.getGetRequest());
+                new CurrencyOfficialExecutor(CurrencyAddActivity.this).execute(requestHolder.get(id));
                 return true;
 
             }
@@ -66,13 +62,13 @@ public class CurrencyAddActivity extends AppCompatActivity implements LoaderMana
 
     @Override
     public void onTaskCompleted(Result result) {
-        switch (result.getId()){
+        switch (result.getId()) {
             case CurrencyOfficialExecutor.KEY_RESULT_GET:
-                CurrencyOfficial currencyOfficial = (CurrencyOfficial) result.getT();
+                CurrencyOfficial currencyOfficial = (CurrencyOfficial) result.getObject();
                 Intent intent = new Intent();
-                intent.putExtra(NAME,currencyOfficial.getName());
-                intent.putExtra(CODE,currencyOfficial.getCode());
-                setResult(RESULT_OK,intent);
+                intent.putExtra(CurrencyOfficial.NAME, currencyOfficial.getName());
+                intent.putExtra(CurrencyOfficial.CODE, currencyOfficial.getCode());
+                setResult(RESULT_OK, intent);
                 finish();
         }
     }

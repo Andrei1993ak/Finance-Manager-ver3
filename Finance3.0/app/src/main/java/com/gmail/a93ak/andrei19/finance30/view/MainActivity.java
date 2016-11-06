@@ -8,9 +8,11 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 
 import com.gmail.a93ak.andrei19.finance30.R;
+import com.gmail.a93ak.andrei19.finance30.control.ItemsTouchHeplers.RecViewPursesSwissHelper;
 import com.gmail.a93ak.andrei19.finance30.control.Loaders.PurseCursorLoader;
 import com.gmail.a93ak.andrei19.finance30.control.adapters.PursesRecycleViewAdapter;
 import com.gmail.a93ak.andrei19.finance30.view.Activities.CategoryStartingActivity;

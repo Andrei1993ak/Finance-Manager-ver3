@@ -5,16 +5,15 @@ import android.database.Cursor;
 import com.gmail.a93ak.andrei19.finance30.control.base.OnTaskCompleted;
 import com.gmail.a93ak.andrei19.finance30.control.base.PojoExecutor;
 import com.gmail.a93ak.andrei19.finance30.control.base.Result;
-import com.gmail.a93ak.andrei19.finance30.model.base.DBHelper;
-import com.gmail.a93ak.andrei19.finance30.model.dbhelpers.DBHelperCurrencyOfficial;
-import com.gmail.a93ak.andrei19.finance30.model.pojos.CurrencyOfficial;
+import com.gmail.a93ak.andrei19.finance30.model.dbHelpers.DBHelperCurrencyOfficial;
+import com.gmail.a93ak.andrei19.finance30.model.models.CurrencyOfficial;
 
 import java.util.List;
 
 
 public class CurrencyOfficialExecutor extends PojoExecutor<CurrencyOfficial> {
 
-    public static final int KEY_RESULT_GET= 204;
+    public static final int KEY_RESULT_GET = 204;
 
     public CurrencyOfficialExecutor(OnTaskCompleted listener) {
         super(listener);
@@ -22,7 +21,7 @@ public class CurrencyOfficialExecutor extends PojoExecutor<CurrencyOfficial> {
 
     @Override
     public Result<CurrencyOfficial> getPojo(long id) {
-        return new Result<>(KEY_RESULT_GET,DBHelperCurrencyOfficial.getInstance(DBHelper.getInstance(context)).get(id));
+        return new Result<>(KEY_RESULT_GET, DBHelperCurrencyOfficial.getInstance().get(id));
     }
 
     @Override

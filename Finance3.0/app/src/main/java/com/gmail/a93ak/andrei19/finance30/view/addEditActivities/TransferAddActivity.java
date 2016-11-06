@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatSpinner;
 import android.view.View;
@@ -19,9 +20,9 @@ import com.gmail.a93ak.andrei19.finance30.control.Executors.PurseExecutor;
 import com.gmail.a93ak.andrei19.finance30.control.base.OnTaskCompleted;
 import com.gmail.a93ak.andrei19.finance30.control.base.RequestHolder;
 import com.gmail.a93ak.andrei19.finance30.control.base.Result;
-import com.gmail.a93ak.andrei19.finance30.model.pojos.Purse;
-import com.gmail.a93ak.andrei19.finance30.modelVer2.TableQueryGenerator;
-import com.gmail.a93ak.andrei19.finance30.modelVer2.pojos.Transfer;
+import com.gmail.a93ak.andrei19.finance30.model.TableQueryGenerator;
+import com.gmail.a93ak.andrei19.finance30.model.models.Purse;
+import com.gmail.a93ak.andrei19.finance30.model.models.Transfer;
 import com.gmail.a93ak.andrei19.finance30.util.TransferRateParser.OnParseCompleted;
 import com.gmail.a93ak.andrei19.finance30.util.TransferRateParser.RateJsonParser;
 
@@ -44,77 +45,12 @@ public class TransferAddActivity extends AppCompatActivity implements OnTaskComp
     private TextView officialRate;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.transfer_add_edit_activity);
         findViewsByIds();
         setDatePickerDialog();
-        RequestHolder<Purse> purseRequestHolder = new RequestHolder<>();
-        purseRequestHolder.setGetAllToListRequest(0);
-        new PurseExecutor(this).execute(purseRequestHolder.getGetAllToListRequest());
-    }
-
-    private boolean checkFields() {
-        boolean flag = true;
-        if (newTransferName.getText().toString().length() == 0) {
-            newTransferName.setBackground(getResources().getDrawable(R.drawable.shape_red_field));
-            flag = false;
-        } else {
-            newTransferName.setBackground(getResources().getDrawable(R.drawable.shape_green_field));
-        }
-        try {
-            final double fromAmount = Double.parseDouble(newTransferFromAmount.getText().toString());
-            if (fromAmount <= 0) {
-                newTransferFromAmount.setBackground(getResources().getDrawable(R.drawable.shape_red_field));
-                flag = false;
-            } else {
-                newTransferFromAmount.setBackground(getResources().getDrawable(R.drawable.shape_green_field));
-            }
-        } catch (NumberFormatException e) {
-            newTransferFromAmount.setBackground(getResources().getDrawable(R.drawable.shape_red_field));
-            flag = false;
-        }
-        try {
-            final double toAmount = Double.parseDouble(newTransferToAmount.getText().toString());
-            if (toAmount <= 0) {
-                newTransferToAmount.setBackground(getResources().getDrawable(R.drawable.shape_red_field));
-                flag = false;
-            } else {
-                newTransferToAmount.setBackground(getResources().getDrawable(R.drawable.shape_green_field));
-            }
-        } catch (NumberFormatException e) {
-            newTransferToAmount.setBackground(getResources().getDrawable(R.drawable.shape_red_field));
-            flag = false;
-        }
-        if (newTransferFromPurse.getSelectedItemPosition() == newTransferToPurse.getSelectedItemPosition()) {
-            newTransferFromPurse.setBackground(getResources().getDrawable(R.drawable.shape_red_field));
-            newTransferToPurse.setBackground(getResources().getDrawable(R.drawable.shape_red_field));
-            flag = false;
-        } else {
-            newTransferFromPurse.setBackground(getResources().getDrawable(R.drawable.shape_green_field));
-            newTransferToPurse.setBackground(getResources().getDrawable(R.drawable.shape_green_field));
-        }
-        return flag;
-    }
-
-    private void setDatePickerDialog() {
-        dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
-        final Calendar today = Calendar.getInstance();
-        final DatePickerDialog dialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                Calendar newDate = Calendar.getInstance();
-                newDate.set(year, month, dayOfMonth);
-                newTransferDate.setText(dateFormatter.format(newDate.getTime()));
-            }
-        }, today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH));
-        newTransferDate.setText(dateFormatter.format(today.getTime()));
-        newTransferDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.show();
-            }
-        });
+        new PurseExecutor(this).execute(new RequestHolder<Purse>().getAllToList(RequestHolder.SELECTION_ALL));
     }
 
     private void findViewsByIds() {
@@ -128,17 +64,104 @@ public class TransferAddActivity extends AppCompatActivity implements OnTaskComp
         ((Button) findViewById(R.id.transfer_add_edit_button)).setText(R.string.add_button_text);
     }
 
+    private void setDatePickerDialog() {
+        dateFormatter = new SimpleDateFormat(getResources().getString(R.string.dateFormat), Locale.US);
+        final Calendar today = Calendar.getInstance();
+        final DatePickerDialog dialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(final DatePicker view, final int year, final int month, final int dayOfMonth) {
+                final Calendar newDate = Calendar.getInstance();
+                newDate.set(year, month, dayOfMonth);
+                newTransferDate.setText(dateFormatter.format(newDate.getTime()));
+            }
+        }, today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH));
+        newTransferDate.setText(dateFormatter.format(today.getTime()));
+        newTransferDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                dialog.show();
+            }
+        });
+    }
+
+    public void addEditTransfer(final View view) {
+
+        final Transfer transfer = checkFields();
+        if (transfer != null) {
+            final Intent intent = new Intent();
+            intent.putExtra(TableQueryGenerator.getTableName(Transfer.class), transfer);
+            setResult(RESULT_OK, intent);
+            finish();
+        }
+    }
+
+    private Transfer checkFields() {
+        final Transfer transfer = new Transfer();
+        boolean flag = true;
+        if (newTransferName.getText().toString().length() == 0) {
+            newTransferName.setBackground(ContextCompat.getDrawable(this, R.drawable.shape_red_field));
+            flag = false;
+        } else {
+            newTransferName.setBackground(ContextCompat.getDrawable(this, R.drawable.shape_green_field));
+            transfer.setName(newTransferName.getText().toString());
+        }
+        try {
+            transfer.setDate(dateFormatter.parse(newTransferDate.getText().toString()).getTime());
+            final double fromAmount = Double.parseDouble(newTransferFromAmount.getText().toString());
+            if (fromAmount <= 0) {
+                newTransferFromAmount.setBackground(ContextCompat.getDrawable(this, R.drawable.shape_red_field));
+                flag = false;
+            } else {
+                newTransferFromAmount.setBackground(ContextCompat.getDrawable(this, R.drawable.shape_green_field));
+                transfer.setFromAmount(fromAmount);
+            }
+        } catch (final NumberFormatException e) {
+            newTransferFromAmount.setBackground(ContextCompat.getDrawable(this, R.drawable.shape_red_field));
+            flag = false;
+        } catch (final ParseException e) {
+            flag = false;
+        }
+        try {
+            final double toAmount = Double.parseDouble(newTransferToAmount.getText().toString());
+            if (toAmount <= 0) {
+                newTransferToAmount.setBackground(ContextCompat.getDrawable(this, R.drawable.shape_red_field));
+                flag = false;
+            } else {
+                newTransferToAmount.setBackground(ContextCompat.getDrawable(this, R.drawable.shape_green_field));
+                transfer.setToAmount(toAmount);
+            }
+        } catch (final NumberFormatException e) {
+            newTransferToAmount.setBackground(ContextCompat.getDrawable(this, R.drawable.shape_red_field));
+            flag = false;
+        }
+        if (newTransferFromPurse.getSelectedItemPosition() == newTransferToPurse.getSelectedItemPosition()) {
+            newTransferFromPurse.setBackground(ContextCompat.getDrawable(this, R.drawable.shape_red_field));
+            newTransferToPurse.setBackground(ContextCompat.getDrawable(this, R.drawable.shape_red_field));
+            flag = false;
+        } else {
+            newTransferFromPurse.setBackground(ContextCompat.getDrawable(this, R.drawable.shape_green_field));
+            newTransferToPurse.setBackground(ContextCompat.getDrawable(this, R.drawable.shape_green_field));
+            transfer.setFromPurseId(allPurses.get(newTransferFromPurse.getSelectedItemPosition()).getId());
+            transfer.setToPurseId(allPurses.get(newTransferToPurse.getSelectedItemPosition()).getId());
+        }
+        if (!flag) {
+            return null;
+        } else {
+            return transfer;
+        }
+    }
+
     @Override
-    public void onTaskCompleted(Result result) {
+    public void onTaskCompleted(final Result result) {
         switch (result.getId()) {
             case PurseExecutor.KEY_RESULT_GET_ALL_TO_LIST:
-                allPurses = (List<Purse>) result.getT();
+                allPurses = (List<Purse>) result.getObject();
                 final String[] pursesNames = new String[allPurses.size()];
                 int i = 0;
-                for (Purse purse : allPurses) {
+                for (final Purse purse : allPurses) {
                     pursesNames[i++] = purse.getName();
                 }
-                final ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, pursesNames);
+                final ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, pursesNames);
                 spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 newTransferFromPurse.setAdapter(spinnerAdapter);
                 newTransferToPurse.setAdapter(spinnerAdapter);
@@ -148,41 +171,19 @@ public class TransferAddActivity extends AppCompatActivity implements OnTaskComp
         }
     }
 
-    public void addEditTransfer(View view) {
-
-        if (checkFields()) {
-            try {
-                final Transfer transfer = new Transfer();
-                transfer.setName(newTransferName.getText().toString());
-                transfer.setDate(dateFormatter.parse(newTransferDate.getText().toString()).getTime());
-                transfer.setFromPurseId(allPurses.get(newTransferFromPurse.getSelectedItemPosition()).getId());
-                transfer.setToPurseId(allPurses.get(newTransferToPurse.getSelectedItemPosition()).getId());
-                transfer.setFromAmount(Double.parseDouble(newTransferFromAmount.getText().toString()));
-                transfer.setToAmount(Double.parseDouble(newTransferToAmount.getText().toString()));
-                Intent intent = new Intent();
-                intent.putExtra(TableQueryGenerator.getTableName(Transfer.class), transfer);
-                setResult(RESULT_OK, intent);
-                finish();
-            } catch (ParseException e) {
-                checkFields();
-            }
-        }
-    }
-
     @Override
-    public void onParseCompleted(Double result) {
+    public void onParseCompleted(final Double result) {
         if (result < 0) {
             officialRate.setText(R.string.checkInternet);
-
         } else {
-            officialRate.setText(String.format("%.4f", result));
+            officialRate.setText(String.format(Locale.US, "%.4f", result));
         }
     }
 
     private class MyItemSelectedListener implements AdapterView.OnItemSelectedListener {
 
         @Override
-        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        public void onItemSelected(final AdapterView<?> parent, final View view, final int position, final long id) {
             if (newTransferFromPurse.getSelectedItemPosition() == newTransferToPurse.getSelectedItemPosition()) {
                 officialRate.setText("");
             } else {
@@ -193,9 +194,8 @@ public class TransferAddActivity extends AppCompatActivity implements OnTaskComp
         }
 
         @Override
-        public void onNothingSelected(AdapterView<?> parent) {
+        public void onNothingSelected(final AdapterView<?> parent) {
 
         }
     }
-
 }

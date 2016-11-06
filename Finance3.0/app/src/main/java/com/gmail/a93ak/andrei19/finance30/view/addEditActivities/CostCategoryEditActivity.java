@@ -15,8 +15,7 @@ import com.gmail.a93ak.andrei19.finance30.control.Executors.CostCategoryExecutor
 import com.gmail.a93ak.andrei19.finance30.control.base.OnTaskCompleted;
 import com.gmail.a93ak.andrei19.finance30.control.base.RequestHolder;
 import com.gmail.a93ak.andrei19.finance30.control.base.Result;
-import com.gmail.a93ak.andrei19.finance30.model.base.DBHelper;
-import com.gmail.a93ak.andrei19.finance30.model.pojos.CostCategory;
+import com.gmail.a93ak.andrei19.finance30.model.models.CostCategory;
 
 import java.util.List;
 
@@ -38,16 +37,15 @@ public class CostCategoryEditActivity extends AppCompatActivity implements OnTas
         parentCategories = (AppCompatSpinner) findViewById(R.id.spinnerParentCategories);
         ((TextView)findViewById(R.id.title_category)).setText(R.string.editing);
         requestHolder = new RequestHolder<>();
-        id = getIntent().getLongExtra(DBHelper.COST_CATEGORY_KEY_ID, -1);
-        requestHolder.setGetRequest(id);
-        new CostCategoryExecutor(this).execute(requestHolder.getGetRequest());
+        id = getIntent().getLongExtra(CostCategory.ID, -1);
+        new CostCategoryExecutor(this).execute(requestHolder.get(id));
     }
 
     @Override
     public void onTaskCompleted(Result result) {
         switch (result.getId()) {
             case CostCategoryExecutor.KEY_RESULT_GET_ALL_TO_LIST:
-                parentsList = (List<CostCategory>) result.getT();
+                parentsList = (List<CostCategory>) result.getObject();
                 String[] names = new String[parentsList.size() + 1];
                 int i = 0;
                 int position = 0;
@@ -64,14 +62,13 @@ public class CostCategoryEditActivity extends AppCompatActivity implements OnTas
                 parentCategories.setSelection(position);
                 break;
             case CostCategoryExecutor.KEY_RESULT_GET:
-                costCategory = (CostCategory) result.getT();
+                costCategory = (CostCategory) result.getObject();
                 editCategoryName.setText(costCategory.getName());
                 if (costCategory.getParent_id() == -1) {
                     parentCategories.setBackground(getResources().getDrawable(R.drawable.shape_gray_field));
                     parentCategories.setEnabled(false);
                 } else {
-                    requestHolder.setGetAllToListRequest(1);
-                    new CostCategoryExecutor(this).execute(requestHolder.getGetAllToListRequest());
+                    new CostCategoryExecutor(this).execute(requestHolder.getAllToList(1));
                 }
                 break;
             default:
@@ -87,15 +84,15 @@ public class CostCategoryEditActivity extends AppCompatActivity implements OnTas
         } else {
             if (costCategory != null) {
                 Intent intent = new Intent();
-                intent.putExtra(DBHelper.COST_CATEGORY_KEY_ID,id);
-                intent.putExtra(DBHelper.COST_CATEGORY_KEY_NAME, name);
+                intent.putExtra(CostCategory.ID,id);
+                intent.putExtra(CostCategory.NAME, name);
                 if (costCategory.getParent_id()==-1){
-                    intent.putExtra(DBHelper.COST_CATEGORY_KEY_PARENT_ID, -1);
+                    intent.putExtra(CostCategory.PARENT_ID, -1);
                 }else {
                     if (parentCategories.getSelectedItemPosition() == (spinnerAdapter.getCount() - 1)) {
-                        intent.putExtra(DBHelper.COST_CATEGORY_KEY_PARENT_ID, -1L);
+                        intent.putExtra(CostCategory.PARENT_ID, -1L);
                     }
-                    intent.putExtra(DBHelper.COST_CATEGORY_KEY_PARENT_ID, parentsList.get(parentCategories.getSelectedItemPosition()).getId());
+                    intent.putExtra(CostCategory.PARENT_ID, parentsList.get(parentCategories.getSelectedItemPosition()).getId());
                 }
                 setResult(RESULT_OK, intent);
                 finish();

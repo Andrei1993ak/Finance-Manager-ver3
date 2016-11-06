@@ -15,8 +15,7 @@ import com.gmail.a93ak.andrei19.finance30.control.Executors.CostCategoryExecutor
 import com.gmail.a93ak.andrei19.finance30.control.base.OnTaskCompleted;
 import com.gmail.a93ak.andrei19.finance30.control.base.RequestHolder;
 import com.gmail.a93ak.andrei19.finance30.control.base.Result;
-import com.gmail.a93ak.andrei19.finance30.model.base.DBHelper;
-import com.gmail.a93ak.andrei19.finance30.model.pojos.CostCategory;
+import com.gmail.a93ak.andrei19.finance30.model.models.CostCategory;
 
 import java.util.List;
 
@@ -35,8 +34,7 @@ public class CostCategoryAddActivity extends AppCompatActivity implements OnTask
         parentCategories = (AppCompatSpinner) findViewById(R.id.spinnerParentCategories);
         ((Button)findViewById(R.id.button_add_edit_category)).setText(R.string.add_button_text);
         RequestHolder<CostCategory> requestHolder = new RequestHolder<>();
-        requestHolder.setGetAllToListRequest(1);
-        new CostCategoryExecutor(this).execute(requestHolder.getGetAllToListRequest());
+        new CostCategoryExecutor(this).execute(requestHolder.getAllToList(1));
     }
 
     public void addEditCategory(View view) {
@@ -47,11 +45,11 @@ public class CostCategoryAddActivity extends AppCompatActivity implements OnTask
         } else {
             if (spinnerAdapter != null) {
                 Intent intent = new Intent();
-                intent.putExtra(DBHelper.COST_CATEGORY_KEY_NAME, name);
+                intent.putExtra(CostCategory.NAME, name);
                 if (parentCategories.getSelectedItemPosition() == spinnerAdapter.getCount() - 1) {
-                    intent.putExtra(DBHelper.COST_CATEGORY_KEY_PARENT_ID, -1L);
+                    intent.putExtra(CostCategory.PARENT_ID, -1L);
                 } else {
-                    intent.putExtra(DBHelper.COST_CATEGORY_KEY_PARENT_ID,parentsList.get(parentCategories.getSelectedItemPosition()).getId());
+                    intent.putExtra(CostCategory.PARENT_ID,parentsList.get(parentCategories.getSelectedItemPosition()).getId());
                 }
                 setResult(RESULT_OK, intent);
                 finish();
@@ -63,7 +61,7 @@ public class CostCategoryAddActivity extends AppCompatActivity implements OnTask
     public void onTaskCompleted(Result result) {
         switch (result.getId()) {
             case CostCategoryExecutor.KEY_RESULT_GET_ALL_TO_LIST:
-                parentsList = (List<CostCategory>) result.getT();
+                parentsList = (List<CostCategory>) result.getObject();
                 String[] names = new String[parentsList.size() + 1];
                 int i = 0;
                 for (CostCategory costCategory : parentsList) {

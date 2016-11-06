@@ -20,8 +20,7 @@ import com.gmail.a93ak.andrei19.finance30.control.adapters.ExpListAdapter;
 import com.gmail.a93ak.andrei19.finance30.control.base.OnTaskCompleted;
 import com.gmail.a93ak.andrei19.finance30.control.base.RequestHolder;
 import com.gmail.a93ak.andrei19.finance30.control.base.Result;
-import com.gmail.a93ak.andrei19.finance30.model.base.DBHelper;
-import com.gmail.a93ak.andrei19.finance30.model.pojos.CostCategory;
+import com.gmail.a93ak.andrei19.finance30.model.models.CostCategory;
 import com.gmail.a93ak.andrei19.finance30.view.addEditActivities.CostCategoryAddActivity;
 import com.gmail.a93ak.andrei19.finance30.view.addEditActivities.CostCategoryEditActivity;
 
@@ -35,7 +34,6 @@ public class CategryCostActivity extends AppCompatActivity implements LoaderMana
 
     private ExpandableListView costCategoryExpListView;
     private ExpListAdapter adapter;
-    private RequestHolder<CostCategory> requestHolder;
 
     private int deleteGroupId = -1;
 
@@ -46,9 +44,9 @@ public class CategryCostActivity extends AppCompatActivity implements LoaderMana
         setContentView(R.layout.category_activity);
         costCategoryExpListView = (ExpandableListView) findViewById(R.id.CategoryExpListView);
         ((TextView)findViewById(R.id.categoriesTitle)).setText(R.string.costCategories);
-        String[] parentsFrom = {DBHelper.COST_CATEGORY_KEY_NAME};
+        String[] parentsFrom = {CostCategory.NAME};
         int[] parentsTo = {android.R.id.text1};
-        String[] childrensFrom = {DBHelper.COST_CATEGORY_KEY_NAME};
+        String[] childrensFrom = {CostCategory.NAME};
         int[] childrensTo = {android.R.id.text1};
         adapter = new ExpListAdapter(this, null, android.R.layout.simple_expandable_list_item_1, parentsFrom, parentsTo,
                 android.R.layout.simple_expandable_list_item_1, childrensFrom, childrensTo);
@@ -59,7 +57,6 @@ public class CategryCostActivity extends AppCompatActivity implements LoaderMana
         } else {
             getSupportLoaderManager().initLoader(-1, null, this);
         }
-        requestHolder = new RequestHolder<>();
         registerForContextMenu(costCategoryExpListView);
     }
 
@@ -92,12 +89,11 @@ public class CategryCostActivity extends AppCompatActivity implements LoaderMana
                 if (type == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
                     deleteGroupId = adapter.getIdToPos().get(groupPosition);
                 }
-                requestHolder.setDeleteRequest(info.id);
-                new CostCategoryExecutor(this).execute(requestHolder.getDeleteRequest());
+                new CostCategoryExecutor(this).execute(new RequestHolder().delete(info.id));
                 return true;
             case CM_EDIT_ID:
                 Intent intent = new Intent(this, CostCategoryEditActivity.class);
-                intent.putExtra(DBHelper.COST_CATEGORY_KEY_ID, info.id);
+                intent.putExtra(CostCategory.ID, info.id);
                 startActivityForResult(intent, EDIT_CATEGORY_REQUEST);
                 return true;
             default:
@@ -137,31 +133,29 @@ public class CategryCostActivity extends AppCompatActivity implements LoaderMana
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case ADD_CATEGORY_REQUEST:
-                    Long categoryParentId = data.getLongExtra(DBHelper.COST_CATEGORY_KEY_PARENT_ID, -2);
+                    Long categoryParentId = data.getLongExtra(CostCategory.PARENT_ID, -2);
                     if (categoryParentId == -2) {
                         return;
                     }
                     CostCategory newCostCategory = new CostCategory();
-                    newCostCategory.setName(data.getStringExtra(DBHelper.COST_CATEGORY_KEY_NAME));
+                    newCostCategory.setName(data.getStringExtra(CostCategory.NAME));
                     newCostCategory.setParent_id(categoryParentId);
-                    requestHolder.setAddRequest(newCostCategory);
-                    new CostCategoryExecutor(this).execute(requestHolder.getAddRequest());
+                    new CostCategoryExecutor(this).execute(new RequestHolder<CostCategory>().add(newCostCategory));
                     break;
                 case EDIT_CATEGORY_REQUEST:
-                    Long editCategoryId = data.getLongExtra(DBHelper.COST_CATEGORY_KEY_ID, -1);
+                    Long editCategoryId = data.getLongExtra(CostCategory.ID, -1);
                     if (editCategoryId == -1) {
                         return;
                     }
-                    Long editCategoryParentId = data.getLongExtra(DBHelper.COST_CATEGORY_KEY_PARENT_ID, -2);
+                    Long editCategoryParentId = data.getLongExtra(CostCategory.PARENT_ID, -2);
                     if (editCategoryParentId == -2) {
                         return;
                     }
                     CostCategory editCostCategory = new CostCategory();
                     editCostCategory.setId(editCategoryId);
-                    editCostCategory.setName(data.getStringExtra(DBHelper.COST_CATEGORY_KEY_NAME));
+                    editCostCategory.setName(data.getStringExtra(CostCategory.NAME));
                     editCostCategory.setParent_id(editCategoryParentId);
-                    requestHolder.setEditRequest(editCostCategory);
-                    new CostCategoryExecutor(this).execute(requestHolder.getEditRequest());
+                    new CostCategoryExecutor(this).execute(new RequestHolder<CostCategory>().edit(editCostCategory));
                     break;
                 default:
                     break;

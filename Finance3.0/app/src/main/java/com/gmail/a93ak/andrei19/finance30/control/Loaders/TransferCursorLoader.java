@@ -4,7 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.support.v4.content.CursorLoader;
 
-import com.gmail.a93ak.andrei19.finance30.modelVer2.dbHelpers.DBHelperTransfer;
+import com.gmail.a93ak.andrei19.finance30.model.dbHelpers.DBHelperTransfer;
 
 public class TransferCursorLoader extends CursorLoader {
 

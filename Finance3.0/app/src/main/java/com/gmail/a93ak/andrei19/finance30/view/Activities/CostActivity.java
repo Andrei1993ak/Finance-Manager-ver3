@@ -10,7 +10,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,9 +28,9 @@ import com.gmail.a93ak.andrei19.finance30.control.adapters.CostCursorAdapter;
 import com.gmail.a93ak.andrei19.finance30.control.base.OnTaskCompleted;
 import com.gmail.a93ak.andrei19.finance30.control.base.RequestHolder;
 import com.gmail.a93ak.andrei19.finance30.control.base.Result;
-import com.gmail.a93ak.andrei19.finance30.model.base.DBHelper;
-import com.gmail.a93ak.andrei19.finance30.model.dbhelpers.DBHelperCost;
-import com.gmail.a93ak.andrei19.finance30.model.pojos.Cost;
+import com.gmail.a93ak.andrei19.finance30.model.TableQueryGenerator;
+import com.gmail.a93ak.andrei19.finance30.model.dbHelpers.DBHelperCost;
+import com.gmail.a93ak.andrei19.finance30.model.models.Cost;
 import com.gmail.a93ak.andrei19.finance30.util.UniversalLoader.Loaders.BitmapLoader;
 import com.gmail.a93ak.andrei19.finance30.view.addEditActivities.CostAddActivity;
 import com.gmail.a93ak.andrei19.finance30.view.addEditActivities.CostEditActivity;
@@ -48,30 +47,33 @@ public class CostActivity extends AppCompatActivity implements LoaderManager.Loa
     private static final int ADD_COST_REQUEST = 1;
     private static final int EDIT_COST_REQUEST = 2;
 
+    private static final int MAIN_LOADER_ID = 0;
+
     public static final String TEMP_PATH = "/storage/emulated/0/temp.jpg";
     public static final String INTERNAL_PATH = "/data/data/com.gmail.a93ak.andrei19.finance30/files/images/";
 
     private CostCursorAdapter costCursorAdapter;
-
     private RequestHolder<Cost> requestHolder;
-    private Cost mNewCost;
-
-    private Cost mEditCost;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cost_activity);
         requestHolder = new RequestHolder<>();
         costCursorAdapter = new CostCursorAdapter(this, null);
-        ListView costListView = (ListView) findViewById(R.id.costListView);
+        final ListView costListView = (ListView) findViewById(R.id.costListView);
         costListView.setAdapter(costCursorAdapter);
         registerForContextMenu(costListView);
-        getSupportLoaderManager().initLoader(0, null, this);
+        getSupportLoaderManager().initLoader(MAIN_LOADER_ID, null, this);
+    }
+
+    public void addCost(final View view) {
+        final Intent intent = new Intent(this, CostAddActivity.class);
+        startActivityForResult(intent, ADD_COST_REQUEST);
     }
 
     @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+    public void onCreateContextMenu(final ContextMenu menu, final View v, final ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         menu.add(0, CM_EDIT_ID, 0, R.string.edit);
         menu.add(0, CM_DELETE_ID, 0, R.string.delete);
@@ -79,33 +81,32 @@ public class CostActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
     @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+    public boolean onContextItemSelected(final MenuItem item) {
+        final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
             case CM_DELETE_ID:
-                requestHolder.setDeleteRequest(info.id);
-                new CostExecutor(this).execute(requestHolder.getDeleteRequest());
+                new CostExecutor(this).execute(requestHolder.delete(info.id));
                 break;
             case CM_EDIT_ID:
-                Intent intent = new Intent(this, CostEditActivity.class);
-                intent.putExtra(DBHelper.COST_KEY_ID, info.id);
+                final Intent intent = new Intent(this, CostEditActivity.class);
+                intent.putExtra(Cost.ID, info.id);
                 startActivityForResult(intent, EDIT_COST_REQUEST);
                 break;
             case CM_PHOTO_ID:
-                Cost cost = DBHelperCost.getInstance(DBHelper.getInstance(this)).get(info.id);
+                final Cost cost = DBHelperCost.getInstance().get(info.id);
                 if (cost.getPhoto() == 0) {
                     Toast.makeText(this, R.string.noPhoto, Toast.LENGTH_LONG).show();
                 } else if (cost.getPhoto() == 1) {
-                    String filePath = INTERNAL_PATH + String.valueOf(info.id) + ".jpg";
-                    File file = new File(filePath);
-                    Dialog builder = new Dialog(this);
+                    final String filePath = INTERNAL_PATH + String.valueOf(info.id) + ".jpg";
+                    final File file = new File(filePath);
+                    final Dialog builder = new Dialog(this);
                     builder.requestWindowFeature(Window.FEATURE_NO_TITLE);
                     builder.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                    ImageView imageView = new ImageView(this);
-                    BitmapLoader bitmapLoader = BitmapLoader.getInstance(this);
+                    final ImageView imageView = new ImageView(this);
+                    final BitmapLoader bitmapLoader = BitmapLoader.getInstance(this);
                     try {
                         bitmapLoader.load(file.toURI().toURL().toString(), imageView);
-                    } catch (MalformedURLException e) {
+                    } catch (final MalformedURLException e) {
                         e.printStackTrace();
                     }
                     builder.addContentView(imageView, new RelativeLayout.LayoutParams(
@@ -119,83 +120,46 @@ public class CostActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case ADD_COST_REQUEST:
-                    mNewCost = new Cost();
-                    mNewCost.setName(data.getStringExtra(DBHelper.COST_KEY_NAME));
-                    mNewCost.setDate(data.getLongExtra(DBHelper.COST_KEY_DATE, -1L));
-                    mNewCost.setAmount(data.getDoubleExtra(DBHelper.COST_KEY_AMOUNT, -1.0));
-                    mNewCost.setPurse_id(data.getLongExtra(DBHelper.COST_KEY_PURSE_ID, -1));
-                    mNewCost.setCategory_id(data.getLongExtra(DBHelper.COST_KEY_CATEGORY_ID, -1L));
-                    mNewCost.setPhoto(data.getIntExtra(DBHelper.COST_KEY_PHOTO, 0));
-                    RequestHolder<Cost> requestHolder = new RequestHolder<>();
-                    requestHolder.setAddRequest(mNewCost);
-                    new CostExecutor(this).execute(requestHolder.getAddRequest());
+                    final Cost newCost = data.getParcelableExtra(TableQueryGenerator.getTableName(Cost.class));
+                    new CostExecutor(this).execute(requestHolder.add(newCost));
                     break;
                 case EDIT_COST_REQUEST:
-                    mEditCost = new Cost();
-                    long id = data.getLongExtra(DBHelper.COST_KEY_ID, -1L);
-                    mEditCost.setId(id);
-                    mEditCost.setName(data.getStringExtra(DBHelper.COST_KEY_NAME));
-                    mEditCost.setDate(data.getLongExtra(DBHelper.COST_KEY_DATE, -1L));
-                    mEditCost.setAmount(data.getDoubleExtra(DBHelper.COST_KEY_AMOUNT, -1.0));
-                    mEditCost.setPurse_id(data.getLongExtra(DBHelper.COST_KEY_PURSE_ID, -1));
-                    mEditCost.setCategory_id(data.getLongExtra(DBHelper.COST_KEY_CATEGORY_ID, -1L));
-                    mEditCost.setPhoto(data.getIntExtra(DBHelper.COST_KEY_PHOTO, 0));
-                    requestHolder = new RequestHolder<>();
-                    requestHolder.setEditRequest(mEditCost);
-                    new CostExecutor(this).execute(requestHolder.getEditRequest());
+                    final Cost editCost = data.getParcelableExtra(TableQueryGenerator.getTableName(Cost.class));
+                    new CostExecutor(this).execute(requestHolder.edit(editCost));
                     break;
                 default:
                     break;
             }
         }
-
     }
 
     @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+    public Loader<Cursor> onCreateLoader(final int id, final Bundle args) {
         return new CostCursorLoader(this);
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+    public void onLoadFinished(final Loader<Cursor> loader, final Cursor data) {
         costCursorAdapter.swapCursor(data);
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
+    public void onLoaderReset(final Loader<Cursor> loader) {
         costCursorAdapter.swapCursor(null);
     }
 
     @Override
-    public void onTaskCompleted(Result result) {
-        int id = result.getId();
-        switch (id) {
-            case CostExecutor.KEY_RESULT_DELETE:
-                if (getSupportLoaderManager().getLoader(0) != null) {
-                    getSupportLoaderManager().getLoader(0).forceLoad();
-                }
-                break;
-            case CostExecutor.KEY_RESULT_ADD:
-                if (getSupportLoaderManager().getLoader(0) != null) {
-                    getSupportLoaderManager().getLoader(0).forceLoad();
-                }
-                break;
-            case CostExecutor.KEY_RESULT_EDIT:
-                if (getSupportLoaderManager().getLoader(0) != null) {
-                    getSupportLoaderManager().getLoader(0).forceLoad();
-                }
-                break;
-            default:
-                Log.e("FinancePMError", "Unknown result code: " + id);
+    public void onTaskCompleted(final Result result) {
+        final int id = result.getId();
+        if (id == CostExecutor.KEY_RESULT_DELETE || id == CostExecutor.KEY_RESULT_ADD || id == CostExecutor.KEY_RESULT_EDIT) {
+            if (getSupportLoaderManager().getLoader(MAIN_LOADER_ID) != null) {
+                getSupportLoaderManager().getLoader(MAIN_LOADER_ID).forceLoad();
+            }
         }
     }
 
-    public void addCost(View view) {
-        Intent intent = new Intent(this, CostAddActivity.class);
-        startActivityForResult(intent, ADD_COST_REQUEST);
-    }
 }

@@ -11,7 +11,6 @@ import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
-import android.widget.Toast;
 
 import com.gmail.a93ak.andrei19.finance30.R;
 import com.gmail.a93ak.andrei19.finance30.control.Executors.IncomeCategoryExecutor;
@@ -20,8 +19,7 @@ import com.gmail.a93ak.andrei19.finance30.control.adapters.ExpListAdapter;
 import com.gmail.a93ak.andrei19.finance30.control.base.OnTaskCompleted;
 import com.gmail.a93ak.andrei19.finance30.control.base.RequestHolder;
 import com.gmail.a93ak.andrei19.finance30.control.base.Result;
-import com.gmail.a93ak.andrei19.finance30.model.base.DBHelper;
-import com.gmail.a93ak.andrei19.finance30.model.pojos.IncomeCategory;
+import com.gmail.a93ak.andrei19.finance30.model.models.IncomeCategory;
 import com.gmail.a93ak.andrei19.finance30.view.addEditActivities.IncomeCategoryAddActivity;
 import com.gmail.a93ak.andrei19.finance30.view.addEditActivities.IncomeCategoryEditActivity;
 
@@ -35,7 +33,6 @@ public class CategoryIncomeActivity extends AppCompatActivity implements LoaderM
 
     private ExpandableListView incomeCategoryExpListView;
     private ExpListAdapter adapter;
-    private RequestHolder<IncomeCategory> requestHolder;
 
     private int deleteGroupId = -1;
 
@@ -45,9 +42,9 @@ public class CategoryIncomeActivity extends AppCompatActivity implements LoaderM
         super.onCreate(savedInstanceState);
         setContentView(R.layout.category_activity);
         incomeCategoryExpListView = (ExpandableListView) findViewById(R.id.CategoryExpListView);
-        String[] parentsFrom = {DBHelper.INCOME_CATEGORY_KEY_NAME};
+        String[] parentsFrom = {IncomeCategory.NAME};
         int[] parentsTo = {android.R.id.text1};
-        String[] childrensFrom = {DBHelper.INCOME_CATEGORY_KEY_NAME};
+        String[] childrensFrom = {IncomeCategory.NAME};
         int[] childrensTo = {android.R.id.text1};
         adapter = new ExpListAdapter(this, null, android.R.layout.simple_expandable_list_item_1, parentsFrom, parentsTo,
                 android.R.layout.simple_expandable_list_item_1, childrensFrom, childrensTo);
@@ -58,7 +55,6 @@ public class CategoryIncomeActivity extends AppCompatActivity implements LoaderM
         } else {
             getSupportLoaderManager().initLoader(-1, null, this);
         }
-        requestHolder = new RequestHolder<>();
         registerForContextMenu(incomeCategoryExpListView);
     }
 
@@ -91,12 +87,11 @@ public class CategoryIncomeActivity extends AppCompatActivity implements LoaderM
                 if (type == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
                     deleteGroupId = adapter.getIdToPos().get(groupPosition);
                 }
-                requestHolder.setDeleteRequest(info.id);
-                new IncomeCategoryExecutor(this).execute(requestHolder.getDeleteRequest());
+                new IncomeCategoryExecutor(this).execute(new RequestHolder().delete(info.id));
                 return true;
             case CM_EDIT_ID:
                 Intent intent = new Intent(this, IncomeCategoryEditActivity.class);
-                intent.putExtra(DBHelper.INCOME_CATEGORY_KEY_ID, info.id);
+                intent.putExtra(IncomeCategory.ID, info.id);
                 startActivityForResult(intent, EDIT_CATEGORY_REQUEST);
                 return true;
             default:
@@ -136,31 +131,29 @@ public class CategoryIncomeActivity extends AppCompatActivity implements LoaderM
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case ADD_CATEGORY_REQUEST:
-                    Long categoryParentId = data.getLongExtra(DBHelper.INCOME_CATEGORY_KEY_PARENT_ID, -2);
+                    Long categoryParentId = data.getLongExtra(IncomeCategory.PARENT_ID, -2);
                     if (categoryParentId == -2) {
                         return;
                     }
                     IncomeCategory newIncomeCategory = new IncomeCategory();
-                    newIncomeCategory.setName(data.getStringExtra(DBHelper.INCOME_CATEGORY_KEY_NAME));
+                    newIncomeCategory.setName(data.getStringExtra(IncomeCategory.NAME));
                     newIncomeCategory.setParent_id(categoryParentId);
-                    requestHolder.setAddRequest(newIncomeCategory);
-                    new IncomeCategoryExecutor(this).execute(requestHolder.getAddRequest());
+                    new IncomeCategoryExecutor(this).execute(new RequestHolder<IncomeCategory>().add(newIncomeCategory));
                     break;
                 case EDIT_CATEGORY_REQUEST:
-                    Long editCategoryId = data.getLongExtra(DBHelper.INCOME_CATEGORY_KEY_ID, -1);
+                    Long editCategoryId = data.getLongExtra(IncomeCategory.ID, -1);
                     if (editCategoryId == -1) {
                         return;
                     }
-                    Long editCategoryParentId = data.getLongExtra(DBHelper.INCOME_CATEGORY_KEY_PARENT_ID, -2);
+                    Long editCategoryParentId = data.getLongExtra(IncomeCategory.PARENT_ID, -2);
                     if (editCategoryParentId == -2) {
                         return;
                     }
                     IncomeCategory editIncomeCategory = new IncomeCategory();
                     editIncomeCategory.setId(editCategoryId);
-                    editIncomeCategory.setName(data.getStringExtra(DBHelper.INCOME_CATEGORY_KEY_NAME));
+                    editIncomeCategory.setName(data.getStringExtra(IncomeCategory.NAME));
                     editIncomeCategory.setParent_id(editCategoryParentId);
-                    requestHolder.setEditRequest(editIncomeCategory);
-                    new IncomeCategoryExecutor(this).execute(requestHolder.getEditRequest());
+                    new IncomeCategoryExecutor(this).execute(new RequestHolder<IncomeCategory>().edit(editIncomeCategory));
                     break;
                 default:
                     break;

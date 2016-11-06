@@ -17,22 +17,22 @@ public class CameraActivity extends AppCompatActivity {
     private ImageView imageView;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.camera_activity_layout);
         this.imageView = (ImageView) this.findViewById(R.id.imageView1);
-        Button photoButton = (Button) this.findViewById(R.id.button1);
+        final Button photoButton = (Button) this.findViewById(R.id.button1);
         photoButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                final Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(cameraIntent, CAMERA_REQUEST);
             }
         });
     }
 
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
             final Bitmap photo = (Bitmap) data.getExtras().get("data");
             imageView.setImageBitmap(photo);

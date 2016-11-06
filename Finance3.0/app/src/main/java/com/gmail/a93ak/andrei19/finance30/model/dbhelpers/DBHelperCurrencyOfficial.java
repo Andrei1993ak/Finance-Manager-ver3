@@ -1,42 +1,44 @@
-package com.gmail.a93ak.andrei19.finance30.model.dbhelpers;
+package com.gmail.a93ak.andrei19.finance30.model.dbHelpers;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.gmail.a93ak.andrei19.finance30.model.base.DBHelper;
-import com.gmail.a93ak.andrei19.finance30.model.base.DBHelperInterface;
-import com.gmail.a93ak.andrei19.finance30.model.pojos.CurrencyOfficial;
+import com.gmail.a93ak.andrei19.finance30.model.DBHelper;
+import com.gmail.a93ak.andrei19.finance30.model.TableQueryGenerator;
+import com.gmail.a93ak.andrei19.finance30.model.models.CurrencyOfficial;
+import com.gmail.a93ak.andrei19.finance30.util.ContextHolder;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class DBHelperCurrencyOfficial implements DBHelperInterface<CurrencyOfficial> {
+public class DBHelperCurrencyOfficial implements DBHelperForModel<CurrencyOfficial> {
 
-    private DBHelper dbHelper;
+    private final DBHelper dbHelper;
 
     private static DBHelperCurrencyOfficial instance;
 
-    public static DBHelperCurrencyOfficial getInstance(DBHelper dbHelper) {
+    public static DBHelperCurrencyOfficial getInstance() {
         if (instance == null)
-            instance = new DBHelperCurrencyOfficial(dbHelper);
+            instance = new DBHelperCurrencyOfficial();
         return instance;
     }
 
-    private DBHelperCurrencyOfficial(DBHelper dbHelper) {
-        this.dbHelper = dbHelper;
+    private DBHelperCurrencyOfficial() {
+
+        this.dbHelper = DBHelper.getInstance(ContextHolder.getInstance().getContext());
     }
 
     @Override
-    public long add(CurrencyOfficial currency) {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(DBHelper.CURRENCY_FROM_WEB_KEY_CODE, currency.getCode());
-        values.put(DBHelper.CURRENCY_FROM_WEB_KEY_NAME, currency.getName());
-        long id;
+    public long add(final CurrencyOfficial currency) {
+        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+        final ContentValues values = new ContentValues();
+        values.put(CurrencyOfficial.CODE, currency.getCode());
+        values.put(CurrencyOfficial.NAME, currency.getName());
+        final long id;
         try {
             db.beginTransaction();
-            id = db.insert(DBHelper.TABLE_CURRENCIES_FROM_WEB, null, values);
+            id = db.insert(TableQueryGenerator.getTableName(CurrencyOfficial.class), null, values);
             db.setTransactionSuccessful();
         } finally {
             db.endTransaction();
@@ -45,15 +47,15 @@ public class DBHelperCurrencyOfficial implements DBHelperInterface<CurrencyOffic
     }
 
     @Override
-    public CurrencyOfficial get(long id) {
-        String selectQuery = "SELECT * FROM " + DBHelper.TABLE_CURRENCIES_FROM_WEB + " WHERE _id = " + id;
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, null);
+    public CurrencyOfficial get(final long id) {
+        final String selectQuery = "SELECT * FROM " + TableQueryGenerator.getTableName(CurrencyOfficial.class) + " WHERE _id = " + id;
+        final SQLiteDatabase db = dbHelper.getReadableDatabase();
+        final Cursor cursor = db.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
-            CurrencyOfficial currency = new CurrencyOfficial();
-            currency.setId(cursor.getLong(0));
-            currency.setCode(cursor.getString(1));
-            currency.setName(cursor.getString(2));
+            final CurrencyOfficial currency = new CurrencyOfficial();
+            currency.setId(cursor.getLong(cursor.getColumnIndex(CurrencyOfficial.ID)));
+            currency.setCode(cursor.getString(cursor.getColumnIndex(CurrencyOfficial.CODE)));
+            currency.setName(cursor.getString(cursor.getColumnIndex(CurrencyOfficial.NAME)));
             cursor.close();
             return currency;
         } else {
@@ -64,22 +66,23 @@ public class DBHelperCurrencyOfficial implements DBHelperInterface<CurrencyOffic
 
     @Override
     public Cursor getAll() {
-        String selectQuery = "SELECT * FROM " + DBHelper.TABLE_CURRENCIES_FROM_WEB + " ORDER BY " + DBHelper.CURRENCY_FROM_WEB_KEY_NAME;
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        final String selectQuery = "SELECT * FROM " + TableQueryGenerator.getTableName(CurrencyOfficial.class) + " ORDER BY " + CurrencyOfficial.NAME;
+        final SQLiteDatabase db = dbHelper.getReadableDatabase();
         return db.rawQuery(selectQuery, null);
     }
 
+    @Override
     public List<CurrencyOfficial> getAllToList() {
-        List<CurrencyOfficial> currenciesList = new ArrayList<>();
-        String selectQuery = "SELECT * FROM " + DBHelper.TABLE_CURRENCIES_FROM_WEB + " ORDER BY " + DBHelper.CURRENCY_FROM_WEB_KEY_NAME;
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, null);
+        final List<CurrencyOfficial> currenciesList = new ArrayList<>();
+        final String selectQuery = "SELECT * FROM " + TableQueryGenerator.getTableName(CurrencyOfficial.class) + " ORDER BY " + CurrencyOfficial.NAME;
+        final SQLiteDatabase db = dbHelper.getReadableDatabase();
+        final Cursor cursor = db.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
             do {
-                CurrencyOfficial currency = new CurrencyOfficial();
-                currency.setId(cursor.getLong(0));
-                currency.setCode(cursor.getString(1));
-                currency.setName(cursor.getString(2));
+                final CurrencyOfficial currency = new CurrencyOfficial();
+                currency.setId(cursor.getLong(cursor.getColumnIndex(CurrencyOfficial.ID)));
+                currency.setCode(cursor.getString(cursor.getColumnIndex(CurrencyOfficial.CODE)));
+                currency.setName(cursor.getString(cursor.getColumnIndex(CurrencyOfficial.NAME)));
                 currenciesList.add(currency);
             } while (cursor.moveToNext());
         }
@@ -88,15 +91,15 @@ public class DBHelperCurrencyOfficial implements DBHelperInterface<CurrencyOffic
     }
 
     @Override
-    public int update(CurrencyOfficial currency) {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(DBHelper.CURRENCY_FROM_WEB_KEY_CODE, currency.getCode());
-        values.put(DBHelper.CURRENCY_FROM_WEB_KEY_NAME, currency.getName());
-        int count;
+    public int update(final CurrencyOfficial currency) {
+        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+        final ContentValues values = new ContentValues();
+        values.put(CurrencyOfficial.CODE, currency.getCode());
+        values.put(CurrencyOfficial.NAME, currency.getName());
+        final int count;
         try {
             db.beginTransaction();
-            count = db.update(DBHelper.TABLE_CURRENCIES_FROM_WEB, values, DBHelper.CURRENCY_FROM_WEB_KEY_ID + "=?", new String[]{String.valueOf(currency.getId())});
+            count = db.update(TableQueryGenerator.getTableName(CurrencyOfficial.class), values, CurrencyOfficial.ID + "=?", new String[]{String.valueOf(currency.getId())});
             db.setTransactionSuccessful();
         } finally {
             db.endTransaction();
@@ -105,12 +108,12 @@ public class DBHelperCurrencyOfficial implements DBHelperInterface<CurrencyOffic
     }
 
     @Override
-    public int delete(long id) {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        int count;
+    public int delete(final long id) {
+        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+        final int count;
         try {
             db.beginTransaction();
-            count = db.delete(DBHelper.TABLE_CURRENCIES_FROM_WEB, DBHelper.CURRENCY_FROM_WEB_KEY_ID + " = " + id, null);
+            count = db.delete(TableQueryGenerator.getTableName(CurrencyOfficial.class), CurrencyOfficial.ID + " = " + id, null);
             db.setTransactionSuccessful();
         } finally {
             db.endTransaction();
@@ -120,11 +123,11 @@ public class DBHelperCurrencyOfficial implements DBHelperInterface<CurrencyOffic
 
     @Override
     public int deleteAll() {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        int count;
+        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+        final int count;
         try {
             db.beginTransaction();
-            count = db.delete(DBHelper.TABLE_CURRENCIES_FROM_WEB, null, null);
+            count = db.delete(TableQueryGenerator.getTableName(CurrencyOfficial.class), null, null);
             db.setTransactionSuccessful();
         } finally {
             db.endTransaction();

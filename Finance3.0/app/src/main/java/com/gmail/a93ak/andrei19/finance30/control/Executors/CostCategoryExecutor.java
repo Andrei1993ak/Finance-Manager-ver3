@@ -5,10 +5,8 @@ import android.database.Cursor;
 import com.gmail.a93ak.andrei19.finance30.control.base.OnTaskCompleted;
 import com.gmail.a93ak.andrei19.finance30.control.base.PojoExecutor;
 import com.gmail.a93ak.andrei19.finance30.control.base.Result;
-import com.gmail.a93ak.andrei19.finance30.model.base.DBHelper;
-import com.gmail.a93ak.andrei19.finance30.model.dbhelpers.DBHelperCategoryCost;
-import com.gmail.a93ak.andrei19.finance30.model.pojos.CostCategory;
-import com.gmail.a93ak.andrei19.finance30.model.pojos.IncomeCategory;
+import com.gmail.a93ak.andrei19.finance30.model.dbHelpers.DBHelperCategoryCost;
+import com.gmail.a93ak.andrei19.finance30.model.models.CostCategory;
 
 
 import java.util.List;
@@ -24,29 +22,29 @@ public class CostCategoryExecutor extends PojoExecutor<CostCategory> {
     public static final int KEY_RESULT_GET_ALL_TO_LIST = 507;
     public static final int KEY_RESULT_GET_ALL_TO_LIST_BY_PARENT_ID = 508;
 
-    private DBHelperCategoryCost dbHelper = DBHelperCategoryCost.getInstance(DBHelper.getInstance(context));
+    private final DBHelperCategoryCost dbHelper = DBHelperCategoryCost.getInstance();
 
-    public CostCategoryExecutor(OnTaskCompleted listener) {
+    public CostCategoryExecutor(final OnTaskCompleted listener) {
         super(listener);
     }
 
     @Override
-    public Result<CostCategory> getPojo(long id) {
+    public Result<CostCategory> getPojo(final long id) {
         return new Result<>(KEY_RESULT_GET, dbHelper.get(id));
     }
 
     @Override
-    public Result<Long> addPojo(CostCategory costCategory) {
+    public Result<Long> addPojo(final CostCategory costCategory) {
         return new Result<>(KEY_RESULT_ADD, dbHelper.add(costCategory));
     }
 
     @Override
-    public Result<Integer> deletePojo(long id) {
+    public Result<Integer> deletePojo(final long id) {
         return new Result<>(KEY_RESULT_DELETE, dbHelper.delete(id));
     }
 
     @Override
-    public Result<Integer> updatePojo(CostCategory costCategory) {
+    public Result<Integer> updatePojo(final CostCategory costCategory) {
         return new Result<>(KEY_RESULT_EDIT, dbHelper.update(costCategory));
     }
 
@@ -61,7 +59,7 @@ public class CostCategoryExecutor extends PojoExecutor<CostCategory> {
     }
 
     @Override
-    public Result<List<CostCategory>> getAllToList(int selection) {
+    public Result<List<CostCategory>> getAllToList(final int selection) {
         if (selection == 0) {
 //            all categories
             return new Result<>(KEY_RESULT_GET_ALL_TO_LIST, dbHelper.getAllToList());
@@ -73,7 +71,7 @@ public class CostCategoryExecutor extends PojoExecutor<CostCategory> {
     }
 
     @Override
-    protected Result<List<CostCategory>> getAllToListByCategoryId(Long id) {
+    protected Result<List<CostCategory>> getAllToListByCategoryId(final Long id) {
         return new Result<>(KEY_RESULT_GET_ALL_TO_LIST_BY_PARENT_ID,dbHelper.getAllToListByParentId(id));
     }
 }

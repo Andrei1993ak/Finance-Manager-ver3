@@ -20,8 +20,7 @@ import com.gmail.a93ak.andrei19.finance30.control.Loaders.CurrencyCursorLoader;
 import com.gmail.a93ak.andrei19.finance30.control.base.OnTaskCompleted;
 import com.gmail.a93ak.andrei19.finance30.control.base.RequestHolder;
 import com.gmail.a93ak.andrei19.finance30.control.base.Result;
-import com.gmail.a93ak.andrei19.finance30.model.base.DBHelper;
-import com.gmail.a93ak.andrei19.finance30.model.pojos.Currency;
+import com.gmail.a93ak.andrei19.finance30.model.models.Currency;
 import com.gmail.a93ak.andrei19.finance30.view.addEditActivities.CurrencyAddActivity;
 import com.gmail.a93ak.andrei19.finance30.view.addEditActivities.CurrencyEditActivity;
 
@@ -44,7 +43,7 @@ public class CurrencyActivity extends AppCompatActivity implements LoaderManager
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.currency_activity);
-        String[] from = new String[]{DBHelper.CURRENCY_KEY_NAME};
+        String[] from = new String[]{Currency.NAME};
         int[] to = new int[]{R.id.currencyName};
         requestHolder = new RequestHolder<>();
         simpleCursorAdapter = new SimpleCursorAdapter(this, R.layout.currency_listitem, null, from, to, 0);
@@ -71,8 +70,7 @@ public class CurrencyActivity extends AppCompatActivity implements LoaderManager
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
             case CM_DELETE_ID:
-                requestHolder.setDeleteRequest(info.id);
-                new CurrencyExecutor(this).execute(requestHolder.getDeleteRequest());
+                new CurrencyExecutor(this).execute(requestHolder.delete(info.id));
                 break;
             case CM_EDIT_ID:
                 Intent intent = new Intent(this, CurrencyEditActivity.class);
@@ -91,8 +89,7 @@ public class CurrencyActivity extends AppCompatActivity implements LoaderManager
                     String name = data.getStringExtra(NAME);
                     String code = data.getStringExtra(CODE);
                     Currency newCurrency = new Currency(code, name);
-                    requestHolder.setAddRequest(newCurrency);
-                    new CurrencyExecutor(this).execute(requestHolder.getAddRequest());
+                    new CurrencyExecutor(this).execute(requestHolder.add(newCurrency));
                     break;
                 case EDIT_CURRENCY_REQUEST:
                     Long id = data.getLongExtra(ID, -1);
@@ -101,8 +98,7 @@ public class CurrencyActivity extends AppCompatActivity implements LoaderManager
                         code = data.getStringExtra(CODE);
                         Currency editCurrency = new Currency(code, name);
                         editCurrency.setId(id);
-                        requestHolder.setEditRequest(editCurrency);
-                        new CurrencyExecutor(this).execute(requestHolder.getEditRequest());
+                        new CurrencyExecutor(this).execute(requestHolder.edit(editCurrency));
                         break;
                     }
                 default:

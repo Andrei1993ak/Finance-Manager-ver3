@@ -3,26 +3,23 @@ package com.gmail.a93ak.andrei19.finance30.control.base;
 public class Request<T> {
 //
     private int id;
-    private T o;
+    private final T object;
 
-    public Request(int id, T o) {
+    public Request(final int id, final T object) {
         this.id = id;
-        this.o = o;
+        this.object = object;
     }
 
     public int getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(final int id) {
         this.id = id;
     }
 
-    public T getO() {
-        return o;
+    public T getObject() {
+        return object;
     }
 
-    public void setO(T o) {
-        this.o = o;
-    }
 }

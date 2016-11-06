@@ -16,50 +16,49 @@ public class BitmapLoader extends UniversalLoader<Bitmap, ImageView> {
 
     private static BitmapLoader instance;
 
-    public static BitmapLoader getInstance(Context context) {
+    public static BitmapLoader getInstance(final Context context) {
         if (instance == null)
             instance = new BitmapLoader(context);
         return instance;
     }
 
-    private BitmapLoader(Context context) {
+    private BitmapLoader(final Context context) {
         super(context);
     }
 
     @Override
-    public int getSizeObj(Bitmap bitmap) {
+    public int getSizeObj(final Bitmap bitmap) {
         return bitmap.getRowBytes() * bitmap.getHeight();
     }
 
     @Override
-    public Bitmap decodeFromFile(File file, int PreSize) {
+    public Bitmap decodeFromFile(final File file, final int preSize) {
         try {
-            BitmapFactory.Options o = new BitmapFactory.Options();
+            final BitmapFactory.Options o = new BitmapFactory.Options();
             o.inJustDecodeBounds = true;
             BitmapFactory.decodeStream(new FileInputStream(file), null, o);
 
-            final int REQUIRED_SIZE = PreSize;
             int width_tmp = o.outWidth, height_tmp = o.outHeight;
             int scale = 1;
             while (true) {
-                if (width_tmp / 2 < REQUIRED_SIZE || height_tmp / 2 < REQUIRED_SIZE)
+                if (width_tmp / 2 < preSize || height_tmp / 2 < preSize)
                     break;
                 width_tmp /= 2;
                 height_tmp /= 2;
                 scale *= 2;
             }
 
-            BitmapFactory.Options o2 = new BitmapFactory.Options();
+            final BitmapFactory.Options o2 = new BitmapFactory.Options();
             o2.inSampleSize = scale;
             return BitmapFactory.decodeStream(new FileInputStream(file), null, o2);
-        } catch (FileNotFoundException e) {
+        } catch (final FileNotFoundException e) {
             e.printStackTrace();
         }
         return null;
     }
 
     @Override
-    public void set(Bitmap bitmap, ImageView imageView) {
+    public void set(final Bitmap bitmap, final ImageView imageView) {
         if (bitmap != null) {
             imageView.setImageBitmap(bitmap);
         } else {

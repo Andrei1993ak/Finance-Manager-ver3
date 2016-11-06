@@ -13,22 +13,21 @@ public class HelloEndpoint extends AsyncTask<Context, Void, String> {
     private Context context;
 
     @Override
-    protected String doInBackground(Context... params) {
-        MyApi.SayHi sayHi;
+    protected String doInBackground(final Context... params) {
+        final MyApi.SayHi sayHi;
         String response;
         context = params[0];
         try {
             sayHi = ApiManager.get().myApi().sayHi("Andrei");
             response = sayHi.execute().getData();
-        } catch (IOException e) {
-            e.printStackTrace();
-            response = ":(";
+        } catch (final IOException e) {
+            response = null;
         }
         return response;
     }
 
     @Override
-    protected void onPostExecute(String s) {
+    protected void onPostExecute(final String s) {
         Toast.makeText(context,s,Toast.LENGTH_LONG).show();
     }
 

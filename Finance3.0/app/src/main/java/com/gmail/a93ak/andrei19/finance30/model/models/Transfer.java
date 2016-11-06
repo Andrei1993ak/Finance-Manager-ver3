@@ -1,22 +1,14 @@
-package com.gmail.a93ak.andrei19.finance30.modelVer2.pojos;
+package com.gmail.a93ak.andrei19.finance30.model.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.gmail.a93ak.andrei19.finance30.modelVer2.annotations.Table;
-import com.gmail.a93ak.andrei19.finance30.modelVer2.annotations.types.DBDouble;
-import com.gmail.a93ak.andrei19.finance30.modelVer2.annotations.types.DBInteger;
-import com.gmail.a93ak.andrei19.finance30.modelVer2.annotations.types.DBIntegerPrimaryKey;
-import com.gmail.a93ak.andrei19.finance30.modelVer2.annotations.types.DBString;
+import com.gmail.a93ak.andrei19.finance30.model.annotations.Table;
+import com.gmail.a93ak.andrei19.finance30.model.annotations.types.DBDouble;
+import com.gmail.a93ak.andrei19.finance30.model.annotations.types.DBInteger;
 
 @Table(name = "transfers")
-public final class Transfer implements TableClass,Parcelable {
-
-    @DBIntegerPrimaryKey
-    public static String ID = "_id";
-
-    @DBString
-    public static String NAME = "name";
+public final class Transfer extends TableClass implements Parcelable {
 
     @DBInteger
     public static String DATE = "date";
@@ -44,7 +36,8 @@ public final class Transfer implements TableClass,Parcelable {
     public Transfer() {
     }
 
-    public Transfer(String name, long date, long fromPurseId, long toPurseId, double fromAmount, double toAmount) {
+    public Transfer(final String name, final long date, final long fromPurseId, final long toPurseId,
+                    final double fromAmount, final double toAmount) {
         this.name = name;
         this.date = date;
         this.fromPurseId = fromPurseId;
@@ -57,7 +50,7 @@ public final class Transfer implements TableClass,Parcelable {
         return _id;
     }
 
-    public void setId(long _id) {
+    public void setId(final long _id) {
         this._id = _id;
     }
 
@@ -65,7 +58,7 @@ public final class Transfer implements TableClass,Parcelable {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -73,7 +66,7 @@ public final class Transfer implements TableClass,Parcelable {
         return date;
     }
 
-    public void setDate(long date) {
+    public void setDate(final long date) {
         this.date = date;
     }
 
@@ -81,7 +74,7 @@ public final class Transfer implements TableClass,Parcelable {
         return fromPurseId;
     }
 
-    public void setFromPurseId(long fromPurseId) {
+    public void setFromPurseId(final long fromPurseId) {
         this.fromPurseId = fromPurseId;
     }
 
@@ -89,7 +82,7 @@ public final class Transfer implements TableClass,Parcelable {
         return toPurseId;
     }
 
-    public void setToPurseId(long toPurseId) {
+    public void setToPurseId(final long toPurseId) {
         this.toPurseId = toPurseId;
     }
 
@@ -97,7 +90,7 @@ public final class Transfer implements TableClass,Parcelable {
         return fromAmount;
     }
 
-    public void setFromAmount(double fromAmount) {
+    public void setFromAmount(final double fromAmount) {
         this.fromAmount = fromAmount;
     }
 
@@ -105,7 +98,7 @@ public final class Transfer implements TableClass,Parcelable {
         return toAmount;
     }
 
-    public void setToAmount(double toAmount) {
+    public void setToAmount(final double toAmount) {
         this.toAmount = toAmount;
     }
 
@@ -116,7 +109,7 @@ public final class Transfer implements TableClass,Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
+    public void writeToParcel(final Parcel dest, final int flags) {
         dest.writeLong(this._id);
         dest.writeString(this.name);
         dest.writeLong(this.date);
@@ -126,7 +119,7 @@ public final class Transfer implements TableClass,Parcelable {
         dest.writeDouble(this.toAmount);
     }
 
-    protected Transfer(Parcel in) {
+    protected Transfer(final Parcel in) {
         this._id = in.readLong();
         this.name = in.readString();
         this.date = in.readLong();
@@ -138,12 +131,12 @@ public final class Transfer implements TableClass,Parcelable {
 
     public static final Parcelable.Creator<Transfer> CREATOR = new Parcelable.Creator<Transfer>() {
         @Override
-        public Transfer createFromParcel(Parcel source) {
+        public Transfer createFromParcel(final Parcel source) {
             return new Transfer(source);
         }
 
         @Override
-        public Transfer[] newArray(int size) {
+        public Transfer[] newArray(final int size) {
             return new Transfer[size];
         }
     };

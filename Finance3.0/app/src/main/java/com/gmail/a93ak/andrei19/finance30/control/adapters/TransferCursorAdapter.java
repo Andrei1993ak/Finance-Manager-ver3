@@ -10,28 +10,27 @@ import android.widget.TextView;
 
 
 import com.gmail.a93ak.andrei19.finance30.R;
-import com.gmail.a93ak.andrei19.finance30.model.base.DBHelper;
-import com.gmail.a93ak.andrei19.finance30.model.dbhelpers.DBHelperCurrency;
-import com.gmail.a93ak.andrei19.finance30.model.dbhelpers.DBHelperPurse;
-import com.gmail.a93ak.andrei19.finance30.model.pojos.Currency;
-import com.gmail.a93ak.andrei19.finance30.model.pojos.Purse;
-import com.gmail.a93ak.andrei19.finance30.modelVer2.pojos.Transfer;
+import com.gmail.a93ak.andrei19.finance30.model.dbHelpers.DBHelperPurse;
+import com.gmail.a93ak.andrei19.finance30.model.dbHelpers.DBHelperCurrency;
+import com.gmail.a93ak.andrei19.finance30.model.models.Currency;
+import com.gmail.a93ak.andrei19.finance30.model.models.Purse;
+import com.gmail.a93ak.andrei19.finance30.model.models.Transfer;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 public class TransferCursorAdapter extends CursorAdapter {
 
-    private LayoutInflater inflater;
-    private DBHelperPurse helperPurse;
-    private DBHelperCurrency helperCurrency;
+    private final LayoutInflater inflater;
+    private final DBHelperPurse helperPurse;
+    private final DBHelperCurrency helperCurrency;
 
 
     public TransferCursorAdapter(final Context context, final Cursor cursor) {
         super(context, cursor, 0);
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        helperPurse = DBHelperPurse.getInstance(DBHelper.getInstance(context));
-        helperCurrency = DBHelperCurrency.getInstance(DBHelper.getInstance(context));
+        helperPurse = DBHelperPurse.getInstance();
+        helperCurrency = DBHelperCurrency.getInstance();
 
     }
 
@@ -66,7 +65,7 @@ public class TransferCursorAdapter extends CursorAdapter {
         final Double fromAmountDouble = cursor.getDouble(cursor.getColumnIndex(Transfer.FROM_AMOUNT));
         StringBuilder builder = new StringBuilder();
         builder.append("-");
-        builder.append(String.format("%.2f", fromAmountDouble));
+        builder.append(String.format(Locale.US, "%.2f", fromAmountDouble));
         builder.append(" ");
         builder.append(currencyFrom.getCode());
         fromAmount.setText(builder.toString());
@@ -76,10 +75,9 @@ public class TransferCursorAdapter extends CursorAdapter {
         final Double toAmountDouble = cursor.getDouble(cursor.getColumnIndex(Transfer.TO_AMOUNT));
         builder = new StringBuilder();
         builder.append("+");
-        builder.append(String.format("%.2f", toAmountDouble));
+        builder.append(String.format(Locale.US, "%.2f", toAmountDouble));
         builder.append(" ");
         builder.append(currencyTo.getCode());
         toAmount.setText(builder.toString());
-
     }
 }

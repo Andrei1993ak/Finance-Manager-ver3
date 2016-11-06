@@ -5,9 +5,8 @@ import android.database.Cursor;
 import com.gmail.a93ak.andrei19.finance30.control.base.OnTaskCompleted;
 import com.gmail.a93ak.andrei19.finance30.control.base.PojoExecutor;
 import com.gmail.a93ak.andrei19.finance30.control.base.Result;
-import com.gmail.a93ak.andrei19.finance30.model.base.DBHelper;
-import com.gmail.a93ak.andrei19.finance30.model.dbhelpers.DBHelperCost;
-import com.gmail.a93ak.andrei19.finance30.model.pojos.Cost;
+import com.gmail.a93ak.andrei19.finance30.model.dbHelpers.DBHelperCost;
+import com.gmail.a93ak.andrei19.finance30.model.models.Cost;
 import com.gmail.a93ak.andrei19.finance30.util.ContextHolder;
 import com.gmail.a93ak.andrei19.finance30.util.UniversalLoader.Loaders.BitmapLoader;
 
@@ -32,26 +31,26 @@ public class CostExecutor extends PojoExecutor<Cost> {
 
     public static final String INTERNAL_PATH = "/data/data/com.gmail.a93ak.andrei19.finance30/files/images/";
 
-    public CostExecutor(OnTaskCompleted listener) {
+    public CostExecutor(final OnTaskCompleted listener) {
         super(listener);
     }
 
     @Override
-    public Result<Cost> getPojo(long id) {
-        return new Result<>(KEY_RESULT_GET, DBHelperCost.getInstance(DBHelper.getInstance(context)).get(id));
+    public Result<Cost> getPojo(final long id) {
+        return new Result<>(KEY_RESULT_GET, DBHelperCost.getInstance().get(id));
     }
 
     @Override
-    public Result<Long> addPojo(Cost cost) {
-        return new Result<>(KEY_RESULT_ADD, DBHelperCost.getInstance(DBHelper.getInstance(context)).add(cost));
+    public Result<Long> addPojo(final Cost cost) {
+        return new Result<>(KEY_RESULT_ADD, DBHelperCost.getInstance().add(cost));
     }
 
     @Override
-    public Result<Integer> deletePojo(long id) {
+    public Result<Integer> deletePojo(final long id) {
 
-        DBHelperCost costDbHelper = DBHelperCost.getInstance(DBHelper.getInstance(ContextHolder.getInstance().getContext()));
+        final DBHelperCost costDbHelper = DBHelperCost.getInstance();
         if (costDbHelper.get(id).getPhoto() == 1) {
-            File file = new File(INTERNAL_PATH + "/" + String.valueOf(id) + ".jpg");
+            final File file = new File(INTERNAL_PATH + "/" + String.valueOf(id) + ".jpg");
             try {
                 BitmapLoader.getInstance(ContextHolder.getInstance().getContext()).clearCashes(file.toURI().toURL().toString());
                 file.delete();
@@ -59,47 +58,47 @@ public class CostExecutor extends PojoExecutor<Cost> {
                 e.printStackTrace();
             }
         }
-        return new Result<>(KEY_RESULT_DELETE, DBHelperCost.getInstance(DBHelper.getInstance(context)).delete(id));
+        return new Result<>(KEY_RESULT_DELETE, DBHelperCost.getInstance().delete(id));
     }
 
     @Override
-    public Result<Integer> updatePojo(Cost cost) {
+    public Result<Integer> updatePojo(final Cost cost) {
         try {
-            File file = new File(INTERNAL_PATH + "/" + String.valueOf(cost.getId()) + ".jpg");
+            final File file = new File(INTERNAL_PATH + "/" + String.valueOf(cost.getId()) + ".jpg");
             BitmapLoader.getInstance(ContextHolder.getInstance().getContext()).clearCashes(file.toURI().toURL().toString());
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        return new Result<>(KEY_RESULT_EDIT, DBHelperCost.getInstance(DBHelper.getInstance(context)).update(cost));
+        return new Result<>(KEY_RESULT_EDIT, DBHelperCost.getInstance().update(cost));
     }
 
     @Override
     public Result<Cursor> getAll() {
-        return new Result<>(KEY_RESULT_GET_ALL, DBHelperCost.getInstance(DBHelper.getInstance(context)).getAll());
+        return new Result<>(KEY_RESULT_GET_ALL, DBHelperCost.getInstance().getAll());
     }
 
     @Override
     public Result<Integer> deleteAll() {
-        return new Result<>(KEY_RESULT_DELETE_ALL, DBHelperCost.getInstance(DBHelper.getInstance(context)).deleteAll());
+        return new Result<>(KEY_RESULT_DELETE_ALL, DBHelperCost.getInstance().deleteAll());
     }
 
     @Override
     public Result<List<Cost>> getAllToList(int selection) {
-        return new Result<>(KEY_RESULT_DELETE_ALL, DBHelperCost.getInstance(DBHelper.getInstance(context)).getAllToList());
+        return new Result<>(KEY_RESULT_DELETE_ALL, DBHelperCost.getInstance().getAllToList());
     }
 
     @Override
-    protected Result<List<Cost>> getAllToListByDates(ArrayList<Long> diapason) {
-        return new Result<>(KEY_RESULT_GET_ALL_TO_LIST_BY_DATES, DBHelperCost.getInstance(DBHelper.getInstance(context)).getAllToListByDates(diapason.get(0), diapason.get(1)));
+    protected Result<List<Cost>> getAllToListByDates(ArrayList<Long> dates) {
+        return new Result<>(KEY_RESULT_GET_ALL_TO_LIST_BY_DATES, DBHelperCost.getInstance().getAllToListByDates(dates.get(0), dates.get(1)));
     }
 
     @Override
     protected Result<List<Cost>> getAllToListByPurseId(Long id) {
-        return new Result<>(KEY_RESULT_GET_ALL_TO_LIST_BY_PURSE_ID, DBHelperCost.getInstance(DBHelper.getInstance(context)).getAllToListByPurseId(id));
+        return new Result<>(KEY_RESULT_GET_ALL_TO_LIST_BY_PURSE_ID, DBHelperCost.getInstance().getAllToListByPurseId(id));
     }
 
     @Override
     protected Result<List<Cost>> getAllToListByCategoryId(Long id) {
-        return new Result<>(KEY_RESULT_GET_ALL_TO_LIST_BY_CATEGORY_ID, DBHelperCost.getInstance(DBHelper.getInstance(context)).getAllToListByCategoryId(id));
+        return new Result<>(KEY_RESULT_GET_ALL_TO_LIST_BY_CATEGORY_ID, DBHelperCost.getInstance().getAllToListByCategoryId(id));
     }
 }

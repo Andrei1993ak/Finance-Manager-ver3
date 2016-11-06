@@ -12,13 +12,12 @@ import com.gmail.a93ak.andrei19.finance30.control.Executors.CurrencyExecutor;
 import com.gmail.a93ak.andrei19.finance30.control.base.OnTaskCompleted;
 import com.gmail.a93ak.andrei19.finance30.control.base.RequestHolder;
 import com.gmail.a93ak.andrei19.finance30.control.base.Result;
-import com.gmail.a93ak.andrei19.finance30.model.pojos.Currency;
+import com.gmail.a93ak.andrei19.finance30.model.models.Currency;
 
 public class CurrencyEditActivity extends AppCompatActivity implements OnTaskCompleted {
 
     public static final String ID = "Id";
-    public static final String NAME = "name";
-    public static final String CODE = "code";
+
 
     private TextView editCurrencyCode;
     private EditText editCurrencyName;
@@ -33,8 +32,7 @@ public class CurrencyEditActivity extends AppCompatActivity implements OnTaskCom
         RequestHolder<Currency> requestHolder = new RequestHolder<>();
         long id = getIntent().getLongExtra(ID, -1);
         if (id != -1) {
-            requestHolder.setGetRequest(id);
-            new CurrencyExecutor(this).execute(requestHolder.getGetRequest());
+            new CurrencyExecutor(this).execute(requestHolder.get(id));
         }
 
     }
@@ -43,7 +41,7 @@ public class CurrencyEditActivity extends AppCompatActivity implements OnTaskCom
     public void onTaskCompleted(Result result) {
         switch (result.getId()) {
             case CurrencyExecutor.KEY_RESULT_GET:
-                currency = (Currency) result.getT();
+                currency = (Currency) result.getObject();
                 editCurrencyCode.setText(currency.getCode());
                 editCurrencyName.setText(currency.getName());
                 break;
@@ -52,15 +50,15 @@ public class CurrencyEditActivity extends AppCompatActivity implements OnTaskCom
 
     public void editCurrency(View view) {
         String name = editCurrencyName.getText().toString();
-        if(currency!=null && name.length()>0) {
+        if (currency != null && name.length() > 0) {
             Intent intent = new Intent();
-            intent.putExtra(ID,currency.getId());
-            intent.putExtra(NAME, name);
-            intent.putExtra(CODE, currency.getCode());
+            intent.putExtra(ID, currency.getId());
+            intent.putExtra(Currency.NAME, name);
+            intent.putExtra(Currency.CODE, currency.getCode());
             setResult(RESULT_OK, intent);
             finish();
         } else {
-            if(!(name.length()>0))
+            if (!(name.length() > 0))
                 editCurrencyName.setBackground(getResources().getDrawable(R.drawable.shape_red_field));
         }
 

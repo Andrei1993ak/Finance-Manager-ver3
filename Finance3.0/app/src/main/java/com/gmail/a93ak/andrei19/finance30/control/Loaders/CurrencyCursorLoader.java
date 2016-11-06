@@ -4,8 +4,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.support.v4.content.CursorLoader;
 
-import com.gmail.a93ak.andrei19.finance30.model.base.DBHelper;
-import com.gmail.a93ak.andrei19.finance30.model.dbhelpers.DBHelperCurrency;
+import com.gmail.a93ak.andrei19.finance30.model.dbHelpers.DBHelperCurrency;
+
 
 public class CurrencyCursorLoader extends CursorLoader {
 
@@ -13,7 +13,7 @@ public class CurrencyCursorLoader extends CursorLoader {
 
     public CurrencyCursorLoader(Context context) {
         super(context);
-        dbHelperCurrency = DBHelperCurrency.getInstance(DBHelper.getInstance(context));
+        dbHelperCurrency = DBHelperCurrency.getInstance();
     }
 
     @Override

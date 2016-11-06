@@ -1,13 +1,12 @@
-package com.gmail.a93ak.andrei19.finance30.modelVer2.dbHelpers;
+package com.gmail.a93ak.andrei19.finance30.model.dbHelpers;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.gmail.a93ak.andrei19.finance30.model.base.DBHelper;
-import com.gmail.a93ak.andrei19.finance30.model.dbhelpers.DBHelperPurse;
-import com.gmail.a93ak.andrei19.finance30.modelVer2.TableQueryGenerator;
-import com.gmail.a93ak.andrei19.finance30.modelVer2.pojos.Transfer;
+import com.gmail.a93ak.andrei19.finance30.model.DBHelper;
+import com.gmail.a93ak.andrei19.finance30.model.TableQueryGenerator;
+import com.gmail.a93ak.andrei19.finance30.model.models.Transfer;
 import com.gmail.a93ak.andrei19.finance30.util.ContextHolder;
 
 import java.util.ArrayList;
@@ -15,7 +14,7 @@ import java.util.List;
 
 public class DBHelperTransfer implements DBHelperForModel<Transfer> {
 
-    private DBHelper dbHelper;
+    private final DBHelper dbHelper;
 
     private static DBHelperTransfer instance;
 
@@ -43,7 +42,7 @@ public class DBHelperTransfer implements DBHelperForModel<Transfer> {
         long id = -1;
         try {
             db.beginTransaction();
-            final DBHelperPurse helperPurse = DBHelperPurse.getInstance(dbHelper);
+            final DBHelperPurse helperPurse = DBHelperPurse.getInstance();
             helperPurse.takeAmount(transfer.getFromPurseId(), transfer.getFromAmount());
             helperPurse.addAmount(transfer.getToPurseId(), transfer.getToAmount());
             id = db.insert(TableQueryGenerator.getTableName(Transfer.class), null, values);
@@ -61,12 +60,12 @@ public class DBHelperTransfer implements DBHelperForModel<Transfer> {
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         final Cursor cursor = db.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
-            Transfer transfer = new Transfer();
-            transfer.setId((Integer.parseInt(cursor.getString(cursor.getColumnIndex(Transfer.ID)))));
+            final Transfer transfer = new Transfer();
+            transfer.setId(cursor.getLong(cursor.getColumnIndex(Transfer.ID)));
             transfer.setName(cursor.getString(cursor.getColumnIndex(Transfer.NAME)));
             transfer.setDate(cursor.getLong(cursor.getColumnIndex(Transfer.DATE)));
-            transfer.setFromPurseId(cursor.getInt(cursor.getColumnIndex(Transfer.FROM_PURSE_ID)));
-            transfer.setToPurseId(cursor.getInt(cursor.getColumnIndex(Transfer.TO_PURSE_ID)));
+            transfer.setFromPurseId(cursor.getLong(cursor.getColumnIndex(Transfer.FROM_PURSE_ID)));
+            transfer.setToPurseId(cursor.getLong(cursor.getColumnIndex(Transfer.TO_PURSE_ID)));
             transfer.setFromAmount(cursor.getDouble(cursor.getColumnIndex(Transfer.FROM_AMOUNT)));
             transfer.setToAmount(cursor.getDouble(cursor.getColumnIndex(Transfer.TO_AMOUNT)));
             cursor.close();
@@ -93,11 +92,11 @@ public class DBHelperTransfer implements DBHelperForModel<Transfer> {
         if (cursor.moveToFirst()) {
             do {
                 final Transfer transfer = new Transfer();
-                transfer.setId((Integer.parseInt(cursor.getString(cursor.getColumnIndex(Transfer.ID)))));
+                transfer.setId(cursor.getLong(cursor.getColumnIndex(Transfer.ID)));
                 transfer.setName(cursor.getString(cursor.getColumnIndex(Transfer.NAME)));
                 transfer.setDate(cursor.getLong(cursor.getColumnIndex(Transfer.DATE)));
-                transfer.setFromPurseId(cursor.getInt(cursor.getColumnIndex(Transfer.FROM_PURSE_ID)));
-                transfer.setToPurseId(cursor.getInt(cursor.getColumnIndex(Transfer.TO_PURSE_ID)));
+                transfer.setFromPurseId(cursor.getLong(cursor.getColumnIndex(Transfer.FROM_PURSE_ID)));
+                transfer.setToPurseId(cursor.getLong(cursor.getColumnIndex(Transfer.TO_PURSE_ID)));
                 transfer.setFromAmount(cursor.getDouble(cursor.getColumnIndex(Transfer.FROM_AMOUNT)));
                 transfer.setToAmount(cursor.getDouble(cursor.getColumnIndex(Transfer.TO_AMOUNT)));
                 cursor.close();
@@ -111,7 +110,7 @@ public class DBHelperTransfer implements DBHelperForModel<Transfer> {
     }
 
     @Override
-    public int update(Transfer transfer) {
+    public int update(final Transfer transfer) {
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         final Transfer oldTransfer = get(transfer.getId());
         final ContentValues values = new ContentValues();
@@ -123,7 +122,7 @@ public class DBHelperTransfer implements DBHelperForModel<Transfer> {
         values.put(Transfer.TO_AMOUNT, transfer.getToAmount());
         final int id = db.update(TableQueryGenerator.getTableName(Transfer.class), values, Transfer.ID + "=?", new String[]{String.valueOf(transfer.getId())});
         final Transfer newTransfer = get(transfer.getId());
-        final DBHelperPurse helperPurse = DBHelperPurse.getInstance(dbHelper);
+        final DBHelperPurse helperPurse = DBHelperPurse.getInstance();
         if (oldTransfer.getFromPurseId() != newTransfer.getFromPurseId()) {
             helperPurse.addAmount(oldTransfer.getFromPurseId(), oldTransfer.getFromAmount());
             helperPurse.takeAmount(newTransfer.getFromPurseId(), newTransfer.getFromAmount());
@@ -140,9 +139,9 @@ public class DBHelperTransfer implements DBHelperForModel<Transfer> {
     }
 
     @Override
-    public int delete(long id) {
+    public int delete(final long id) {
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        final DBHelperPurse helperPurse = DBHelperPurse.getInstance(dbHelper);
+        final DBHelperPurse helperPurse = DBHelperPurse.getInstance();
         final Transfer transfer = get(id);
         helperPurse.addAmount(transfer.getFromPurseId(), transfer.getFromAmount());
         helperPurse.takeAmount(transfer.getToPurseId(), transfer.getToAmount());
@@ -154,16 +153,15 @@ public class DBHelperTransfer implements DBHelperForModel<Transfer> {
         return 0;
     }
 
-    public List<Transfer> getAllToListByDates(Long aLong, Long aLong1) {
+    public List<Transfer> getAllToListByDates(final Long fromDate, final Long toDate) {
         return null;
     }
 
-
-    public List<Transfer> getAllToListByPurseId(Long id) {
+    public List<Transfer> getAllToListByPurseId(final Long id) {
         return null;
     }
 
-    public List<Transfer> getAllToListByCategoryId(Long id) {
+    public List<Transfer> getAllToListByCategoryId(final Long id) {
         return null;
     }
 }

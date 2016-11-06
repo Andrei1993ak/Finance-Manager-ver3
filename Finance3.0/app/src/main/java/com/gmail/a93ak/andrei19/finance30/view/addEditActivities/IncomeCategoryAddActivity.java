@@ -15,8 +15,7 @@ import com.gmail.a93ak.andrei19.finance30.control.Executors.IncomeCategoryExecut
 import com.gmail.a93ak.andrei19.finance30.control.base.OnTaskCompleted;
 import com.gmail.a93ak.andrei19.finance30.control.base.RequestHolder;
 import com.gmail.a93ak.andrei19.finance30.control.base.Result;
-import com.gmail.a93ak.andrei19.finance30.model.base.DBHelper;
-import com.gmail.a93ak.andrei19.finance30.model.pojos.IncomeCategory;
+import com.gmail.a93ak.andrei19.finance30.model.models.IncomeCategory;
 
 import java.util.List;
 
@@ -35,8 +34,7 @@ public class IncomeCategoryAddActivity extends AppCompatActivity implements OnTa
         parentCategories = (AppCompatSpinner) findViewById(R.id.spinnerParentCategories);
         ((Button)findViewById(R.id.button_add_edit_category)).setText(R.string.add_button_text);
         RequestHolder<IncomeCategory> requestHolder = new RequestHolder<>();
-        requestHolder.setGetAllToListRequest(1);
-        new IncomeCategoryExecutor(this).execute(requestHolder.getGetAllToListRequest());
+        new IncomeCategoryExecutor(this).execute(requestHolder.getAllToList(1));
     }
 
     public void addEditCategory(View view) {
@@ -47,11 +45,11 @@ public class IncomeCategoryAddActivity extends AppCompatActivity implements OnTa
         } else {
             if (spinnerAdapter != null) {
                 Intent intent = new Intent();
-                intent.putExtra(DBHelper.INCOME_CATEGORY_KEY_NAME, name);
+                intent.putExtra(IncomeCategory.NAME, name);
                 if (parentCategories.getSelectedItemPosition() == spinnerAdapter.getCount() - 1) {
-                    intent.putExtra(DBHelper.INCOME_CATEGORY_KEY_PARENT_ID, -1L);
+                    intent.putExtra(IncomeCategory.PARENT_ID, -1L);
                 } else {
-                    intent.putExtra(DBHelper.INCOME_CATEGORY_KEY_PARENT_ID,parentsList.get(parentCategories.getSelectedItemPosition()).getId());
+                    intent.putExtra(IncomeCategory.PARENT_ID,parentsList.get(parentCategories.getSelectedItemPosition()).getId());
                 }
                 setResult(RESULT_OK, intent);
                 finish();
@@ -63,7 +61,7 @@ public class IncomeCategoryAddActivity extends AppCompatActivity implements OnTa
     public void onTaskCompleted(Result result) {
         switch (result.getId()) {
             case IncomeCategoryExecutor.KEY_RESULT_GET_ALL_TO_LIST:
-                parentsList = (List<IncomeCategory>) result.getT();
+                parentsList = (List<IncomeCategory>) result.getObject();
                 String[] names = new String[parentsList.size() + 1];
                 int i = 0;
                 for (IncomeCategory incomeCategory : parentsList) {
