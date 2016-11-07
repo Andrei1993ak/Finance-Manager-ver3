@@ -39,19 +39,19 @@ public class CategryCostActivity extends AppCompatActivity implements LoaderMana
 
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.category_activity);
         costCategoryExpListView = (ExpandableListView) findViewById(R.id.CategoryExpListView);
         ((TextView)findViewById(R.id.categoriesTitle)).setText(R.string.costCategories);
-        String[] parentsFrom = {CostCategory.NAME};
-        int[] parentsTo = {android.R.id.text1};
-        String[] childrensFrom = {CostCategory.NAME};
-        int[] childrensTo = {android.R.id.text1};
+        final String[] parentsFrom = {CostCategory.NAME};
+        final int[] parentsTo = {android.R.id.text1};
+        final String[] childrensFrom = {CostCategory.NAME};
+        final int[] childrensTo = {android.R.id.text1};
         adapter = new ExpListAdapter(this, null, android.R.layout.simple_expandable_list_item_1, parentsFrom, parentsTo,
                 android.R.layout.simple_expandable_list_item_1, childrensFrom, childrensTo);
         costCategoryExpListView.setAdapter(adapter);
-        Loader loader = getSupportLoaderManager().getLoader(-1);
+        final Loader loader = getSupportLoaderManager().getLoader(-1);
         if (loader != null && !loader.isReset()) {
             getSupportLoaderManager().restartLoader(-1, null, this);
         } else {
@@ -67,22 +67,22 @@ public class CategryCostActivity extends AppCompatActivity implements LoaderMana
         super.onStop();
     }
 
-    public void addCategory(View view) {
-        Intent intent = new Intent(this, CostCategoryAddActivity.class);
+    public void addCategory(final View view) {
+        final Intent intent = new Intent(this, CostCategoryAddActivity.class);
         startActivityForResult(intent, ADD_CATEGORY_REQUEST);
     }
 
     @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+    public void onCreateContextMenu(final ContextMenu menu, final View v, final ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         menu.add(0, CM_EDIT_ID, 0, R.string.edit);
         menu.add(0, CM_DELETE_ID, 0, R.string.delete);
     }
 
     @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        ExpandableListView.ExpandableListContextMenuInfo info = (ExpandableListView.ExpandableListContextMenuInfo) item.getMenuInfo();
-        int type = ExpandableListView.getPackedPositionType(info.packedPosition);
+    public boolean onContextItemSelected(final MenuItem item) {
+        final ExpandableListView.ExpandableListContextMenuInfo info = (ExpandableListView.ExpandableListContextMenuInfo) item.getMenuInfo();
+        final int type = ExpandableListView.getPackedPositionType(info.packedPosition);
         final int groupPosition = ExpandableListView.getPackedPositionGroup(info.packedPosition);
         switch (item.getItemId()) {
             case CM_DELETE_ID:
@@ -92,7 +92,7 @@ public class CategryCostActivity extends AppCompatActivity implements LoaderMana
                 new CostCategoryExecutor(this).execute(new RequestHolder().delete(info.id));
                 return true;
             case CM_EDIT_ID:
-                Intent intent = new Intent(this, CostCategoryEditActivity.class);
+                final Intent intent = new Intent(this, CostCategoryEditActivity.class);
                 intent.putExtra(CostCategory.ID, info.id);
                 startActivityForResult(intent, EDIT_CATEGORY_REQUEST);
                 return true;
@@ -102,15 +102,15 @@ public class CategryCostActivity extends AppCompatActivity implements LoaderMana
     }
 
     @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+    public Loader<Cursor> onCreateLoader(final int id, final Bundle args) {
         return new CostCategoryCursorLoader(this, id);
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        int id = loader.getId();
+    public void onLoadFinished(final Loader<Cursor> loader, final Cursor data) {
+        final int id = loader.getId();
         if (id != -1) {
-            int groupPos = adapter.getPosToId().get(id);
+            final int groupPos = adapter.getPosToId().get(id);
             adapter.setChildrenCursor(groupPos, data);
         } else {
             adapter.setGroupCursor(data);
@@ -118,7 +118,7 @@ public class CategryCostActivity extends AppCompatActivity implements LoaderMana
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
+    public void onLoaderReset(final Loader<Cursor> loader) {
 //        int id = loader.getId();
 //        if (id != -1) {
 //            int groupPos = adapter.getPosToId().get(id);
@@ -129,29 +129,29 @@ public class CategryCostActivity extends AppCompatActivity implements LoaderMana
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case ADD_CATEGORY_REQUEST:
-                    Long categoryParentId = data.getLongExtra(CostCategory.PARENT_ID, -2);
+                    final Long categoryParentId = data.getLongExtra(CostCategory.PARENT_ID, -2);
                     if (categoryParentId == -2) {
                         return;
                     }
-                    CostCategory newCostCategory = new CostCategory();
+                    final CostCategory newCostCategory = new CostCategory();
                     newCostCategory.setName(data.getStringExtra(CostCategory.NAME));
                     newCostCategory.setParent_id(categoryParentId);
                     new CostCategoryExecutor(this).execute(new RequestHolder<CostCategory>().add(newCostCategory));
                     break;
                 case EDIT_CATEGORY_REQUEST:
-                    Long editCategoryId = data.getLongExtra(CostCategory.ID, -1);
+                    final Long editCategoryId = data.getLongExtra(CostCategory.ID, -1);
                     if (editCategoryId == -1) {
                         return;
                     }
-                    Long editCategoryParentId = data.getLongExtra(CostCategory.PARENT_ID, -2);
+                    final Long editCategoryParentId = data.getLongExtra(CostCategory.PARENT_ID, -2);
                     if (editCategoryParentId == -2) {
                         return;
                     }
-                    CostCategory editCostCategory = new CostCategory();
+                    final CostCategory editCostCategory = new CostCategory();
                     editCostCategory.setId(editCategoryId);
                     editCostCategory.setName(data.getStringExtra(CostCategory.NAME));
                     editCostCategory.setParent_id(editCategoryParentId);
@@ -164,8 +164,8 @@ public class CategryCostActivity extends AppCompatActivity implements LoaderMana
     }
 
     @Override
-    public void onTaskCompleted(Result result) {
-        int id = result.getId();
+    public void onTaskCompleted(final Result result) {
+        final int id = result.getId();
         switch (id) {
             case CostCategoryExecutor.KEY_RESULT_DELETE:
                 if (deleteGroupId == -1 && getSupportLoaderManager().getLoader(-1) != null) {

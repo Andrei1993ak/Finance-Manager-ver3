@@ -87,7 +87,7 @@ public class CostEditActivity extends AppCompatActivity implements OnTaskComplet
         final Calendar newCalendar = Calendar.getInstance();
         final DatePickerDialog dialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+            public void onDateSet(final DatePicker view, final int year, final int month, final int dayOfMonth) {
                 final Calendar newDate = Calendar.getInstance();
                 newDate.set(year, month, dayOfMonth);
                 editCostDate.setText(dateFormatter.format(newDate.getTime()));
@@ -96,7 +96,7 @@ public class CostEditActivity extends AppCompatActivity implements OnTaskComplet
         editCostDate.setText(dateFormatter.format(newCalendar.getTime()));
         editCostDate.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
                 dialog.show();
             }
         });

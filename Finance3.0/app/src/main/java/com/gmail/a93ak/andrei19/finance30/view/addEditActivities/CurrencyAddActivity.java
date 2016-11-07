@@ -25,13 +25,13 @@ public class CurrencyAddActivity extends AppCompatActivity implements LoaderMana
     private RequestHolder<CurrencyOfficial> requestHolder;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.currency_add_activity);
-        String[] from = new String[]{CurrencyOfficial.NAME};
-        int[] to = new int[]{R.id.currencyName};
+        final String[] from = new String[]{CurrencyOfficial.NAME};
+        final int[] to = new int[]{R.id.currencyName};
         simpleCursorAdapter = new SimpleCursorAdapter(this, R.layout.currency_listitem, null, from, to, 0);
-        ListView lvAllCurrencies = (ListView) findViewById(R.id.lvAllCurrencies);
+        final ListView lvAllCurrencies = (ListView) findViewById(R.id.lvAllCurrencies);
         lvAllCurrencies.setAdapter(simpleCursorAdapter);
         requestHolder = new RequestHolder<>();
         lvAllCurrencies.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -46,26 +46,26 @@ public class CurrencyAddActivity extends AppCompatActivity implements LoaderMana
     }
 
     @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+    public Loader<Cursor> onCreateLoader(final int id, final Bundle args) {
         return new CurrencyAllCursorLoader(this);
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+    public void onLoadFinished(final Loader<Cursor> loader, final Cursor data) {
         simpleCursorAdapter.swapCursor(data);
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
+    public void onLoaderReset(final Loader<Cursor> loader) {
         simpleCursorAdapter.swapCursor(null);
     }
 
     @Override
-    public void onTaskCompleted(Result result) {
+    public void onTaskCompleted(final Result result) {
         switch (result.getId()) {
             case CurrencyOfficialExecutor.KEY_RESULT_GET:
-                CurrencyOfficial currencyOfficial = (CurrencyOfficial) result.getObject();
-                Intent intent = new Intent();
+                final CurrencyOfficial currencyOfficial = (CurrencyOfficial) result.getObject();
+                final Intent intent = new Intent();
                 intent.putExtra(CurrencyOfficial.NAME, currencyOfficial.getName());
                 intent.putExtra(CurrencyOfficial.CODE, currencyOfficial.getCode());
                 setResult(RESULT_OK, intent);

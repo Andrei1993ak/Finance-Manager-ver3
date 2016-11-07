@@ -38,40 +38,40 @@ public class PurseActivity extends AppCompatActivity implements LoaderManager.Lo
     private RequestHolder<Purse> requestHolder;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.purse_activity);
         requestHolder = new RequestHolder<>();
-        ListView purseListVIew = (ListView) findViewById(R.id.purseListView);
-        String[] from = new String[]{Purse.NAME, Purse.AMOUNT, DBHelperPurse.CURRENCY_NAME};
-        int[] to = new int[]{R.id.purseName, R.id.purseAmount, R.id.purseCurrency};
+        final ListView purseListVIew = (ListView) findViewById(R.id.purseListView);
+        final String[] from = new String[]{Purse.NAME, Purse.AMOUNT, DBHelperPurse.CURRENCY_NAME};
+        final int[] to = new int[]{R.id.purseName, R.id.purseAmount, R.id.purseCurrency};
         simpleCursorAdapter = new SimpleCursorAdapter(this, R.layout.purse_listitem, null, from, to, 0);
         purseListVIew.setAdapter(simpleCursorAdapter);
         registerForContextMenu(purseListVIew);
         getSupportLoaderManager().initLoader(0, null, this);
     }
 
-    public void addPurse(View view) {
-        Intent intent = new Intent(this, PurseAddActivity.class);
+    public void addPurse(final View view) {
+        final Intent intent = new Intent(this, PurseAddActivity.class);
         startActivityForResult(intent, ADD_PURSE_REQUEST);
     }
 
     @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+    public void onCreateContextMenu(final ContextMenu menu, final View v, final ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         menu.add(0, CM_EDIT_ID, 0, R.string.rename);
         menu.add(0, CM_DELETE_ID, 0, R.string.delete);
     }
 
     @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+    public boolean onContextItemSelected(final MenuItem item) {
+        final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
             case CM_DELETE_ID:
                 new PurseExecutor(this).execute(requestHolder.delete(info.id));
                 break;
             case CM_EDIT_ID:
-                Intent intent = new Intent(this, PurseEditActivity.class);
+                final Intent intent = new Intent(this, PurseEditActivity.class);
                 intent.putExtra(Purse.ID, info.id);
                 startActivityForResult(intent, EDIT_PURSE_REQUEST);
                 break;
@@ -80,18 +80,18 @@ public class PurseActivity extends AppCompatActivity implements LoaderManager.Lo
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case ADD_PURSE_REQUEST:
-                    Purse newPurse = new Purse();
+                    final Purse newPurse = new Purse();
                     newPurse.setName(data.getStringExtra(Purse.NAME));
                     newPurse.setAmount(data.getDoubleExtra(Purse.AMOUNT, -1.0));
                     newPurse.setCurrency_id(data.getLongExtra(Purse.CURRENCY_ID, -1));
                     new PurseExecutor(this).execute(requestHolder.add(newPurse));
                     break;
                 case EDIT_PURSE_REQUEST:
-                    Purse editPurse = new Purse();
+                    final Purse editPurse = new Purse();
                     editPurse.setId(data.getLongExtra(Purse.ID, -1));
                     editPurse.setName(data.getStringExtra(Purse.NAME));
                     editPurse.setAmount(data.getDoubleExtra(Purse.AMOUNT, -1.0));
@@ -106,23 +106,23 @@ public class PurseActivity extends AppCompatActivity implements LoaderManager.Lo
     }
 
     @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+    public Loader<Cursor> onCreateLoader(final int id, final Bundle args) {
         return new PurseCursorLoader(this);
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+    public void onLoadFinished(final Loader<Cursor> loader, final Cursor data) {
         simpleCursorAdapter.swapCursor(data);
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
+    public void onLoaderReset(final Loader<Cursor> loader) {
         simpleCursorAdapter.swapCursor(null);
     }
 
     @Override
-    public void onTaskCompleted(Result result) {
-        int id = result.getId();
+    public void onTaskCompleted(final Result result) {
+        final int id = result.getId();
         switch (id) {
             case PurseExecutor.KEY_RESULT_DELETE:
                 if (getSupportLoaderManager().getLoader(0) != null) {

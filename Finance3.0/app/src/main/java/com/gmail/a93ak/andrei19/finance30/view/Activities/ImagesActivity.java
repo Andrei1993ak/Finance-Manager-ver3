@@ -1,6 +1,7 @@
 package com.gmail.a93ak.andrei19.finance30.view.Activities;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import android.view.View;
@@ -18,7 +19,7 @@ public class ImagesActivity extends AppCompatActivity {
 
     public static final String demoImage = "ftp://adk:1111111@93.125.42.84:21/images/FileToSend.jpg";
 
-    private static String[] IMAGE_URLS =
+    private static final String[] IMAGE_URLS =
             {
                     "http://makeitlast.se/wp-content/uploads/2015/10/loppis_12.jpg",
                     "https://images-na.ssl-images-amazon.com/images/G/01/img15/pet-products/small-tiles/30423_pets-products_january-site-flip_3-cathealth_short-tile_592x304._CB286975940_.jpg",
@@ -33,17 +34,18 @@ public class ImagesActivity extends AppCompatActivity {
             };
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.images_activity);
 //        final BitmapLoader bitmapLoader = ((App) getApplication()).getBitmapLoader();
         final BitmapLoader bitmapLoader = BitmapLoader.getInstance(this);
         final ListView listView = (ListView) findViewById(R.id.m_list);
         listView.setAdapter(new ArrayAdapter<String>(this, R.layout.adapter_image, R.id.m_text, IMAGE_URLS) {
+            @NonNull
             @Override
-            public View getView(final int position, final View convertView, final ViewGroup parent) {
-                View view = super.getView(position, convertView, parent);
-                ImageView imageView = (ImageView) view.findViewById(R.id.m_image);
+            public View getView(final int position, final View convertView, @NonNull final ViewGroup parent) {
+                final View view = super.getView(position, convertView, parent);
+                final ImageView imageView = (ImageView) view.findViewById(R.id.m_image);
 //                bitmapLoader.load(IMAGE_URLS[position], imageView);
                 bitmapLoader.load(demoImage, imageView);
                 return view;

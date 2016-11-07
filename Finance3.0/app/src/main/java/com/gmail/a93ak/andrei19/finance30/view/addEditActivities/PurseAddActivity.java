@@ -26,26 +26,26 @@ public class PurseAddActivity extends AppCompatActivity implements OnTaskComplet
     private EditText newPurseAmount;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.purse_add_activity);
         spinnerCurrencies = (AppCompatSpinner)findViewById(R.id.spinnerCurrencies);
         newPurseName = (EditText)findViewById(R.id.new_purse_name);
         newPurseAmount = (EditText)findViewById(R.id.new_purse_amount);
-        RequestHolder<Currency> requestHolder = new RequestHolder<>();
+        final RequestHolder<Currency> requestHolder = new RequestHolder<>();
         new CurrencyExecutor(this).execute(requestHolder.getAllToList(0));
     }
 
-    public void addNewPurse(View view) {
-        String name = newPurseName.getText().toString();
+    public void addNewPurse(final View view) {
+        final String name = newPurseName.getText().toString();
         Double amount = -1.0;
         try {
             amount = Double.parseDouble(newPurseAmount.getText().toString());
-        } catch (NumberFormatException e){
+        } catch (final NumberFormatException e){
             newPurseAmount.setBackground(getResources().getDrawable(R.drawable.shape_red_field));
         }
-        Long currencyId = currencies.get(spinnerCurrencies.getSelectedItemPosition()).getId();
+        final Long currencyId = currencies.get(spinnerCurrencies.getSelectedItemPosition()).getId();
         if (name.length()==0){
             newPurseName.setBackground(getResources().getDrawable(R.drawable.shape_red_field));
         } else if (amount<0){
@@ -53,7 +53,7 @@ public class PurseAddActivity extends AppCompatActivity implements OnTaskComplet
         } else if (currencyId <0){
             return;
         } else {
-            Intent intent = new Intent();
+            final Intent intent = new Intent();
             intent.putExtra(Purse.NAME,name);
             intent.putExtra(Purse.AMOUNT, amount);
             intent.putExtra(Purse.CURRENCY_ID, currencyId);

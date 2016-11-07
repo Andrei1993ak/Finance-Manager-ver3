@@ -30,7 +30,7 @@ public class CostCategoryEditActivity extends AppCompatActivity implements OnTas
     private ArrayAdapter<String> spinnerAdapter;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.category_add_edit_activity);
         editCategoryName = (EditText) findViewById(R.id.add_edit_category_name);
@@ -42,14 +42,14 @@ public class CostCategoryEditActivity extends AppCompatActivity implements OnTas
     }
 
     @Override
-    public void onTaskCompleted(Result result) {
+    public void onTaskCompleted(final Result result) {
         switch (result.getId()) {
             case CostCategoryExecutor.KEY_RESULT_GET_ALL_TO_LIST:
                 parentsList = (List<CostCategory>) result.getObject();
-                String[] names = new String[parentsList.size() + 1];
+                final String[] names = new String[parentsList.size() + 1];
                 int i = 0;
                 int position = 0;
-                for (CostCategory category : parentsList) {
+                for (final CostCategory category : parentsList) {
                     if(costCategory.getParent_id()==category.getId()) {
                         position = i;
                     }
@@ -76,14 +76,14 @@ public class CostCategoryEditActivity extends AppCompatActivity implements OnTas
         }
     }
 
-    public void addEditCategory(View view) {
-        String name = editCategoryName.getText().toString();
+    public void addEditCategory(final View view) {
+        final String name = editCategoryName.getText().toString();
         if (name.length() == 0) {
             editCategoryName.setBackground(getResources().getDrawable(R.drawable.shape_red_field));
             return;
         } else {
             if (costCategory != null) {
-                Intent intent = new Intent();
+                final Intent intent = new Intent();
                 intent.putExtra(CostCategory.ID,id);
                 intent.putExtra(CostCategory.NAME, name);
                 if (costCategory.getParent_id()==-1){

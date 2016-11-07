@@ -72,7 +72,7 @@ public class IncomeEditActivity extends AppCompatActivity implements OnTaskCompl
         final Calendar newCalendar = Calendar.getInstance();
         final DatePickerDialog dialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+            public void onDateSet(final DatePicker view, final int year, final int month, final int dayOfMonth) {
                 final Calendar newDate = Calendar.getInstance();
                 newDate.set(year, month, dayOfMonth);
                 editIncomeDate.setText(dateFormatter.format(newDate.getTime()));

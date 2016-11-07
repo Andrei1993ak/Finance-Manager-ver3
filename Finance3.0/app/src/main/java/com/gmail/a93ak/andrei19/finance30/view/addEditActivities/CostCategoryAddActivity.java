@@ -27,24 +27,24 @@ public class CostCategoryAddActivity extends AppCompatActivity implements OnTask
     private ArrayAdapter<String> spinnerAdapter;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.category_add_edit_activity);
         newCategoryName = (EditText) findViewById(R.id.add_edit_category_name);
         parentCategories = (AppCompatSpinner) findViewById(R.id.spinnerParentCategories);
         ((Button)findViewById(R.id.button_add_edit_category)).setText(R.string.add_button_text);
-        RequestHolder<CostCategory> requestHolder = new RequestHolder<>();
+        final RequestHolder<CostCategory> requestHolder = new RequestHolder<>();
         new CostCategoryExecutor(this).execute(requestHolder.getAllToList(1));
     }
 
-    public void addEditCategory(View view) {
-        String name = newCategoryName.getText().toString();
+    public void addEditCategory(final View view) {
+        final String name = newCategoryName.getText().toString();
         if (name.length() == 0) {
             newCategoryName.setBackground(getResources().getDrawable(R.drawable.shape_red_field));
             return;
         } else {
             if (spinnerAdapter != null) {
-                Intent intent = new Intent();
+                final Intent intent = new Intent();
                 intent.putExtra(CostCategory.NAME, name);
                 if (parentCategories.getSelectedItemPosition() == spinnerAdapter.getCount() - 1) {
                     intent.putExtra(CostCategory.PARENT_ID, -1L);
@@ -58,13 +58,13 @@ public class CostCategoryAddActivity extends AppCompatActivity implements OnTask
     }
 
     @Override
-    public void onTaskCompleted(Result result) {
+    public void onTaskCompleted(final Result result) {
         switch (result.getId()) {
             case CostCategoryExecutor.KEY_RESULT_GET_ALL_TO_LIST:
                 parentsList = (List<CostCategory>) result.getObject();
-                String[] names = new String[parentsList.size() + 1];
+                final String[] names = new String[parentsList.size() + 1];
                 int i = 0;
-                for (CostCategory costCategory : parentsList) {
+                for (final CostCategory costCategory : parentsList) {
                     names[i++] = costCategory.getName();
                 }
                 names[i] = "-";

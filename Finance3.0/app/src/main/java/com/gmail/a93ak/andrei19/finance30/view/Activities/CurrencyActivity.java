@@ -40,40 +40,40 @@ public class CurrencyActivity extends AppCompatActivity implements LoaderManager
     private RequestHolder<Currency> requestHolder;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.currency_activity);
-        String[] from = new String[]{Currency.NAME};
-        int[] to = new int[]{R.id.currencyName};
+        final String[] from = new String[]{Currency.NAME};
+        final int[] to = new int[]{R.id.currencyName};
         requestHolder = new RequestHolder<>();
         simpleCursorAdapter = new SimpleCursorAdapter(this, R.layout.currency_listitem, null, from, to, 0);
-        ListView lvCurrencies = (ListView) findViewById(R.id.currencyListView);
+        final ListView lvCurrencies = (ListView) findViewById(R.id.currencyListView);
         lvCurrencies.setAdapter(simpleCursorAdapter);
         registerForContextMenu(lvCurrencies);
         getSupportLoaderManager().initLoader(0, null, this);
     }
 
-    public void addCurrency(View view) {
-        Intent intent = new Intent(this, CurrencyAddActivity.class);
+    public void addCurrency(final View view) {
+        final Intent intent = new Intent(this, CurrencyAddActivity.class);
         startActivityForResult(intent, ADD_CURRENCY_REQUEST);
     }
 
     @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+    public void onCreateContextMenu(final ContextMenu menu, final View v, final ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         menu.add(0, CM_EDIT_ID, 0, R.string.rename);
         menu.add(0, CM_DELETE_ID, 0, R.string.delete);
     }
 
     @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+    public boolean onContextItemSelected(final MenuItem item) {
+        final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
             case CM_DELETE_ID:
                 new CurrencyExecutor(this).execute(requestHolder.delete(info.id));
                 break;
             case CM_EDIT_ID:
-                Intent intent = new Intent(this, CurrencyEditActivity.class);
+                final Intent intent = new Intent(this, CurrencyEditActivity.class);
                 intent.putExtra(ID, info.id);
                 startActivityForResult(intent, EDIT_CURRENCY_REQUEST);
                 break;
@@ -82,21 +82,21 @@ public class CurrencyActivity extends AppCompatActivity implements LoaderManager
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case ADD_CURRENCY_REQUEST:
                     String name = data.getStringExtra(NAME);
                     String code = data.getStringExtra(CODE);
-                    Currency newCurrency = new Currency(code, name);
+                    final Currency newCurrency = new Currency(code, name);
                     new CurrencyExecutor(this).execute(requestHolder.add(newCurrency));
                     break;
                 case EDIT_CURRENCY_REQUEST:
-                    Long id = data.getLongExtra(ID, -1);
+                    final Long id = data.getLongExtra(ID, -1);
                     if (id != -1) {
                         name = data.getStringExtra(NAME);
                         code = data.getStringExtra(CODE);
-                        Currency editCurrency = new Currency(code, name);
+                        final Currency editCurrency = new Currency(code, name);
                         editCurrency.setId(id);
                         new CurrencyExecutor(this).execute(requestHolder.edit(editCurrency));
                         break;
@@ -108,23 +108,23 @@ public class CurrencyActivity extends AppCompatActivity implements LoaderManager
     }
 
     @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+    public Loader<Cursor> onCreateLoader(final int id, final Bundle args) {
         return new CurrencyCursorLoader(this);
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+    public void onLoadFinished(final Loader<Cursor> loader, final Cursor data) {
         simpleCursorAdapter.swapCursor(data);
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
+    public void onLoaderReset(final Loader<Cursor> loader) {
         simpleCursorAdapter.swapCursor(null);
     }
 
     @Override
-    public void onTaskCompleted(Result result) {
-        int id = result.getId();
+    public void onTaskCompleted(final Result result) {
+        final int id = result.getId();
         switch (id) {
             case CurrencyExecutor.KEY_RESULT_DELETE:
                 if (getSupportLoaderManager().getLoader(0) != null) {
