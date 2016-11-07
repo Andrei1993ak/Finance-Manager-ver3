@@ -16,6 +16,7 @@ import com.gmail.a93ak.andrei19.finance30.control.Executors.IncomeCategoryExecut
 import com.gmail.a93ak.andrei19.finance30.control.base.OnTaskCompleted;
 import com.gmail.a93ak.andrei19.finance30.control.base.RequestHolder;
 import com.gmail.a93ak.andrei19.finance30.control.base.Result;
+import com.gmail.a93ak.andrei19.finance30.model.TableQueryGenerator;
 import com.gmail.a93ak.andrei19.finance30.model.models.IncomeCategory;
 
 import java.util.List;
@@ -31,30 +32,52 @@ public class IncomeCategoryAddActivity extends AppCompatActivity implements OnTa
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.category_add_edit_activity);
+        findViewsById();
+        new IncomeCategoryExecutor(this).execute(new RequestHolder<IncomeCategory>().getAllToList(RequestHolder.SELECTION_PARENT_CATEGORIES));
+    }
+
+    private void findViewsById() {
         newCategoryName = (EditText) findViewById(R.id.add_edit_category_name);
         parentCategories = (AppCompatSpinner) findViewById(R.id.spinnerParentCategories);
         ((Button) findViewById(R.id.button_add_edit_category)).setText(R.string.add_button_text);
-        final RequestHolder<IncomeCategory> requestHolder = new RequestHolder<>();
-        new IncomeCategoryExecutor(this).execute(requestHolder.getAllToList(1));
+    }
+
+    @Nullable
+    private IncomeCategory checkFields() {
+        final IncomeCategory incomeCategory = new IncomeCategory();
+        boolean flag = true;
+        if (newCategoryName.getText().toString().length() == 0) {
+            newCategoryName.setBackground(ContextCompat.getDrawable(this, R.drawable.shape_red_field));
+            flag = false;
+        } else {
+            newCategoryName.setBackground(ContextCompat.getDrawable(this, R.drawable.shape_green_field));
+            incomeCategory.setName(newCategoryName.getText().toString());
+        }
+        if (spinnerAdapter == null) {
+            parentCategories.setBackground(ContextCompat.getDrawable(this, R.drawable.shape_red_field));
+            flag = false;
+        } else {
+            parentCategories.setBackground(ContextCompat.getDrawable(this, R.drawable.shape_green_field));
+            if (parentCategories.getSelectedItemPosition() == spinnerAdapter.getCount() - 1) {
+                incomeCategory.setParent_id(-1L);
+            } else {
+                incomeCategory.setParent_id(parentsList.get(parentCategories.getSelectedItemPosition()).getId());
+            }
+        }
+        if (!flag) {
+            return null;
+        } else {
+            return incomeCategory;
+        }
     }
 
     public void addEditCategory(final View view) {
-        final String name = newCategoryName.getText().toString();
-        if (name.length() == 0) {
-            newCategoryName.setBackground(ContextCompat.getDrawable(this, R.drawable.shape_red_field));
-            return;
-        } else {
-            if (spinnerAdapter != null) {
-                final Intent intent = new Intent();
-                intent.putExtra(IncomeCategory.NAME, name);
-                if (parentCategories.getSelectedItemPosition() == spinnerAdapter.getCount() - 1) {
-                    intent.putExtra(IncomeCategory.PARENT_ID, -1L);
-                } else {
-                    intent.putExtra(IncomeCategory.PARENT_ID, parentsList.get(parentCategories.getSelectedItemPosition()).getId());
-                }
-                setResult(RESULT_OK, intent);
-                finish();
-            }
+        final IncomeCategory incomeCategory = checkFields();
+        if (incomeCategory != null) {
+            final Intent intent = new Intent();
+            intent.putExtra(TableQueryGenerator.getTableName(IncomeCategory.class), incomeCategory);
+            setResult(RESULT_OK, intent);
+            finish();
         }
     }
 

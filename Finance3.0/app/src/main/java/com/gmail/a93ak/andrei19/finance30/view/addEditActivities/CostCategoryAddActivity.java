@@ -3,6 +3,7 @@ package com.gmail.a93ak.andrei19.finance30.view.addEditActivities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatSpinner;
 import android.view.View;
@@ -15,6 +16,7 @@ import com.gmail.a93ak.andrei19.finance30.control.Executors.CostCategoryExecutor
 import com.gmail.a93ak.andrei19.finance30.control.base.OnTaskCompleted;
 import com.gmail.a93ak.andrei19.finance30.control.base.RequestHolder;
 import com.gmail.a93ak.andrei19.finance30.control.base.Result;
+import com.gmail.a93ak.andrei19.finance30.model.TableQueryGenerator;
 import com.gmail.a93ak.andrei19.finance30.model.models.CostCategory;
 
 import java.util.List;
@@ -30,30 +32,52 @@ public class CostCategoryAddActivity extends AppCompatActivity implements OnTask
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.category_add_edit_activity);
+        findViewsById();
+        new CostCategoryExecutor(this).execute(new RequestHolder<CostCategory>().getAllToList(RequestHolder.SELECTION_PARENT_CATEGORIES));
+    }
+
+    private void findViewsById() {
         newCategoryName = (EditText) findViewById(R.id.add_edit_category_name);
         parentCategories = (AppCompatSpinner) findViewById(R.id.spinnerParentCategories);
-        ((Button)findViewById(R.id.button_add_edit_category)).setText(R.string.add_button_text);
-        final RequestHolder<CostCategory> requestHolder = new RequestHolder<>();
-        new CostCategoryExecutor(this).execute(requestHolder.getAllToList(1));
+        ((Button) findViewById(R.id.button_add_edit_category)).setText(R.string.add_button_text);
     }
 
     public void addEditCategory(final View view) {
-        final String name = newCategoryName.getText().toString();
-        if (name.length() == 0) {
-            newCategoryName.setBackground(getResources().getDrawable(R.drawable.shape_red_field));
-            return;
+        final CostCategory costCategory = checkFields();
+        if (costCategory != null) {
+            final Intent intent = new Intent();
+            intent.putExtra(TableQueryGenerator.getTableName(CostCategory.class), costCategory);
+            setResult(RESULT_OK, intent);
+            finish();
+        }
+    }
+
+    @Nullable
+    private CostCategory checkFields() {
+        final CostCategory costCategory = new CostCategory();
+        boolean flag = true;
+        if (newCategoryName.getText().toString().length() == 0) {
+            newCategoryName.setBackground(ContextCompat.getDrawable(this, R.drawable.shape_red_field));
+            flag = false;
         } else {
-            if (spinnerAdapter != null) {
-                final Intent intent = new Intent();
-                intent.putExtra(CostCategory.NAME, name);
-                if (parentCategories.getSelectedItemPosition() == spinnerAdapter.getCount() - 1) {
-                    intent.putExtra(CostCategory.PARENT_ID, -1L);
-                } else {
-                    intent.putExtra(CostCategory.PARENT_ID,parentsList.get(parentCategories.getSelectedItemPosition()).getId());
-                }
-                setResult(RESULT_OK, intent);
-                finish();
+            newCategoryName.setBackground(ContextCompat.getDrawable(this, R.drawable.shape_green_field));
+            costCategory.setName(newCategoryName.getText().toString());
+        }
+        if (spinnerAdapter == null) {
+            parentCategories.setBackground(ContextCompat.getDrawable(this, R.drawable.shape_red_field));
+            flag = false;
+        } else {
+            parentCategories.setBackground(ContextCompat.getDrawable(this, R.drawable.shape_green_field));
+            if (parentCategories.getSelectedItemPosition() == spinnerAdapter.getCount() - 1) {
+                costCategory.setParent_id(-1L);
+            } else {
+                costCategory.setParent_id(parentsList.get(parentCategories.getSelectedItemPosition()).getId());
             }
+        }
+        if (!flag) {
+            return null;
+        } else {
+            return costCategory;
         }
     }
 

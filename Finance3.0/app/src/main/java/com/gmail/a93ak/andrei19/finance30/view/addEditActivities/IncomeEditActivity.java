@@ -98,6 +98,7 @@ public class IncomeEditActivity extends AppCompatActivity implements OnTaskCompl
         }
     }
 
+    @Nullable
     private Income checkFields() {
         final Income income = new Income();
         boolean flag = true;

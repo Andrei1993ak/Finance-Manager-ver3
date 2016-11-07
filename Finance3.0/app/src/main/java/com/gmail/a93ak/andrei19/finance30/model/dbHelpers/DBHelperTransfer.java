@@ -150,7 +150,8 @@ public class DBHelperTransfer implements DBHelperForModel<Transfer> {
 
     @Override
     public int deleteAll() {
-        return 0;
+        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+        return db.delete(TableQueryGenerator.getTableName(Transfer.class), null, null);
     }
 
     public List<Transfer> getAllToListByDates(final Long fromDate, final Long toDate) {

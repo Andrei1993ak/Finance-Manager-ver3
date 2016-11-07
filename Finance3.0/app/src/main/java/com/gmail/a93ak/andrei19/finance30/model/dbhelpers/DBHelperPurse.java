@@ -7,8 +7,11 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.gmail.a93ak.andrei19.finance30.model.DBHelper;
 import com.gmail.a93ak.andrei19.finance30.model.TableQueryGenerator;
+import com.gmail.a93ak.andrei19.finance30.model.models.Cost;
 import com.gmail.a93ak.andrei19.finance30.model.models.Currency;
+import com.gmail.a93ak.andrei19.finance30.model.models.Income;
 import com.gmail.a93ak.andrei19.finance30.model.models.Purse;
+import com.gmail.a93ak.andrei19.finance30.model.models.Transfer;
 import com.gmail.a93ak.andrei19.finance30.util.ContextHolder;
 
 import java.util.ArrayList;
@@ -38,7 +41,7 @@ public class DBHelperPurse implements DBHelperForModel<Purse> {
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         final ContentValues values = new ContentValues();
         values.put(Purse.NAME, purse.getName());
-        values.put(Purse.CURRENCY_ID, purse.getCurrency_id());
+        values.put(Purse.CURRENCY_ID, purse.getCurrencyId());
         values.put(Purse.AMOUNT, purse.getAmount());
 
         final long id;
@@ -61,7 +64,7 @@ public class DBHelperPurse implements DBHelperForModel<Purse> {
             final Purse purse = new Purse();
             purse.setId(cursor.getLong(cursor.getColumnIndex(Purse.ID)));
             purse.setName(cursor.getString(cursor.getColumnIndex(Purse.NAME)));
-            purse.setCurrency_id(cursor.getLong(cursor.getColumnIndex(Purse.CURRENCY_ID)));
+            purse.setCurrencyId(cursor.getLong(cursor.getColumnIndex(Purse.CURRENCY_ID)));
             purse.setAmount(cursor.getDouble(cursor.getColumnIndex(Purse.AMOUNT)));
             cursor.close();
             return purse;
@@ -90,7 +93,7 @@ public class DBHelperPurse implements DBHelperForModel<Purse> {
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         final ContentValues values = new ContentValues();
         values.put(Purse.NAME, purse.getName());
-        values.put(Purse.CURRENCY_ID, purse.getCurrency_id());
+        values.put(Purse.CURRENCY_ID, purse.getCurrencyId());
         values.put(Purse.AMOUNT, purse.getAmount());
         final int count;
         try {
@@ -107,6 +110,20 @@ public class DBHelperPurse implements DBHelperForModel<Purse> {
     @Override
     public int delete(final long id) {
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
+        final String[] querys = {
+                "SELECT * FROM " + TableQueryGenerator.getTableName(Cost.class) + " WHERE " + Cost.PURSE_ID + " = " + id + " LIMIT 1",
+                "SELECT * FROM " + TableQueryGenerator.getTableName(Income.class) + " WHERE " + Income.PURSE_ID + " = " + id + " LIMIT 1",
+                "SELECT * FROM " + TableQueryGenerator.getTableName(Transfer.class) + " WHERE " + Transfer.FROM_PURSE_ID + " = " + id +
+                        " or " + Transfer.TO_PURSE_ID + " = " + id + " LIMIT 1"};
+        for (final String query : querys) {
+            final Cursor cursor = db.rawQuery(query, null);
+            if (cursor.moveToFirst()) {
+                cursor.close();
+                return -1;
+            } else {
+                cursor.close();
+            }
+        }
         final int count;
         try {
             db.beginTransaction();
@@ -132,13 +149,13 @@ public class DBHelperPurse implements DBHelperForModel<Purse> {
         return count;
     }
 
-    public void addAmount(final long id, final double amount) {
+    void addAmount(final long id, final double amount) {
         final Purse purse = get(id);
         purse.setAmount(purse.getAmount() + amount);
         update(purse);
     }
 
-    public void takeAmount(final long id, final double amount) {
+    void takeAmount(final long id, final double amount) {
         final Purse purse = get(id);
         purse.setAmount(purse.getAmount() - amount);
         update(purse);
@@ -154,7 +171,7 @@ public class DBHelperPurse implements DBHelperForModel<Purse> {
                 final Purse purse = new Purse();
                 purse.setId(cursor.getLong(cursor.getColumnIndex(Purse.ID)));
                 purse.setName(cursor.getString(cursor.getColumnIndex(Purse.NAME)));
-                purse.setCurrency_id(cursor.getLong(cursor.getColumnIndex(Purse.CURRENCY_ID)));
+                purse.setCurrencyId(cursor.getLong(cursor.getColumnIndex(Purse.CURRENCY_ID)));
                 purse.setAmount(cursor.getDouble(cursor.getColumnIndex(Purse.AMOUNT)));
                 pursesList.add(purse);
             } while (cursor.moveToNext());

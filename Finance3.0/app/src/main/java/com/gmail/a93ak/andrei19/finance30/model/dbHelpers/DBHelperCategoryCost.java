@@ -6,7 +6,9 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.gmail.a93ak.andrei19.finance30.model.DBHelper;
 import com.gmail.a93ak.andrei19.finance30.model.TableQueryGenerator;
+import com.gmail.a93ak.andrei19.finance30.model.models.Cost;
 import com.gmail.a93ak.andrei19.finance30.model.models.CostCategory;
+import com.gmail.a93ak.andrei19.finance30.model.models.Income;
 import com.gmail.a93ak.andrei19.finance30.util.ContextHolder;
 
 
@@ -16,6 +18,8 @@ import java.util.List;
 
 public class DBHelperCategoryCost implements DBHelperForModel<CostCategory> {
 
+    public static final int usable = -1;
+    public static final int hasChildrens = -2;
 
     private final DBHelper dbHelper;
 
@@ -93,24 +97,27 @@ public class DBHelperCategoryCost implements DBHelperForModel<CostCategory> {
 
     @Override
     public int delete(final long id) {
-        final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        int count = 0;
-        try {
-            db.beginTransaction();
-            if (get(id).getParent_id() == -1) {
-                count += deleteAllByParentId(id);
-            }
-            count += db.delete(TableQueryGenerator.getTableName(CostCategory.class), CostCategory.ID + "=?", new String[]{String.valueOf(id)});
-            db.setTransactionSuccessful();
-        } finally {
-            db.endTransaction();
-        }
-        return count;
-    }
 
-    private int deleteAllByParentId(final long id) {
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        int count;
+        if (get(id).getParent_id() == -1) {
+            final String query = "SELECT * FROM " + TableQueryGenerator.getTableName(CostCategory.class) + " WHERE " + CostCategory.PARENT_ID + " = " + id + " LIMIT 1";
+            final Cursor cursor = db.rawQuery(query, null);
+            if (cursor.moveToFirst()) {
+                cursor.close();
+                return hasChildrens;
+            } else {
+                cursor.close();
+            }
+        }
+        final String query = "SELECT * FROM " + TableQueryGenerator.getTableName(Cost.class) + " WHERE " + Cost.CATEGORY_ID + " = " + id + " LIMIT 1";
+        final Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            cursor.close();
+            return usable;
+        } else {
+            cursor.close();
+        }
+        int count = 0;
         try {
             db.beginTransaction();
             count = db.delete(TableQueryGenerator.getTableName(CostCategory.class), CostCategory.ID + "=?", new String[]{String.valueOf(id)});
@@ -121,6 +128,18 @@ public class DBHelperCategoryCost implements DBHelperForModel<CostCategory> {
         return count;
     }
 
+//    private int deleteAllByParentId(final long id) {
+//        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+//        int count;
+//        try {
+//            db.beginTransaction();
+//            count = db.delete(TableQueryGenerator.getTableName(CostCategory.class), CostCategory.ID + "=?", new String[]{String.valueOf(id)});
+//            db.setTransactionSuccessful();
+//        } finally {
+//            db.endTransaction();
+//        }
+//        return count;
+//    }
 
     @Override
     public int deleteAll() {

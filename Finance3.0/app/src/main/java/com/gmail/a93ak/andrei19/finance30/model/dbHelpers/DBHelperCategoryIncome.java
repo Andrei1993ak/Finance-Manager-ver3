@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.gmail.a93ak.andrei19.finance30.model.DBHelper;
 import com.gmail.a93ak.andrei19.finance30.model.TableQueryGenerator;
+import com.gmail.a93ak.andrei19.finance30.model.models.Income;
 import com.gmail.a93ak.andrei19.finance30.model.models.IncomeCategory;
 import com.gmail.a93ak.andrei19.finance30.util.ContextHolder;
 
@@ -14,6 +15,8 @@ import java.util.List;
 
 public class DBHelperCategoryIncome implements DBHelperForModel<IncomeCategory> {
 
+    public static final int usable = -1;
+    public static final int hasChildrens = -2;
 
     private final DBHelper dbHelper;
 
@@ -92,13 +95,28 @@ public class DBHelperCategoryIncome implements DBHelperForModel<IncomeCategory> 
     @Override
     public int delete(final long id) {
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
+        if (get(id).getParent_id() == -1) {
+            final String query = "SELECT * FROM " + TableQueryGenerator.getTableName(IncomeCategory.class) + " WHERE " + IncomeCategory.PARENT_ID + " = " + id + " LIMIT 1";
+            final Cursor cursor = db.rawQuery(query, null);
+            if (cursor.moveToFirst()) {
+                cursor.close();
+                return hasChildrens;
+            } else {
+                cursor.close();
+            }
+        }
+        final String query = "SELECT * FROM " + TableQueryGenerator.getTableName(Income.class) + " WHERE " + Income.CATEGORY_ID + " = " + id + " LIMIT 1";
+        final Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            cursor.close();
+            return usable;
+        } else {
+            cursor.close();
+        }
         int count = 0;
         try {
             db.beginTransaction();
-            if (get(id).getParent_id() == -1) {
-                count += deleteAllByParentId(id);
-            }
-            count += db.delete(TableQueryGenerator.getTableName(IncomeCategory.class), IncomeCategory.ID + "=?", new String[]{String.valueOf(id)});
+            count = db.delete(TableQueryGenerator.getTableName(IncomeCategory.class), IncomeCategory.ID + "=?", new String[]{String.valueOf(id)});
             db.setTransactionSuccessful();
         } finally {
             db.endTransaction();
@@ -106,18 +124,18 @@ public class DBHelperCategoryIncome implements DBHelperForModel<IncomeCategory> 
         return count;
     }
 
-    private int deleteAllByParentId(final long id) {
-        final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        int count;
-        try {
-            db.beginTransaction();
-            count = db.delete(TableQueryGenerator.getTableName(IncomeCategory.class), IncomeCategory.PARENT_ID + "=?", new String[]{String.valueOf(id)});
-            db.setTransactionSuccessful();
-        } finally {
-            db.endTransaction();
-        }
-        return count;
-    }
+//    private int deleteAllByParentId(final long id) {
+//        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+//        int count;
+//        try {
+//            db.beginTransaction();
+//            count = db.delete(TableQueryGenerator.getTableName(IncomeCategory.class), IncomeCategory.PARENT_ID + "=?", new String[]{String.valueOf(id)});
+//            db.setTransactionSuccessful();
+//        } finally {
+//            db.endTransaction();
+//        }
+//        return count;
+//    }
 
 
     @Override

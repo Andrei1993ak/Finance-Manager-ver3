@@ -61,7 +61,7 @@ public class TransferCursorAdapter extends CursorAdapter {
         textViewPurseTo.setText(to.getName());
 
         final TextView fromAmount = (TextView) view.findViewById(R.id.LIFromPurseAmount);
-        final Currency currencyFrom = helperCurrency.get(from.getCurrency_id());
+        final Currency currencyFrom = helperCurrency.get(from.getCurrencyId());
         final Double fromAmountDouble = cursor.getDouble(cursor.getColumnIndex(Transfer.FROM_AMOUNT));
         StringBuilder builder = new StringBuilder();
         builder.append("-");
@@ -71,7 +71,7 @@ public class TransferCursorAdapter extends CursorAdapter {
         fromAmount.setText(builder.toString());
 
         final TextView toAmount = (TextView) view.findViewById(R.id.LIToPurseAmount);
-        final Currency currencyTo = helperCurrency.get(to.getCurrency_id());
+        final Currency currencyTo = helperCurrency.get(to.getCurrencyId());
         final Double toAmountDouble = cursor.getDouble(cursor.getColumnIndex(Transfer.TO_AMOUNT));
         builder = new StringBuilder();
         builder.append("+");

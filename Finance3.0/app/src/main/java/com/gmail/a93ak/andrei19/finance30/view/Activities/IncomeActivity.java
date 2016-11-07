@@ -94,7 +94,6 @@ public class IncomeActivity extends AppCompatActivity implements LoaderManager.L
                     break;
             }
         }
-
     }
 
     @Override

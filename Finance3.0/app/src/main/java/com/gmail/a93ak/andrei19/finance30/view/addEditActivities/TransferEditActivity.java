@@ -86,6 +86,7 @@ public class TransferEditActivity extends AppCompatActivity implements OnTaskCom
         });
     }
 
+    @Nullable
     private Transfer checkFields() {
         final Transfer transfer = new Transfer();
         boolean flag = true;
@@ -210,8 +211,8 @@ public class TransferEditActivity extends AppCompatActivity implements OnTaskCom
             if (editTransferFromPurse.getSelectedItemPosition() == editTransferToPurse.getSelectedItemPosition()) {
                 officialRate.setText("");
             } else {
-                final long idFrom = (allPurses.get(editTransferFromPurse.getSelectedItemPosition()).getCurrency_id());
-                final long idTo = (allPurses.get(editTransferToPurse.getSelectedItemPosition()).getCurrency_id());
+                final long idFrom = (allPurses.get(editTransferFromPurse.getSelectedItemPosition()).getCurrencyId());
+                final long idTo = (allPurses.get(editTransferToPurse.getSelectedItemPosition()).getCurrencyId());
                 new RateJsonParser(TransferEditActivity.this).execute(idFrom, idTo);
             }
         }

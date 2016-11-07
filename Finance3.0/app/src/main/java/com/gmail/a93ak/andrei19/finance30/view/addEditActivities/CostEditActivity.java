@@ -113,6 +113,7 @@ public class CostEditActivity extends AppCompatActivity implements OnTaskComplet
         }
     }
 
+    @Nullable
     private Cost checkFields() {
         final Cost cost = new Cost();
         boolean flag = true;

@@ -52,7 +52,7 @@ public class CostCursorAdapter extends CursorAdapter {
 
         final TextView tvAmount = (TextView) view.findViewById(R.id.LICostPurseAmount);
         final Purse purse = helperPurse.get(cursor.getLong(cursor.getColumnIndex(Cost.PURSE_ID)));
-        final Currency currency = helperCurrency.get(purse.getCurrency_id());
+        final Currency currency = helperCurrency.get(purse.getCurrencyId());
         final Double amount = cursor.getDouble(cursor.getColumnIndex(Cost.AMOUNT));
         String amountString = String.format(Locale.US, "%.2f", amount);
         amountString += " ";

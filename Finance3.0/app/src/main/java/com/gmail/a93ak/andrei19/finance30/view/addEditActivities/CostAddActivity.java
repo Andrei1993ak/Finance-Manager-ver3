@@ -56,6 +56,7 @@ public class CostAddActivity extends AppCompatActivity implements OnTaskComplete
     private List<CostCategory> subCategoriesList;
     private SimpleDateFormat dateFormatter;
     private Bitmap photo;
+    private ArrayAdapter<String> spinnerSubCategoriesAdapter;
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
@@ -106,6 +107,7 @@ public class CostAddActivity extends AppCompatActivity implements OnTaskComplete
         }
     }
 
+    @Nullable
     private Cost checkFields() {
         final Cost cost = new Cost();
         boolean flag = true;
@@ -142,7 +144,11 @@ public class CostAddActivity extends AppCompatActivity implements OnTaskComplete
         if (newCostSubCategory.getVisibility() == View.GONE) {
             cost.setCategoryId(categoriesList.get(newCostCategory.getSelectedItemPosition()).getId());
         } else {
-            cost.setCategoryId(subCategoriesList.get(newCostSubCategory.getSelectedItemPosition()).getId());
+            if (newCostSubCategory.getSelectedItemPosition() != spinnerSubCategoriesAdapter.getCount() - 1) {
+                cost.setCategoryId(subCategoriesList.get(newCostSubCategory.getSelectedItemPosition()).getId());
+            } else {
+                cost.setCategoryId(categoriesList.get(newCostCategory.getSelectedItemPosition()).getId());
+            }
         }
         if (photo == null) {
             cost.setPhoto(0);
@@ -209,18 +215,18 @@ public class CostAddActivity extends AppCompatActivity implements OnTaskComplete
                     newCostSubCategory.setVisibility(View.GONE);
                 } else {
                     newCostSubCategory.setVisibility(View.VISIBLE);
-                    final String[] subCategoriesNames = new String[subCategoriesList.size()];
+                    final String[] subCategoriesNames = new String[subCategoriesList.size() + 1];
                     int k = 0;
                     for (final CostCategory costCategory : subCategoriesList) {
                         subCategoriesNames[k++] = costCategory.getName();
                     }
-                    final ArrayAdapter<String> spinnerSubCategoriesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, subCategoriesNames);
+                    subCategoriesNames[k] = "-";
+                    spinnerSubCategoriesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, subCategoriesNames);
                     spinnerSubCategoriesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     newCostSubCategory.setAdapter(spinnerSubCategoriesAdapter);
                 }
                 break;
         }
-
     }
 
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {

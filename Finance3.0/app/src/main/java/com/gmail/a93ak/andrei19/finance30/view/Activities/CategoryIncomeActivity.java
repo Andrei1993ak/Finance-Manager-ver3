@@ -11,6 +11,7 @@ import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
+import android.widget.Toast;
 
 import com.gmail.a93ak.andrei19.finance30.R;
 import com.gmail.a93ak.andrei19.finance30.control.Executors.IncomeCategoryExecutor;
@@ -19,6 +20,8 @@ import com.gmail.a93ak.andrei19.finance30.control.adapters.ExpListAdapter;
 import com.gmail.a93ak.andrei19.finance30.control.base.OnTaskCompleted;
 import com.gmail.a93ak.andrei19.finance30.control.base.RequestHolder;
 import com.gmail.a93ak.andrei19.finance30.control.base.Result;
+import com.gmail.a93ak.andrei19.finance30.model.TableQueryGenerator;
+import com.gmail.a93ak.andrei19.finance30.model.dbHelpers.DBHelperCategoryIncome;
 import com.gmail.a93ak.andrei19.finance30.model.models.IncomeCategory;
 import com.gmail.a93ak.andrei19.finance30.view.addEditActivities.IncomeCategoryAddActivity;
 import com.gmail.a93ak.andrei19.finance30.view.addEditActivities.IncomeCategoryEditActivity;
@@ -30,6 +33,8 @@ public class CategoryIncomeActivity extends AppCompatActivity implements LoaderM
 
     private static final int ADD_CATEGORY_REQUEST = 1;
     private static final int EDIT_CATEGORY_REQUEST = 2;
+
+    public static final int ROOT_LOADER_ID = -1;
 
     private ExpandableListView incomeCategoryExpListView;
     private ExpListAdapter adapter;
@@ -44,17 +49,12 @@ public class CategoryIncomeActivity extends AppCompatActivity implements LoaderM
         incomeCategoryExpListView = (ExpandableListView) findViewById(R.id.CategoryExpListView);
         final String[] parentsFrom = {IncomeCategory.NAME};
         final int[] parentsTo = {android.R.id.text1};
-        final String[] childrensFrom = {IncomeCategory.NAME};
-        final int[] childrensTo = {android.R.id.text1};
+        final String[] childFrom = {IncomeCategory.NAME};
+        final int[] childTo = {android.R.id.text1};
         adapter = new ExpListAdapter(this, null, android.R.layout.simple_expandable_list_item_1, parentsFrom, parentsTo,
-                android.R.layout.simple_expandable_list_item_1, childrensFrom, childrensTo);
+                android.R.layout.simple_expandable_list_item_1, childFrom, childTo);
         incomeCategoryExpListView.setAdapter(adapter);
-        final Loader loader = getSupportLoaderManager().getLoader(-1);
-        if (loader != null && !loader.isReset()) {
-            getSupportLoaderManager().restartLoader(-1, null, this);
-        } else {
-            getSupportLoaderManager().initLoader(-1, null, this);
-        }
+        getSupportLoaderManager().restartLoader(ROOT_LOADER_ID, null, this);
         registerForContextMenu(incomeCategoryExpListView);
     }
 
@@ -107,7 +107,7 @@ public class CategoryIncomeActivity extends AppCompatActivity implements LoaderM
     @Override
     public void onLoadFinished(final Loader<Cursor> loader, final Cursor data) {
         final int id = loader.getId();
-        if (id != -1) {
+        if (id != ROOT_LOADER_ID) {
             final int groupPos = adapter.getPosToId().get(id);
             adapter.setChildrenCursor(groupPos, data);
         } else {
@@ -131,28 +131,11 @@ public class CategoryIncomeActivity extends AppCompatActivity implements LoaderM
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case ADD_CATEGORY_REQUEST:
-                    final Long categoryParentId = data.getLongExtra(IncomeCategory.PARENT_ID, -2);
-                    if (categoryParentId == -2) {
-                        return;
-                    }
-                    final IncomeCategory newIncomeCategory = new IncomeCategory();
-                    newIncomeCategory.setName(data.getStringExtra(IncomeCategory.NAME));
-                    newIncomeCategory.setParent_id(categoryParentId);
+                    final IncomeCategory newIncomeCategory = data.getParcelableExtra(TableQueryGenerator.getTableName(IncomeCategory.class));
                     new IncomeCategoryExecutor(this).execute(new RequestHolder<IncomeCategory>().add(newIncomeCategory));
                     break;
                 case EDIT_CATEGORY_REQUEST:
-                    final Long editCategoryId = data.getLongExtra(IncomeCategory.ID, -1);
-                    if (editCategoryId == -1) {
-                        return;
-                    }
-                    final Long editCategoryParentId = data.getLongExtra(IncomeCategory.PARENT_ID, -2);
-                    if (editCategoryParentId == -2) {
-                        return;
-                    }
-                    final IncomeCategory editIncomeCategory = new IncomeCategory();
-                    editIncomeCategory.setId(editCategoryId);
-                    editIncomeCategory.setName(data.getStringExtra(IncomeCategory.NAME));
-                    editIncomeCategory.setParent_id(editCategoryParentId);
+                    final IncomeCategory editIncomeCategory = data.getParcelableExtra(TableQueryGenerator.getTableName(IncomeCategory.class));
                     new IncomeCategoryExecutor(this).execute(new RequestHolder<IncomeCategory>().edit(editIncomeCategory));
                     break;
                 default:
@@ -166,22 +149,33 @@ public class CategoryIncomeActivity extends AppCompatActivity implements LoaderM
         final int id = result.getId();
         switch (id) {
             case IncomeCategoryExecutor.KEY_RESULT_DELETE:
-                if (deleteGroupId == -1 && getSupportLoaderManager().getLoader(-1) != null) {
-                    getSupportLoaderManager().getLoader(-1).forceLoad();
-                } else if (getSupportLoaderManager().getLoader(-1) != null && getSupportLoaderManager().getLoader(deleteGroupId) != null) {
-                    getSupportLoaderManager().getLoader(deleteGroupId).forceLoad();
-                    getSupportLoaderManager().getLoader(-1).forceLoad();
-                    deleteGroupId = -1;
+                if (deleteGroupId == -1 && getSupportLoaderManager().getLoader(ROOT_LOADER_ID) != null) {
+                    if ((Integer) result.getObject() == DBHelperCategoryIncome.hasChildrens) {
+                        Toast.makeText(this, R.string.hasChilds, Toast.LENGTH_LONG).show();
+                    } else if ((Integer) result.getObject() == DBHelperCategoryIncome.usable) {
+                        Toast.makeText(this, R.string.categoryUsable, Toast.LENGTH_LONG).show();
+                    } else {
+                        getSupportLoaderManager().getLoader(ROOT_LOADER_ID).forceLoad();
+                    }
+                } else if (getSupportLoaderManager().getLoader(ROOT_LOADER_ID) != null
+                        && getSupportLoaderManager().getLoader(deleteGroupId) != null) {
+                    if ((Integer) result.getObject() == DBHelperCategoryIncome.usable) {
+                        Toast.makeText(this, R.string.categoryUsable, Toast.LENGTH_LONG).show();
+                    } else {
+                        getSupportLoaderManager().getLoader(deleteGroupId).forceLoad();
+                        getSupportLoaderManager().getLoader(ROOT_LOADER_ID).forceLoad();
+                        deleteGroupId = -1;
+                    }
                 }
                 break;
             case IncomeCategoryExecutor.KEY_RESULT_ADD:
-                if (getSupportLoaderManager().getLoader(-1) != null) {
-                    getSupportLoaderManager().getLoader(-1).forceLoad();
+                if (getSupportLoaderManager().getLoader(ROOT_LOADER_ID) != null) {
+                    getSupportLoaderManager().getLoader(ROOT_LOADER_ID).forceLoad();
                 }
                 break;
             case IncomeCategoryExecutor.KEY_RESULT_EDIT:
-                if (getSupportLoaderManager().getLoader(-1) != null) {
-                    getSupportLoaderManager().getLoader(-1).forceLoad();
+                if (getSupportLoaderManager().getLoader(ROOT_LOADER_ID) != null) {
+                    getSupportLoaderManager().getLoader(ROOT_LOADER_ID).forceLoad();
                 }
                 break;
             default:

@@ -40,4 +40,8 @@
     <string name="official_rate">Official rate</string>
     <string name="checkInternet">Check internet</string>
     <string name="dateFormat">dd-MM-yyyy</string>
+    <string name="unpossibleToDeleteCur">Unpossible to delete usable curency</string>
+    <string name="unpossibleToDeletePurse">Unpossible to delete usable purse</string>
+    <string name="hasChilds">First delete all childs!</string>
+    <string name="categoryUsable">This category are used!</string>
 </resources>

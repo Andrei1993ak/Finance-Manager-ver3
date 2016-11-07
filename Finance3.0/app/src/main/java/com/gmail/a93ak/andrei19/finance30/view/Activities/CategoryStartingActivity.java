@@ -22,7 +22,7 @@ public class CategoryStartingActivity extends AppCompatActivity {
                 startActivity(new Intent(this, CategoryIncomeActivity.class));
                 break;
             case R.id.tvCosts:
-                startActivity(new Intent(this, CategryCostActivity.class));
+                startActivity(new Intent(this, CategoryCostActivity.class));
                 break;
         }
     }

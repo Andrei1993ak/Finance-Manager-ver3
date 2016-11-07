@@ -29,7 +29,7 @@ import com.gmail.a93ak.andrei19.finance30.control.base.OnTaskCompleted;
 import com.gmail.a93ak.andrei19.finance30.control.base.RequestHolder;
 import com.gmail.a93ak.andrei19.finance30.control.base.Result;
 import com.gmail.a93ak.andrei19.finance30.model.TableQueryGenerator;
-import com.gmail.a93ak.andrei19.finance30.model.dbHelpers.DBHelperCost;
+
 import com.gmail.a93ak.andrei19.finance30.model.models.Cost;
 import com.gmail.a93ak.andrei19.finance30.util.UniversalLoader.Loaders.BitmapLoader;
 import com.gmail.a93ak.andrei19.finance30.view.addEditActivities.CostAddActivity;
@@ -93,7 +93,7 @@ public class CostActivity extends AppCompatActivity implements LoaderManager.Loa
                 startActivityForResult(intent, EDIT_COST_REQUEST);
                 break;
             case CM_PHOTO_ID:
-                final Cost cost = DBHelperCost.getInstance().get(info.id);
+                final Cost cost = com.gmail.a93ak.andrei19.finance30.model.dbHelpers.DBHelperCost.getInstance().get(info.id);
                 if (cost.getPhoto() == 0) {
                     Toast.makeText(this, R.string.noPhoto, Toast.LENGTH_LONG).show();
                 } else if (cost.getPhoto() == 1) {

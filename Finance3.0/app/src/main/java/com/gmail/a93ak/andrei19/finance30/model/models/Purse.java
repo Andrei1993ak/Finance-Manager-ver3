@@ -80,11 +80,11 @@ public class Purse extends TableClass implements Parcelable {
         this.name = name;
     }
 
-    public long getCurrency_id() {
+    public long getCurrencyId() {
         return currency_id;
     }
 
-    public void setCurrency_id(final long currency_id) {
+    public void setCurrencyId(final long currency_id) {
         this.currency_id = currency_id;
     }
 

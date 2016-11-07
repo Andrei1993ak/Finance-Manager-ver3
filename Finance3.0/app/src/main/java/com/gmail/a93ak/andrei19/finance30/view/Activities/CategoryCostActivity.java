@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.gmail.a93ak.andrei19.finance30.R;
 import com.gmail.a93ak.andrei19.finance30.control.Executors.CostCategoryExecutor;
@@ -20,11 +21,14 @@ import com.gmail.a93ak.andrei19.finance30.control.adapters.ExpListAdapter;
 import com.gmail.a93ak.andrei19.finance30.control.base.OnTaskCompleted;
 import com.gmail.a93ak.andrei19.finance30.control.base.RequestHolder;
 import com.gmail.a93ak.andrei19.finance30.control.base.Result;
+import com.gmail.a93ak.andrei19.finance30.model.TableQueryGenerator;
+import com.gmail.a93ak.andrei19.finance30.model.dbHelpers.DBHelperCategoryCost;
 import com.gmail.a93ak.andrei19.finance30.model.models.CostCategory;
+import com.gmail.a93ak.andrei19.finance30.model.models.Income;
 import com.gmail.a93ak.andrei19.finance30.view.addEditActivities.CostCategoryAddActivity;
 import com.gmail.a93ak.andrei19.finance30.view.addEditActivities.CostCategoryEditActivity;
 
-public class CategryCostActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, OnTaskCompleted {
+public class CategoryCostActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, OnTaskCompleted {
 
     private static final int CM_EDIT_ID = 1;
     private static final int CM_DELETE_ID = 2;
@@ -37,26 +41,22 @@ public class CategryCostActivity extends AppCompatActivity implements LoaderMana
 
     private int deleteGroupId = -1;
 
+    public static final int ROOT_LOADER_ID = -1;
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.category_activity);
         costCategoryExpListView = (ExpandableListView) findViewById(R.id.CategoryExpListView);
-        ((TextView)findViewById(R.id.categoriesTitle)).setText(R.string.costCategories);
+        ((TextView) findViewById(R.id.categoriesTitle)).setText(R.string.costCategories);
         final String[] parentsFrom = {CostCategory.NAME};
         final int[] parentsTo = {android.R.id.text1};
-        final String[] childrensFrom = {CostCategory.NAME};
-        final int[] childrensTo = {android.R.id.text1};
+        final String[] childFrom = {CostCategory.NAME};
+        final int[] childTo = {android.R.id.text1};
         adapter = new ExpListAdapter(this, null, android.R.layout.simple_expandable_list_item_1, parentsFrom, parentsTo,
-                android.R.layout.simple_expandable_list_item_1, childrensFrom, childrensTo);
+                android.R.layout.simple_expandable_list_item_1, childFrom, childTo);
         costCategoryExpListView.setAdapter(adapter);
-        final Loader loader = getSupportLoaderManager().getLoader(-1);
-        if (loader != null && !loader.isReset()) {
-            getSupportLoaderManager().restartLoader(-1, null, this);
-        } else {
-            getSupportLoaderManager().initLoader(-1, null, this);
-        }
+        getSupportLoaderManager().restartLoader(ROOT_LOADER_ID, null, this);
         registerForContextMenu(costCategoryExpListView);
     }
 
@@ -109,7 +109,7 @@ public class CategryCostActivity extends AppCompatActivity implements LoaderMana
     @Override
     public void onLoadFinished(final Loader<Cursor> loader, final Cursor data) {
         final int id = loader.getId();
-        if (id != -1) {
+        if (id != ROOT_LOADER_ID) {
             final int groupPos = adapter.getPosToId().get(id);
             adapter.setChildrenCursor(groupPos, data);
         } else {
@@ -133,28 +133,11 @@ public class CategryCostActivity extends AppCompatActivity implements LoaderMana
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case ADD_CATEGORY_REQUEST:
-                    final Long categoryParentId = data.getLongExtra(CostCategory.PARENT_ID, -2);
-                    if (categoryParentId == -2) {
-                        return;
-                    }
-                    final CostCategory newCostCategory = new CostCategory();
-                    newCostCategory.setName(data.getStringExtra(CostCategory.NAME));
-                    newCostCategory.setParent_id(categoryParentId);
+                    final CostCategory newCostCategory = data.getParcelableExtra(TableQueryGenerator.getTableName(CostCategory.class));
                     new CostCategoryExecutor(this).execute(new RequestHolder<CostCategory>().add(newCostCategory));
                     break;
                 case EDIT_CATEGORY_REQUEST:
-                    final Long editCategoryId = data.getLongExtra(CostCategory.ID, -1);
-                    if (editCategoryId == -1) {
-                        return;
-                    }
-                    final Long editCategoryParentId = data.getLongExtra(CostCategory.PARENT_ID, -2);
-                    if (editCategoryParentId == -2) {
-                        return;
-                    }
-                    final CostCategory editCostCategory = new CostCategory();
-                    editCostCategory.setId(editCategoryId);
-                    editCostCategory.setName(data.getStringExtra(CostCategory.NAME));
-                    editCostCategory.setParent_id(editCategoryParentId);
+                    final CostCategory editCostCategory = data.getParcelableExtra(TableQueryGenerator.getTableName(CostCategory.class));
                     new CostCategoryExecutor(this).execute(new RequestHolder<CostCategory>().edit(editCostCategory));
                     break;
                 default:
@@ -168,22 +151,33 @@ public class CategryCostActivity extends AppCompatActivity implements LoaderMana
         final int id = result.getId();
         switch (id) {
             case CostCategoryExecutor.KEY_RESULT_DELETE:
-                if (deleteGroupId == -1 && getSupportLoaderManager().getLoader(-1) != null) {
-                    getSupportLoaderManager().getLoader(-1).forceLoad();
-                } else if (getSupportLoaderManager().getLoader(-1) != null && getSupportLoaderManager().getLoader(deleteGroupId) != null) {
-                    getSupportLoaderManager().getLoader(deleteGroupId).forceLoad();
-                    getSupportLoaderManager().getLoader(-1).forceLoad();
-                    deleteGroupId = -1;
+                if (deleteGroupId == -1 && getSupportLoaderManager().getLoader(ROOT_LOADER_ID) != null) {
+                    if ((Integer) result.getObject() == DBHelperCategoryCost.hasChildrens) {
+                        Toast.makeText(this, R.string.hasChilds, Toast.LENGTH_LONG).show();
+                    } else if ((Integer) result.getObject() == DBHelperCategoryCost.usable) {
+                        Toast.makeText(this, R.string.categoryUsable, Toast.LENGTH_LONG).show();
+                    } else {
+                        getSupportLoaderManager().getLoader(ROOT_LOADER_ID).forceLoad();
+                    }
+                } else if (getSupportLoaderManager().getLoader(ROOT_LOADER_ID) != null
+                        && getSupportLoaderManager().getLoader(deleteGroupId) != null) {
+                    if ((Integer) result.getObject() == DBHelperCategoryCost.usable) {
+                        Toast.makeText(this, R.string.categoryUsable, Toast.LENGTH_LONG).show();
+                    } else {
+                        getSupportLoaderManager().getLoader(deleteGroupId).forceLoad();
+                        getSupportLoaderManager().getLoader(ROOT_LOADER_ID).forceLoad();
+                        deleteGroupId = -1;
+                    }
                 }
                 break;
             case CostCategoryExecutor.KEY_RESULT_ADD:
-                if (getSupportLoaderManager().getLoader(-1) != null) {
-                    getSupportLoaderManager().getLoader(-1).forceLoad();
+                if (getSupportLoaderManager().getLoader(ROOT_LOADER_ID) != null) {
+                    getSupportLoaderManager().getLoader(ROOT_LOADER_ID).forceLoad();
                 }
                 break;
             case CostCategoryExecutor.KEY_RESULT_EDIT:
-                if (getSupportLoaderManager().getLoader(-1) != null) {
-                    getSupportLoaderManager().getLoader(-1).forceLoad();
+                if (getSupportLoaderManager().getLoader(ROOT_LOADER_ID) != null) {
+                    getSupportLoaderManager().getLoader(ROOT_LOADER_ID).forceLoad();
                 }
                 break;
             default:

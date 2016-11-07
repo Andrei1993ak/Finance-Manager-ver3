@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.gmail.a93ak.andrei19.finance30.model.DBHelper;
 import com.gmail.a93ak.andrei19.finance30.model.TableQueryGenerator;
 import com.gmail.a93ak.andrei19.finance30.model.models.Currency;
+import com.gmail.a93ak.andrei19.finance30.model.models.Purse;
 import com.gmail.a93ak.andrei19.finance30.util.ContextHolder;
 
 import java.util.ArrayList;
@@ -110,13 +111,20 @@ public class DBHelperCurrency implements DBHelperForModel<Currency> {
     @Override
     public int delete(final long id) {
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        final int count;
-        try {
-            db.beginTransaction();
-            count = db.delete(TableQueryGenerator.getTableName(Currency.class), Currency.ID + " = " + id, null);
-            db.setTransactionSuccessful();
-        } finally {
-            db.endTransaction();
+        final String selectQuery = "SELECT * FROM " + TableQueryGenerator.getTableName(Purse.class) + " WHERE " + Purse.CURRENCY_ID + " = " + id + " LIMIT 1";
+        final Cursor cursor = db.rawQuery(selectQuery, null);
+        int count = -1;
+        if (!cursor.moveToFirst()) {
+            cursor.close();
+            try {
+                db.beginTransaction();
+                count = db.delete(TableQueryGenerator.getTableName(Currency.class), Currency.ID + " = " + id, null);
+                db.setTransactionSuccessful();
+            } finally {
+                db.endTransaction();
+            }
+        } else {
+            cursor.close();
         }
         return count;
     }

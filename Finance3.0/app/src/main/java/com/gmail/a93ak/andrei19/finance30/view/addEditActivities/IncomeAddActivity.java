@@ -43,6 +43,7 @@ public class IncomeAddActivity extends AppCompatActivity implements OnTaskComple
     private List<IncomeCategory> categoriesList;
     private List<IncomeCategory> subCategoriesList;
     private SimpleDateFormat dateFormatter;
+    private ArrayAdapter<String> spinnerSubCategoriesAdapter;
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
@@ -64,7 +65,7 @@ public class IncomeAddActivity extends AppCompatActivity implements OnTaskComple
     }
 
     private void setDatePickerDialog() {
-        dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+        dateFormatter = new SimpleDateFormat(getResources().getString(R.string.dateFormat), Locale.US);
         final Calendar newCalendar = Calendar.getInstance();
         final DatePickerDialog dialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -85,7 +86,7 @@ public class IncomeAddActivity extends AppCompatActivity implements OnTaskComple
 
     public void addNewIncome(final View view) {
         final Income income = checkFields();
-        if (income!= null) {
+        if (income != null) {
             final Intent intent = new Intent();
             intent.putExtra(TableQueryGenerator.getTableName(Income.class), income);
             setResult(RESULT_OK, intent);
@@ -93,6 +94,7 @@ public class IncomeAddActivity extends AppCompatActivity implements OnTaskComple
         }
     }
 
+    @Nullable
     private Income checkFields() {
         final Income income = new Income();
         boolean flag = true;
@@ -123,7 +125,11 @@ public class IncomeAddActivity extends AppCompatActivity implements OnTaskComple
         if (newIncomeSubCategory.getVisibility() == View.GONE) {
             income.setCategoryId(categoriesList.get(newIncomeCategory.getSelectedItemPosition()).getId());
         } else {
-            income.setCategoryId(subCategoriesList.get(newIncomeSubCategory.getSelectedItemPosition()).getId());
+            if (newIncomeSubCategory.getSelectedItemPosition() != spinnerSubCategoriesAdapter.getCount() - 1) {
+                income.setCategoryId(subCategoriesList.get(newIncomeSubCategory.getSelectedItemPosition()).getId());
+            } else {
+                income.setCategoryId(categoriesList.get(newIncomeCategory.getSelectedItemPosition()).getId());
+            }
         }
         if (!flag) {
             return null;
@@ -176,12 +182,13 @@ public class IncomeAddActivity extends AppCompatActivity implements OnTaskComple
                     newIncomeSubCategory.setVisibility(View.GONE);
                 } else {
                     newIncomeSubCategory.setVisibility(View.VISIBLE);
-                    final String[] subCategoriesNames = new String[subCategoriesList.size()];
+                    final String[] subCategoriesNames = new String[subCategoriesList.size() + 1];
                     int k = 0;
                     for (final IncomeCategory incomeCategory : subCategoriesList) {
                         subCategoriesNames[k++] = incomeCategory.getName();
                     }
-                    final ArrayAdapter<String> spinnerSubCategoriesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, subCategoriesNames);
+                    subCategoriesNames[k] = "-";
+                    spinnerSubCategoriesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, subCategoriesNames);
                     spinnerSubCategoriesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     newIncomeSubCategory.setAdapter(spinnerSubCategoriesAdapter);
                 }

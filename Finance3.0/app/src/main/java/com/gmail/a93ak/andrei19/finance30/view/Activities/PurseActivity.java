@@ -8,12 +8,12 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.gmail.a93ak.andrei19.finance30.R;
 import com.gmail.a93ak.andrei19.finance30.control.Executors.PurseExecutor;
@@ -21,18 +21,21 @@ import com.gmail.a93ak.andrei19.finance30.control.Loaders.PurseCursorLoader;
 import com.gmail.a93ak.andrei19.finance30.control.base.OnTaskCompleted;
 import com.gmail.a93ak.andrei19.finance30.control.base.RequestHolder;
 import com.gmail.a93ak.andrei19.finance30.control.base.Result;
+import com.gmail.a93ak.andrei19.finance30.model.TableQueryGenerator;
 import com.gmail.a93ak.andrei19.finance30.model.dbHelpers.DBHelperPurse;
 import com.gmail.a93ak.andrei19.finance30.model.models.Purse;
 import com.gmail.a93ak.andrei19.finance30.view.addEditActivities.PurseAddActivity;
 import com.gmail.a93ak.andrei19.finance30.view.addEditActivities.PurseEditActivity;
 
 public class PurseActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, OnTaskCompleted {
-//
+
     private static final int CM_EDIT_ID = 1;
     private static final int CM_DELETE_ID = 2;
 
     private static final int ADD_PURSE_REQUEST = 1;
     private static final int EDIT_PURSE_REQUEST = 2;
+
+    public static final int MAIN_LOADER_ID = 0;
 
     private SimpleCursorAdapter simpleCursorAdapter;
     private RequestHolder<Purse> requestHolder;
@@ -48,7 +51,7 @@ public class PurseActivity extends AppCompatActivity implements LoaderManager.Lo
         simpleCursorAdapter = new SimpleCursorAdapter(this, R.layout.purse_listitem, null, from, to, 0);
         purseListVIew.setAdapter(simpleCursorAdapter);
         registerForContextMenu(purseListVIew);
-        getSupportLoaderManager().initLoader(0, null, this);
+        getSupportLoaderManager().initLoader(MAIN_LOADER_ID, null, this);
     }
 
     public void addPurse(final View view) {
@@ -84,18 +87,11 @@ public class PurseActivity extends AppCompatActivity implements LoaderManager.Lo
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case ADD_PURSE_REQUEST:
-                    final Purse newPurse = new Purse();
-                    newPurse.setName(data.getStringExtra(Purse.NAME));
-                    newPurse.setAmount(data.getDoubleExtra(Purse.AMOUNT, -1.0));
-                    newPurse.setCurrency_id(data.getLongExtra(Purse.CURRENCY_ID, -1));
+                    final Purse newPurse = data.getParcelableExtra(TableQueryGenerator.getTableName(Purse.class));
                     new PurseExecutor(this).execute(requestHolder.add(newPurse));
                     break;
                 case EDIT_PURSE_REQUEST:
-                    final Purse editPurse = new Purse();
-                    editPurse.setId(data.getLongExtra(Purse.ID, -1));
-                    editPurse.setName(data.getStringExtra(Purse.NAME));
-                    editPurse.setAmount(data.getDoubleExtra(Purse.AMOUNT, -1.0));
-                    editPurse.setCurrency_id(data.getLongExtra(Purse.CURRENCY_ID, -1));
+                    final Purse editPurse = data.getParcelableExtra(TableQueryGenerator.getTableName(Purse.class));
                     new PurseExecutor(this).execute(requestHolder.edit(editPurse));
                     break;
                 default:
@@ -124,23 +120,27 @@ public class PurseActivity extends AppCompatActivity implements LoaderManager.Lo
     public void onTaskCompleted(final Result result) {
         final int id = result.getId();
         switch (id) {
-            case PurseExecutor.KEY_RESULT_DELETE:
-                if (getSupportLoaderManager().getLoader(0) != null) {
-                    getSupportLoaderManager().getLoader(0).forceLoad();
-                }
-                break;
             case PurseExecutor.KEY_RESULT_ADD:
-                if (getSupportLoaderManager().getLoader(0) != null) {
-                    getSupportLoaderManager().getLoader(0).forceLoad();
+                if (getSupportLoaderManager().getLoader(MAIN_LOADER_ID) != null) {
+                    getSupportLoaderManager().getLoader(MAIN_LOADER_ID).forceLoad();
                 }
                 break;
             case PurseExecutor.KEY_RESULT_EDIT:
-                if (getSupportLoaderManager().getLoader(0) != null) {
-                    getSupportLoaderManager().getLoader(0).forceLoad();
+                if (getSupportLoaderManager().getLoader(MAIN_LOADER_ID) != null) {
+                    getSupportLoaderManager().getLoader(MAIN_LOADER_ID).forceLoad();
+                }
+                break;
+            case PurseExecutor.KEY_RESULT_DELETE:
+                if ((Integer) result.getObject() == -1) {
+                    Toast.makeText(this, R.string.unpossibleToDeletePurse, Toast.LENGTH_LONG).show();
+                } else {
+                    if (getSupportLoaderManager().getLoader(MAIN_LOADER_ID) != null) {
+                        getSupportLoaderManager().getLoader(MAIN_LOADER_ID).forceLoad();
+                    }
                 }
                 break;
             default:
-                Log.e("FinancePMError", "Unknown result code: " + id);
+                break;
         }
     }
 }

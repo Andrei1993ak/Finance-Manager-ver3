@@ -95,6 +95,7 @@ public class TransferAddActivity extends AppCompatActivity implements OnTaskComp
         }
     }
 
+    @Nullable
     private Transfer checkFields() {
         final Transfer transfer = new Transfer();
         boolean flag = true;
@@ -187,8 +188,8 @@ public class TransferAddActivity extends AppCompatActivity implements OnTaskComp
             if (newTransferFromPurse.getSelectedItemPosition() == newTransferToPurse.getSelectedItemPosition()) {
                 officialRate.setText("");
             } else {
-                final long idFrom = (allPurses.get(newTransferFromPurse.getSelectedItemPosition()).getCurrency_id());
-                final long idTo = (allPurses.get(newTransferToPurse.getSelectedItemPosition()).getCurrency_id());
+                final long idFrom = (allPurses.get(newTransferFromPurse.getSelectedItemPosition()).getCurrencyId());
+                final long idTo = (allPurses.get(newTransferToPurse.getSelectedItemPosition()).getCurrencyId());
                 new RateJsonParser(TransferAddActivity.this).execute(idFrom, idTo);
             }
         }

@@ -53,7 +53,7 @@ public class IncomeCursorAdapter extends CursorAdapter {
 
         final TextView tvAmount = (TextView) view.findViewById(R.id.LIIncomePurseAmount);
         final Purse purse = helperPurse.get(cursor.getLong(cursor.getColumnIndex(Income.PURSE_ID)));
-        final Currency currency = helperCurrency.get(purse.getCurrency_id());
+        final Currency currency = helperCurrency.get(purse.getCurrencyId());
         final Double amount = cursor.getDouble(cursor.getColumnIndex(Income.AMOUNT));
         String amountString = String.format(Locale.US, "%.2f", amount);
         amountString += " ";
