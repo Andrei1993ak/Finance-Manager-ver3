@@ -24,6 +24,7 @@ import com.gmail.a93ak.andrei19.finance30.view.Activities.CurrencyActivity;
 import com.gmail.a93ak.andrei19.finance30.view.Activities.ImagesActivity;
 import com.gmail.a93ak.andrei19.finance30.view.Activities.IncomeActivity;
 import com.gmail.a93ak.andrei19.finance30.view.Activities.PurseActivity;
+import com.gmail.a93ak.andrei19.finance30.view.Activities.ReportsActivity;
 import com.gmail.a93ak.andrei19.finance30.view.Activities.TransferActivity;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -75,6 +76,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             case R.id.tvTransfers:
                 startActivity(new Intent(this, TransferActivity.class));
                 break;
+            case R.id.tvReports:
+                startActivity(new Intent(this, ReportsActivity.class));
         }
     }
 

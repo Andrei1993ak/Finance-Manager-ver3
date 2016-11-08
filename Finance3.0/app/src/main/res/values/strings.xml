@@ -44,4 +44,7 @@
     <string name="unpossibleToDeletePurse">Unpossible to delete usable purse</string>
     <string name="hasChilds">First delete all childs!</string>
     <string name="categoryUsable">This category are used!</string>
+    <string name="report3">report3</string>
+    <string name="costsByCategories">Costs by Categories</string>
+    <string name="incomesByCategories">Incomes by categories</string>
 </resources>

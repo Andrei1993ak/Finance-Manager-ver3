@@ -43,6 +43,7 @@
         <activity android:name=".view.Activities.TransferActivity"/>
         <activity android:name=".view.addEditActivities.TransferAddActivity"/>
         <activity android:name=".view.addEditActivities.TransferEditActivity"/>
+        <activity android:name=".view.Activities.ReportsActivity"/>
 
     </application>
 

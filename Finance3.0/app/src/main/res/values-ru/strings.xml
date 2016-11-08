@@ -44,4 +44,7 @@
     <string name="unpossibleToDeletePurse">Невозможнно удалить используемый кошелек!</string>
     <string name="categoryUsable">Невозможно удалить используемую категорию!</string>
     <string name="hasChilds">Сначала удалите дочерние категории!</string>
+    <string name="report3">Отчёт3</string>
+    <string name="costsByCategories">Расходы по категориям</string>
+    <string name="incomesByCategories">Доходы по категориям</string>
 </resources>
