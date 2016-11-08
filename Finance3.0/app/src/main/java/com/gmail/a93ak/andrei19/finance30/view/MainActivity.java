@@ -8,24 +8,19 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 
 import com.gmail.a93ak.andrei19.finance30.R;
-import com.gmail.a93ak.andrei19.finance30.control.ItemsTouchHeplers.RecViewPursesSwissHelper;
 import com.gmail.a93ak.andrei19.finance30.control.Loaders.PurseCursorLoader;
 import com.gmail.a93ak.andrei19.finance30.control.adapters.PursesRecycleViewAdapter;
-import com.gmail.a93ak.andrei19.finance30.model.dbHelpers.DBHelperCost;
-import com.gmail.a93ak.andrei19.finance30.model.dbHelpers.DBHelperIncome;
-import com.gmail.a93ak.andrei19.finance30.model.dbHelpers.DBHelperTransfer;
-import com.gmail.a93ak.andrei19.finance30.view.Activities.CategoryStartingActivity;
-import com.gmail.a93ak.andrei19.finance30.view.Activities.CostActivity;
-import com.gmail.a93ak.andrei19.finance30.view.Activities.CurrencyActivity;
-import com.gmail.a93ak.andrei19.finance30.view.Activities.ImagesActivity;
-import com.gmail.a93ak.andrei19.finance30.view.Activities.IncomeActivity;
-import com.gmail.a93ak.andrei19.finance30.view.Activities.PurseActivity;
-import com.gmail.a93ak.andrei19.finance30.view.Activities.ReportsActivity;
-import com.gmail.a93ak.andrei19.finance30.view.Activities.TransferActivity;
+import com.gmail.a93ak.andrei19.finance30.view.activities.CategoryStartingActivity;
+import com.gmail.a93ak.andrei19.finance30.view.activities.CostActivity;
+import com.gmail.a93ak.andrei19.finance30.view.activities.CurrencyActivity;
+import com.gmail.a93ak.andrei19.finance30.view.activities.ImagesActivity;
+import com.gmail.a93ak.andrei19.finance30.view.activities.IncomeActivity;
+import com.gmail.a93ak.andrei19.finance30.view.activities.PurseActivity;
+import com.gmail.a93ak.andrei19.finance30.view.activities.ReportsActivity;
+import com.gmail.a93ak.andrei19.finance30.view.activities.TransferActivity;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
     public static final int LOADER_ID = 0;

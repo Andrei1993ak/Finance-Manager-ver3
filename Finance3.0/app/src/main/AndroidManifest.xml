@@ -20,30 +20,31 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.Activities.CurrencyActivity" />
+        <activity android:name=".view.activities.CurrencyActivity" />
         <activity android:name=".view.addEditActivities.CurrencyAddActivity" />
         <activity android:name=".view.addEditActivities.CurrencyEditActivity" />
-        <activity android:name=".view.Activities.PurseActivity" />
+        <activity android:name=".view.activities.PurseActivity" />
         <activity android:name=".view.addEditActivities.PurseAddActivity" />
         <activity android:name=".view.addEditActivities.PurseEditActivity" />
-        <activity android:name=".view.Activities.CategoryStartingActivity" />
-        <activity android:name=".view.Activities.CategoryIncomeActivity" />
-        <activity android:name=".view.Activities.CategoryCostActivity" />
+        <activity android:name=".view.activities.CategoryStartingActivity" />
+        <activity android:name=".view.activities.CategoryIncomeActivity" />
+        <activity android:name=".view.activities.CategoryCostActivity" />
         <activity android:name=".view.addEditActivities.IncomeCategoryAddActivity" />
         <activity android:name=".view.addEditActivities.CostCategoryAddActivity" />
         <activity android:name=".view.addEditActivities.IncomeCategoryEditActivity" />
         <activity android:name=".view.addEditActivities.CostCategoryEditActivity" />
-        <activity android:name=".view.Activities.ImagesActivity" />
-        <activity android:name=".view.Activities.IncomeActivity" />
+        <activity android:name=".view.activities.ImagesActivity" />
+        <activity android:name=".view.activities.IncomeActivity" />
         <activity android:name=".view.addEditActivities.IncomeAddActivity" />
         <activity android:name=".view.addEditActivities.IncomeEditActivity" />
-        <activity android:name=".view.Activities.CostActivity"/>
+        <activity android:name=".view.activities.CostActivity"/>
         <activity android:name=".view.addEditActivities.CostAddActivity"/>
         <activity android:name=".view.addEditActivities.CostEditActivity" />
-        <activity android:name=".view.Activities.TransferActivity"/>
+        <activity android:name=".view.activities.TransferActivity"/>
         <activity android:name=".view.addEditActivities.TransferAddActivity"/>
         <activity android:name=".view.addEditActivities.TransferEditActivity"/>
-        <activity android:name=".view.Activities.ReportsActivity"/>
+        <activity android:name=".view.activities.ReportsActivity"/>
+        <activity android:name=".view.reports.ReportIncomePieActivity"/>
 
     </application>
 

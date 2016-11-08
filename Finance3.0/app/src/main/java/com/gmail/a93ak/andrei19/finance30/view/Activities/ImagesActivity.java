@@ -1,4 +1,4 @@
-package com.gmail.a93ak.andrei19.finance30.view.Activities;
+package com.gmail.a93ak.andrei19.finance30.view.activities;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 
 import android.support.v7.app.AppCompatActivity;
-import com.gmail.a93ak.andrei19.finance30.App;
+
 import com.gmail.a93ak.andrei19.finance30.R;
 import com.gmail.a93ak.andrei19.finance30.util.UniversalLoader.Loaders.BitmapLoader;
 

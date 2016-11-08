@@ -1,4 +1,4 @@
-package com.gmail.a93ak.andrei19.finance30.view.Activities;
+package com.gmail.a93ak.andrei19.finance30.view.activities;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
