@@ -5,138 +5,145 @@
     android:background="@android:color/darker_gray"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:background="@drawable/shape"
-        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tvPurse"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@mipmap/ic_purses"
-            android:duplicateParentState="true"
-            android:onClick="selectCategory"
-            android:text="@string/purses"
-            android:textSize="40sp" />
-
-        <View
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@android:color/darker_gray" />
+            android:layout_weight="3"
+            android:background="@drawable/shape"
+            android:layout_margin="10dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/tvPurse"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@mipmap/ic_purses"
+                    android:duplicateParentState="true"
+                    android:onClick="selectCategory"
+                    android:text="@string/purses"
+                    android:textSize="40sp" />
 
-        <TextView
-            android:id="@+id/tvIncomes"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@mipmap/ic_income"
-            android:duplicateParentState="true"
-            android:onClick="selectCategory"
-            android:text="@string/incomes"
-            android:textSize="40sp" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/darker_gray" />
 
-        <View
+                <TextView
+                    android:id="@+id/tvIncomes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@mipmap/ic_income"
+                    android:duplicateParentState="true"
+                    android:onClick="selectCategory"
+                    android:text="@string/incomes"
+                    android:textSize="40sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/darker_gray" />
+
+                <TextView
+                    android:id="@+id/tvCosts"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@mipmap/ic_costs"
+                    android:duplicateParentState="true"
+                    android:onClick="selectCategory"
+                    android:text="@string/costs"
+                    android:textSize="40sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/darker_gray" />
+
+                <TextView
+                    android:id="@+id/tvTransfers"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@mipmap/ic_transfers"
+                    android:duplicateParentState="true"
+                    android:onClick="selectCategory"
+                    android:text="@string/transfers"
+                    android:textSize="40sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/darker_gray" />
+
+                <TextView
+                    android:id="@+id/tvReports"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@mipmap/ic_reports"
+                    android:duplicateParentState="true"
+                    android:onClick="selectCategory"
+                    android:text="@string/reports"
+                    android:textSize="40sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/darker_gray" />
+
+                <TextView
+                    android:id="@+id/tvCategories"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@mipmap/ic_categories"
+                    android:duplicateParentState="true"
+                    android:onClick="selectCategory"
+                    android:text="@string/categories"
+                    android:textSize="40sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/darker_gray" />
+
+                <TextView
+                    android:id="@+id/tvCurrency"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@mipmap/ic_currencies"
+                    android:duplicateParentState="true"
+                    android:onClick="selectCategory"
+                    android:text="@string/currencies"
+                    android:textSize="40sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/darker_gray" />
+
+                <TextView
+                    android:id="@+id/tvSettings"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@mipmap/ic_settings"
+                    android:duplicateParentState="true"
+                    android:onClick="selectCategory"
+                    android:text="@string/settings"
+                    android:textSize="40sp" />
+
+            </LinearLayout>
+        </ScrollView>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@android:color/darker_gray" />
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/shape"
+            android:layout_weight="1"/>
 
-        <TextView
-            android:id="@+id/tvCosts"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@mipmap/ic_costs"
-            android:duplicateParentState="true"
-            android:onClick="selectCategory"
-            android:text="@string/costs"
-            android:textSize="40sp" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@android:color/darker_gray" />
-
-        <TextView
-            android:id="@+id/tvTransfers"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@mipmap/ic_transfers"
-            android:duplicateParentState="true"
-            android:onClick="selectCategory"
-            android:text="@string/transfers"
-            android:textSize="40sp" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@android:color/darker_gray" />
-
-        <TextView
-            android:id="@+id/tvReports"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@mipmap/ic_reports"
-            android:duplicateParentState="true"
-            android:onClick="selectCategory"
-            android:text="@string/reports"
-            android:textSize="40sp" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@android:color/darker_gray" />
-
-        <TextView
-            android:id="@+id/tvCategories"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@mipmap/ic_categories"
-            android:duplicateParentState="true"
-            android:onClick="selectCategory"
-            android:text="@string/categories"
-            android:textSize="40sp" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@android:color/darker_gray" />
-
-        <TextView
-            android:id="@+id/tvCurrency"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@mipmap/ic_currencies"
-            android:duplicateParentState="true"
-            android:onClick="selectCategory"
-            android:text="@string/currencies"
-            android:textSize="40sp" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@android:color/darker_gray" />
-
-        <TextView
-            android:id="@+id/tvSettings"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@mipmap/ic_settings"
-            android:duplicateParentState="true"
-            android:onClick="selectCategory"
-            android:text="@string/settings"
-            android:textSize="40sp" />
-
-    </LinearLayout>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/shape"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="10dp" />
 
 </LinearLayout>
 

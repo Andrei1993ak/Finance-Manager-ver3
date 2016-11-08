@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.gmail.a93ak.andrei19.finance30.App;
 import com.gmail.a93ak.andrei19.finance30.R;
 import com.gmail.a93ak.andrei19.finance30.control.Executors.CostCategoryExecutor;
 import com.gmail.a93ak.andrei19.finance30.control.Executors.PurseExecutor;
@@ -30,7 +31,6 @@ import com.gmail.a93ak.andrei19.finance30.model.TableQueryGenerator;
 import com.gmail.a93ak.andrei19.finance30.model.models.Cost;
 import com.gmail.a93ak.andrei19.finance30.model.models.CostCategory;
 import com.gmail.a93ak.andrei19.finance30.model.models.Purse;
-import com.gmail.a93ak.andrei19.finance30.view.Activities.CostActivity;
 import com.google.common.io.Files;
 
 import java.io.File;
@@ -163,7 +163,7 @@ public class CostAddActivity extends AppCompatActivity implements OnTaskComplete
     }
 
     public void addPhoto(final View view) {
-        final File file = new File(CostActivity.TEMP_PATH);
+        final File file = new File(App.getTempImagePath());
         final Uri outputFileUri = Uri.fromFile(file);
         final Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
@@ -231,13 +231,13 @@ public class CostAddActivity extends AppCompatActivity implements OnTaskComplete
 
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
-            photo = BitmapFactory.decodeFile(CostActivity.TEMP_PATH);
+            photo = BitmapFactory.decodeFile(App.getTempImagePath());
             final ImageView view = (ImageView) findViewById(R.id.new_cost_photo);
             view.setImageBitmap(photo);
-            final String path = CostActivity.INTERNAL_PATH + String.valueOf(DBHelper.getInstance(this).getNextId()) + ".jpg";
+            final String path = App.getImagePath(DBHelper.getInstance(this).getNextId());
             final File toFile = new File(path);
             try {
-                Files.move(new File(CostActivity.TEMP_PATH), toFile);
+                Files.move(new File(App.getTempImagePath()), toFile);
             } catch (final IOException e) {
                 photo = null;
             }

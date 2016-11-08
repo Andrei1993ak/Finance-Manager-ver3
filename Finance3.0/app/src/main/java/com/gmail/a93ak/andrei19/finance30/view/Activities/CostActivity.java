@@ -21,6 +21,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.gmail.a93ak.andrei19.finance30.App;
 import com.gmail.a93ak.andrei19.finance30.R;
 import com.gmail.a93ak.andrei19.finance30.control.Executors.CostExecutor;
 import com.gmail.a93ak.andrei19.finance30.control.Loaders.CostCursorLoader;
@@ -49,9 +50,6 @@ public class CostActivity extends AppCompatActivity implements LoaderManager.Loa
 
     private static final int MAIN_LOADER_ID = 0;
 
-    public static final String TEMP_PATH = "/storage/emulated/0/temp.jpg";
-    public static final String INTERNAL_PATH = "/data/data/com.gmail.a93ak.andrei19.finance30/files/images/";
-
     private CostCursorAdapter costCursorAdapter;
     private RequestHolder<Cost> requestHolder;
 
@@ -64,7 +62,7 @@ public class CostActivity extends AppCompatActivity implements LoaderManager.Loa
         final ListView costListView = (ListView) findViewById(R.id.costListView);
         costListView.setAdapter(costCursorAdapter);
         registerForContextMenu(costListView);
-        getSupportLoaderManager().initLoader(MAIN_LOADER_ID, null, this);
+        getSupportLoaderManager().restartLoader(MAIN_LOADER_ID, null, this);
     }
 
     public void addCost(final View view) {
@@ -97,7 +95,7 @@ public class CostActivity extends AppCompatActivity implements LoaderManager.Loa
                 if (cost.getPhoto() == 0) {
                     Toast.makeText(this, R.string.noPhoto, Toast.LENGTH_LONG).show();
                 } else if (cost.getPhoto() == 1) {
-                    final String filePath = INTERNAL_PATH + String.valueOf(info.id) + ".jpg";
+                    final String filePath = App.getImagePath(info.id);
                     final File file = new File(filePath);
                     final Dialog builder = new Dialog(this);
                     builder.requestWindowFeature(Window.FEATURE_NO_TITLE);

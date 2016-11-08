@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.view.ContextMenu;
 import android.view.MenuItem;
@@ -18,11 +17,11 @@ import android.widget.Toast;
 import com.gmail.a93ak.andrei19.finance30.R;
 import com.gmail.a93ak.andrei19.finance30.control.Executors.PurseExecutor;
 import com.gmail.a93ak.andrei19.finance30.control.Loaders.PurseCursorLoader;
+import com.gmail.a93ak.andrei19.finance30.control.adapters.PurseCursorAdapter;
 import com.gmail.a93ak.andrei19.finance30.control.base.OnTaskCompleted;
 import com.gmail.a93ak.andrei19.finance30.control.base.RequestHolder;
 import com.gmail.a93ak.andrei19.finance30.control.base.Result;
 import com.gmail.a93ak.andrei19.finance30.model.TableQueryGenerator;
-import com.gmail.a93ak.andrei19.finance30.model.dbHelpers.DBHelperPurse;
 import com.gmail.a93ak.andrei19.finance30.model.models.Purse;
 import com.gmail.a93ak.andrei19.finance30.view.addEditActivities.PurseAddActivity;
 import com.gmail.a93ak.andrei19.finance30.view.addEditActivities.PurseEditActivity;
@@ -37,7 +36,7 @@ public class PurseActivity extends AppCompatActivity implements LoaderManager.Lo
 
     public static final int MAIN_LOADER_ID = 0;
 
-    private SimpleCursorAdapter simpleCursorAdapter;
+    private PurseCursorAdapter purseCursorAdapter;
     private RequestHolder<Purse> requestHolder;
 
     @Override
@@ -46,12 +45,10 @@ public class PurseActivity extends AppCompatActivity implements LoaderManager.Lo
         setContentView(R.layout.purse_activity);
         requestHolder = new RequestHolder<>();
         final ListView purseListVIew = (ListView) findViewById(R.id.purseListView);
-        final String[] from = new String[]{Purse.NAME, Purse.AMOUNT, DBHelperPurse.CURRENCY_NAME};
-        final int[] to = new int[]{R.id.purseName, R.id.purseAmount, R.id.purseCurrency};
-        simpleCursorAdapter = new SimpleCursorAdapter(this, R.layout.purse_listitem, null, from, to, 0);
-        purseListVIew.setAdapter(simpleCursorAdapter);
+        purseCursorAdapter = new PurseCursorAdapter(this, null);
+        purseListVIew.setAdapter(purseCursorAdapter);
         registerForContextMenu(purseListVIew);
-        getSupportLoaderManager().initLoader(MAIN_LOADER_ID, null, this);
+        getSupportLoaderManager().restartLoader(MAIN_LOADER_ID, null, this);
     }
 
     public void addPurse(final View view) {
@@ -108,12 +105,12 @@ public class PurseActivity extends AppCompatActivity implements LoaderManager.Lo
 
     @Override
     public void onLoadFinished(final Loader<Cursor> loader, final Cursor data) {
-        simpleCursorAdapter.swapCursor(data);
+        purseCursorAdapter.swapCursor(data);
     }
 
     @Override
     public void onLoaderReset(final Loader<Cursor> loader) {
-        simpleCursorAdapter.swapCursor(null);
+        purseCursorAdapter.swapCursor(null);
     }
 
     @Override

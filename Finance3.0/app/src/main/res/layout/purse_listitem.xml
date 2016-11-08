@@ -8,18 +8,17 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:id="@+id/purseCurrency"
-        android:text="EUR"
         android:paddingBottom="10dp"
         android:paddingRight="10dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="123,45"
         android:paddingBottom="10dp"
         android:paddingRight="10dp"
         android:id="@+id/purseAmount"

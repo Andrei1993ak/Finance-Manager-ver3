@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.gmail.a93ak.andrei19.finance30.App;
 import com.gmail.a93ak.andrei19.finance30.R;
 import com.gmail.a93ak.andrei19.finance30.control.Executors.CostCategoryExecutor;
 import com.gmail.a93ak.andrei19.finance30.control.Executors.CostExecutor;
@@ -31,7 +32,6 @@ import com.gmail.a93ak.andrei19.finance30.model.models.Cost;
 import com.gmail.a93ak.andrei19.finance30.model.models.CostCategory;
 import com.gmail.a93ak.andrei19.finance30.model.models.Purse;
 import com.gmail.a93ak.andrei19.finance30.util.UniversalLoader.Loaders.BitmapLoader;
-import com.gmail.a93ak.andrei19.finance30.view.Activities.CostActivity;
 import com.google.common.io.Files;
 
 import java.io.File;
@@ -165,7 +165,7 @@ public class CostEditActivity extends AppCompatActivity implements OnTaskComplet
     }
 
     public void editPhoto(final View view) {
-        final File file = new File(CostActivity.TEMP_PATH);
+        final File file = new File(App.getTempImagePath());
         final Uri outputFileUri = Uri.fromFile(file);
         final Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
@@ -181,7 +181,7 @@ public class CostEditActivity extends AppCompatActivity implements OnTaskComplet
                 editCostAmount.setText(String.valueOf(cost.getAmount()));
                 editCostDate.setText(dateFormatter.format(cost.getDate()));
                 if (cost.getPhoto() == 1) {
-                    final String filePath = CostActivity.INTERNAL_PATH + String.valueOf(id) + ".jpg";
+                    final String filePath = App.getImagePath(id);
                     final File file = new File(filePath);
                     final BitmapLoader bitmapLoader = BitmapLoader.getInstance(this);
                     try {
@@ -278,13 +278,13 @@ public class CostEditActivity extends AppCompatActivity implements OnTaskComplet
 
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
-            photo = BitmapFactory.decodeFile(CostActivity.TEMP_PATH);
+            photo = BitmapFactory.decodeFile(App.getTempImagePath());
             final ImageView view = (ImageView) findViewById(R.id.edit_cost_photo);
             view.setImageBitmap(photo);
-            final String path = CostActivity.INTERNAL_PATH + String.valueOf(id) + ".jpg";
+            final String path = App.getImagePath(id);
             final File toFile = new File(path);
             try {
-                Files.move(new File(CostActivity.TEMP_PATH), toFile);
+                Files.move(new File(App.getTempImagePath()), toFile);
             } catch (final IOException e) {
                 photo = null;
             }

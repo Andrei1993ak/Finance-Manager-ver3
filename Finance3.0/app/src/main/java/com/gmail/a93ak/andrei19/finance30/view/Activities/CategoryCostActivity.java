@@ -24,7 +24,6 @@ import com.gmail.a93ak.andrei19.finance30.control.base.Result;
 import com.gmail.a93ak.andrei19.finance30.model.TableQueryGenerator;
 import com.gmail.a93ak.andrei19.finance30.model.dbHelpers.DBHelperCategoryCost;
 import com.gmail.a93ak.andrei19.finance30.model.models.CostCategory;
-import com.gmail.a93ak.andrei19.finance30.model.models.Income;
 import com.gmail.a93ak.andrei19.finance30.view.addEditActivities.CostCategoryAddActivity;
 import com.gmail.a93ak.andrei19.finance30.view.addEditActivities.CostCategoryEditActivity;
 

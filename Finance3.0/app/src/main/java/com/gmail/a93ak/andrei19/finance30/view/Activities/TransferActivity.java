@@ -47,7 +47,7 @@ public class TransferActivity extends AppCompatActivity implements LoaderManager
         final ListView transferListView = (ListView) findViewById(R.id.transferListView);
         transferListView.setAdapter(transferCursorAdapter);
         registerForContextMenu(transferListView);
-        getSupportLoaderManager().initLoader(MAIN_LOADER_ID, null, this);
+        getSupportLoaderManager().restartLoader(MAIN_LOADER_ID, null, this);
     }
 
     public void addTransfer(final View view) {

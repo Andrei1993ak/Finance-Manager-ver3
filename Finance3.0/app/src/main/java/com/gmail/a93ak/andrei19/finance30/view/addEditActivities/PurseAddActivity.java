@@ -63,7 +63,7 @@ public class PurseAddActivity extends AppCompatActivity implements OnTaskComplet
                 flag = false;
             } else {
                 purse.setAmount(amount);
-                newPurseAmount.setBackground(ContextCompat.getDrawable(this, R.drawable.shape_red_field));
+                newPurseAmount.setBackground(ContextCompat.getDrawable(this, R.drawable.shape_green_field));
             }
         } catch (final NumberFormatException e) {
             newPurseAmount.setBackground(ContextCompat.getDrawable(this, R.drawable.shape_red_field));

@@ -47,7 +47,7 @@ public class IncomeActivity extends AppCompatActivity implements LoaderManager.L
         final ListView incomeListView = (ListView) findViewById(R.id.incomeListView);
         incomeListView.setAdapter(incomeCursorAdapter);
         registerForContextMenu(incomeListView);
-        getSupportLoaderManager().initLoader(MAIN_LOADER_ID, null, this);
+        getSupportLoaderManager().restartLoader(MAIN_LOADER_ID, null, this);
     }
 
     public void addIncome(final View view) {

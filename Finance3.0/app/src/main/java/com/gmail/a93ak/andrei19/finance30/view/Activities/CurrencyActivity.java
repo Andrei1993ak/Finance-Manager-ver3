@@ -49,7 +49,7 @@ public class CurrencyActivity extends AppCompatActivity implements LoaderManager
         final ListView lvCurrencies = (ListView) findViewById(R.id.currencyListView);
         lvCurrencies.setAdapter(simpleCursorAdapter);
         registerForContextMenu(lvCurrencies);
-        getSupportLoaderManager().initLoader(MAIN_LOADER_ID, null, this);
+        getSupportLoaderManager().restartLoader(MAIN_LOADER_ID, null, this);
     }
 
     public void addCurrency(final View view) {
