@@ -158,7 +158,25 @@ public class DBHelperIncome implements DBHelperForModel<Income> {
     }
 
     public List<Income> getAllToListByPurseId(final long id) {
-        return null;
+        final List<Income> incomeList = new ArrayList<>();
+        final String selectQuery = "SELECT * FROM " + TableQueryGenerator.getTableName(Income.class) +
+                " WHERE " + Income.PURSE_ID + " = " + id;
+        final SQLiteDatabase db = dbHelper.getReadableDatabase();
+        final Cursor cursor = db.rawQuery(selectQuery, null);
+        if (cursor.moveToFirst()) {
+            do {
+                final Income income = new Income();
+                income.setId(cursor.getLong(cursor.getColumnIndex(Income.ID)));
+                income.setName(cursor.getString(cursor.getColumnIndex(Income.NAME)));
+                income.setPurseId(cursor.getLong(cursor.getColumnIndex(Income.PURSE_ID)));
+                income.setAmount(cursor.getDouble(cursor.getColumnIndex(Income.AMOUNT)));
+                income.setCategoryId(cursor.getLong(cursor.getColumnIndex(Income.CATEGORY_ID)));
+                income.setDate(cursor.getLong(cursor.getColumnIndex(Income.DATE)));
+                incomeList.add(income);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return incomeList;
     }
 
     public List<Income> getAllToListByDates(final long from, long to) {
