@@ -1,4 +1,4 @@
-package com.gmail.a93ak.andrei19.finance30.control.Loaders;
+package com.gmail.a93ak.andrei19.finance30.control.loaders;
 
 import android.content.Context;
 import android.database.Cursor;

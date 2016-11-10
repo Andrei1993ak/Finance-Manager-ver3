@@ -38,7 +38,6 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:text="@string/incomes"
-        android:textColor="@android:color/black"
         android:textIsSelectable="false"
         android:textSize="30sp" />
 

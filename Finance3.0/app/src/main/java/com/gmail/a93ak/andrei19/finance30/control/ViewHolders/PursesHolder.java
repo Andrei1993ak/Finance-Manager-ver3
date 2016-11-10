@@ -1,4 +1,4 @@
-package com.gmail.a93ak.andrei19.finance30.control.ViewHolders;
+package com.gmail.a93ak.andrei19.finance30.control.viewHolders;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;

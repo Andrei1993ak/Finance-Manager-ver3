@@ -1,4 +1,4 @@
-package com.gmail.a93ak.andrei19.finance30.control.Executors;
+package com.gmail.a93ak.andrei19.finance30.control.executors;
 
 import android.database.Cursor;
 
@@ -8,7 +8,7 @@ import com.gmail.a93ak.andrei19.finance30.control.base.Result;
 import com.gmail.a93ak.andrei19.finance30.model.dbHelpers.DBHelperCost;
 import com.gmail.a93ak.andrei19.finance30.model.models.Cost;
 import com.gmail.a93ak.andrei19.finance30.util.ContextHolder;
-import com.gmail.a93ak.andrei19.finance30.util.UniversalLoader.Loaders.BitmapLoader;
+import com.gmail.a93ak.andrei19.finance30.util.universalLoader.Loaders.BitmapLoader;
 
 import java.io.File;
 import java.net.MalformedURLException;

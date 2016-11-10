@@ -21,8 +21,8 @@ import android.widget.TextView;
 
 import com.gmail.a93ak.andrei19.finance30.App;
 import com.gmail.a93ak.andrei19.finance30.R;
-import com.gmail.a93ak.andrei19.finance30.control.Executors.CostCategoryExecutor;
-import com.gmail.a93ak.andrei19.finance30.control.Executors.PurseExecutor;
+import com.gmail.a93ak.andrei19.finance30.control.executors.CostCategoryExecutor;
+import com.gmail.a93ak.andrei19.finance30.control.executors.PurseExecutor;
 import com.gmail.a93ak.andrei19.finance30.control.base.OnTaskCompleted;
 import com.gmail.a93ak.andrei19.finance30.control.base.RequestHolder;
 import com.gmail.a93ak.andrei19.finance30.control.base.Result;

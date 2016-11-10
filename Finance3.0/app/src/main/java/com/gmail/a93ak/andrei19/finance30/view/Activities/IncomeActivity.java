@@ -14,8 +14,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.gmail.a93ak.andrei19.finance30.R;
-import com.gmail.a93ak.andrei19.finance30.control.Executors.IncomeExecutor;
-import com.gmail.a93ak.andrei19.finance30.control.Loaders.IncomeCursorLoader;
+import com.gmail.a93ak.andrei19.finance30.control.executors.IncomeExecutor;
+import com.gmail.a93ak.andrei19.finance30.control.loaders.IncomeCursorLoader;
 import com.gmail.a93ak.andrei19.finance30.control.adapters.IncomeCursorAdapter;
 import com.gmail.a93ak.andrei19.finance30.control.base.OnTaskCompleted;
 import com.gmail.a93ak.andrei19.finance30.control.base.RequestHolder;

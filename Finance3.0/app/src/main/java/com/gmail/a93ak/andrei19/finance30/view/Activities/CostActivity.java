@@ -23,8 +23,8 @@ import android.widget.Toast;
 
 import com.gmail.a93ak.andrei19.finance30.App;
 import com.gmail.a93ak.andrei19.finance30.R;
-import com.gmail.a93ak.andrei19.finance30.control.Executors.CostExecutor;
-import com.gmail.a93ak.andrei19.finance30.control.Loaders.CostCursorLoader;
+import com.gmail.a93ak.andrei19.finance30.control.executors.CostExecutor;
+import com.gmail.a93ak.andrei19.finance30.control.loaders.CostCursorLoader;
 import com.gmail.a93ak.andrei19.finance30.control.adapters.CostCursorAdapter;
 import com.gmail.a93ak.andrei19.finance30.control.base.OnTaskCompleted;
 import com.gmail.a93ak.andrei19.finance30.control.base.RequestHolder;
@@ -32,7 +32,7 @@ import com.gmail.a93ak.andrei19.finance30.control.base.Result;
 import com.gmail.a93ak.andrei19.finance30.model.TableQueryGenerator;
 
 import com.gmail.a93ak.andrei19.finance30.model.models.Cost;
-import com.gmail.a93ak.andrei19.finance30.util.UniversalLoader.Loaders.BitmapLoader;
+import com.gmail.a93ak.andrei19.finance30.util.universalLoader.Loaders.BitmapLoader;
 import com.gmail.a93ak.andrei19.finance30.view.addEditActivities.CostAddActivity;
 import com.gmail.a93ak.andrei19.finance30.view.addEditActivities.CostEditActivity;
 

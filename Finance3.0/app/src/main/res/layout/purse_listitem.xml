@@ -4,37 +4,37 @@
     android:layout_height="45dp">
 
     <TextView
+        android:id="@+id/purseCurrency"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:id="@+id/purseCurrency"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:paddingBottom="10dp"
         android:paddingRight="10dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 
     <TextView
+        android:id="@+id/purseAmount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:paddingBottom="10dp"
-        android:paddingRight="10dp"
-        android:id="@+id/purseAmount"
         android:layout_alignParentBottom="true"
         android:layout_toLeftOf="@+id/purseCurrency"
-        android:layout_toStartOf="@+id/purseCurrency" />
+        android:layout_toStartOf="@+id/purseCurrency"
+        android:paddingBottom="10dp"
+        android:paddingRight="10dp"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
+        android:id="@+id/purseName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:id="@+id/purseName"
-        android:clickable="false"
-        android:text="Основной"
-        android:padding="10dp"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true" />
+        android:clickable="false"
+        android:padding="10dp"
+        android:text="Основной"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </RelativeLayout>

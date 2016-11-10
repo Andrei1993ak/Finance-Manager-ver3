@@ -15,8 +15,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.gmail.a93ak.andrei19.finance30.R;
-import com.gmail.a93ak.andrei19.finance30.control.Executors.PurseExecutor;
-import com.gmail.a93ak.andrei19.finance30.control.Loaders.PurseCursorLoader;
+import com.gmail.a93ak.andrei19.finance30.control.executors.PurseExecutor;
+import com.gmail.a93ak.andrei19.finance30.control.loaders.PurseCursorLoader;
 import com.gmail.a93ak.andrei19.finance30.control.adapters.PurseCursorAdapter;
 import com.gmail.a93ak.andrei19.finance30.control.base.OnTaskCompleted;
 import com.gmail.a93ak.andrei19.finance30.control.base.RequestHolder;

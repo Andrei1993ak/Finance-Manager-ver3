@@ -12,23 +12,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
-            android:textStyle="bold"
-            android:textSize="18dp"
             android:paddingLeft="5dp"
             android:text="Зарплата"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textSize="18dp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/LIIncomePurseAmount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
-            android:textSize="18dp"
-            android:textStyle="bold"
             android:paddingRight="5dp"
             android:text="+300 BYN"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@android:color/holo_green_light" />
+            android:textColor="@android:color/holo_green_light"
+            android:textSize="18dp"
+            android:textStyle="bold" />
 
     </TableRow>
 

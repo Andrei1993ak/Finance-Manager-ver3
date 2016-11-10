@@ -29,7 +29,6 @@
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:text="@string/newPurse"
-            android:textColor="@android:color/black"
             android:textIsSelectable="false"
             android:textSize="30sp" />
     </RelativeLayout>
@@ -71,26 +70,25 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/amount"
-                android:textSize="16sp"
-                />
+                android:textSize="16sp" />
 
             <EditText
                 android:id="@+id/new_purse_amount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dp"
-                android:inputType="numberDecimal"
+                android:background="@drawable/shape_green_field"
                 android:ems="10"
-                android:background="@drawable/shape_green_field" />
+                android:inputType="numberDecimal" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:orientation="horizontal"
             android:layout_gravity="bottom"
-            android:gravity="bottom">
+            android:layout_margin="5dp"
+            android:gravity="bottom"
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"

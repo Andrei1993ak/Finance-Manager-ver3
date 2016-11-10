@@ -1,4 +1,4 @@
-package com.gmail.a93ak.andrei19.finance30.control.Executors;
+package com.gmail.a93ak.andrei19.finance30.control.executors;
 
 import android.database.Cursor;
 

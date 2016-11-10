@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.gmail.a93ak.andrei19.finance30.R;
-import com.gmail.a93ak.andrei19.finance30.control.ViewHolders.PursesHolder;
+import com.gmail.a93ak.andrei19.finance30.control.viewHolders.PursesHolder;
 import com.gmail.a93ak.andrei19.finance30.model.dbHelpers.DBHelperPurse;
 import com.gmail.a93ak.andrei19.finance30.model.models.Purse;
 

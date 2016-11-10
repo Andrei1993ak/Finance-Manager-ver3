@@ -1,12 +1,12 @@
-package com.gmail.a93ak.andrei19.finance30.control.ItemsTouchHeplers;
+package com.gmail.a93ak.andrei19.finance30.control.itemsTouchHeplers;
 
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 
-import com.gmail.a93ak.andrei19.finance30.control.Executors.PurseExecutor;
-import com.gmail.a93ak.andrei19.finance30.control.ViewHolders.PursesHolder;
+import com.gmail.a93ak.andrei19.finance30.control.executors.PurseExecutor;
+import com.gmail.a93ak.andrei19.finance30.control.viewHolders.PursesHolder;
 import com.gmail.a93ak.andrei19.finance30.control.base.OnTaskCompleted;
 import com.gmail.a93ak.andrei19.finance30.control.base.RequestHolder;
 import com.gmail.a93ak.andrei19.finance30.control.base.Result;

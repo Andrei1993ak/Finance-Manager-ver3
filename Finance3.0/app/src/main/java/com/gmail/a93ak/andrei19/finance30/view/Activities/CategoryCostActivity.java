@@ -15,8 +15,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gmail.a93ak.andrei19.finance30.R;
-import com.gmail.a93ak.andrei19.finance30.control.Executors.CostCategoryExecutor;
-import com.gmail.a93ak.andrei19.finance30.control.Loaders.CostCategoryCursorLoader;
+import com.gmail.a93ak.andrei19.finance30.control.executors.CostCategoryExecutor;
+import com.gmail.a93ak.andrei19.finance30.control.loaders.CostCategoryCursorLoader;
 import com.gmail.a93ak.andrei19.finance30.control.adapters.ExpListAdapter;
 import com.gmail.a93ak.andrei19.finance30.control.base.OnTaskCompleted;
 import com.gmail.a93ak.andrei19.finance30.control.base.RequestHolder;

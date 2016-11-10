@@ -1,4 +1,4 @@
-package com.gmail.a93ak.andrei19.finance30.util.UniversalLoader;
+package com.gmail.a93ak.andrei19.finance30.util.universalLoader;
 
 import android.content.Context;
 

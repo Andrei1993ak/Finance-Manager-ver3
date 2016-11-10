@@ -15,16 +15,16 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.gmail.a93ak.andrei19.finance30.R;
-import com.gmail.a93ak.andrei19.finance30.control.Executors.PurseExecutor;
-import com.gmail.a93ak.andrei19.finance30.control.Executors.TransferExecutor;
+import com.gmail.a93ak.andrei19.finance30.control.executors.PurseExecutor;
+import com.gmail.a93ak.andrei19.finance30.control.executors.TransferExecutor;
 import com.gmail.a93ak.andrei19.finance30.control.base.OnTaskCompleted;
 import com.gmail.a93ak.andrei19.finance30.control.base.RequestHolder;
 import com.gmail.a93ak.andrei19.finance30.control.base.Result;
 import com.gmail.a93ak.andrei19.finance30.model.TableQueryGenerator;
 import com.gmail.a93ak.andrei19.finance30.model.models.Purse;
 import com.gmail.a93ak.andrei19.finance30.model.models.Transfer;
-import com.gmail.a93ak.andrei19.finance30.util.TransferRateParser.OnParseCompleted;
-import com.gmail.a93ak.andrei19.finance30.util.TransferRateParser.RateJsonParser;
+import com.gmail.a93ak.andrei19.finance30.util.transferRateParser.OnParseCompleted;
+import com.gmail.a93ak.andrei19.finance30.util.transferRateParser.RateJsonParser;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

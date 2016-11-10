@@ -7,7 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.gmail.a93ak.andrei19.finance30.R;
-import com.gmail.a93ak.andrei19.finance30.view.reports.ReportIncomePieActivity;
+import com.gmail.a93ak.andrei19.finance30.model.reportModels.PieChartItem;
+import com.gmail.a93ak.andrei19.finance30.view.reports.PieChartActivity;
 
 public class ReportsActivity extends AppCompatActivity {
 
@@ -20,14 +21,18 @@ public class ReportsActivity extends AppCompatActivity {
     public void selectReport(final View view) {
         switch (view.getId()) {
             case R.id.reportIncomesPie:
-                startActivity(new Intent(this, ReportIncomePieActivity.class));
+                Intent intent = new Intent(this, PieChartActivity.class);
+                intent.putExtra(PieChartItem.TYPE,true);
+                startActivity(intent);
                 break;
             case R.id.reportCostPie:
-                startActivity(new Intent(this, ReportIncomePieActivity.class));
+                intent = new Intent(this, PieChartActivity.class);
+                intent.putExtra(PieChartItem.TYPE,false);
+                startActivity(intent);
                 break;
-            case R.id.report3:
-                startActivity(new Intent(this, ReportIncomePieActivity.class));
-                break;
+//            case R.id.report3:
+//                startActivity(new Intent(this, PieChartActivity.class));
+//                break;
         }
     }
 }

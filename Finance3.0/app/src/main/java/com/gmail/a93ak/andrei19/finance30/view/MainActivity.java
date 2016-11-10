@@ -11,7 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.gmail.a93ak.andrei19.finance30.R;
-import com.gmail.a93ak.andrei19.finance30.control.Loaders.PurseCursorLoader;
+import com.gmail.a93ak.andrei19.finance30.control.loaders.PurseCursorLoader;
 import com.gmail.a93ak.andrei19.finance30.control.adapters.PursesRecycleViewAdapter;
 import com.gmail.a93ak.andrei19.finance30.view.activities.CategoryStartingActivity;
 import com.gmail.a93ak.andrei19.finance30.view.activities.CostActivity;
@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     PursesRecycleViewAdapter adapter;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
@@ -65,9 +65,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             case R.id.tvCosts:
                 startActivity(new Intent(this, CostActivity.class));
                 break;
-            case R.id.tvSettings:
-                startActivity(new Intent(this, ImagesActivity.class));
-                break;
             case R.id.tvTransfers:
                 startActivity(new Intent(this, TransferActivity.class));
                 break;
@@ -77,19 +74,19 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
     @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+    public Loader<Cursor> onCreateLoader(final int id, final Bundle args) {
         return new PurseCursorLoader(this);
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+    public void onLoadFinished(final Loader<Cursor> loader, final Cursor data) {
         adapter = new PursesRecycleViewAdapter(data, this);
         recyclerView.swapAdapter(adapter, true);
 
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
+    public void onLoaderReset(final Loader<Cursor> loader) {
         recyclerView.swapAdapter(null, true);
     }
 

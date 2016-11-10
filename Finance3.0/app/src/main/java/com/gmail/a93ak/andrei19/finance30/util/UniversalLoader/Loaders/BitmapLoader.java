@@ -1,11 +1,11 @@
-package com.gmail.a93ak.andrei19.finance30.util.UniversalLoader.Loaders;
+package com.gmail.a93ak.andrei19.finance30.util.universalLoader.Loaders;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.widget.ImageView;
 
-import com.gmail.a93ak.andrei19.finance30.util.UniversalLoader.UniversalLoader;
+import com.gmail.a93ak.andrei19.finance30.util.universalLoader.UniversalLoader;
 
 import java.io.File;
 import java.io.FileInputStream;

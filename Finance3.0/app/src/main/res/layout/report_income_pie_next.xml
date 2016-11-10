@@ -5,24 +5,8 @@
     android:background="@color/colorPrimaryDark"
     android:orientation="vertical">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_weight="0.6">
-
-        <android.support.v7.widget.AppCompatSpinner
-            android:id="@+id/pursesNames"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal" />
-    </FrameLayout>
-
-
     <LinearLayout
-        android:id="@+id/chart"
+        android:id="@+id/chart_next"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_margin="10dp"
@@ -32,7 +16,7 @@
         android:orientation="vertical" />
 
     <ListView
-        android:id="@+id/pieListView"
+        android:id="@+id/pieListView_next"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginBottom="10dp"

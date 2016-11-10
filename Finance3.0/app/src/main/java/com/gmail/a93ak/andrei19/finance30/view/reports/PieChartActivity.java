@@ -1,6 +1,6 @@
 package com.gmail.a93ak.andrei19.finance30.view.reports;
 
-import android.graphics.Color;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
@@ -14,14 +14,15 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.gmail.a93ak.andrei19.finance30.R;
-import com.gmail.a93ak.andrei19.finance30.control.Executors.PurseExecutor;
-import com.gmail.a93ak.andrei19.finance30.control.Loaders.PieReportLoader;
-import com.gmail.a93ak.andrei19.finance30.control.adapters.PieIncomeAdapter;
+import com.gmail.a93ak.andrei19.finance30.control.adapters.PieChartItemAdapter;
 import com.gmail.a93ak.andrei19.finance30.control.base.OnTaskCompleted;
 import com.gmail.a93ak.andrei19.finance30.control.base.RequestHolder;
 import com.gmail.a93ak.andrei19.finance30.control.base.Result;
+import com.gmail.a93ak.andrei19.finance30.control.executors.PurseExecutor;
+import com.gmail.a93ak.andrei19.finance30.control.loaders.PieReportLoader;
+import com.gmail.a93ak.andrei19.finance30.model.models.Income;
 import com.gmail.a93ak.andrei19.finance30.model.models.Purse;
-import com.gmail.a93ak.andrei19.finance30.model.reportModels.IncomePieCategory;
+import com.gmail.a93ak.andrei19.finance30.model.reportModels.PieChartItem;
 
 import org.achartengine.ChartFactory;
 import org.achartengine.GraphicalView;
@@ -32,14 +33,14 @@ import org.achartengine.renderer.SimpleSeriesRenderer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReportIncomePieActivity extends AppCompatActivity implements OnTaskCompleted, LoaderManager.LoaderCallbacks<ArrayList<IncomePieCategory>> {
+public class PieChartActivity extends AppCompatActivity implements OnTaskCompleted, LoaderManager.LoaderCallbacks<ArrayList<PieChartItem>> {
 
+    public static final int MAIN_LOADER = 0;
     private GraphicalView mChartView;
     private List<Purse> pursesList;
+    private ListView listView;
     private AppCompatSpinner spinner;
-    private ListView incomeListView;
-    private PieIncomeAdapter adapter;
-
+    private PieChartItemAdapter adapter;
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
@@ -58,8 +59,8 @@ public class ReportIncomePieActivity extends AppCompatActivity implements OnTask
     }
 
     public GraphicalView buildView(final String[] bars, final Double[] values) {
-        final int[] colors = new int[]{Color.BLUE, Color.GREEN, Color.MAGENTA,
-                Color.YELLOW, Color.CYAN, Color.RED};
+        final int[] colors = new int[]{0xFFA5EA8C, 0xFFEAA28C, 0xFF8CA5EA,
+                0xFFEAE18C, 0xFFEA8CA4, 0xFF80ede2};
         final CategorySeries series = new CategorySeries("Pie Chart");
         final DefaultRenderer dr = new DefaultRenderer();
         for (int v = 0; v < bars.length; v++) {
@@ -95,9 +96,11 @@ public class ReportIncomePieActivity extends AppCompatActivity implements OnTask
                 public void onItemSelected(final AdapterView<?> parent, final View view, final int position, final long id) {
                     final long purseId = (pursesList.get(position).getId());
                     final Bundle args = new Bundle();
-                    args.putLong("id", purseId);
-                    getSupportLoaderManager().restartLoader(0, args, ReportIncomePieActivity.this);
-                    final Loader<Object> loader = ReportIncomePieActivity.this.getSupportLoaderManager().getLoader(0);
+                    args.putLong(Income.PURSE_ID, purseId);
+                    args.putBoolean(PieChartItem.TYPE, getIntent().getBooleanExtra(PieChartItem.TYPE, false));
+                    args.putLong(Income.CATEGORY_ID, -1L);
+                    getSupportLoaderManager().restartLoader(MAIN_LOADER, args, PieChartActivity.this);
+                    final Loader<Object> loader = PieChartActivity.this.getSupportLoaderManager().getLoader(MAIN_LOADER);
                     loader.forceLoad();
                 }
 
@@ -110,23 +113,34 @@ public class ReportIncomePieActivity extends AppCompatActivity implements OnTask
     }
 
     @Override
-    public Loader<ArrayList<IncomePieCategory>> onCreateLoader(final int id, final Bundle args) {
-        return new PieReportLoader(this, (Long) args.get("id"));
+    public Loader<ArrayList<PieChartItem>> onCreateLoader(final int id, final Bundle args) {
+        return new PieReportLoader(this, args);
     }
 
     @Override
-    public void onLoadFinished(final Loader<ArrayList<IncomePieCategory>> loader, final ArrayList<IncomePieCategory> data) {
-        incomeListView = (ListView) findViewById(R.id.incomePieListView);
-        adapter = new PieIncomeAdapter(this, data);
-        incomeListView.setAdapter(adapter);
+    public void onLoadFinished(final Loader<ArrayList<PieChartItem>> loader, final ArrayList<PieChartItem> data) {
+        listView = (ListView) findViewById(R.id.pieListView);
+        adapter = new PieChartItemAdapter(this, data);
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
+                final long mId = ((PieChartItem) parent.getItemAtPosition(position)).getCategoryId();
+                Intent intent = new Intent(PieChartActivity.this, PieChartActivityNext.class);
+                intent.putExtra(Income.CATEGORY_ID, mId);
+                intent.putExtra(PieChartItem.TYPE, getIntent().getBooleanExtra(PieChartItem.TYPE, false));
+                intent.putExtra(Income.PURSE_ID, pursesList.get(spinner.getSelectedItemPosition()).getId());
+                startActivity(intent);
+            }
+        });
         final LinearLayout layout = (LinearLayout) findViewById(R.id.chart);
         layout.removeAllViews();
         final String[] names = new String[data.size()];
         final Double[] values = new Double[data.size()];
         int i = 0;
-        for (final IncomePieCategory incomePieCategory : data) {
-            names[i] = incomePieCategory.getCategoryName();
-            values[i++] = incomePieCategory.getAmount();
+        for (final PieChartItem pieChartItem : data) {
+            names[i] = pieChartItem.getCategoryName();
+            values[i++] = pieChartItem.getAmount();
         }
         mChartView = buildView(names, values);
         layout.addView(mChartView, new LinearLayout.LayoutParams
@@ -134,8 +148,9 @@ public class ReportIncomePieActivity extends AppCompatActivity implements OnTask
     }
 
     @Override
-    public void onLoaderReset(final Loader<ArrayList<IncomePieCategory>> loader) {
+    public void onLoaderReset(final Loader<ArrayList<PieChartItem>> loader) {
         final LinearLayout layout = (LinearLayout) findViewById(R.id.chart);
         layout.removeAllViews();
+
     }
 }

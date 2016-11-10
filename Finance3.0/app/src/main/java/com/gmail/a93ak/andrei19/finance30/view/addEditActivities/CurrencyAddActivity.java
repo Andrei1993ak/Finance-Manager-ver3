@@ -12,8 +12,8 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
 import com.gmail.a93ak.andrei19.finance30.R;
-import com.gmail.a93ak.andrei19.finance30.control.Executors.CurrencyOfficialExecutor;
-import com.gmail.a93ak.andrei19.finance30.control.Loaders.CurrencyAllCursorLoader;
+import com.gmail.a93ak.andrei19.finance30.control.executors.CurrencyOfficialExecutor;
+import com.gmail.a93ak.andrei19.finance30.control.loaders.CurrencyAllCursorLoader;
 import com.gmail.a93ak.andrei19.finance30.control.base.OnTaskCompleted;
 import com.gmail.a93ak.andrei19.finance30.control.base.RequestHolder;
 import com.gmail.a93ak.andrei19.finance30.control.base.Result;

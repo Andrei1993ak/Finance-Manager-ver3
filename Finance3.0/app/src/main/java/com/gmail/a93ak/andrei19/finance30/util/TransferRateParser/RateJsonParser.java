@@ -1,4 +1,4 @@
-package com.gmail.a93ak.andrei19.finance30.util.TransferRateParser;
+package com.gmail.a93ak.andrei19.finance30.util.transferRateParser;
 
 import android.os.AsyncTask;
 

@@ -6,7 +6,7 @@
     android:padding="10dp">
 
     <TextView
-        android:id="@+id/incomePieName"
+        android:id="@+id/pieChartItemName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="24sp" />
@@ -17,7 +17,7 @@
         android:layout_weight="1" />
 
     <TextView
-        android:id="@+id/incomePieAmount"
+        android:id="@+id/pieChartItemAmount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="24sp" />

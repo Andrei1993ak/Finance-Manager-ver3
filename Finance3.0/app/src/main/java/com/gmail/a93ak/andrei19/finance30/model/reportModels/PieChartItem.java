@@ -1,12 +1,14 @@
 package com.gmail.a93ak.andrei19.finance30.model.reportModels;
 
 
-public class IncomePieCategory {
+public class PieChartItem {
     private long categoryId;
     private String categoryName;
     private double amount;
 
-    public IncomePieCategory(final long categoryId, final String categoryName, final double amount) {
+    public static final String TYPE = "type";
+
+    public PieChartItem(final long categoryId, final String categoryName, final double amount) {
         this.categoryId = categoryId;
         this.categoryName = categoryName;
         this.amount = amount;
