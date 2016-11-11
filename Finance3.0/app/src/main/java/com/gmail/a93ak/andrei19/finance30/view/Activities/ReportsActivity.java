@@ -8,6 +8,7 @@ import android.view.View;
 
 import com.gmail.a93ak.andrei19.finance30.R;
 import com.gmail.a93ak.andrei19.finance30.model.reportModels.PieChartItem;
+import com.gmail.a93ak.andrei19.finance30.view.reports.BalanceChartActivity;
 import com.gmail.a93ak.andrei19.finance30.view.reports.PieChartActivity;
 
 public class ReportsActivity extends AppCompatActivity {
@@ -30,9 +31,9 @@ public class ReportsActivity extends AppCompatActivity {
                 intent.putExtra(PieChartItem.TYPE,false);
                 startActivity(intent);
                 break;
-//            case R.id.report3:
-//                startActivity(new Intent(this, PieChartActivity.class));
-//                break;
+            case R.id.balanceChart:
+                startActivity(new Intent(this, BalanceChartActivity.class));
+                break;
         }
     }
 }

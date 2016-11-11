@@ -38,9 +38,7 @@ public class PieChartActivity extends AppCompatActivity implements OnTaskComplet
     public static final int MAIN_LOADER = 0;
     private GraphicalView mChartView;
     private List<Purse> pursesList;
-    private ListView listView;
     private AppCompatSpinner spinner;
-    private PieChartItemAdapter adapter;
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
@@ -119,14 +117,14 @@ public class PieChartActivity extends AppCompatActivity implements OnTaskComplet
 
     @Override
     public void onLoadFinished(final Loader<ArrayList<PieChartItem>> loader, final ArrayList<PieChartItem> data) {
-        listView = (ListView) findViewById(R.id.pieListView);
-        adapter = new PieChartItemAdapter(this, data);
+        final ListView listView = (ListView) findViewById(R.id.pieListView);
+        final PieChartItemAdapter adapter = new PieChartItemAdapter(this, data);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
                 final long mId = ((PieChartItem) parent.getItemAtPosition(position)).getCategoryId();
-                Intent intent = new Intent(PieChartActivity.this, PieChartActivityNext.class);
+                final Intent intent = new Intent(PieChartActivity.this, PieChartActivityNext.class);
                 intent.putExtra(Income.CATEGORY_ID, mId);
                 intent.putExtra(PieChartItem.TYPE, getIntent().getBooleanExtra(PieChartItem.TYPE, false));
                 intent.putExtra(Income.PURSE_ID, pursesList.get(spinner.getSelectedItemPosition()).getId());

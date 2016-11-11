@@ -35,18 +35,18 @@
             android:text="@string/costsByCategories"
             android:textSize="24sp" />
 
-        <!--<View-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="1dp"-->
-        <!--android:background="@android:color/darker_gray" />-->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray" />
 
-        <!--<TextView-->
-        <!--android:id="@+id/report3"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:duplicateParentState="true"-->
-        <!--android:onClick="selectReport"-->
-        <!--android:text="@string/report3"-->
-        <!--android:textSize="22sp" />-->
+        <TextView
+            android:id="@+id/balanceChart"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:duplicateParentState="true"
+            android:onClick="selectReport"
+            android:text="@string/balanceCHart"
+            android:textSize="24sp" />
     </LinearLayout>
 </LinearLayout>

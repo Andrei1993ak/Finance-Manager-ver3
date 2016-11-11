@@ -47,6 +47,7 @@
         <activity android:name=".view.activities.ReportsActivity"/>
         <activity android:name=".view.reports.PieChartActivity"/>
         <activity android:name=".view.reports.PieChartActivityNext"/>
+        <activity android:name=".view.reports.BalanceChartActivity"/>
 
     </application>
 

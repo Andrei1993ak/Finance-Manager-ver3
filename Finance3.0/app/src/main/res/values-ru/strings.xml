@@ -47,4 +47,5 @@
     <string name="report3">Отчёт3</string>
     <string name="costsByCategories">Расходы по категориям</string>
     <string name="incomesByCategories">Доходы по категориям</string>
+    <string name="balanceCHart">Баланс по кошельку</string>
 </resources>
