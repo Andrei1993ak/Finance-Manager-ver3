@@ -1,5 +1,6 @@
 package com.gmail.a93ak.andrei19.finance30.view.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.gmail.a93ak.andrei19.finance30.App;
 import com.gmail.a93ak.andrei19.finance30.R;
 import com.gmail.a93ak.andrei19.finance30.control.executors.PurseExecutor;
 import com.gmail.a93ak.andrei19.finance30.control.loaders.PurseCursorLoader;
@@ -41,6 +43,9 @@ public class PurseActivity extends AppCompatActivity implements LoaderManager.Lo
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
+        if (getSharedPreferences(App.PREFS, Context.MODE_PRIVATE).getBoolean(App.THEME, false)) {
+            setTheme(R.style.Dark);
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.purse_activity);
         requestHolder = new RequestHolder<>();

@@ -1,5 +1,6 @@
 package com.gmail.a93ak.andrei19.finance30.view.reports;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 
+import com.gmail.a93ak.andrei19.finance30.App;
 import com.gmail.a93ak.andrei19.finance30.R;
 import com.gmail.a93ak.andrei19.finance30.control.base.OnTaskCompleted;
 import com.gmail.a93ak.andrei19.finance30.control.base.RequestHolder;
@@ -36,6 +38,9 @@ public class BalanceChartActivity extends AppCompatActivity implements OnTaskCom
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
+        if (getSharedPreferences(App.PREFS, Context.MODE_PRIVATE).getBoolean(App.THEME, false)) {
+            setTheme(R.style.Dark);
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.balance_activity);
         spinner = (AppCompatSpinner) findViewById(R.id.pursesNamesBalanceChart);
@@ -71,7 +76,7 @@ public class BalanceChartActivity extends AppCompatActivity implements OnTaskCom
         dataSet.addSeries(series);
 
         final XYSeriesRenderer renderer = new XYSeriesRenderer();
-        renderer.setLineWidth(1);
+        renderer.setLineWidth(2);
         renderer.setColor(Color.RED);
         renderer.setDisplayBoundingPoints(false);
         renderer.setPointStyle(PointStyle.POINT);

@@ -1,6 +1,7 @@
 package com.gmail.a93ak.andrei19.finance30.view.addEditActivities;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -60,6 +61,9 @@ public class CostAddActivity extends AppCompatActivity implements OnTaskComplete
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
+        if (getSharedPreferences(App.PREFS, Context.MODE_PRIVATE).getBoolean(App.THEME, false)) {
+            setTheme(R.style.Dark);
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cost_add_activity);
         findViewsBuId();

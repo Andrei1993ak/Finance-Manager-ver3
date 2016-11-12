@@ -1,5 +1,6 @@
 package com.gmail.a93ak.andrei19.finance30.view.addEditActivities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.gmail.a93ak.andrei19.finance30.App;
 import com.gmail.a93ak.andrei19.finance30.R;
 import com.gmail.a93ak.andrei19.finance30.control.executors.CurrencyExecutor;
 import com.gmail.a93ak.andrei19.finance30.control.base.OnTaskCompleted;
@@ -25,6 +27,9 @@ public class CurrencyEditActivity extends AppCompatActivity implements OnTaskCom
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
+        if (getSharedPreferences(App.PREFS, Context.MODE_PRIVATE).getBoolean(App.THEME, false)) {
+            setTheme(R.style.Dark);
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.currency_edit_activity);
         editCurrencyCode = (TextView) findViewById(R.id.edit_currency_code);

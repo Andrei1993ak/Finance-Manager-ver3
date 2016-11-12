@@ -1,6 +1,7 @@
 package com.gmail.a93ak.andrei19.finance30.view.addEditActivities;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,6 +15,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.gmail.a93ak.andrei19.finance30.App;
 import com.gmail.a93ak.andrei19.finance30.R;
 import com.gmail.a93ak.andrei19.finance30.control.executors.IncomeCategoryExecutor;
 import com.gmail.a93ak.andrei19.finance30.control.executors.PurseExecutor;
@@ -47,6 +49,9 @@ public class IncomeAddActivity extends AppCompatActivity implements OnTaskComple
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
+        if (getSharedPreferences(App.PREFS, Context.MODE_PRIVATE).getBoolean(App.THEME, false)) {
+            setTheme(R.style.Dark);
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.income_add_activity);
         findViewsBuId();

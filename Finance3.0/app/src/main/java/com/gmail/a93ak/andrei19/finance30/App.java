@@ -1,6 +1,8 @@
 package com.gmail.a93ak.andrei19.finance30;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Environment;
 
 import com.gmail.a93ak.andrei19.finance30.util.ContextHolder;
@@ -10,6 +12,9 @@ public class App extends Application {
 
     private static String imagePath;
     private static String tempImagePath;
+
+    public static String PREFS = "themePrefs";
+    public static String THEME = "theme";
 
     @Override
     public void onCreate() {
@@ -26,4 +31,5 @@ public class App extends Application {
     public static String getTempImagePath() {
         return tempImagePath;
     }
+
 }

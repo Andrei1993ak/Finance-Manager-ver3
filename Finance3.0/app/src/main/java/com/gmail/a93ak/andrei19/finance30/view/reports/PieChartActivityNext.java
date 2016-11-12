@@ -1,6 +1,7 @@
 package com.gmail.a93ak.andrei19.finance30.view.reports;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
@@ -10,6 +11,7 @@ import android.support.v7.widget.AppCompatSpinner;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import com.gmail.a93ak.andrei19.finance30.App;
 import com.gmail.a93ak.andrei19.finance30.R;
 import com.gmail.a93ak.andrei19.finance30.control.adapters.PieChartItemAdapter;
 import com.gmail.a93ak.andrei19.finance30.control.loaders.PieReportLoader;
@@ -34,6 +36,9 @@ public class PieChartActivityNext extends AppCompatActivity implements LoaderMan
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
+        if (getSharedPreferences(App.PREFS, Context.MODE_PRIVATE).getBoolean(App.THEME, false)) {
+            setTheme(R.style.Dark);
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.report_income_pie_next);
         final Bundle args = new Bundle();

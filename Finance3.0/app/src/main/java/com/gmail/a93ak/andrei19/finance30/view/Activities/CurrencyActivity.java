@@ -1,5 +1,6 @@
 package com.gmail.a93ak.andrei19.finance30.view.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
+import com.gmail.a93ak.andrei19.finance30.App;
 import com.gmail.a93ak.andrei19.finance30.R;
 import com.gmail.a93ak.andrei19.finance30.control.executors.CurrencyExecutor;
 import com.gmail.a93ak.andrei19.finance30.control.loaders.CurrencyCursorLoader;
@@ -40,6 +42,9 @@ public class CurrencyActivity extends AppCompatActivity implements LoaderManager
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
+        if (getSharedPreferences(App.PREFS, Context.MODE_PRIVATE).getBoolean(App.THEME, false)) {
+            setTheme(R.style.Dark);
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.currency_activity);
         final String[] from = new String[]{Currency.NAME};

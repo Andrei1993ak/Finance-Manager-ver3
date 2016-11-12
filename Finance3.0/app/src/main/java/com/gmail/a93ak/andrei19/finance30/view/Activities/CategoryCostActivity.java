@@ -1,5 +1,6 @@
 package com.gmail.a93ak.andrei19.finance30.view.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.widget.ExpandableListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.gmail.a93ak.andrei19.finance30.App;
 import com.gmail.a93ak.andrei19.finance30.R;
 import com.gmail.a93ak.andrei19.finance30.control.executors.CostCategoryExecutor;
 import com.gmail.a93ak.andrei19.finance30.control.loaders.CostCategoryCursorLoader;
@@ -44,6 +46,9 @@ public class CategoryCostActivity extends AppCompatActivity implements LoaderMan
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
+        if (getSharedPreferences(App.PREFS, Context.MODE_PRIVATE).getBoolean(App.THEME, false)) {
+            setTheme(R.style.Dark);
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.category_activity);
         costCategoryExpListView = (ExpandableListView) findViewById(R.id.CategoryExpListView);

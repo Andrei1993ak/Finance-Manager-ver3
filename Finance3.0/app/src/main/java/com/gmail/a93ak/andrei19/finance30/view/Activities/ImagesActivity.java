@@ -1,5 +1,6 @@
 package com.gmail.a93ak.andrei19.finance30.view.activities;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,6 +13,7 @@ import android.widget.ListView;
 
 import android.support.v7.app.AppCompatActivity;
 
+import com.gmail.a93ak.andrei19.finance30.App;
 import com.gmail.a93ak.andrei19.finance30.R;
 import com.gmail.a93ak.andrei19.finance30.util.universalLoader.loaders.BitmapLoader;
 
@@ -35,6 +37,9 @@ public class ImagesActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
+        if (getSharedPreferences(App.PREFS, Context.MODE_PRIVATE).getBoolean(App.THEME, false)) {
+            setTheme(R.style.Dark);
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.images_activity);
 //        final BitmapLoader bitmapLoader = ((App) getApplication()).getBitmapLoader();
