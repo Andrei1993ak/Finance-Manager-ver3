@@ -1,4 +1,4 @@
-package com.gmail.a93ak.andrei19.finance30.util.universalLoader.Loaders;
+package com.gmail.a93ak.andrei19.finance30.util.universalLoader.loaders;
 
 import android.content.Context;
 import android.graphics.Bitmap;

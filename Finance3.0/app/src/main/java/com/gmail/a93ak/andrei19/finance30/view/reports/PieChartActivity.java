@@ -36,17 +36,23 @@ import java.util.List;
 public class PieChartActivity extends AppCompatActivity implements OnTaskCompleted, LoaderManager.LoaderCallbacks<ArrayList<PieChartItem>> {
 
     public static final int MAIN_LOADER = 0;
+    public static final String POSITION = "position";
     private GraphicalView mChartView;
     private List<Purse> pursesList;
     private AppCompatSpinner spinner;
+    private int position;
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.report_income_pie);
         spinner = (AppCompatSpinner) findViewById(R.id.pursesNames);
+        if (savedInstanceState == null) {
+            position = 0;
+        } else {
+            position = savedInstanceState.getInt(POSITION);
+        }
         new PurseExecutor(this).execute(new RequestHolder<Purse>().getAllToList(RequestHolder.SELECTION_ALL));
-
     }
 
     protected void onResume() {
@@ -107,6 +113,7 @@ public class PieChartActivity extends AppCompatActivity implements OnTaskComplet
 
                 }
             });
+            spinner.setSelection(position);
         }
     }
 
@@ -150,5 +157,11 @@ public class PieChartActivity extends AppCompatActivity implements OnTaskComplet
         final LinearLayout layout = (LinearLayout) findViewById(R.id.chart);
         layout.removeAllViews();
 
+    }
+
+    @Override
+    protected void onSaveInstanceState(final Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(POSITION,spinner.getSelectedItemPosition());
     }
 }

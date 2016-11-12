@@ -32,7 +32,7 @@ import com.gmail.a93ak.andrei19.finance30.control.base.Result;
 import com.gmail.a93ak.andrei19.finance30.model.TableQueryGenerator;
 
 import com.gmail.a93ak.andrei19.finance30.model.models.Cost;
-import com.gmail.a93ak.andrei19.finance30.util.universalLoader.Loaders.BitmapLoader;
+import com.gmail.a93ak.andrei19.finance30.util.universalLoader.loaders.BitmapLoader;
 import com.gmail.a93ak.andrei19.finance30.view.addEditActivities.CostAddActivity;
 import com.gmail.a93ak.andrei19.finance30.view.addEditActivities.CostEditActivity;
 

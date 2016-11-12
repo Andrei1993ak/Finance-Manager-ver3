@@ -13,7 +13,7 @@ import android.widget.ListView;
 import android.support.v7.app.AppCompatActivity;
 
 import com.gmail.a93ak.andrei19.finance30.R;
-import com.gmail.a93ak.andrei19.finance30.util.universalLoader.Loaders.BitmapLoader;
+import com.gmail.a93ak.andrei19.finance30.util.universalLoader.loaders.BitmapLoader;
 
 public class ImagesActivity extends AppCompatActivity {
 

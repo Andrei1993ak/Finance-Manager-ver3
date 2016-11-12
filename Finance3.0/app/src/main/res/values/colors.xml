@@ -9,9 +9,9 @@
     <color name="colorRedText">#d4ec4832</color>
 
 
-    <color name="pieColor2">#80ede2</color>
-    <color name="pieColor3">#ed9a80</color>
-    <color name="pieColor4">#d08ca5ea</color>
-    <color name="pieColor5">#d0eae18c</color>
-    <color name="pieColor6">#d0ea8ca4</color>
+    <!--<color name="pieColor2">#80ede2</color>-->
+    <!--<color name="pieColor3">#ed9a80</color>-->
+    <!--<color name="pieColor4">#d08ca5ea</color>-->
+    <!--<color name="pieColor5">#d0eae18c</color>-->
+    <!--<color name="pieColor6">#d0ea8ca4</color>-->
 </resources>

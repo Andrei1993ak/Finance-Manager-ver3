@@ -31,7 +31,7 @@ import com.gmail.a93ak.andrei19.finance30.model.TableQueryGenerator;
 import com.gmail.a93ak.andrei19.finance30.model.models.Cost;
 import com.gmail.a93ak.andrei19.finance30.model.models.CostCategory;
 import com.gmail.a93ak.andrei19.finance30.model.models.Purse;
-import com.gmail.a93ak.andrei19.finance30.util.universalLoader.Loaders.BitmapLoader;
+import com.gmail.a93ak.andrei19.finance30.util.universalLoader.loaders.BitmapLoader;
 import com.google.common.io.Files;
 
 import java.io.File;
