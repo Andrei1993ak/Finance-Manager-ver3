@@ -159,7 +159,29 @@ public class DBHelperTransfer implements DBHelperForModel<Transfer> {
     }
 
     public List<Transfer> getAllToListByPurseId(final Long id) {
-        return null;
+        final List<Transfer> transfers = new ArrayList<>();
+        final String selectQuery = "SELECT * FROM " + TableQueryGenerator.getTableName(Transfer.class) +
+                " WHERE " + Transfer.FROM_PURSE_ID + " = " + id + " OR " + Transfer.TO_PURSE_ID + " = " + id;
+        final SQLiteDatabase db = dbHelper.getReadableDatabase();
+        final Cursor cursor = db.rawQuery(selectQuery, null);
+        if (cursor.moveToFirst()) {
+            do {
+                final Transfer transfer = new Transfer();
+                transfer.setId(cursor.getLong(cursor.getColumnIndex(Transfer.ID)));
+                transfer.setName(cursor.getString(cursor.getColumnIndex(Transfer.NAME)));
+                transfer.setDate(cursor.getLong(cursor.getColumnIndex(Transfer.DATE)));
+                transfer.setFromPurseId(cursor.getLong(cursor.getColumnIndex(Transfer.FROM_PURSE_ID)));
+                transfer.setToPurseId(cursor.getLong(cursor.getColumnIndex(Transfer.TO_PURSE_ID)));
+                transfer.setFromAmount(cursor.getDouble(cursor.getColumnIndex(Transfer.FROM_AMOUNT)));
+                transfer.setToAmount(cursor.getDouble(cursor.getColumnIndex(Transfer.TO_AMOUNT)));
+                transfers.add(transfer);
+            } while (cursor.moveToNext());
+        } else {
+            cursor.close();
+            return null;
+        }
+        cursor.close();
+        return transfers;
     }
 
     public List<Transfer> getAllToListByCategoryId(final Long id) {

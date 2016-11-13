@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatSpinner;
 import android.view.View;
@@ -17,6 +19,7 @@ import com.gmail.a93ak.andrei19.finance30.control.base.OnTaskCompleted;
 import com.gmail.a93ak.andrei19.finance30.control.base.RequestHolder;
 import com.gmail.a93ak.andrei19.finance30.control.base.Result;
 import com.gmail.a93ak.andrei19.finance30.control.executors.PurseExecutor;
+import com.gmail.a93ak.andrei19.finance30.control.loaders.BalanceChartLoader;
 import com.gmail.a93ak.andrei19.finance30.model.models.Purse;
 
 import org.achartengine.ChartFactory;
@@ -27,12 +30,13 @@ import org.achartengine.model.XYMultipleSeriesDataset;
 import org.achartengine.renderer.XYMultipleSeriesRenderer;
 import org.achartengine.renderer.XYSeriesRenderer;
 
-import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Random;
 
-public class BalanceChartActivity extends AppCompatActivity implements OnTaskCompleted {
+public class BalanceChartActivity extends AppCompatActivity implements OnTaskCompleted, LoaderManager.LoaderCallbacks<TimeSeries> {
 
+    public static final int MAIN_LOADER = 0;
+    public static final String POSITION = "position";
+    private int position;
     private AppCompatSpinner spinner;
     private List<Purse> pursesList;
 
@@ -41,72 +45,46 @@ public class BalanceChartActivity extends AppCompatActivity implements OnTaskCom
         if (getSharedPreferences(App.PREFS, Context.MODE_PRIVATE).getBoolean(App.THEME, false)) {
             setTheme(R.style.Dark);
         }
+        if (savedInstanceState == null) {
+            position = 0;
+        } else {
+            position = savedInstanceState.getInt(POSITION);
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.balance_activity);
         spinner = (AppCompatSpinner) findViewById(R.id.pursesNamesBalanceChart);
         new PurseExecutor(this).execute(new RequestHolder<Purse>().getAllToList(RequestHolder.SELECTION_ALL));
-//        createChart();
     }
 
-    private void createChart() {
-
-        final int days = 100;
-        int sum = 500;
-        int max = 0;
-        int min = 500;
-
-        final TimeSeries series = new TimeSeries("Balance");
-        final Random r = new Random();
-        for (int i = 0; i < days; i++) {
-            final GregorianCalendar gc = new GregorianCalendar(2016, 10, i + 1);
-            sum -= 7 * r.nextDouble();
-            if (i % 30 == 0) {
-                sum += 250 * r.nextDouble();
-            }
-            if (sum > max) {
-                max = sum;
-            }
-            if (sum < min) {
-                min = sum;
-            }
-            series.add(gc.getTime(), sum);
-        }
+    private GraphicalView buildView(final TimeSeries series) {
 
         final XYMultipleSeriesDataset dataSet = new XYMultipleSeriesDataset();
         dataSet.addSeries(series);
-
         final XYSeriesRenderer renderer = new XYSeriesRenderer();
         renderer.setLineWidth(2);
         renderer.setColor(Color.RED);
         renderer.setDisplayBoundingPoints(false);
         renderer.setPointStyle(PointStyle.POINT);
         renderer.setPointStrokeWidth(2);
-
         final XYMultipleSeriesRenderer mRenderer = new XYMultipleSeriesRenderer();
         mRenderer.setMarginsColor(Color.argb(0x00, 0xff, 0x00, 0x00));
         mRenderer.addSeriesRenderer(renderer);
         mRenderer.setPanEnabled(true, false);
         mRenderer.setZoomEnabled(true, false);
         final double[] panLimits = new double[4];
-        panLimits[0] = new GregorianCalendar(2016, 10, 1).getTimeInMillis();
-        panLimits[1] = new GregorianCalendar(2016, 10, 1 + days).getTimeInMillis();
         final double[] zoomLimits = new double[4];
-        zoomLimits[0] = new GregorianCalendar(2016, 10, 1).getTimeInMillis();
-        zoomLimits[1] = new GregorianCalendar(2016, 10, 1 + days).getTimeInMillis();
+        zoomLimits[0] = panLimits[0] = series.getX(series.getItemCount() - 1);
+        zoomLimits[1] = panLimits[1] = series.getX(0);
         mRenderer.setPanLimits(panLimits);
         mRenderer.setZoomLimits(zoomLimits);
-
         mRenderer.setZoomInLimitX(600000000);
-        mRenderer.setLabelsTextSize(35);
-        mRenderer.setAxisTitleTextSize(35);
+        mRenderer.setLabelsTextSize(30);
+        mRenderer.setAxisTitleTextSize(30);
         mRenderer.setShowLegend(false);
         mRenderer.setShowGrid(true);
-        mRenderer.setYAxisMin(min);
-        mRenderer.setYAxisMax(max);
-        final GraphicalView chartView = ChartFactory.getTimeChartView(this, dataSet, mRenderer, "dd-MMM-yyyy");
-        final LinearLayout layout = (LinearLayout) findViewById(R.id.chartBalance);
-        layout.removeAllViews();
-        layout.addView(chartView, 0);
+        mRenderer.setYAxisMin(series.getMinY());
+        mRenderer.setYAxisMax(series.getMaxY());
+        return ChartFactory.getTimeChartView(this, dataSet, mRenderer, "dd-MMM-yyyy");
     }
 
     @Override
@@ -125,7 +103,12 @@ public class BalanceChartActivity extends AppCompatActivity implements OnTaskCom
             spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(final AdapterView<?> parent, final View view, final int position, final long id) {
-                    createChart();
+                    final long purseId = (pursesList.get(position).getId());
+                    final Bundle args = new Bundle();
+                    args.putLong(Purse.ID, purseId);
+                    getSupportLoaderManager().restartLoader(MAIN_LOADER, args, BalanceChartActivity.this);
+                    final Loader<Object> loader = BalanceChartActivity.this.getSupportLoaderManager().getLoader(MAIN_LOADER);
+                    loader.forceLoad();
                 }
 
                 @Override
@@ -133,6 +116,35 @@ public class BalanceChartActivity extends AppCompatActivity implements OnTaskCom
 
                 }
             });
+            spinner.setSelection(position);
         }
+    }
+
+    @Override
+    public Loader<TimeSeries> onCreateLoader(final int id, final Bundle args) {
+        return new BalanceChartLoader(this, args.getLong(Purse.ID));
+    }
+
+    @Override
+    public void onLoadFinished(final Loader<TimeSeries> loader, final TimeSeries data) {
+        final LinearLayout layout = (LinearLayout) findViewById(R.id.chartBalance);
+        layout.removeAllViews();
+        final GraphicalView balanceChartView = buildView(data);
+        layout.addView(balanceChartView, new LinearLayout.LayoutParams
+                (LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+    }
+
+    @Override
+    public void onLoaderReset(final Loader<TimeSeries> loader) {
+        final LinearLayout layout = (LinearLayout) findViewById(R.id.chart);
+        if (layout != null) {
+            layout.removeAllViews();
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(final Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(POSITION, spinner.getSelectedItemPosition());
     }
 }
