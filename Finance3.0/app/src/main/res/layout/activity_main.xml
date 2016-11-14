@@ -5,6 +5,7 @@
     android:background="?attr/colorControlNormal"
     android:orientation="vertical">
 
+    <!-- TODO fix margin value google.com/design -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,6 +17,10 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <!-- TODO use vector drawables -->
+            <!-- TODO rename onClick method to onSelectCategoryViewClick -->
+            <!-- TODO move all colors to resources -->
+            <!-- TODO create separate style/attr for view -->
             <TextView
                 android:id="@+id/tvPurse"
                 android:layout_width="match_parent"
@@ -134,6 +139,7 @@
         </LinearLayout>
     </ScrollView>
 
+    <!-- TODO fix height about 100dip, and create view pager with cards google.com/design -->
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"

@@ -14,6 +14,8 @@ import java.util.List;
 
 public class TransferExecutor extends PojoExecutor<Transfer> {
 
+    //TODO create enum
+    //TODO or @IntDef annotations
     public static final int KEY_RESULT_ADD = 801;
     public static final int KEY_RESULT_EDIT = 802;
     public static final int KEY_RESULT_DELETE = 803;

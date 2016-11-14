@@ -13,6 +13,7 @@ public class App extends Application {
     private static String imagePath;
     private static String tempImagePath;
 
+    //TODO move to Constants.class
     public static String PREFS = "themePrefs";
     public static String THEME = "theme";
 
@@ -20,10 +21,13 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         ContextHolder.getInstance().setContext(this);
+        //TODO use getFilesDir()
         imagePath = getApplicationInfo().dataDir + "/files/images/";
+        //TODO use getCacheDir()
         tempImagePath = Environment.getExternalStorageDirectory().getPath() + "/temp.jpg";
     }
 
+    //TODO ImageNameGenerator
     public static String getImagePath(long id) {
         return imagePath + String.valueOf(id) + ".jpg";
     }

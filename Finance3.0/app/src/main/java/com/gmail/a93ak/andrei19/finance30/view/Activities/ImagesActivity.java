@@ -17,6 +17,7 @@ import com.gmail.a93ak.andrei19.finance30.App;
 import com.gmail.a93ak.andrei19.finance30.R;
 import com.gmail.a93ak.andrei19.finance30.util.universalLoader.loaders.BitmapLoader;
 
+//TODO remove
 public class ImagesActivity extends AppCompatActivity {
 
     public static final String demoImage = "ftp://adk:1111111@93.125.42.84:21/images/FileToSend.jpg";

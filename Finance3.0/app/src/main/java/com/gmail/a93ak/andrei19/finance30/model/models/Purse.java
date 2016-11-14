@@ -7,6 +7,7 @@ import com.gmail.a93ak.andrei19.finance30.model.annotations.Table;
 import com.gmail.a93ak.andrei19.finance30.model.annotations.types.DBDouble;
 import com.gmail.a93ak.andrei19.finance30.model.annotations.types.DBInteger;
 
+//TODO runtime/compile time annotation and describe plusses and minuses?
 @Table(name = "purses")
 public class Purse extends TableClass implements Parcelable {
 
@@ -25,6 +26,7 @@ public class Purse extends TableClass implements Parcelable {
 
     }
 
+    //TODO _
     public Purse(final String name, final long currency_id, final double amount) {
         this.name = name;
         this.currency_id = currency_id;

@@ -1,3 +1,4 @@
+//TODO move to app_package.app
 package com.gmail.a93ak.andrei19.finance30.view.activities;
 
 import android.content.Context;

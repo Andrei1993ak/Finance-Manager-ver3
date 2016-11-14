@@ -40,12 +40,14 @@ public class TransferActivity extends AppCompatActivity implements LoaderManager
     private static final int MAIN_LOADER_ID = 0;
 
     private TransferCursorAdapter transferCursorAdapter;
+    //TODO move to adapter
     private RequestHolder<Transfer> requestHolder;
     private ListView transferListView;
     private long itemId = -1;
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
+        //TODO create BaseActivity
         if (getSharedPreferences(App.PREFS, Context.MODE_PRIVATE).getBoolean(App.THEME, false)) {
             setTheme(R.style.Dark);
         }
@@ -101,6 +103,7 @@ public class TransferActivity extends AppCompatActivity implements LoaderManager
     @Override
     public void onCreateContextMenu(final ContextMenu menu, final View view, final ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, view, menuInfo);
+        //TODO move to xml
         menu.add(0, CM_EDIT_ID, 0, R.string.edit);
         menu.add(0, CM_DELETE_ID, 0, R.string.delete);
     }

@@ -5,6 +5,8 @@
     android:background="?attr/colorControlNormal"
     android:orientation="horizontal">
 
+    <!--TODO use PercentFrameLayout -->
+    <!--TODO use include? Use custom view? -->
     <ScrollView
         android:layout_width="1dp"
         android:layout_height="match_parent"

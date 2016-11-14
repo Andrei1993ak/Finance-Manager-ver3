@@ -54,12 +54,15 @@ public class DBHelperCost implements DBHelperForModel<Cost> {
     }
 
     @Override
+    //TODO public Cost get(final long id, Class<?> clazz) {
     public Cost get(final long id) {
+        //TODO getTable from clazz
         final String selectQuery = "SELECT * FROM " + TableQueryGenerator.getTableName(Cost.class) + " WHERE _id = " + id;
         final SQLiteDatabase db = dbHelper.getReadableDatabase();
         final Cursor cursor = db.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
             final Cost cost = new Cost();
+            //TODO generate fields from annotated members
             cost.setId(cursor.getLong(cursor.getColumnIndex(Cost.ID)));
             cost.setName(cursor.getString(cursor.getColumnIndex(Cost.NAME)));
             cost.setPurseId(cursor.getLong(cursor.getColumnIndex(Cost.PURSE_ID)));

@@ -25,9 +25,12 @@ import com.gmail.a93ak.andrei19.finance30.view.activities.SettingsActivity;
 import com.gmail.a93ak.andrei19.finance30.view.activities.TransferActivity;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+    //TODO move to Constants.class
     public static final int LOADER_ID = 0;
     public static final int REQUEST_CODE_SETTING = 0;
+
     private RecyclerView recyclerView;
+    //TODO modificator of access
     PursesRecycleViewAdapter adapter;
 
     @Override
@@ -49,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     protected void onResume() {
         super.onResume();
+        //TODO move to local final var
         if (getSupportLoaderManager().getLoader(LOADER_ID) != null) {
             getSupportLoaderManager().getLoader(LOADER_ID).forceLoad();
         }

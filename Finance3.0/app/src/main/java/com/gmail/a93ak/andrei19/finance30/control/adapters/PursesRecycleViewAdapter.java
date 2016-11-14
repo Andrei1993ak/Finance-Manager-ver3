@@ -18,6 +18,7 @@ public class PursesRecycleViewAdapter extends RecyclerView.Adapter<PursesHolder>
     private final Cursor cursor;
     private final Context context;
 
+    //TODO wallet
     public PursesRecycleViewAdapter(final Cursor cursor, final Context context) {
         this.cursor = cursor;
         this.context = context;
@@ -25,6 +26,7 @@ public class PursesRecycleViewAdapter extends RecyclerView.Adapter<PursesHolder>
 
     @Override
     public PursesHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
+        //TODO move layoutInflater to member
         final View view = LayoutInflater.from(context).inflate(R.layout.purse_listitem, null);
         return new PursesHolder(view);
     }
@@ -32,6 +34,7 @@ public class PursesRecycleViewAdapter extends RecyclerView.Adapter<PursesHolder>
     @Override
     public void onBindViewHolder(final PursesHolder holder, final int position) {
         cursor.moveToPosition(position);
+        //TODO create CursorUtils method CursorUtils.getDouble(cursor, key);
         final Double amount = cursor.getDouble(cursor.getColumnIndex(Purse.AMOUNT));
         holder.purseAmount.setText(String.format(Locale.US, "%.2f", amount));
         holder.purseName.setText(cursor.getString(cursor.getColumnIndex(Purse.NAME)));

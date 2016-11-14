@@ -41,7 +41,7 @@ public class TransferCursorAdapter extends CursorAdapter {
 
     @Override
     public void bindView(final View view, final Context context, final Cursor cursor) {
-
+        //TODO implement custom view
         final TextView textViewName = (TextView) view.findViewById(R.id.LITransferName);
         final String name = cursor.getString(cursor.getColumnIndex(Transfer.NAME));
         textViewName.setText(name);
@@ -73,6 +73,7 @@ public class TransferCursorAdapter extends CursorAdapter {
         final TextView toAmount = (TextView) view.findViewById(R.id.LIToPurseAmount);
         final Currency currencyTo = helperCurrency.get(to.getCurrencyId());
         final Double toAmountDouble = cursor.getDouble(cursor.getColumnIndex(Transfer.TO_AMOUNT));
+        //TODO prepare string before insert to DB
         builder = new StringBuilder();
         builder.append("+");
         builder.append(String.format(Locale.US, "%.2f", toAmountDouble));

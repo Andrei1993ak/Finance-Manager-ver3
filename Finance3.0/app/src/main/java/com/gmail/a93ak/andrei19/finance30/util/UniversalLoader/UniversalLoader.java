@@ -15,6 +15,8 @@ import java.util.WeakHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+//TODO fix all warnings
+//TODO create base interface first, then extends to abstract class
 public abstract class UniversalLoader<MyObj, Destination> {
 
     public abstract int getSizeObj(MyObj myObj);
@@ -30,11 +32,14 @@ public abstract class UniversalLoader<MyObj, Destination> {
     private Context context;
 
     private FileCache fileCache;
+    //TODO why its called like ImageViews?
     private Map<Destination, String> imageViews = Collections.synchronizedMap(new WeakHashMap<Destination, String>());
     private ExecutorService executorService;
     private MemoryCache<MyObj> memoryCache;
 
     public UniversalLoader(Context context) {
+        //TODO move to constants
+        //TODO add this to all members
         connectTimeout=3000;
         readTimeout = 3000;
         maxPreSize = 400;
@@ -95,11 +100,14 @@ public abstract class UniversalLoader<MyObj, Destination> {
             InputStream is = conn.getInputStream();
             OutputStream os = new FileOutputStream(file);
             copyStream(is, os);
+            //TODO need to close in final block
             is.close();
             os.close();
             myObj = decodeFromFile(file, maxPreSize);
             return myObj;
         } catch (Throwable ex) {
+            //TODO why it ignored?
+            //TODO add callbacks
             ex.printStackTrace();
             if (ex instanceof OutOfMemoryError)
                 memoryCache.clear();
@@ -112,12 +120,14 @@ public abstract class UniversalLoader<MyObj, Destination> {
         try {
             byte[] bytes = new byte[buffer_size];
             for (; ; ) {
+                //TODO move count from circle
                 int count = is.read(bytes, 0, buffer_size);
                 if (count == -1)
                     break;
                 os.write(bytes, 0, count);
             }
         } catch (Exception ex) {
+            //TODO WTF? we can't ignore exceptions
             ex.printStackTrace();
         }
     }

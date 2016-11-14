@@ -16,9 +16,12 @@ public class DBHelperTransfer implements DBHelperForModel<Transfer> {
 
     private final DBHelper dbHelper;
 
+    //TODO bbeeee static
+    //TODO move to App
     private static DBHelperTransfer instance;
 
     public static DBHelperTransfer getInstance() {
+        //TODO {}
         if (instance == null)
             instance = new DBHelperTransfer();
         return instance;
@@ -68,6 +71,7 @@ public class DBHelperTransfer implements DBHelperForModel<Transfer> {
             transfer.setToPurseId(cursor.getLong(cursor.getColumnIndex(Transfer.TO_PURSE_ID)));
             transfer.setFromAmount(cursor.getDouble(cursor.getColumnIndex(Transfer.FROM_AMOUNT)));
             transfer.setToAmount(cursor.getDouble(cursor.getColumnIndex(Transfer.TO_AMOUNT)));
+            //TODO final block
             cursor.close();
             return transfer;
         } else {

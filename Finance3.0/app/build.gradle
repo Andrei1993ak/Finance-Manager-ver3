@@ -1,9 +1,12 @@
 apply plugin: 'com.android.application'
 
+//TODO fix all yellow marks
 android {
     compileSdkVersion 24
+    //TODO
     buildToolsVersion "24.0.1"
     defaultConfig {
+        //TODO rename top package or be developer of gmail.com
         applicationId "com.gmail.a93ak.andrei19.finance30"
         minSdkVersion 16
         targetSdkVersion 24
@@ -24,6 +27,8 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+    //TODO update libs
+    //TODO move version to var
     compile 'com.android.support:recyclerview-v7:24.2.0'
     compile 'com.android.support:appcompat-v7:24.2.0'
     compile 'com.android.support:design:24.2.1'
