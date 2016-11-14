@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatSpinner;
@@ -70,6 +71,7 @@ public class CostEditActivity extends AppCompatActivity implements OnTaskComplet
         }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cost_edit_activity);
+        setTitle(R.string.editing);
         findViewsBuId();
         id = getIntent().getLongExtra(Cost.ID, -1);
         new CostExecutor(this).execute(new RequestHolder<Cost>().get(id));
@@ -84,6 +86,13 @@ public class CostEditActivity extends AppCompatActivity implements OnTaskComplet
         editCostCategory = (AppCompatSpinner) findViewById(R.id.edit_cost_category);
         editCostSubCategory = (AppCompatSpinner) findViewById(R.id.edit_cost_subCategory);
         imageView = (ImageView) findViewById(R.id.edit_cost_photo);
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_cost_edit);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                editCost();
+            }
+        });
     }
 
     private void setDatePickerDialog() {
@@ -106,7 +115,7 @@ public class CostEditActivity extends AppCompatActivity implements OnTaskComplet
         });
     }
 
-    public void editCost(final View view) {
+    public void editCost() {
         final Cost cost = checkFields();
         if (cost != null) {
             cost.setId(id);

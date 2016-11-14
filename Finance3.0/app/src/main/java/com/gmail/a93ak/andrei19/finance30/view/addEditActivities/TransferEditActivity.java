@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatSpinner;
@@ -17,11 +18,11 @@ import android.widget.TextView;
 
 import com.gmail.a93ak.andrei19.finance30.App;
 import com.gmail.a93ak.andrei19.finance30.R;
-import com.gmail.a93ak.andrei19.finance30.control.executors.PurseExecutor;
-import com.gmail.a93ak.andrei19.finance30.control.executors.TransferExecutor;
 import com.gmail.a93ak.andrei19.finance30.control.base.OnTaskCompleted;
 import com.gmail.a93ak.andrei19.finance30.control.base.RequestHolder;
 import com.gmail.a93ak.andrei19.finance30.control.base.Result;
+import com.gmail.a93ak.andrei19.finance30.control.executors.PurseExecutor;
+import com.gmail.a93ak.andrei19.finance30.control.executors.TransferExecutor;
 import com.gmail.a93ak.andrei19.finance30.model.TableQueryGenerator;
 import com.gmail.a93ak.andrei19.finance30.model.models.Purse;
 import com.gmail.a93ak.andrei19.finance30.model.models.Transfer;
@@ -53,10 +54,19 @@ public class TransferEditActivity extends AppCompatActivity implements OnTaskCom
             setTheme(R.style.Dark);
         }
         super.onCreate(savedInstanceState);
+        setTitle(R.string.editing);
         setContentView(R.layout.transfer_add_edit_activity);
         findViewsByIds();
         setDatePickerDialog();
         final long transferId = getIntent().getLongExtra(Transfer.ID, -1);
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_transfer_add_edit);
+        fab.setImageResource(android.R.drawable.ic_menu_edit);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                editTransfer();
+            }
+        });
         new TransferExecutor(this).execute(new RequestHolder<Transfer>().get(transferId));
     }
 
@@ -68,7 +78,6 @@ public class TransferEditActivity extends AppCompatActivity implements OnTaskCom
         editTransferFromAmount = (EditText) findViewById(R.id.transfer_from_amount);
         editTransferToAmount = (EditText) findViewById(R.id.transfer_to_amount);
         officialRate = (TextView) findViewById(R.id.official_rate);
-        ((TextView) findViewById(R.id.transfers)).setText(R.string.editing);
     }
 
     private void setDatePickerDialog() {
@@ -148,7 +157,7 @@ public class TransferEditActivity extends AppCompatActivity implements OnTaskCom
         }
     }
 
-    public void addEditTransfer(final View view) {
+    public void editTransfer() {
 
         final Transfer transfer = checkFields();
         if (transfer != null) {

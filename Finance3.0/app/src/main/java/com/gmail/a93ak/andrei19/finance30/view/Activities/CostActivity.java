@@ -8,10 +8,12 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.view.ContextMenu;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,14 +26,13 @@ import android.widget.Toast;
 
 import com.gmail.a93ak.andrei19.finance30.App;
 import com.gmail.a93ak.andrei19.finance30.R;
-import com.gmail.a93ak.andrei19.finance30.control.executors.CostExecutor;
-import com.gmail.a93ak.andrei19.finance30.control.loaders.CostCursorLoader;
 import com.gmail.a93ak.andrei19.finance30.control.adapters.CostCursorAdapter;
 import com.gmail.a93ak.andrei19.finance30.control.base.OnTaskCompleted;
 import com.gmail.a93ak.andrei19.finance30.control.base.RequestHolder;
 import com.gmail.a93ak.andrei19.finance30.control.base.Result;
+import com.gmail.a93ak.andrei19.finance30.control.executors.CostExecutor;
+import com.gmail.a93ak.andrei19.finance30.control.loaders.CostCursorLoader;
 import com.gmail.a93ak.andrei19.finance30.model.TableQueryGenerator;
-
 import com.gmail.a93ak.andrei19.finance30.model.models.Cost;
 import com.gmail.a93ak.andrei19.finance30.util.universalLoader.loaders.BitmapLoader;
 import com.gmail.a93ak.andrei19.finance30.view.addEditActivities.CostAddActivity;
@@ -53,25 +54,60 @@ public class CostActivity extends AppCompatActivity implements LoaderManager.Loa
 
     private CostCursorAdapter costCursorAdapter;
     private RequestHolder<Cost> requestHolder;
+    private ListView costListView;
+    private long itemId = -1;
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         if (getSharedPreferences(App.PREFS, Context.MODE_PRIVATE).getBoolean(App.THEME, false)) {
             setTheme(R.style.Dark);
         }
+        setTitle(R.string.costs);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.cost_activity);
+        setContentView(R.layout.standart_activity);
         requestHolder = new RequestHolder<>();
         costCursorAdapter = new CostCursorAdapter(this, null);
-        final ListView costListView = (ListView) findViewById(R.id.costListView);
+        costListView = (ListView) findViewById(R.id.standartListView);
         costListView.setAdapter(costCursorAdapter);
+        costListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
+                itemId = id;
+            }
+        });
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                final Intent intent = new Intent(CostActivity.this, CostAddActivity.class);
+                startActivityForResult(intent, ADD_COST_REQUEST);
+            }
+        });
         registerForContextMenu(costListView);
         getSupportLoaderManager().restartLoader(MAIN_LOADER_ID, null, this);
     }
 
-    public void addCost(final View view) {
-        final Intent intent = new Intent(this, CostAddActivity.class);
-        startActivityForResult(intent, ADD_COST_REQUEST);
+    @Override
+    public boolean onCreateOptionsMenu(final Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(final MenuItem item) {
+        final int id = item.getItemId();
+        if (itemId != -1) {
+            if (id == R.id.action_edit) {
+                final Intent intent = new Intent(this, CostEditActivity.class);
+                intent.putExtra(Cost.ID, itemId);
+                startActivityForResult(intent, EDIT_COST_REQUEST);
+                return true;
+            } else {
+                new CostExecutor(this).execute(requestHolder.delete(itemId));
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override

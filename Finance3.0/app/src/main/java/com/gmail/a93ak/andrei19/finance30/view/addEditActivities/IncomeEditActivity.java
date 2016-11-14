@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatSpinner;
@@ -17,12 +18,12 @@ import android.widget.TextView;
 
 import com.gmail.a93ak.andrei19.finance30.App;
 import com.gmail.a93ak.andrei19.finance30.R;
-import com.gmail.a93ak.andrei19.finance30.control.executors.IncomeCategoryExecutor;
-import com.gmail.a93ak.andrei19.finance30.control.executors.IncomeExecutor;
-import com.gmail.a93ak.andrei19.finance30.control.executors.PurseExecutor;
 import com.gmail.a93ak.andrei19.finance30.control.base.OnTaskCompleted;
 import com.gmail.a93ak.andrei19.finance30.control.base.RequestHolder;
 import com.gmail.a93ak.andrei19.finance30.control.base.Result;
+import com.gmail.a93ak.andrei19.finance30.control.executors.IncomeCategoryExecutor;
+import com.gmail.a93ak.andrei19.finance30.control.executors.IncomeExecutor;
+import com.gmail.a93ak.andrei19.finance30.control.executors.PurseExecutor;
 import com.gmail.a93ak.andrei19.finance30.model.TableQueryGenerator;
 import com.gmail.a93ak.andrei19.finance30.model.models.Income;
 import com.gmail.a93ak.andrei19.finance30.model.models.IncomeCategory;
@@ -57,6 +58,7 @@ public class IncomeEditActivity extends AppCompatActivity implements OnTaskCompl
         }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.income_edit_activity);
+        setTitle(R.string.editing);
         id = getIntent().getLongExtra(Income.ID, -1);
         findViewsBuId();
         setDatePickerDialog();
@@ -70,6 +72,13 @@ public class IncomeEditActivity extends AppCompatActivity implements OnTaskCompl
         editIncomePurse = (AppCompatSpinner) findViewById(R.id.edit_income_purse);
         editIncomeCategory = (AppCompatSpinner) findViewById(R.id.edit_income_category);
         editIncomeSubCategory = (AppCompatSpinner) findViewById(R.id.edit_income_subCategory);
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_income_edit);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                editIncome();
+            }
+        });
     }
 
     private void setDatePickerDialog() {
@@ -92,7 +101,7 @@ public class IncomeEditActivity extends AppCompatActivity implements OnTaskCompl
         });
     }
 
-    public void editIncome(final View view) {
+    public void editIncome() {
         final Income income = checkFields();
         if (income != null) {
             income.setId(id);

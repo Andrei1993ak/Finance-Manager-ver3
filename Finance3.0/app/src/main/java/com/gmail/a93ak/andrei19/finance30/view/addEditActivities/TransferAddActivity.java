@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatSpinner;
@@ -52,9 +53,17 @@ public class TransferAddActivity extends AppCompatActivity implements OnTaskComp
             setTheme(R.style.Dark);
         }
         super.onCreate(savedInstanceState);
+        setTitle(R.string.newTransfer);
         setContentView(R.layout.transfer_add_edit_activity);
         findViewsByIds();
         setDatePickerDialog();
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_transfer_add_edit);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                addTransfer();
+            }
+        });
         new PurseExecutor(this).execute(new RequestHolder<Purse>().getAllToList(RequestHolder.SELECTION_ALL));
     }
 
@@ -66,7 +75,7 @@ public class TransferAddActivity extends AppCompatActivity implements OnTaskComp
         newTransferFromAmount = (EditText) findViewById(R.id.transfer_from_amount);
         newTransferToAmount = (EditText) findViewById(R.id.transfer_to_amount);
         officialRate = (TextView) findViewById(R.id.official_rate);
-        ((Button) findViewById(R.id.transfer_add_edit_button)).setText(R.string.add_button_text);
+
     }
 
     private void setDatePickerDialog() {
@@ -89,7 +98,7 @@ public class TransferAddActivity extends AppCompatActivity implements OnTaskComp
         });
     }
 
-    public void addEditTransfer(final View view) {
+    public void addTransfer() {
 
         final Transfer transfer = checkFields();
         if (transfer != null) {

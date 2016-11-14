@@ -5,10 +5,12 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.view.ContextMenu;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -16,12 +18,12 @@ import android.widget.ListView;
 
 import com.gmail.a93ak.andrei19.finance30.App;
 import com.gmail.a93ak.andrei19.finance30.R;
-import com.gmail.a93ak.andrei19.finance30.control.executors.IncomeExecutor;
-import com.gmail.a93ak.andrei19.finance30.control.loaders.IncomeCursorLoader;
 import com.gmail.a93ak.andrei19.finance30.control.adapters.IncomeCursorAdapter;
 import com.gmail.a93ak.andrei19.finance30.control.base.OnTaskCompleted;
 import com.gmail.a93ak.andrei19.finance30.control.base.RequestHolder;
 import com.gmail.a93ak.andrei19.finance30.control.base.Result;
+import com.gmail.a93ak.andrei19.finance30.control.executors.IncomeExecutor;
+import com.gmail.a93ak.andrei19.finance30.control.loaders.IncomeCursorLoader;
 import com.gmail.a93ak.andrei19.finance30.model.TableQueryGenerator;
 import com.gmail.a93ak.andrei19.finance30.model.models.Income;
 import com.gmail.a93ak.andrei19.finance30.view.addEditActivities.IncomeAddActivity;
@@ -39,6 +41,8 @@ public class IncomeActivity extends AppCompatActivity implements LoaderManager.L
 
     private IncomeCursorAdapter incomeCursorAdapter;
     private RequestHolder<Income> requestHolder;
+    private ListView incomeListView;
+    private long itemId = -1;
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
@@ -46,18 +50,51 @@ public class IncomeActivity extends AppCompatActivity implements LoaderManager.L
             setTheme(R.style.Dark);
         }
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.imcome_activity);
+        setTitle(R.string.incomes);
+        setContentView(R.layout.standart_activity);
         requestHolder = new RequestHolder<>();
         incomeCursorAdapter = new IncomeCursorAdapter(this, null);
-        final ListView incomeListView = (ListView) findViewById(R.id.incomeListView);
+        incomeListView = (ListView) findViewById(R.id.standartListView);
         incomeListView.setAdapter(incomeCursorAdapter);
+        incomeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
+                itemId = id;
+            }
+        });
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                final Intent intent = new Intent(IncomeActivity.this, IncomeAddActivity.class);
+                startActivityForResult(intent, ADD_INCOME_REQUEST);
+            }
+        });
         registerForContextMenu(incomeListView);
         getSupportLoaderManager().restartLoader(MAIN_LOADER_ID, null, this);
     }
 
-    public void addIncome(final View view) {
-        final Intent intent = new Intent(this, IncomeAddActivity.class);
-        startActivityForResult(intent, ADD_INCOME_REQUEST);
+    @Override
+    public boolean onCreateOptionsMenu(final Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(final MenuItem item) {
+        final int id = item.getItemId();
+        if (itemId != -1) {
+            if (id == R.id.action_edit) {
+                final Intent intent = new Intent(this, IncomeEditActivity.class);
+                intent.putExtra(Income.ID, itemId);
+                startActivityForResult(intent, EDIT_INCOME_REQUEST);
+                return true;
+            } else {
+                new IncomeExecutor(this).execute(requestHolder.delete(itemId));
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override

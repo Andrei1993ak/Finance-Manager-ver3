@@ -5,10 +5,12 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.view.ContextMenu;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -16,12 +18,12 @@ import android.widget.ListView;
 
 import com.gmail.a93ak.andrei19.finance30.App;
 import com.gmail.a93ak.andrei19.finance30.R;
-import com.gmail.a93ak.andrei19.finance30.control.executors.TransferExecutor;
-import com.gmail.a93ak.andrei19.finance30.control.loaders.TransferCursorLoader;
 import com.gmail.a93ak.andrei19.finance30.control.adapters.TransferCursorAdapter;
 import com.gmail.a93ak.andrei19.finance30.control.base.OnTaskCompleted;
 import com.gmail.a93ak.andrei19.finance30.control.base.RequestHolder;
 import com.gmail.a93ak.andrei19.finance30.control.base.Result;
+import com.gmail.a93ak.andrei19.finance30.control.executors.TransferExecutor;
+import com.gmail.a93ak.andrei19.finance30.control.loaders.TransferCursorLoader;
 import com.gmail.a93ak.andrei19.finance30.model.TableQueryGenerator;
 import com.gmail.a93ak.andrei19.finance30.model.models.Transfer;
 import com.gmail.a93ak.andrei19.finance30.view.addEditActivities.TransferAddActivity;
@@ -39,6 +41,8 @@ public class TransferActivity extends AppCompatActivity implements LoaderManager
 
     private TransferCursorAdapter transferCursorAdapter;
     private RequestHolder<Transfer> requestHolder;
+    private ListView transferListView;
+    private long itemId = -1;
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
@@ -46,18 +50,52 @@ public class TransferActivity extends AppCompatActivity implements LoaderManager
             setTheme(R.style.Dark);
         }
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.transfer_activity);
+        setContentView(R.layout.standart_activity);
+        setTitle(R.string.transfers);
         transferCursorAdapter = new TransferCursorAdapter(this, null);
         requestHolder = new RequestHolder<>();
-        final ListView transferListView = (ListView) findViewById(R.id.transferListView);
+        transferListView = (ListView) findViewById(R.id.standartListView);
+        transferListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
+                itemId = id;
+            }
+        });
         transferListView.setAdapter(transferCursorAdapter);
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                final Intent intent = new Intent(TransferActivity.this, TransferAddActivity.class);
+                startActivityForResult(intent, ADD_TRANSFER_REQUEST);
+            }
+        });
         registerForContextMenu(transferListView);
         getSupportLoaderManager().restartLoader(MAIN_LOADER_ID, null, this);
     }
 
-    public void addTransfer(final View view) {
-        final Intent intent = new Intent(this, TransferAddActivity.class);
-        startActivityForResult(intent, ADD_TRANSFER_REQUEST);
+
+    @Override
+    public boolean onCreateOptionsMenu(final Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(final MenuItem item) {
+        final int id = item.getItemId();
+        if (itemId != -1) {
+            if (id == R.id.action_edit) {
+                final Intent intent = new Intent(this, TransferEditActivity.class);
+                intent.putExtra(Transfer.ID, itemId);
+                startActivityForResult(intent, EDIT_TRANSFER_REQUEST);
+                return true;
+            } else {
+                new TransferExecutor(this).execute(requestHolder.delete(itemId));
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override

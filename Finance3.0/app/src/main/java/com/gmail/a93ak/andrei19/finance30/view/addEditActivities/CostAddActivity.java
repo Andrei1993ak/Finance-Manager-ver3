@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatSpinner;
@@ -22,11 +23,11 @@ import android.widget.TextView;
 
 import com.gmail.a93ak.andrei19.finance30.App;
 import com.gmail.a93ak.andrei19.finance30.R;
-import com.gmail.a93ak.andrei19.finance30.control.executors.CostCategoryExecutor;
-import com.gmail.a93ak.andrei19.finance30.control.executors.PurseExecutor;
 import com.gmail.a93ak.andrei19.finance30.control.base.OnTaskCompleted;
 import com.gmail.a93ak.andrei19.finance30.control.base.RequestHolder;
 import com.gmail.a93ak.andrei19.finance30.control.base.Result;
+import com.gmail.a93ak.andrei19.finance30.control.executors.CostCategoryExecutor;
+import com.gmail.a93ak.andrei19.finance30.control.executors.PurseExecutor;
 import com.gmail.a93ak.andrei19.finance30.model.DBHelper;
 import com.gmail.a93ak.andrei19.finance30.model.TableQueryGenerator;
 import com.gmail.a93ak.andrei19.finance30.model.models.Cost;
@@ -64,9 +65,17 @@ public class CostAddActivity extends AppCompatActivity implements OnTaskComplete
         if (getSharedPreferences(App.PREFS, Context.MODE_PRIVATE).getBoolean(App.THEME, false)) {
             setTheme(R.style.Dark);
         }
+        setTitle(R.string.newCost);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cost_add_activity);
         findViewsBuId();
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_cost_add);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                addNewCost();
+            }
+        });
         new PurseExecutor(this).execute(new RequestHolder<Purse>().getAllToList(RequestHolder.SELECTION_ALL));
         new CostCategoryExecutor(this).execute(new RequestHolder<CostCategory>().getAllToList(RequestHolder.SELECTION_PARENT_CATEGORIES));
         setDatePickerDialog();
@@ -101,7 +110,7 @@ public class CostAddActivity extends AppCompatActivity implements OnTaskComplete
         newCostSubCategory = (AppCompatSpinner) findViewById(R.id.new_cost_subCategory);
     }
 
-    public void addNewCost(final View view) {
+    public void addNewCost() {
         final Cost cost = checkFields();
         if (cost != null) {
             final Intent intent = new Intent();

@@ -25,7 +25,6 @@ import com.gmail.a93ak.andrei19.finance30.control.base.Result;
 import com.gmail.a93ak.andrei19.finance30.control.executors.PurseExecutor;
 import com.gmail.a93ak.andrei19.finance30.control.loaders.PurseCursorLoader;
 import com.gmail.a93ak.andrei19.finance30.model.TableQueryGenerator;
-import com.gmail.a93ak.andrei19.finance30.model.models.Currency;
 import com.gmail.a93ak.andrei19.finance30.model.models.Purse;
 import com.gmail.a93ak.andrei19.finance30.view.addEditActivities.PurseAddActivity;
 import com.gmail.a93ak.andrei19.finance30.view.addEditActivities.PurseEditActivity;
@@ -41,7 +40,7 @@ public class PurseActivity extends AppCompatActivity implements LoaderManager.Lo
     private PurseCursorAdapter purseCursorAdapter;
     private RequestHolder<Purse> requestHolder;
     private ListView lvPurses;
-    private long itemId;
+    private long itemId = -1;
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
@@ -84,7 +83,7 @@ public class PurseActivity extends AppCompatActivity implements LoaderManager.Lo
         if (itemId != -1) {
             if (id == R.id.action_edit) {
                 final Intent intent = new Intent(this, PurseEditActivity.class);
-                intent.putExtra(Currency.ID, itemId);
+                intent.putExtra(Purse.ID, itemId);
                 startActivityForResult(intent, EDIT_PURSE_REQUEST);
                 return true;
             } else {

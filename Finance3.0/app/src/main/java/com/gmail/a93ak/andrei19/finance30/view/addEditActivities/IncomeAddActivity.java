@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatSpinner;
@@ -52,10 +53,18 @@ public class IncomeAddActivity extends AppCompatActivity implements OnTaskComple
         if (getSharedPreferences(App.PREFS, Context.MODE_PRIVATE).getBoolean(App.THEME, false)) {
             setTheme(R.style.Dark);
         }
+        setTitle(R.string.newIncome);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.income_add_activity);
         findViewsBuId();
         setDatePickerDialog();
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_income_add);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                addNewIncome();
+            }
+        });
         new PurseExecutor(this).execute(new RequestHolder<Purse>().getAllToList(RequestHolder.SELECTION_ALL));
         new IncomeCategoryExecutor(this).execute(new RequestHolder<IncomeCategory>().getAllToList(RequestHolder.SELECTION_PARENT_CATEGORIES));
     }
@@ -89,7 +98,7 @@ public class IncomeAddActivity extends AppCompatActivity implements OnTaskComple
         });
     }
 
-    public void addNewIncome(final View view) {
+    public void addNewIncome() {
         final Income income = checkFields();
         if (income != null) {
             final Intent intent = new Intent();
