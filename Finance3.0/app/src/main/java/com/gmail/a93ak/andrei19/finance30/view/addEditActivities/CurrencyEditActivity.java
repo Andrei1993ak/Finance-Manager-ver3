@@ -3,6 +3,7 @@ package com.gmail.a93ak.andrei19.finance30.view.addEditActivities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -11,10 +12,10 @@ import android.widget.TextView;
 
 import com.gmail.a93ak.andrei19.finance30.App;
 import com.gmail.a93ak.andrei19.finance30.R;
-import com.gmail.a93ak.andrei19.finance30.control.executors.CurrencyExecutor;
 import com.gmail.a93ak.andrei19.finance30.control.base.OnTaskCompleted;
 import com.gmail.a93ak.andrei19.finance30.control.base.RequestHolder;
 import com.gmail.a93ak.andrei19.finance30.control.base.Result;
+import com.gmail.a93ak.andrei19.finance30.control.executors.CurrencyExecutor;
 import com.gmail.a93ak.andrei19.finance30.model.TableQueryGenerator;
 import com.gmail.a93ak.andrei19.finance30.model.models.Currency;
 
@@ -32,21 +33,25 @@ public class CurrencyEditActivity extends AppCompatActivity implements OnTaskCom
         }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.currency_edit_activity);
+        setTitle(R.string.editing);
         editCurrencyCode = (TextView) findViewById(R.id.edit_currency_code);
         editCurrencyName = (EditText) findViewById(R.id.edit_currency_name);
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_cur_edit);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Currency currency = checkFields();
+                if (currency != null) {
+                    final Intent intent = new Intent();
+                    intent.putExtra(TableQueryGenerator.getTableName(Currency.class), currency);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                }
+            }
+        });
         final RequestHolder<Currency> requestHolder = new RequestHolder<>();
         final long id = getIntent().getLongExtra(Currency.ID, -1);
         new CurrencyExecutor(this).execute(requestHolder.get(id));
-    }
-
-    public void editCurrency(final View view) {
-        final Currency currency = checkFields();
-        if (currency != null) {
-            final Intent intent = new Intent();
-            intent.putExtra(TableQueryGenerator.getTableName(Currency.class), currency);
-            setResult(RESULT_OK, intent);
-            finish();
-        }
     }
 
     private Currency checkFields() {

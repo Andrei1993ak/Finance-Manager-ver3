@@ -47,9 +47,10 @@ public class PurseActivity extends AppCompatActivity implements LoaderManager.Lo
             setTheme(R.style.Dark);
         }
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.purse_activity);
+        setTitle(R.string.purses);
+        setContentView(R.layout.standart_activity);
         requestHolder = new RequestHolder<>();
-        final ListView purseListVIew = (ListView) findViewById(R.id.purseListView);
+        final ListView purseListVIew = (ListView) findViewById(R.id.standartListView);
         purseCursorAdapter = new PurseCursorAdapter(this, null);
         purseListVIew.setAdapter(purseCursorAdapter);
         registerForContextMenu(purseListVIew);

@@ -20,6 +20,7 @@ public class SettingsActivity extends AppCompatActivity {
         }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings);
+        setTitle(R.string.settings);
         final Switch themeSwitch = (Switch) findViewById(R.id.themeSwitch);
         if (getSharedPreferences(App.PREFS, Context.MODE_PRIVATE).getBoolean(App.THEME, false)) {
             themeSwitch.setChecked(true);

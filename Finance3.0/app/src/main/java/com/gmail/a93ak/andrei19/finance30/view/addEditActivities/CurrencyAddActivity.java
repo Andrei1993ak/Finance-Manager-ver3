@@ -34,6 +34,7 @@ public class CurrencyAddActivity extends AppCompatActivity implements LoaderMana
             setTheme(R.style.Dark);
         }
         super.onCreate(savedInstanceState);
+        setTitle(R.string.allCurrencies);
         setContentView(R.layout.currency_add_activity);
         final String[] from = new String[]{CurrencyOfficial.NAME};
         final int[] to = new int[]{R.id.currencyName};

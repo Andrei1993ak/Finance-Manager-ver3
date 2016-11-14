@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Финансовфй менеджер</string>
+    <string name="app_name">Финансовый менеджер</string>
     <string name="currencies">Валюты</string>
     <string name="delete">Удалить</string>
     <string name="rename">Переименовать</string>
@@ -49,4 +49,5 @@
     <string name="incomesByCategories">Доходы по категориям</string>
     <string name="balanceCHart">Баланс по кошельку</string>
     <string name="theme">Установить темный стиль</string>
+    <string name="allCurrencies">Все валюты</string>
 </resources>

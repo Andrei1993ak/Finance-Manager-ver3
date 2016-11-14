@@ -50,4 +50,5 @@
     <string name="type">type</string>
     <string name="balanceCHart">Balance chart</string>
     <string name="theme">Set dark style</string>
+    <string name="allCurrencies">All currencies</string>
 </resources>
