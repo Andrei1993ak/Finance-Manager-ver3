@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatSpinner;
@@ -36,20 +37,28 @@ public class CostCategoryEditActivity extends AppCompatActivity implements OnTas
         if (getSharedPreferences(App.PREFS, Context.MODE_PRIVATE).getBoolean(App.THEME, false)) {
             setTheme(R.style.Dark);
         }
+        setTitle(R.string.editing);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.category_add_edit_activity);
         findViewsById();
         final long costCategoryId = getIntent().getLongExtra(CostCategory.ID, -1);
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_cat_add);
+        fab.setImageResource(android.R.drawable.ic_menu_edit);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                editCategory();
+            }
+        });
         new CostCategoryExecutor(this).execute(new RequestHolder<CostCategory>().get(costCategoryId));
     }
 
     private void findViewsById() {
         editCategoryName = (EditText) findViewById(R.id.add_edit_category_name);
         parentCategories = (AppCompatSpinner) findViewById(R.id.spinnerParentCategories);
-        ((TextView) findViewById(R.id.title_category)).setText(R.string.editing);
     }
 
-    public void addEditCategory(final View view) {
+    public void editCategory() {
         final CostCategory costCategory = checkFields();
         if (costCategory != null) {
             final Intent intent = new Intent();

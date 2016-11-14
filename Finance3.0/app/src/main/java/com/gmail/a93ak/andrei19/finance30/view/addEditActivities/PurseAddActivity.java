@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatSpinner;
@@ -13,10 +14,10 @@ import android.widget.EditText;
 
 import com.gmail.a93ak.andrei19.finance30.App;
 import com.gmail.a93ak.andrei19.finance30.R;
-import com.gmail.a93ak.andrei19.finance30.control.executors.CurrencyExecutor;
 import com.gmail.a93ak.andrei19.finance30.control.base.OnTaskCompleted;
 import com.gmail.a93ak.andrei19.finance30.control.base.RequestHolder;
 import com.gmail.a93ak.andrei19.finance30.control.base.Result;
+import com.gmail.a93ak.andrei19.finance30.control.executors.CurrencyExecutor;
 import com.gmail.a93ak.andrei19.finance30.model.TableQueryGenerator;
 import com.gmail.a93ak.andrei19.finance30.model.models.Currency;
 import com.gmail.a93ak.andrei19.finance30.model.models.Purse;
@@ -36,8 +37,16 @@ public class PurseAddActivity extends AppCompatActivity implements OnTaskComplet
             setTheme(R.style.Dark);
         }
         super.onCreate(savedInstanceState);
+        setTitle(R.string.newPurse);
         setContentView(R.layout.purse_add_activity);
         findViewsById();
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_pur_edit);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                addNewPurse();
+            }
+        });
         new CurrencyExecutor(this).execute(new RequestHolder<Currency>().getAllToList(RequestHolder.SELECTION_ALL));
     }
 
@@ -47,7 +56,7 @@ public class PurseAddActivity extends AppCompatActivity implements OnTaskComplet
         newPurseAmount = (EditText) findViewById(R.id.new_purse_amount);
     }
 
-    public void addNewPurse(final View view) {
+    public void addNewPurse() {
         final Purse purse = checkFields();
         if (purse != null) {
             final Intent intent = new Intent();

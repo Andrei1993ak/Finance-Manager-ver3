@@ -4,20 +4,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatSpinner;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.gmail.a93ak.andrei19.finance30.App;
 import com.gmail.a93ak.andrei19.finance30.R;
-import com.gmail.a93ak.andrei19.finance30.control.executors.IncomeCategoryExecutor;
 import com.gmail.a93ak.andrei19.finance30.control.base.OnTaskCompleted;
 import com.gmail.a93ak.andrei19.finance30.control.base.RequestHolder;
 import com.gmail.a93ak.andrei19.finance30.control.base.Result;
+import com.gmail.a93ak.andrei19.finance30.control.executors.IncomeCategoryExecutor;
 import com.gmail.a93ak.andrei19.finance30.model.TableQueryGenerator;
 import com.gmail.a93ak.andrei19.finance30.model.models.IncomeCategory;
 
@@ -39,17 +39,25 @@ public class IncomeCategoryEditActivity extends AppCompatActivity implements OnT
         super.onCreate(savedInstanceState);
         setContentView(R.layout.category_add_edit_activity);
         findViewsById();
+        setTitle(R.string.editing);
         final long incomeCategoryId = getIntent().getLongExtra(IncomeCategory.ID, -1);
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_cat_add);
+        fab.setImageResource(android.R.drawable.ic_menu_edit);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                editCategory();
+            }
+        });
         new IncomeCategoryExecutor(this).execute(new RequestHolder<IncomeCategory>().get(incomeCategoryId));
     }
 
     private void findViewsById() {
         editCategoryName = (EditText) findViewById(R.id.add_edit_category_name);
         parentCategories = (AppCompatSpinner) findViewById(R.id.spinnerParentCategories);
-        ((TextView) findViewById(R.id.title_category)).setText(R.string.editing);
     }
 
-    public void addEditCategory(final View view) {
+    public void editCategory() {
         final IncomeCategory incomeCategory = checkFields();
         if (incomeCategory != null) {
             final Intent intent = new Intent();

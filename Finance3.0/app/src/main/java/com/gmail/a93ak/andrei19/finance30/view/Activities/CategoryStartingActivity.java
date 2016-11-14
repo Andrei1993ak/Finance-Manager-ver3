@@ -13,9 +13,11 @@ public class CategoryStartingActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
+
         if (getSharedPreferences(App.PREFS, Context.MODE_PRIVATE).getBoolean(App.THEME, false)) {
             setTheme(R.style.Dark);
         }
+        setTitle(R.string.categories);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.category_starting_activity);
     }

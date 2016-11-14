@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
@@ -16,12 +17,12 @@ import android.widget.Toast;
 
 import com.gmail.a93ak.andrei19.finance30.App;
 import com.gmail.a93ak.andrei19.finance30.R;
-import com.gmail.a93ak.andrei19.finance30.control.executors.IncomeCategoryExecutor;
-import com.gmail.a93ak.andrei19.finance30.control.loaders.IncomeCategoryCursorLoader;
 import com.gmail.a93ak.andrei19.finance30.control.adapters.ExpListAdapter;
 import com.gmail.a93ak.andrei19.finance30.control.base.OnTaskCompleted;
 import com.gmail.a93ak.andrei19.finance30.control.base.RequestHolder;
 import com.gmail.a93ak.andrei19.finance30.control.base.Result;
+import com.gmail.a93ak.andrei19.finance30.control.executors.IncomeCategoryExecutor;
+import com.gmail.a93ak.andrei19.finance30.control.loaders.IncomeCategoryCursorLoader;
 import com.gmail.a93ak.andrei19.finance30.model.TableQueryGenerator;
 import com.gmail.a93ak.andrei19.finance30.model.dbHelpers.DBHelperCategoryIncome;
 import com.gmail.a93ak.andrei19.finance30.model.models.IncomeCategory;
@@ -51,6 +52,7 @@ public class CategoryIncomeActivity extends AppCompatActivity implements LoaderM
         }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.category_activity);
+        setTitle(R.string.incomeCategories);
         incomeCategoryExpListView = (ExpandableListView) findViewById(R.id.CategoryExpListView);
         final String[] parentsFrom = {IncomeCategory.NAME};
         final int[] parentsTo = {android.R.id.text1};
@@ -59,7 +61,15 @@ public class CategoryIncomeActivity extends AppCompatActivity implements LoaderM
         adapter = new ExpListAdapter(this, null, android.R.layout.simple_expandable_list_item_1, parentsFrom, parentsTo,
                 android.R.layout.simple_expandable_list_item_1, childFrom, childTo);
         incomeCategoryExpListView.setAdapter(adapter);
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_add_cat);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                addCategory();
+            }
+        });
         getSupportLoaderManager().restartLoader(ROOT_LOADER_ID, null, this);
+
         registerForContextMenu(incomeCategoryExpListView);
     }
 
@@ -70,7 +80,7 @@ public class CategoryIncomeActivity extends AppCompatActivity implements LoaderM
         super.onStop();
     }
 
-    public void addCategory(final View view) {
+    public void addCategory() {
         final Intent intent = new Intent(this, IncomeCategoryAddActivity.class);
         startActivityForResult(intent, ADD_CATEGORY_REQUEST);
     }

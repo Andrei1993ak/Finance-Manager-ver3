@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
@@ -51,8 +52,8 @@ public class CategoryCostActivity extends AppCompatActivity implements LoaderMan
         }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.category_activity);
+        setTitle(R.string.costCategories);
         costCategoryExpListView = (ExpandableListView) findViewById(R.id.CategoryExpListView);
-        ((TextView) findViewById(R.id.categoriesTitle)).setText(R.string.costCategories);
         final String[] parentsFrom = {CostCategory.NAME};
         final int[] parentsTo = {android.R.id.text1};
         final String[] childFrom = {CostCategory.NAME};
@@ -60,6 +61,13 @@ public class CategoryCostActivity extends AppCompatActivity implements LoaderMan
         adapter = new ExpListAdapter(this, null, android.R.layout.simple_expandable_list_item_1, parentsFrom, parentsTo,
                 android.R.layout.simple_expandable_list_item_1, childFrom, childTo);
         costCategoryExpListView.setAdapter(adapter);
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_add_cat);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                addCategory();
+            }
+        });
         getSupportLoaderManager().restartLoader(ROOT_LOADER_ID, null, this);
         registerForContextMenu(costCategoryExpListView);
     }
@@ -71,7 +79,7 @@ public class CategoryCostActivity extends AppCompatActivity implements LoaderMan
         super.onStop();
     }
 
-    public void addCategory(final View view) {
+    public void addCategory() {
         final Intent intent = new Intent(this, CostCategoryAddActivity.class);
         startActivityForResult(intent, ADD_CATEGORY_REQUEST);
     }

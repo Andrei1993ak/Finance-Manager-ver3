@@ -9,7 +9,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
-        android:layout_weight="0.05">
+        android:layout_weight="0.08">
 
         <android.support.v7.widget.AppCompatSpinner
             android:id="@+id/pursesNamesBalanceChart"

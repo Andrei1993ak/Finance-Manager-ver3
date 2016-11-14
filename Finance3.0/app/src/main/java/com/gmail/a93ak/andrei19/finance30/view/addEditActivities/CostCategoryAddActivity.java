@@ -36,6 +36,7 @@ public class CostCategoryAddActivity extends AppCompatActivity implements OnTask
             setTheme(R.style.Dark);
         }
         super.onCreate(savedInstanceState);
+        setTitle(R.string.newCategory);
         setContentView(R.layout.category_add_edit_activity);
         findViewsById();
         new CostCategoryExecutor(this).execute(new RequestHolder<CostCategory>().getAllToList(RequestHolder.SELECTION_PARENT_CATEGORIES));
@@ -44,7 +45,6 @@ public class CostCategoryAddActivity extends AppCompatActivity implements OnTask
     private void findViewsById() {
         newCategoryName = (EditText) findViewById(R.id.add_edit_category_name);
         parentCategories = (AppCompatSpinner) findViewById(R.id.spinnerParentCategories);
-        ((Button) findViewById(R.id.button_add_edit_category)).setText(R.string.add_button_text);
     }
 
     public void addEditCategory(final View view) {

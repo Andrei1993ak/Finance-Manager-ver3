@@ -51,6 +51,11 @@ public class PieChartActivity extends AppCompatActivity implements OnTaskComplet
         }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.report_income_pie);
+        if (getIntent().getBooleanExtra(PieChartItem.TYPE, false)){
+            setTitle(R.string.incomesByCategories);
+        } else {
+            setTitle(R.string.costsByCategories);
+        }
         spinner = (AppCompatSpinner) findViewById(R.id.pursesNames);
         if (savedInstanceState == null) {
             position = 0;

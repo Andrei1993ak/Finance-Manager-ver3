@@ -22,6 +22,7 @@ public class ReportsActivity extends AppCompatActivity {
         }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.reports);
+        setTitle(R.string.reports);
     }
 
     public void selectReport(final View view) {

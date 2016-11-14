@@ -41,6 +41,11 @@ public class PieChartActivityNext extends AppCompatActivity implements LoaderMan
         }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.report_income_pie_next);
+        if (getIntent().getBooleanExtra(PieChartItem.TYPE, false)) {
+            setTitle(R.string.incomesByCategories);
+        } else {
+            setTitle(R.string.costsByCategories);
+        }
         final Bundle args = new Bundle();
         args.putLong(Income.PURSE_ID, getIntent().getLongExtra(Income.PURSE_ID, -1));
         args.putLong(Income.CATEGORY_ID, getIntent().getLongExtra(Income.CATEGORY_ID, -1));

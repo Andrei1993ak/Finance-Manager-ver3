@@ -45,6 +45,7 @@ public class BalanceChartActivity extends AppCompatActivity implements OnTaskCom
         if (getSharedPreferences(App.PREFS, Context.MODE_PRIVATE).getBoolean(App.THEME, false)) {
             setTheme(R.style.Dark);
         }
+        setTitle(R.string.balanceCHart);
         if (savedInstanceState == null) {
             position = 0;
         } else {
