@@ -1,4 +1,4 @@
-package com.github.andrei1993ak.finance30;
+package com.github.andrei1993ak.finances;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

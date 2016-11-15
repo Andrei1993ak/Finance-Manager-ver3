@@ -1,4 +1,4 @@
-package com.github.andrei1993ak.finance30;
+package com.github.andrei1993ak.finances;
 
 import org.junit.Test;
 
