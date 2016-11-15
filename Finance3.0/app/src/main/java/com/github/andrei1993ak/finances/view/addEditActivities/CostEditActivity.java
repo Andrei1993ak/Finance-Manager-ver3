@@ -1,0 +1,311 @@
+package com.github.andrei1993ak.finances.view.addEditActivities;
+
+import android.app.DatePickerDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatSpinner;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.github.andrei1993ak.finances.control.base.Result;
+import com.github.andrei1993ak.finances.control.executors.CostExecutor;
+import com.github.andrei1993ak.finances.control.executors.PurseExecutor;
+import com.github.andrei1993ak.finances.model.TableQueryGenerator;
+import com.github.andrei1993ak.finances.model.models.Cost;
+import com.github.andrei1993ak.finances.model.models.CostCategory;
+import com.github.andrei1993ak.finances.model.models.Purse;
+import com.github.andrei1993ak.finances.util.universalLoader.loaders.BitmapLoader;
+import com.github.andrei1993ak.finances.App;
+import com.github.andrei1993ak.finances.R;
+import com.github.andrei1993ak.finances.control.executors.CostCategoryExecutor;
+import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
+import com.github.andrei1993ak.finances.control.base.RequestHolder;
+import com.google.common.io.Files;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
+
+public class CostEditActivity extends AppCompatActivity implements OnTaskCompleted {
+
+    private Cost cost;
+    private EditText editCostName;
+    private EditText editCostAmount;
+    private TextView editCostDate;
+    private AppCompatSpinner editCostPurse;
+    private AppCompatSpinner editCostCategory;
+    private AppCompatSpinner editCostSubCategory;
+    private List<Purse> pursesList;
+    private List<CostCategory> categoriesList;
+    private List<CostCategory> subCategoriesList;
+    private ImageView imageView;
+    private SimpleDateFormat dateFormatter;
+    private long parentId;
+    private long id;
+    private Bitmap photo;
+    public static final int CAMERA_REQUEST = 1;
+
+    @Override
+    protected void onCreate(@Nullable final Bundle savedInstanceState) {
+        if (getSharedPreferences(App.PREFS, Context.MODE_PRIVATE).getBoolean(App.THEME, false)) {
+            setTheme(R.style.Dark);
+        }
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.cost_edit_activity);
+        setTitle(R.string.editing);
+        findViewsBuId();
+        id = getIntent().getLongExtra(Cost.ID, -1);
+        new CostExecutor(this).execute(new RequestHolder<Cost>().get(id));
+        setDatePickerDialog();
+    }
+
+    private void findViewsBuId() {
+        editCostName = (EditText) findViewById(R.id.edit_cost_name);
+        editCostAmount = (EditText) findViewById(R.id.edit_cost_amount);
+        editCostDate = (TextView) findViewById(R.id.edit_cost_date);
+        editCostPurse = (AppCompatSpinner) findViewById(R.id.edit_cost_purse);
+        editCostCategory = (AppCompatSpinner) findViewById(R.id.edit_cost_category);
+        editCostSubCategory = (AppCompatSpinner) findViewById(R.id.edit_cost_subCategory);
+        imageView = (ImageView) findViewById(R.id.edit_cost_photo);
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_cost_edit);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                editCost();
+            }
+        });
+        final PackageManager pm = getApplicationContext().getPackageManager();
+        if (!pm.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
+            findViewById(R.id.button_edit_photo).setVisibility(View.INVISIBLE);
+        }
+    }
+
+    private void setDatePickerDialog() {
+        dateFormatter = new SimpleDateFormat(getResources().getString(R.string.dateFormat), Locale.US);
+        final Calendar newCalendar = Calendar.getInstance();
+        final DatePickerDialog dialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(final DatePicker view, final int year, final int month, final int dayOfMonth) {
+                final Calendar newDate = Calendar.getInstance();
+                newDate.set(year, month, dayOfMonth);
+                editCostDate.setText(dateFormatter.format(newDate.getTime()));
+            }
+        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+        editCostDate.setText(dateFormatter.format(newCalendar.getTime()));
+        editCostDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                dialog.show();
+            }
+        });
+    }
+
+    public void editCost() {
+        final Cost cost = checkFields();
+        if (cost != null) {
+            cost.setId(id);
+            final Intent intent = new Intent();
+            intent.putExtra(TableQueryGenerator.getTableName(Cost.class), cost);
+            setResult(RESULT_OK, intent);
+            finish();
+        }
+    }
+
+    @Nullable
+    private Cost checkFields() {
+        final Cost cost = new Cost();
+        boolean flag = true;
+        if (editCostName.getText().toString().length() == 0) {
+            editCostName.setBackground(ContextCompat.getDrawable(this, R.drawable.shape_red_field));
+            flag = false;
+        } else {
+            editCostName.setBackground(ContextCompat.getDrawable(this, R.drawable.shape_green_field));
+            cost.setName(editCostName.getText().toString());
+        }
+        try {
+            cost.setDate(dateFormatter.parse(editCostDate.getText().toString()).getTime());
+            final Double amount = Double.parseDouble(editCostAmount.getText().toString());
+            if (amount > 0) {
+                cost.setAmount(amount);
+                editCostAmount.setBackground(ContextCompat.getDrawable(this, R.drawable.shape_green_field));
+            } else {
+                editCostAmount.setBackground(ContextCompat.getDrawable(this, R.drawable.shape_red_field));
+                flag = false;
+            }
+        } catch (final NumberFormatException e) {
+            editCostAmount.setBackground(ContextCompat.getDrawable(this, R.drawable.shape_red_field));
+            flag = false;
+        } catch (final ParseException e) {
+            flag = false;
+        }
+        if (editCostAmount.getText().length() == 0) {
+            editCostAmount.setBackground(ContextCompat.getDrawable(this, R.drawable.shape_red_field));
+            flag = false;
+        } else {
+            editCostAmount.setBackground(ContextCompat.getDrawable(this, R.drawable.shape_green_field));
+        }
+        cost.setPurseId(pursesList.get(editCostPurse.getSelectedItemPosition()).getId());
+        if (editCostSubCategory.getVisibility() == View.GONE) {
+            cost.setCategoryId(categoriesList.get(editCostCategory.getSelectedItemPosition()).getId());
+        } else {
+            cost.setCategoryId(subCategoriesList.get(editCostSubCategory.getSelectedItemPosition()).getId());
+        }
+        if (photo == null) {
+            cost.setPhoto(0);
+        } else {
+            cost.setPhoto(1);
+        }
+        if (!flag) {
+            return null;
+        } else {
+            return cost;
+        }
+    }
+
+    public void editPhoto(final View view) {
+        final File file = new File(App.getTempImagePath());
+        final Uri outputFileUri = Uri.fromFile(file);
+        final Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
+        startActivityForResult(cameraIntent, CAMERA_REQUEST);
+    }
+
+    @Override
+    public void onTaskCompleted(final Result result) {
+        switch (result.getId()) {
+            case CostExecutor.KEY_RESULT_GET:
+                cost = (Cost) result.getObject();
+                editCostName.setText(cost.getName());
+                editCostAmount.setText(String.valueOf(cost.getAmount()));
+                editCostDate.setText(dateFormatter.format(cost.getDate()));
+                if (cost.getPhoto() == 1) {
+                    final String filePath = App.getImagePath(id);
+                    final File file = new File(filePath);
+                    final BitmapLoader bitmapLoader = BitmapLoader.getInstance(this);
+                    try {
+                        bitmapLoader.load(file.toURI().toURL().toString(), imageView);
+                    } catch (final MalformedURLException e) {
+                        e.printStackTrace();
+                    }
+                }
+                final RequestHolder<Purse> purseRequestHolder = new RequestHolder<>();
+                new PurseExecutor(this).execute(purseRequestHolder.getAllToList(0));
+                final RequestHolder<CostCategory> categoryRequestHolder = new RequestHolder<>();
+                new CostCategoryExecutor(this).execute(categoryRequestHolder.get(cost.getCategoryId()));
+                break;
+            case PurseExecutor.KEY_RESULT_GET_ALL_TO_LIST:
+                pursesList = (List<Purse>) result.getObject();
+                final String[] pursesNames = new String[pursesList.size()];
+                int i = 0;
+                int position = -1;
+                for (final Purse purse : pursesList) {
+                    pursesNames[i++] = purse.getName();
+                    if (purse.getId() == cost.getPurseId()) {
+                        position = i - 1;
+                    }
+                }
+                final ArrayAdapter<String> spinnerPursesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, pursesNames);
+                spinnerPursesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                editCostPurse.setAdapter(spinnerPursesAdapter);
+                editCostPurse.setSelection(position);
+                break;
+            case CostCategoryExecutor.KEY_RESULT_GET:
+                final CostCategory category = (CostCategory) result.getObject();
+                parentId = category.getParent_id();
+                final RequestHolder<CostCategory> costCategoryRequestHolder = new RequestHolder<>();
+                new CostCategoryExecutor(this).execute(costCategoryRequestHolder.getAllToList(1));
+                break;
+            case CostCategoryExecutor.KEY_RESULT_GET_ALL_TO_LIST:
+                categoriesList = (List<CostCategory>) result.getObject();
+                final String[] categoriesNames = new String[categoriesList.size()];
+                int j = 0;
+                int categoryPosition = -1;
+                for (final CostCategory costCategory : categoriesList) {
+                    categoriesNames[j++] = costCategory.getName();
+                    if (parentId == -1) {
+                        if (costCategory.getId() == cost.getCategoryId()) {
+                            categoryPosition = j - 1;
+                        }
+                    } else {
+                        if (costCategory.getId() == parentId) {
+                            categoryPosition = j - 1;
+                        }
+                    }
+                }
+                final ArrayAdapter<String> spinnerCategoriesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categoriesNames);
+                spinnerCategoriesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                editCostCategory.setAdapter(spinnerCategoriesAdapter);
+                editCostCategory.setSelection(categoryPosition);
+                editCostCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(final AdapterView<?> parent, final View view, final int position, final long id) {
+                        final RequestHolder<CostCategory> categoryRequestHolder = new RequestHolder<>();
+                        new CostCategoryExecutor(CostEditActivity.this).execute(categoryRequestHolder.getAllToListByCategory(categoriesList.get(position).getId()));
+                    }
+
+                    @Override
+                    public void onNothingSelected(final AdapterView<?> parent) {
+
+                    }
+                });
+                break;
+            case CostCategoryExecutor.KEY_RESULT_GET_ALL_TO_LIST_BY_PARENT_ID:
+                subCategoriesList = (List<CostCategory>) result.getObject();
+                final int length = subCategoriesList.size();
+                if (length == 0) {
+                    editCostSubCategory.setVisibility(View.GONE);
+                } else {
+                    editCostSubCategory.setVisibility(View.VISIBLE);
+                    final String[] subCategoriesNames = new String[subCategoriesList.size()];
+                    int k = 0;
+                    int subCatPosition = 0;
+                    for (final CostCategory costCategory : subCategoriesList) {
+                        subCategoriesNames[k++] = costCategory.getName();
+                        if (costCategory.getId() == cost.getCategoryId()) {
+                            subCatPosition = k - 1;
+                        }
+                    }
+                    final ArrayAdapter<String> spinnerSubCategoriesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, subCategoriesNames);
+                    spinnerSubCategoriesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    editCostSubCategory.setAdapter(spinnerSubCategoriesAdapter);
+                    editCostSubCategory.setSelection(subCatPosition);
+                }
+                break;
+        }
+    }
+
+    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+        if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
+            photo = BitmapFactory.decodeFile(App.getTempImagePath());
+            final ImageView view = (ImageView) findViewById(R.id.edit_cost_photo);
+            view.setImageBitmap(photo);
+            final String path = App.getImagePath(id);
+            final File toFile = new File(path);
+            try {
+                Files.move(new File(App.getTempImagePath()), toFile);
+            } catch (final IOException e) {
+                photo = null;
+            }
+        }
+    }
+}

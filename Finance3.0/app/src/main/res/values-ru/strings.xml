@@ -23,7 +23,6 @@
     <string name="edit">Редактировать</string>
     <string name="add_button_text">+</string>
     <string name="costCategories">Категории расходов</string>
-    <string name="edit_button_text"></string>
     <string name="newIncome">Новый доход</string>
     <string name="purse">Кошелек</string>
     <string name="date">Дата</string>
@@ -50,4 +49,6 @@
     <string name="balanceCHart">Баланс по кошельку</string>
     <string name="theme">Установить темный стиль</string>
     <string name="allCurrencies">Все валюты</string>
+    <string name="dateFormat">dd-MM-yyyy</string>
+    <string name="type">type</string>
 </resources>

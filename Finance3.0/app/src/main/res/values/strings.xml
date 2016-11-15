@@ -20,7 +20,6 @@
     <string name="newCategory">New Category</string>
     <string name="parent">Parent</string>
     <string name="edit">Edit</string>
-    <string name="edit_button_text">"\u2714"</string>
     <string name="add_button_text">+</string>
     <string name="costCategories">Cost Categories</string>
     <string name="newIncome">new income</string>

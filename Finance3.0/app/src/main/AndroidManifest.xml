@@ -1,58 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.gmail.a93ak.andrei19.finance30">
+    package="com.github.andrei1993ak.finances">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <!--TODO external storage is not required to read FileProvider -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <!--TODO make feature not required -->
-    <uses-feature android:name="android.hardware.camera"/>
 
-    <!--TODO rename ic_launcher to something app specific -->
-    <!--TODO rtlSupport really? -->
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
     <application
-        android:name=".App"
+        android:name="com.github.andrei1993ak.finances.App"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:fullBackupContent="true"
+        android:icon="@mipmap/ic_launcher_finances"
         android:label="@string/app_name"
-        android:supportsRtl="true"
+        android:supportsRtl="false"
         android:theme="@style/Light">
-        <!--TODO fix all yellow and red lines in the right -->
-        <activity android:name=".view.MainActivity">
+        <activity android:name="com.github.andrei1993ak.finances.view.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="github.com"
+                    android:pathPrefix="/finances"
+                    android:scheme="http" />
+            </intent-filter>
         </activity>
-        <activity android:name=".view.activities.CurrencyActivity" />
-        <activity android:name=".view.addEditActivities.CurrencyAddActivity" />
-        <activity android:name=".view.addEditActivities.CurrencyEditActivity" />
-        <activity android:name=".view.activities.PurseActivity" />
-        <activity android:name=".view.addEditActivities.PurseAddActivity" />
-        <activity android:name=".view.addEditActivities.PurseEditActivity" />
-        <activity android:name=".view.activities.CategoryStartingActivity" />
-        <activity android:name=".view.activities.CategoryIncomeActivity" />
-        <activity android:name=".view.activities.CategoryCostActivity" />
-        <activity android:name=".view.addEditActivities.IncomeCategoryAddActivity" />
-        <activity android:name=".view.addEditActivities.CostCategoryAddActivity" />
-        <activity android:name=".view.addEditActivities.IncomeCategoryEditActivity" />
-        <activity android:name=".view.addEditActivities.CostCategoryEditActivity" />
-        <activity android:name=".view.activities.ImagesActivity" />
-        <activity android:name=".view.activities.IncomeActivity" />
-        <activity android:name=".view.addEditActivities.IncomeAddActivity" />
-        <activity android:name=".view.addEditActivities.IncomeEditActivity" />
-        <activity android:name=".view.activities.CostActivity"/>
-        <activity android:name=".view.addEditActivities.CostAddActivity"/>
-        <activity android:name=".view.addEditActivities.CostEditActivity" />
-        <activity android:name=".view.activities.TransferActivity"/>
-        <activity android:name=".view.addEditActivities.TransferAddActivity"/>
-        <activity android:name=".view.addEditActivities.TransferEditActivity"/>
-        <activity android:name=".view.activities.ReportsActivity"/>
-        <activity android:name=".view.reports.PieChartActivity"/>
-        <activity android:name=".view.reports.PieChartActivityNext"/>
-        <activity android:name=".view.reports.BalanceChartActivity"/>
-        <activity android:name=".view.activities.SettingsActivity"/>
+        <activity android:name="com.github.andrei1993ak.finances.view.activities.CurrencyActivity" />
+        <activity android:name="com.github.andrei1993ak.finances.view.addEditActivities.CurrencyAddActivity" />
+        <activity android:name="com.github.andrei1993ak.finances.view.addEditActivities.CurrencyEditActivity" />
+        <activity android:name="com.github.andrei1993ak.finances.view.activities.PurseActivity" />
+        <activity android:name="com.github.andrei1993ak.finances.view.addEditActivities.PurseAddActivity" />
+        <activity android:name="com.github.andrei1993ak.finances.view.addEditActivities.PurseEditActivity" />
+        <activity android:name="com.github.andrei1993ak.finances.view.activities.CategoryStartingActivity" />
+        <activity android:name="com.github.andrei1993ak.finances.view.activities.CategoryIncomeActivity" />
+        <activity android:name="com.github.andrei1993ak.finances.view.activities.CategoryCostActivity" />
+        <activity android:name="com.github.andrei1993ak.finances.view.addEditActivities.IncomeCategoryAddActivity" />
+        <activity android:name="com.github.andrei1993ak.finances.view.addEditActivities.CostCategoryAddActivity" />
+        <activity android:name="com.github.andrei1993ak.finances.view.addEditActivities.IncomeCategoryEditActivity" />
+        <activity android:name="com.github.andrei1993ak.finances.view.addEditActivities.CostCategoryEditActivity" />
+        <activity android:name="com.github.andrei1993ak.finances.view.activities.ImagesActivity" />
+        <activity android:name="com.github.andrei1993ak.finances.view.activities.IncomeActivity" />
+        <activity android:name="com.github.andrei1993ak.finances.view.addEditActivities.IncomeAddActivity" />
+        <activity android:name="com.github.andrei1993ak.finances.view.addEditActivities.IncomeEditActivity" />
+        <activity android:name="com.github.andrei1993ak.finances.view.activities.CostActivity" />
+        <activity android:name="com.github.andrei1993ak.finances.view.addEditActivities.CostAddActivity" />
+        <activity android:name="com.github.andrei1993ak.finances.view.addEditActivities.CostEditActivity" />
+        <activity android:name="com.github.andrei1993ak.finances.view.activities.TransferActivity" />
+        <activity android:name="com.github.andrei1993ak.finances.view.addEditActivities.TransferAddActivity" />
+        <activity android:name="com.github.andrei1993ak.finances.view.addEditActivities.TransferEditActivity" />
+        <activity android:name="com.github.andrei1993ak.finances.view.activities.ReportsActivity" />
+        <activity android:name="com.github.andrei1993ak.finances.view.reports.PieChartActivity" />
+        <activity android:name="com.github.andrei1993ak.finances.view.reports.PieChartActivityNext" />
+        <activity android:name="com.github.andrei1993ak.finances.view.reports.BalanceChartActivity" />
+        <activity android:name="com.github.andrei1993ak.finances.view.activities.SettingsActivity" />
 
     </application>
 

@@ -1,15 +1,12 @@
 apply plugin: 'com.android.application'
 
-//TODO fix all yellow marks
 android {
-    compileSdkVersion 24
-    //TODO
-    buildToolsVersion "24.0.1"
+    compileSdkVersion 25
+    buildToolsVersion "25.0.0"
     defaultConfig {
-        //TODO rename top package or be developer of gmail.com
-        applicationId "com.gmail.a93ak.andrei19.finance30"
+        applicationId "com.github.andrei1993ak.finances"
         minSdkVersion 16
-        targetSdkVersion 24
+        targetSdkVersion 25
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -20,21 +17,29 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    return void
 }
+
+ext.versions = [
+        resyclerViewVersion: '25.0.0',
+        appCompatVersion   : '25.0.0',
+        design             : '25.0.0',
+        findBags           : '2.0.1',
+        espresso           : '2.2.2',
+        aChartEngine       : '1.2.0',
+        jUnit              : '4.12'
+]
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    androidTestCompile("com.android.support.test.espresso:espresso-core:$versions.espresso", {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    //TODO update libs
-    //TODO move version to var
-    compile 'com.android.support:recyclerview-v7:24.2.0'
-    compile 'com.android.support:appcompat-v7:24.2.0'
-    compile 'com.android.support:design:24.2.1'
-    compile 'com.google.code.findbugs:jsr305:2.0.1'
-    compile group: 'commons-net', name: 'commons-net', version: '3.3'
-    compile group: 'org.achartengine', name: 'achartengine', version: '1.2.0'
-    testCompile 'junit:junit:4.12'
+    compile "com.android.support:recyclerview-v7:$versions.resyclerViewVersion"
+    compile "com.android.support:appcompat-v7:$versions.appCompatVersion"
+    compile "com.android.support:design:$versions.design"
+    compile "com.google.code.findbugs:jsr305:$versions.findBags"
+    compile group: 'org.achartengine', name: 'achartengine', version: "$versions.aChartEngine"
+    testCompile "junit:junit:$versions.jUnit"
     compile project(path: ':backend', configuration: 'android-endpoints')
 }

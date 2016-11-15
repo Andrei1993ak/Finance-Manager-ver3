@@ -170,6 +170,7 @@
                             android:layout_weight="1" />
 
                         <ImageButton
+                            android:id="@+id/add_photo_button"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:background="@drawable/ic_camera_enhance_black_24dp"
