@@ -3,8 +3,8 @@ package com.github.andrei1993ak.finances.model.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.github.andrei1993ak.finances.model.annotations.types.DBDouble;
 import com.github.andrei1993ak.finances.model.annotations.Table;
+import com.github.andrei1993ak.finances.model.annotations.types.DBDouble;
 import com.github.andrei1993ak.finances.model.annotations.types.DBInteger;
 
 @Table(name = "costs")

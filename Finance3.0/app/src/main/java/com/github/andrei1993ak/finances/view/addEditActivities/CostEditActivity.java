@@ -12,6 +12,7 @@ import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatSpinner;
 import android.view.View;
@@ -22,7 +23,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.github.andrei1993ak.finances.App;
+import com.github.andrei1993ak.finances.R;
+import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
+import com.github.andrei1993ak.finances.control.base.RequestHolder;
 import com.github.andrei1993ak.finances.control.base.Result;
+import com.github.andrei1993ak.finances.control.executors.CostCategoryExecutor;
 import com.github.andrei1993ak.finances.control.executors.CostExecutor;
 import com.github.andrei1993ak.finances.control.executors.PurseExecutor;
 import com.github.andrei1993ak.finances.model.TableQueryGenerator;
@@ -30,16 +36,12 @@ import com.github.andrei1993ak.finances.model.models.Cost;
 import com.github.andrei1993ak.finances.model.models.CostCategory;
 import com.github.andrei1993ak.finances.model.models.Purse;
 import com.github.andrei1993ak.finances.util.universalLoader.loaders.BitmapLoader;
-import com.github.andrei1993ak.finances.App;
-import com.github.andrei1993ak.finances.R;
-import com.github.andrei1993ak.finances.control.executors.CostCategoryExecutor;
-import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
-import com.github.andrei1993ak.finances.control.base.RequestHolder;
 import com.google.common.io.Files;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -48,6 +50,7 @@ import java.util.Locale;
 
 public class CostEditActivity extends AppCompatActivity implements OnTaskCompleted {
 
+    public static final String AUTHORITY = "com.github.andrei1993ak.finances.fileProvider";
     private Cost cost;
     private EditText editCostName;
     private EditText editCostAmount;
@@ -183,9 +186,14 @@ public class CostEditActivity extends AppCompatActivity implements OnTaskComplet
     }
 
     public void editPhoto(final View view) {
-        final File file = new File(App.getTempImagePath());
-        final Uri outputFileUri = Uri.fromFile(file);
         final Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        final Context context = this;
+        final File imagePath = new File(context.getFilesDir(), "public");
+        if (!imagePath.exists()) {
+            imagePath.mkdirs();
+        }
+        final File file = new File(imagePath, "tmp.jpg");
+        final Uri outputFileUri = FileProvider.getUriForFile(context, AUTHORITY, file);
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
         startActivityForResult(cameraIntent, CAMERA_REQUEST);
     }
@@ -296,13 +304,19 @@ public class CostEditActivity extends AppCompatActivity implements OnTaskComplet
 
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
-            photo = BitmapFactory.decodeFile(App.getTempImagePath());
+            final File imagePath = new File(this.getFilesDir(), "public");
+            if (!imagePath.exists()) {
+                imagePath.mkdirs();
+            }
+            final File file = new File(imagePath, "tmp.jpg");
             final ImageView view = (ImageView) findViewById(R.id.edit_cost_photo);
-            view.setImageBitmap(photo);
             final String path = App.getImagePath(id);
             final File toFile = new File(path);
             try {
-                Files.move(new File(App.getTempImagePath()), toFile);
+                Files.move(file, toFile);
+                photo = BitmapFactory.decodeFile(toFile.getPath());
+                BitmapLoader.getInstance(this).clearCashes(toFile.toURI().toURL().toString());
+                view.setImageBitmap(photo);
             } catch (final IOException e) {
                 photo = null;
             }

@@ -6,19 +6,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.github.andrei1993ak.finances.model.models.Cost;
-import com.github.andrei1993ak.finances.model.models.CostCategory;
-import com.github.andrei1993ak.finances.model.models.Currency;
-import com.github.andrei1993ak.finances.model.models.CurrencyOfficial;
-import com.github.andrei1993ak.finances.model.models.Income;
-import com.github.andrei1993ak.finances.model.models.IncomeCategory;
-import com.github.andrei1993ak.finances.model.models.Purse;
-import com.github.andrei1993ak.finances.model.models.Transfer;
 
 public class DBHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "financePm";
 
-    private static final int DATABASE_VERSION = 12;
+    private static final int DATABASE_VERSION = 17;
 
     private static DBHelper instance;
 
@@ -36,19 +29,18 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(final SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL(TableQueryGenerator.getTableCreateQuery(CurrencyOfficial.class));
-        sqLiteDatabase.execSQL(TableQueryGenerator.getTableCreateQuery(Currency.class));
-        sqLiteDatabase.execSQL(TableQueryGenerator.getTableCreateQuery(CostCategory.class));
-        sqLiteDatabase.execSQL(TableQueryGenerator.getTableCreateQuery(IncomeCategory.class));
-        sqLiteDatabase.execSQL(TableQueryGenerator.getTableCreateQuery(Purse.class));
-        sqLiteDatabase.execSQL(TableQueryGenerator.getTableCreateQuery(Income.class));
-        sqLiteDatabase.execSQL(TableQueryGenerator.getTableCreateQuery(Transfer.class));
-        sqLiteDatabase.execSQL(TableQueryGenerator.getTableCreateQuery(Cost.class));
+//        sqLiteDatabase.execSQL(TableQueryGenerator.getTableCreateQuery(CurrencyOfficial.class));
+//        sqLiteDatabase.execSQL(TableQueryGenerator.getTableCreateQuery(Currency.class));
+//        sqLiteDatabase.execSQL(TableQueryGenerator.getTableCreateQuery(CostCategory.class));
+//        sqLiteDatabase.execSQL(TableQueryGenerator.getTableCreateQuery(IncomeCategory.class));
+//        sqLiteDatabase.execSQL(TableQueryGenerator.getTableCreateQuery(Purse.class));
+//        sqLiteDatabase.execSQL(TableQueryGenerator.getTableCreateQuery(Income.class));
+//        sqLiteDatabase.execSQL(TableQueryGenerator.getTableCreateQuery(Transfer.class));
+//        sqLiteDatabase.execSQL(TableQueryGenerator.getTableCreateQuery(Cost.class));
     }
 
     @Override
     public void onUpgrade(final SQLiteDatabase sqLiteDatabase, final int oldVersion, final int newVersion) {
-//        sqLiteDatabase.execSQL(TableQueryGenerator.getTableDeleteQuery(Transfer.class));
         onCreate(sqLiteDatabase);
     }
 

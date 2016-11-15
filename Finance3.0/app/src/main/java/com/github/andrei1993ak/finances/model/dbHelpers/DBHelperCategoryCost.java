@@ -59,9 +59,9 @@ public class DBHelperCategoryCost implements DBHelperForModel<CostCategory> {
         final Cursor cursor = db.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
             final CostCategory costCategory = new CostCategory();
-            costCategory.setId(cursor.getLong(0));
-            costCategory.setName(cursor.getString(1));
-            costCategory.setParent_id(cursor.getLong(2));
+            costCategory.setId(cursor.getLong(cursor.getColumnIndex(CostCategory.ID)));
+            costCategory.setName(cursor.getString(cursor.getColumnIndex(CostCategory.NAME)));
+            costCategory.setParent_id(cursor.getLong(cursor.getColumnIndex(CostCategory.PARENT_ID)));
             cursor.close();
             return costCategory;
         } else {
@@ -163,9 +163,9 @@ public class DBHelperCategoryCost implements DBHelperForModel<CostCategory> {
         if (cursor.moveToFirst()) {
             do {
                 final CostCategory costCategory = new CostCategory();
-                costCategory.setId(cursor.getLong(0));
-                costCategory.setName(cursor.getString(1));
-                costCategory.setParent_id(cursor.getLong(2));
+                costCategory.setId(cursor.getLong(cursor.getColumnIndex(CostCategory.ID)));
+                costCategory.setName(cursor.getString(cursor.getColumnIndex(CostCategory.NAME)));
+                costCategory.setParent_id(cursor.getLong(cursor.getColumnIndex(CostCategory.PARENT_ID)));
                 list.add(costCategory);
             } while (cursor.moveToNext());
         }
@@ -187,9 +187,9 @@ public class DBHelperCategoryCost implements DBHelperForModel<CostCategory> {
         if (cursor.moveToFirst()) {
             do {
                 final CostCategory costCategory = new CostCategory();
-                costCategory.setId(cursor.getLong(0));
-                costCategory.setName(cursor.getString(1));
-                costCategory.setParent_id(cursor.getLong(2));
+                costCategory.setId(cursor.getLong(cursor.getColumnIndex(CostCategory.ID)));
+                costCategory.setName(cursor.getString(cursor.getColumnIndex(CostCategory.NAME)));
+                costCategory.setParent_id(cursor.getLong(cursor.getColumnIndex(CostCategory.PARENT_ID)));
                 list.add(costCategory);
             } while (cursor.moveToNext());
         }

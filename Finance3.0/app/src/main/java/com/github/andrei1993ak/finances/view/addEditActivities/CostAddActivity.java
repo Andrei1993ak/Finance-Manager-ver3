@@ -12,6 +12,7 @@ import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatSpinner;
 import android.view.View;
@@ -47,6 +48,7 @@ import java.util.Locale;
 public class CostAddActivity extends AppCompatActivity implements OnTaskCompleted {
 
     private static final int CAMERA_REQUEST = 1;
+    public static final String AUTHORITY = "com.github.andrei1993ak.finances.fileProvider";
 
     private EditText newCostName;
     private EditText newCostAmount;
@@ -181,12 +183,26 @@ public class CostAddActivity extends AppCompatActivity implements OnTaskComplete
     }
 
     public void addPhoto(final View view) {
-        final File file = new File(App.getTempImagePath());
-        final Uri outputFileUri = Uri.fromFile(file);
         final Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        final Context context = this;
+        final File imagePath = new File(context.getFilesDir(), "public");
+        if (!imagePath.exists()) {
+            imagePath.mkdirs();
+        }
+        final File file = new File(imagePath, "tmp.jpg");
+        final Uri outputFileUri = FileProvider.getUriForFile(context, AUTHORITY, file);
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
         startActivityForResult(cameraIntent, CAMERA_REQUEST);
     }
+
+
+//    public void addPhoto(final View view) {
+////        final Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+////        final File file = new File(App.getTempImagePath());
+////        final Uri outputFileUri = Uri.fromFile(file);
+////        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
+////        startActivityForResult(cameraIntent, CAMERA_REQUEST);
+//    }
 
     @Override
     public void onTaskCompleted(final Result result) {
@@ -249,13 +265,18 @@ public class CostAddActivity extends AppCompatActivity implements OnTaskComplete
 
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
-            photo = BitmapFactory.decodeFile(App.getTempImagePath());
+            final File imagePath = new File(this.getFilesDir(), "public");
+            if (!imagePath.exists()) {
+                imagePath.mkdirs();
+            }
+            final File file = new File(imagePath, "tmp.jpg");
+            photo = BitmapFactory.decodeFile(file.getPath());
             final ImageView view = (ImageView) findViewById(R.id.new_cost_photo);
             view.setImageBitmap(photo);
             final String path = App.getImagePath(DBHelper.getInstance(this).getNextId());
             final File toFile = new File(path);
             try {
-                Files.move(new File(App.getTempImagePath()), toFile);
+                Files.move(file, toFile);
             } catch (final IOException e) {
                 photo = null;
             }

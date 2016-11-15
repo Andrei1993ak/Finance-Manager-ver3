@@ -1,9 +1,10 @@
 package com.github.andrei1993ak.finances;
 
 import android.app.Application;
-import android.os.Environment;
 
 import com.github.andrei1993ak.finances.util.ContextHolder;
+
+import java.io.File;
 
 
 public class App extends Application {
@@ -19,14 +20,16 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         ContextHolder.getInstance().setContext(this);
-        //TODO use getFilesDir()
-        imagePath = getApplicationInfo().dataDir + "/files/images/";
-        //TODO use getCacheDir()
-        tempImagePath = Environment.getExternalStorageDirectory().getPath() + "/temp.jpg";
+        imagePath = getFilesDir() + "/images/";
+        final File file = new File(imagePath);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+        tempImagePath = getCacheDir() + "/temp.jpg";
     }
 
     //TODO ImageNameGenerator
-    public static String getImagePath(long id) {
+    public static String getImagePath(final long id) {
         return imagePath + String.valueOf(id) + ".jpg";
     }
 

@@ -5,10 +5,11 @@ import android.support.annotation.Nullable;
 
 import com.github.andrei1993ak.finances.model.annotations.Table;
 import com.github.andrei1993ak.finances.model.annotations.types.DBDouble;
+import com.github.andrei1993ak.finances.model.annotations.types.DBInteger;
+import com.github.andrei1993ak.finances.model.annotations.types.DBIntegerAutoIncrement;
+import com.github.andrei1993ak.finances.model.annotations.types.DBIntegerPrimaryKey;
 import com.github.andrei1993ak.finances.model.annotations.types.DBString;
 import com.github.andrei1993ak.finances.model.models.TableClass;
-import com.github.andrei1993ak.finances.model.annotations.types.DBInteger;
-import com.github.andrei1993ak.finances.model.annotations.types.DBIntegerPrimaryKey;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -20,8 +21,9 @@ public class TableQueryGenerator {
     private static final String SQL_TABLE_DELETE_TEMPLATE = "DROP TABLE IF EXISTS %s";
     private static final String SQL_TABLE_CREATE_FIELD_TEMPLATE = "%s %s";
 
+//    Package local
     @Nullable
-    public static String getTableCreateQuery(final Class<? extends TableClass> clazz) {
+    static String getTableCreateQuery(final Class<? extends TableClass> clazz) {
 
         final Table table = clazz.getAnnotation(Table.class);
 
@@ -50,6 +52,8 @@ public class TableQueryGenerator {
                             type = ((DBString) annotation).value();
                         } else if (annotation instanceof DBIntegerPrimaryKey) {
                             type = ((DBIntegerPrimaryKey) annotation).value();
+                        } else if (annotation instanceof DBIntegerAutoIncrement) {
+                            type = ((DBIntegerAutoIncrement) annotation).value();
                         }
                     }
 
@@ -77,9 +81,9 @@ public class TableQueryGenerator {
             return null;
         }
     }
-
+//    Package local
     @Nullable
-    public static String getTableDeleteQuery(final Class<? extends TableClass> clazz) {
+    static String getTableDeleteQuery(final Class<? extends TableClass> clazz) {
 
         final Table table = clazz.getAnnotation(Table.class);
 
