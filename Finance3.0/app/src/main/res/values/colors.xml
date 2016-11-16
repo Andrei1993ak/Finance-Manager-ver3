@@ -7,6 +7,7 @@
     <color name="colorGreenText">#d0aaea8c</color>
     <color name="colorGrayText">#d0c0c4be</color>
     <color name="colorRedText">#d4ec4832</color>
+    <color name="separatorView">@android:color/darker_gray</color>
 
 
     <!--<color name="pieColor2">#80ede2</color>-->

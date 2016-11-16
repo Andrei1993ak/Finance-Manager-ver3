@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         }
     }
 
-    public void selectCategory(final View view) {
+    public void onSelectedCategoryViewClick(final View view) {
         switch (view.getId()) {
             case R.id.tvCurrency:
                 startActivity(new Intent(this, CurrencyActivity.class));

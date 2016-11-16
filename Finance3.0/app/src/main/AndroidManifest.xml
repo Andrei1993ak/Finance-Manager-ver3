@@ -50,7 +50,6 @@
         <activity android:name="com.github.andrei1993ak.finances.view.addEditActivities.CostCategoryAddActivity" />
         <activity android:name="com.github.andrei1993ak.finances.view.addEditActivities.IncomeCategoryEditActivity" />
         <activity android:name="com.github.andrei1993ak.finances.view.addEditActivities.CostCategoryEditActivity" />
-        <activity android:name="com.github.andrei1993ak.finances.view.activities.ImagesActivity" />
         <activity android:name="com.github.andrei1993ak.finances.view.activities.IncomeActivity" />
         <activity android:name="com.github.andrei1993ak.finances.view.addEditActivities.IncomeAddActivity" />
         <activity android:name="com.github.andrei1993ak.finances.view.addEditActivities.IncomeEditActivity" />

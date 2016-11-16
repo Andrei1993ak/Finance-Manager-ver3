@@ -8,45 +8,36 @@ import java.util.Map.Entry;
 
 abstract class MemoryCache<MyObj> {
 
-    private Map<String, MyObj> cache = Collections.synchronizedMap(new LinkedHashMap<String, MyObj>(10, 1.5f, true));
+    private final Map<String, MyObj> cache = Collections.synchronizedMap(new LinkedHashMap<String, MyObj>(10, 1.5f, true));
     private long size = 0;
-    private long limit = Runtime.getRuntime().maxMemory() / 4;
-
-    public MemoryCache() {
-
-    }
+    private final long limit = Runtime.getRuntime().maxMemory() / 4;
 
     abstract int getSize(MyObj myObj);
 
-    MyObj getFromMemoryCache(String id) {
+    MyObj getFromMemoryCache(final String id) {
         try {
             if (!cache.containsKey(id))
                 return null;
             return cache.get(id);
-        } catch (NullPointerException ex) {
-            ex.printStackTrace();
+        } catch (final NullPointerException ex) {
             return null;
         }
     }
 
-    void putToMemoryCache(String id, MyObj myObj) {
-        try {
-            if (cache.containsKey(id)) {
-                size -= getSizeInBytes(cache.get(id));
-            }
-            cache.put(id, myObj);
-            size += getSizeInBytes(myObj);
-            checkSize();
-        } catch (Throwable th) {
-            th.printStackTrace();
+    void putToMemoryCache(final String id, final MyObj myObj) {
+        if (cache.containsKey(id)) {
+            size -= getSizeInBytes(cache.get(id));
         }
+        cache.put(id, myObj);
+        size += getSizeInBytes(myObj);
+        checkSize();
     }
 
     private void checkSize() {
         if (size > limit) {
-            Iterator<Entry<String, MyObj>> iterator = cache.entrySet().iterator();
+            final Iterator<Entry<String, MyObj>> iterator = cache.entrySet().iterator();
             while (iterator.hasNext()) {
-                Entry<String, MyObj> entry = iterator.next();
+                final Entry<String, MyObj> entry = iterator.next();
                 size -= getSizeInBytes(entry.getValue());
                 iterator.remove();
                 if (size <= limit)
@@ -56,20 +47,17 @@ abstract class MemoryCache<MyObj> {
     }
 
     void clear() {
-        try {
-            cache.clear();
-            size = 0;
-        } catch (NullPointerException ex) {
-            ex.printStackTrace();
-        }
+        cache.clear();
+        size = 0;
     }
 
-    void clear(String url){
-        if (cache.containsKey(url)){
+    void clear(final String url) {
+        if (cache.containsKey(url)) {
             cache.remove(url);
         }
     }
-    private long getSizeInBytes(MyObj myObj) {
+
+    private long getSizeInBytes(final MyObj myObj) {
         if (myObj == null)
             return 0;
         return getSize(myObj);

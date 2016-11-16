@@ -1,18 +1,23 @@
 <resources>
 
-    <style name="Light" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorPrimary">#3F51B5</item>
-        <item name="colorPrimaryDark">#303F9F</item>
-        <item name="colorAccent">#FF4081</item>
-        <item name="colorBackgroundFloating">@android:color/background_light</item>
-        <item name="colorControlNormal">#6b78ba</item>
-    </style>
+<style name="Light" parent="Theme.AppCompat.Light.DarkActionBar">
+    <item name="colorPrimary">#3F51B5</item>
+    <item name="colorPrimaryDark">#303F9F</item>
+    <item name="colorAccent">#FF4081</item>
+    <item name="colorBackgroundFloating">@android:color/background_light</item>
+    <item name="colorControlNormal">#6b78ba</item>
+    <item name="android:textColorPrimary">#383a3b</item>
+    <item name="textColorSearchUrl">#383a3b</item>
+</style>
 
-    <style name="Dark" parent="Theme.AppCompat">
-        <item name="colorPrimary">#383a3b</item>
-        <item name="colorAccent">#FF4081</item>
-        <item name="colorBackgroundFloating">#727678</item>
-        <item name="colorControlNormal">#383a3b</item>
-    </style>
+<style name="Dark" parent="Theme.AppCompat">
+    <item name="colorPrimary">#383a3b</item>
+    <item name="colorAccent">#FF4081</item>
+    <item name="colorBackgroundFloating">#727678</item>
+    <item name="colorControlNormal">#383a3b</item>
+    <item name="android:textColorPrimary">#e2e8ea</item>
+    <item name="textColorSearchUrl">#e2e8ea</item>
+
+</style>
 
 </resources>

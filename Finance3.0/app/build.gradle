@@ -21,9 +21,10 @@ android {
 }
 
 ext.versions = [
-        resyclerViewVersion: '25.0.0',
-        appCompatVersion   : '25.0.0',
-        design             : '25.0.0',
+        resyclerViewVersion: '25.0.1',
+        appCompatVersion   : '25.0.1',
+        design             : '25.0.1',
+        percent            : '25.0.1',
         findBags           : '2.0.1',
         espresso           : '2.2.2',
         aChartEngine       : '1.2.0',
@@ -38,6 +39,7 @@ dependencies {
     compile "com.android.support:recyclerview-v7:$versions.resyclerViewVersion"
     compile "com.android.support:appcompat-v7:$versions.appCompatVersion"
     compile "com.android.support:design:$versions.design"
+    compile "com.android.support:percent:$versions.percent"
     compile "com.google.code.findbugs:jsr305:$versions.findBags"
     compile group: 'org.achartengine', name: 'achartengine', version: "$versions.aChartEngine"
     testCompile "junit:junit:$versions.jUnit"

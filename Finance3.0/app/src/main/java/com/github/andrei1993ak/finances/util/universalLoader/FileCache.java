@@ -1,9 +1,11 @@
 package com.github.andrei1993ak.finances.util.universalLoader;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 class FileCache {
@@ -20,12 +22,19 @@ class FileCache {
 
     private FileCache(final Context context) {
         cacheDir = new File(context.getCacheDir(), IMAGES_CACHE);
-        if (!cacheDir.exists())
+        if (!cacheDir.exists()) {
             cacheDir.mkdirs();
+        }
     }
 
+    @Nullable
     File getFile(final String url) {
-        final String filename = URLEncoder.encode(url);
+        final String filename;
+        try {
+            filename = URLEncoder.encode(url, "UTF-8");
+        } catch (final UnsupportedEncodingException e) {
+            return null;
+        }
         return new File(cacheDir, filename);
     }
 
@@ -38,15 +47,22 @@ class FileCache {
     }
 
     void clear(final String url) {
-        final String filename = URLEncoder.encode(url);
-        final File[] file = cacheDir.listFiles(new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-                return name.equals(filename);
+        final String filename;
+        try {
+            filename = URLEncoder.encode(url, "UTF-8");
+            final File[] file = cacheDir.listFiles(new FilenameFilter() {
+                @Override
+                public boolean accept(final File dir, final String name) {
+                    return name.equals(filename);
+                }
+            });
+            if (file.length != 0) {
+                file[0].delete();
             }
-        });
-        if (file.length != 0) {
-            file[0].delete();
+        } catch (final UnsupportedEncodingException e) {
+            clear();
         }
+
+
     }
 }
