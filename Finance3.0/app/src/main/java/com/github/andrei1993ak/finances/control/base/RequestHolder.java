@@ -15,7 +15,7 @@ public class RequestHolder<Model> {
     private static final int KEY_DELETE_ALL = 6;
     private static final int KEY_GET_ALL_TO_LIST = 7;
     private static final int KEY_GET_ALL_TO_LIST_BY_CATEGORY_ID = 8;
-    private static final int KEY_GET_ALL_TO_LIST_BY_PURSE_ID = 9;
+    private static final int KEY_GET_ALL_TO_LIST_BY_WALLET_ID = 9;
     private static final int KEY_GET_ALL_TO_LIST_BY_DATES = 10;
 
     public Request get(final Long id) {
@@ -50,8 +50,8 @@ public class RequestHolder<Model> {
         return new Request<>(KEY_GET_ALL_TO_LIST_BY_DATES, dates);
     }
 
-    public Request getAllToListByPurse(final Long purseId) {
-        return new Request<>(KEY_GET_ALL_TO_LIST_BY_PURSE_ID, purseId);
+    public Request getAllToListByWallet(final Long walletID) {
+        return new Request<>(KEY_GET_ALL_TO_LIST_BY_WALLET_ID, walletID);
     }
 
     public Request getAllToListByCategory(final Long categoryId) {

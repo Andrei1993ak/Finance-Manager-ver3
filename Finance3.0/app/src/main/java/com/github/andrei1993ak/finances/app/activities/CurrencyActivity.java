@@ -1,14 +1,11 @@
-//TODO move to app_package.app
 package com.github.andrei1993ak.finances.app.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,6 +15,9 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
 import com.github.andrei1993ak.finances.R;
+import com.github.andrei1993ak.finances.app.BaseActivity;
+import com.github.andrei1993ak.finances.app.addEditActivities.CurrencyAddActivity;
+import com.github.andrei1993ak.finances.app.addEditActivities.CurrencyEditActivity;
 import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
 import com.github.andrei1993ak.finances.control.base.RequestHolder;
 import com.github.andrei1993ak.finances.control.base.Result;
@@ -25,11 +25,8 @@ import com.github.andrei1993ak.finances.control.executors.CurrencyExecutor;
 import com.github.andrei1993ak.finances.control.loaders.CurrencyCursorLoader;
 import com.github.andrei1993ak.finances.model.TableQueryGenerator;
 import com.github.andrei1993ak.finances.model.models.Currency;
-import com.github.andrei1993ak.finances.util.Constants;
-import com.github.andrei1993ak.finances.app.addEditActivities.CurrencyAddActivity;
-import com.github.andrei1993ak.finances.app.addEditActivities.CurrencyEditActivity;
 
-public class CurrencyActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, OnTaskCompleted {
+public class CurrencyActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor>, OnTaskCompleted {
 
     private static final int ADD_CURRENCY_REQUEST = 1;
     private static final int EDIT_CURRENCY_REQUEST = 2;
@@ -44,9 +41,6 @@ public class CurrencyActivity extends AppCompatActivity implements LoaderManager
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
-        if (getSharedPreferences(Constants.PREFS, Context.MODE_PRIVATE).getBoolean(Constants.THEME, false)) {
-            setTheme(R.style.Dark);
-        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.standart_activity);
         setTitle(R.string.currencies);

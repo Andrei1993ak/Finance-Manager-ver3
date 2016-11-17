@@ -21,7 +21,7 @@ public class IncomeExecutor extends PojoExecutor<Income> {
     public static final int KEY_RESULT_DELETE_ALL = 606;
     public static final int KEY_RESULT_GET_ALL_TO_LIST= 607;
     public static final int KEY_RESULT_GET_ALL_TO_LIST_BY_CATEGORY_ID = 608;
-    public static final int KEY_RESULT_GET_ALL_TO_LIST_BY_PURSE_ID = 609;
+    public static final int KEY_RESULT_GET_ALL_TO_LIST_BY_WALLET_ID = 609;
     public static final int KEY_RESULT_GET_ALL_TO_LIST_BY_DATES = 610;
 
     public IncomeExecutor(OnTaskCompleted listener) {
@@ -69,8 +69,8 @@ public class IncomeExecutor extends PojoExecutor<Income> {
     }
 
     @Override
-    protected Result<List<Income>> getAllToListByPurseId(Long id) {
-        return new Result<>(KEY_RESULT_GET_ALL_TO_LIST_BY_PURSE_ID,DBHelperIncome.getInstance().getAllToListByPurseId(id));
+    protected Result<List<Income>> getAllToListByWalletId(Long walletId) {
+        return new Result<>(KEY_RESULT_GET_ALL_TO_LIST_BY_WALLET_ID,DBHelperIncome.getInstance().getAllToListByWalletId(walletId));
     }
 
     @Override

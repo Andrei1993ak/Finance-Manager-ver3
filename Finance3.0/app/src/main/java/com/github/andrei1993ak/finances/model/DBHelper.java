@@ -33,7 +33,7 @@ public class DBHelper extends SQLiteOpenHelper {
 //        sqLiteDatabase.execSQL(TableQueryGenerator.getTableCreateQuery(Currency.class));
 //        sqLiteDatabase.execSQL(TableQueryGenerator.getTableCreateQuery(CostCategory.class));
 //        sqLiteDatabase.execSQL(TableQueryGenerator.getTableCreateQuery(IncomeCategory.class));
-//        sqLiteDatabase.execSQL(TableQueryGenerator.getTableCreateQuery(Purse.class));
+//        sqLiteDatabase.execSQL(TableQueryGenerator.getTableCreateQuery(Wallet.class));
 //        sqLiteDatabase.execSQL(TableQueryGenerator.getTableCreateQuery(Income.class));
 //        sqLiteDatabase.execSQL(TableQueryGenerator.getTableCreateQuery(Transfer.class));
 //        sqLiteDatabase.execSQL(TableQueryGenerator.getTableCreateQuery(Cost.class));

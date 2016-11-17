@@ -14,20 +14,20 @@ public class CostCategory extends TableClass implements Parcelable {
 
     private long id;
     private String name;
-    private long parent_id;
+    private long parentId;
 
     public CostCategory() {
     }
 
-    public CostCategory(final String name, final long parent_id) {
+    public CostCategory(final String name, final long parentId) {
         this.name = name;
-        this.parent_id = parent_id;
+        this.parentId = parentId;
     }
 
-    public CostCategory(final long id, final String name, final long parent_id) {
+    public CostCategory(final long id, final String name, final long parentId) {
         this.id = id;
         this.name = name;
-        this.parent_id = parent_id;
+        this.parentId = parentId;
     }
 
     public long getId() {
@@ -46,12 +46,12 @@ public class CostCategory extends TableClass implements Parcelable {
         this.name = name;
     }
 
-    public long getParent_id() {
-        return parent_id;
+    public long getParentId() {
+        return parentId;
     }
 
-    public void setParent_id(final long parent_id) {
-        this.parent_id = parent_id;
+    public void setParentId(final long parentId) {
+        this.parentId = parentId;
     }
 
     @Override
@@ -63,13 +63,13 @@ public class CostCategory extends TableClass implements Parcelable {
     public void writeToParcel(final Parcel dest, final int flags) {
         dest.writeLong(this.id);
         dest.writeString(this.name);
-        dest.writeLong(this.parent_id);
+        dest.writeLong(this.parentId);
     }
 
     protected CostCategory(final Parcel in) {
         this.id = in.readLong();
         this.name = in.readString();
-        this.parent_id = in.readLong();
+        this.parentId = in.readLong();
     }
 
     public static final Parcelable.Creator<CostCategory> CREATOR = new Parcelable.Creator<CostCategory>() {

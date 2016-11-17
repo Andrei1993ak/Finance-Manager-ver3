@@ -14,10 +14,10 @@ public final class Transfer extends TableClass implements Parcelable {
     public static String DATE = "date";
 
     @DBInteger
-    public static String FROM_PURSE_ID = "fromPurseId";
+    public static String FROM_WALLET_ID = "fromPurseId";
 
     @DBInteger
-    public static String TO_PURSE_ID = "toPurseId";
+    public static String TO_WALLET_ID = "toPurseId";
 
     @DBDouble
     public static String FROM_AMOUNT = "fromAmount";
@@ -28,20 +28,20 @@ public final class Transfer extends TableClass implements Parcelable {
     private long _id;
     private String name;
     private long date;
-    private long fromPurseId;
-    private long toPurseId;
+    private long fromWalletId;
+    private long toWalletId;
     private double fromAmount;
     private double toAmount;
 
     public Transfer() {
     }
 
-    public Transfer(final String name, final long date, final long fromPurseId, final long toPurseId,
+    public Transfer(final String name, final long date, final long fromWalletId, final long toWalletId,
                     final double fromAmount, final double toAmount) {
         this.name = name;
         this.date = date;
-        this.fromPurseId = fromPurseId;
-        this.toPurseId = toPurseId;
+        this.fromWalletId = fromWalletId;
+        this.toWalletId = toWalletId;
         this.fromAmount = fromAmount;
         this.toAmount = toAmount;
     }
@@ -70,20 +70,20 @@ public final class Transfer extends TableClass implements Parcelable {
         this.date = date;
     }
 
-    public long getFromPurseId() {
-        return fromPurseId;
+    public long getFromWalletId() {
+        return fromWalletId;
     }
 
-    public void setFromPurseId(final long fromPurseId) {
-        this.fromPurseId = fromPurseId;
+    public void setFromWalletId(final long fromWalletId) {
+        this.fromWalletId = fromWalletId;
     }
 
-    public long getToPurseId() {
-        return toPurseId;
+    public long getToWalletId() {
+        return toWalletId;
     }
 
-    public void setToPurseId(final long toPurseId) {
-        this.toPurseId = toPurseId;
+    public void setToWalletId(final long toWalletId) {
+        this.toWalletId = toWalletId;
     }
 
     public double getFromAmount() {
@@ -113,8 +113,8 @@ public final class Transfer extends TableClass implements Parcelable {
         dest.writeLong(this._id);
         dest.writeString(this.name);
         dest.writeLong(this.date);
-        dest.writeLong(this.fromPurseId);
-        dest.writeLong(this.toPurseId);
+        dest.writeLong(this.fromWalletId);
+        dest.writeLong(this.toWalletId);
         dest.writeDouble(this.fromAmount);
         dest.writeDouble(this.toAmount);
     }
@@ -123,8 +123,8 @@ public final class Transfer extends TableClass implements Parcelable {
         this._id = in.readLong();
         this.name = in.readString();
         this.date = in.readLong();
-        this.fromPurseId = in.readLong();
-        this.toPurseId = in.readLong();
+        this.fromWalletId = in.readLong();
+        this.toWalletId = in.readLong();
         this.fromAmount = in.readDouble();
         this.toAmount = in.readDouble();
     }

@@ -14,7 +14,7 @@
         android:layout_weight="0.6">
 
         <android.support.v7.widget.AppCompatSpinner
-            android:id="@+id/pursesNames"
+            android:id="@+id/walletsNames"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal" />

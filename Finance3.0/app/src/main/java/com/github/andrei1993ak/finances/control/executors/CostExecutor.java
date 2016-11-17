@@ -25,7 +25,7 @@ public class CostExecutor extends PojoExecutor<Cost> {
     public static final int KEY_RESULT_DELETE_ALL = 706;
     public static final int KEY_RESULT_GET_ALL_TO_LIST = 707;
     public static final int KEY_RESULT_GET_ALL_TO_LIST_BY_CATEGORY_ID = 708;
-    public static final int KEY_RESULT_GET_ALL_TO_LIST_BY_PURSE_ID = 709;
+    public static final int KEY_RESULT_GET_ALL_TO_LIST_BY_WALLET_ID = 709;
     public static final int KEY_RESULT_GET_ALL_TO_LIST_BY_DATES = 710;
 
 
@@ -93,8 +93,8 @@ public class CostExecutor extends PojoExecutor<Cost> {
     }
 
     @Override
-    protected Result<List<Cost>> getAllToListByPurseId(Long id) {
-        return new Result<>(KEY_RESULT_GET_ALL_TO_LIST_BY_PURSE_ID, DBHelperCost.getInstance().getAllToListByPurseId(id));
+    protected Result<List<Cost>> getAllToListByWalletId(Long walletId) {
+        return new Result<>(KEY_RESULT_GET_ALL_TO_LIST_BY_WALLET_ID, DBHelperCost.getInstance().getAllToListByWalletId(walletId));
     }
 
     @Override

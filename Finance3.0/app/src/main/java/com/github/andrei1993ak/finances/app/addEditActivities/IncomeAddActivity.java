@@ -1,13 +1,11 @@
 package com.github.andrei1993ak.finances.app.addEditActivities;
 
 import android.app.DatePickerDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatSpinner;
 import android.view.View;
 import android.widget.AdapterView;
@@ -16,17 +14,17 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.github.andrei1993ak.finances.control.base.Result;
-import com.github.andrei1993ak.finances.model.models.Income;
 import com.github.andrei1993ak.finances.R;
-import com.github.andrei1993ak.finances.control.executors.IncomeCategoryExecutor;
-import com.github.andrei1993ak.finances.control.executors.PurseExecutor;
+import com.github.andrei1993ak.finances.app.BaseActivity;
 import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
 import com.github.andrei1993ak.finances.control.base.RequestHolder;
+import com.github.andrei1993ak.finances.control.base.Result;
+import com.github.andrei1993ak.finances.control.executors.IncomeCategoryExecutor;
+import com.github.andrei1993ak.finances.control.executors.WalletExecutor;
 import com.github.andrei1993ak.finances.model.TableQueryGenerator;
+import com.github.andrei1993ak.finances.model.models.Income;
 import com.github.andrei1993ak.finances.model.models.IncomeCategory;
-import com.github.andrei1993ak.finances.model.models.Purse;
-import com.github.andrei1993ak.finances.util.Constants;
+import com.github.andrei1993ak.finances.model.models.Wallet;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -34,15 +32,15 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class IncomeAddActivity extends AppCompatActivity implements OnTaskCompleted {
+public class IncomeAddActivity extends BaseActivity implements OnTaskCompleted {
 
     private EditText newIncomeName;
     private EditText newIncomeAmount;
     private TextView newIncomeDate;
-    private AppCompatSpinner newIncomePurse;
+    private AppCompatSpinner newIncomeWallet;
     private AppCompatSpinner newIncomeCategory;
     private AppCompatSpinner newIncomeSubCategory;
-    private List<Purse> pursesList;
+    private List<Wallet> wallets;
     private List<IncomeCategory> categoriesList;
     private List<IncomeCategory> subCategoriesList;
     private SimpleDateFormat dateFormatter;
@@ -50,32 +48,29 @@ public class IncomeAddActivity extends AppCompatActivity implements OnTaskComple
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
-        if (getSharedPreferences(Constants.PREFS, Context.MODE_PRIVATE).getBoolean(Constants.THEME, false)) {
-            setTheme(R.style.Dark);
-        }
         setTitle(R.string.newIncome);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.income_add_activity);
+        setContentView(R.layout.income_add_edit_activity);
         findViewsBuId();
         setDatePickerDialog();
-        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_income_add);
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_income_add_edit);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
                 addNewIncome();
             }
         });
-        new PurseExecutor(this).execute(new RequestHolder<Purse>().getAllToList(RequestHolder.SELECTION_ALL));
+        new WalletExecutor(this).execute(new RequestHolder<Wallet>().getAllToList(RequestHolder.SELECTION_ALL));
         new IncomeCategoryExecutor(this).execute(new RequestHolder<IncomeCategory>().getAllToList(RequestHolder.SELECTION_PARENT_CATEGORIES));
     }
 
     private void findViewsBuId() {
-        newIncomeName = (EditText) findViewById(R.id.edit_income_name);
-        newIncomeAmount = (EditText) findViewById(R.id.edit_income_amount);
-        newIncomeDate = (TextView) findViewById(R.id.edit_income_date);
-        newIncomePurse = (AppCompatSpinner) findViewById(R.id.edit_income_purse);
-        newIncomeCategory = (AppCompatSpinner) findViewById(R.id.edit_income_category);
-        newIncomeSubCategory = (AppCompatSpinner) findViewById(R.id.edit_income_subCategory);
+        newIncomeName = (EditText) findViewById(R.id.income_name);
+        newIncomeAmount = (EditText) findViewById(R.id.income_amount);
+        newIncomeDate = (TextView) findViewById(R.id.income_date);
+        newIncomeWallet = (AppCompatSpinner) findViewById(R.id.income_wallet);
+        newIncomeCategory = (AppCompatSpinner) findViewById(R.id.income_category);
+        newIncomeSubCategory = (AppCompatSpinner) findViewById(R.id.income_subCategory);
     }
 
     private void setDatePickerDialog() {
@@ -135,7 +130,7 @@ public class IncomeAddActivity extends AppCompatActivity implements OnTaskComple
         } catch (final ParseException e) {
             flag = false;
         }
-        income.setPurseId(pursesList.get(newIncomePurse.getSelectedItemPosition()).getId());
+        income.setWalletId(wallets.get(newIncomeWallet.getSelectedItemPosition()).getId());
         if (newIncomeSubCategory.getVisibility() == View.GONE) {
             income.setCategoryId(categoriesList.get(newIncomeCategory.getSelectedItemPosition()).getId());
         } else {
@@ -155,16 +150,16 @@ public class IncomeAddActivity extends AppCompatActivity implements OnTaskComple
     @Override
     public void onTaskCompleted(final Result result) {
         switch (result.getId()) {
-            case PurseExecutor.KEY_RESULT_GET_ALL_TO_LIST:
-                pursesList = (List<Purse>) result.getObject();
-                final String[] pursesNames = new String[pursesList.size()];
+            case WalletExecutor.KEY_RESULT_GET_ALL_TO_LIST:
+                wallets = (List<Wallet>) result.getObject();
+                final String[] walletsNames = new String[wallets.size()];
                 int i = 0;
-                for (final Purse purse : pursesList) {
-                    pursesNames[i++] = purse.getName();
+                for (final Wallet wallet : wallets) {
+                    walletsNames[i++] = wallet.getName();
                 }
-                final ArrayAdapter<String> spinnerPursesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, pursesNames);
-                spinnerPursesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                newIncomePurse.setAdapter(spinnerPursesAdapter);
+                final ArrayAdapter<String> spinneWalletsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, walletsNames);
+                spinneWalletsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                newIncomeWallet.setAdapter(spinneWalletsAdapter);
                 break;
             case IncomeCategoryExecutor.KEY_RESULT_GET_ALL_TO_LIST:
                 categoriesList = (List<IncomeCategory>) result.getObject();

@@ -50,11 +50,11 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom"
                         android:layout_marginRight="@dimen/table_indent"
-                        android:text="@string/fromPurse"
+                        android:text="@string/fromWallet"
                         android:textSize="@dimen/table_text_size" />
 
                     <android.support.v7.widget.AppCompatSpinner
-                        android:id="@+id/transfer_from_purse"
+                        android:id="@+id/transfer_from_wallet"
                         android:layout_width="match_parent"
                         android:layout_height="30dp"
                         android:layout_marginBottom="@dimen/line_indent"
@@ -93,11 +93,11 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom"
                         android:layout_marginRight="@dimen/table_indent"
-                        android:text="@string/toPurse"
+                        android:text="@string/toWallet"
                         android:textSize="@dimen/table_text_size" />
 
                     <android.support.v7.widget.AppCompatSpinner
-                        android:id="@+id/transfer_to_purse"
+                        android:id="@+id/transfer_to_wallet"
                         android:layout_width="match_parent"
                         android:layout_height="30dp"
                         android:layout_marginBottom="@dimen/line_indent"

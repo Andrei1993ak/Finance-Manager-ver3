@@ -4,7 +4,7 @@
     android:layout_height="45dp">
 
     <TextView
-        android:id="@+id/purseCurrency"
+        android:id="@+id/walletCurrency"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -16,18 +16,18 @@
 
 
     <TextView
-        android:id="@+id/purseAmount"
+        android:id="@+id/walletAmount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_toLeftOf="@+id/purseCurrency"
-        android:layout_toStartOf="@+id/purseCurrency"
+        android:layout_toLeftOf="@+id/walletCurrency"
+        android:layout_toStartOf="@+id/walletCurrency"
         android:paddingBottom="@dimen/background_margin"
         android:paddingRight="@dimen/background_margin"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
-        android:id="@+id/purseName"
+        android:id="@+id/walletName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"

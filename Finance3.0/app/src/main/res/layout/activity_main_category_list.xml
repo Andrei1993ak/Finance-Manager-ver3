@@ -1,32 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:customNs="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/shape">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/shape"
         android:orientation="vertical">
 
-        <!-- TODO Use custom view? -->
-        <!-- TODO create separate style/attr for view -->
-        <TextView
-            android:id="@+id/tvPurse"
+        <com.github.andrei1993ak.finances.app.customViews.BottomBorderTextView
+            android:id="@+id/tvWallet"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawableLeft="@drawable/ic_wallets_32dp"
             android:duplicateParentState="true"
             android:onClick="onSelectedCategoryViewClick"
-            android:text="@string/purses"
-            android:textSize="@dimen/main_activity_text_size" />
+            android:text="@string/wallets"
+            android:textSize="@dimen/main_activity_text_size"
+            customNs:mBorderColor="@color/colorSeparator" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/separatorView" />
-
-        <TextView
+        <com.github.andrei1993ak.finances.app.customViews.BottomBorderTextView
             android:id="@+id/tvIncomes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -34,14 +29,10 @@
             android:duplicateParentState="true"
             android:onClick="onSelectedCategoryViewClick"
             android:text="@string/incomes"
-            android:textSize="@dimen/main_activity_text_size" />
+            android:textSize="@dimen/main_activity_text_size"
+            customNs:mBorderColor="@color/colorSeparator" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/separatorView" />
-
-        <TextView
+        <com.github.andrei1993ak.finances.app.customViews.BottomBorderTextView
             android:id="@+id/tvCosts"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -49,14 +40,11 @@
             android:duplicateParentState="true"
             android:onClick="onSelectedCategoryViewClick"
             android:text="@string/costs"
-            android:textSize="@dimen/main_activity_text_size" />
+            android:textSize="@dimen/main_activity_text_size"
+            customNs:mBorderColor="@color/colorSeparator" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/separatorView" />
 
-        <TextView
+        <com.github.andrei1993ak.finances.app.customViews.BottomBorderTextView
             android:id="@+id/tvTransfers"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -64,14 +52,11 @@
             android:duplicateParentState="true"
             android:onClick="onSelectedCategoryViewClick"
             android:text="@string/transfers"
-            android:textSize="@dimen/main_activity_text_size" />
+            android:textSize="@dimen/main_activity_text_size"
+            customNs:mBorderColor="@color/colorSeparator" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/separatorView" />
 
-        <TextView
+        <com.github.andrei1993ak.finances.app.customViews.BottomBorderTextView
             android:id="@+id/tvReports"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -79,14 +64,10 @@
             android:duplicateParentState="true"
             android:onClick="onSelectedCategoryViewClick"
             android:text="@string/reports"
-            android:textSize="@dimen/main_activity_text_size" />
+            android:textSize="@dimen/main_activity_text_size"
+            customNs:mBorderColor="@color/colorSeparator" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/separatorView" />
-
-        <TextView
+        <com.github.andrei1993ak.finances.app.customViews.BottomBorderTextView
             android:id="@+id/tvCategories"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -94,14 +75,10 @@
             android:duplicateParentState="true"
             android:onClick="onSelectedCategoryViewClick"
             android:text="@string/categories"
-            android:textSize="@dimen/main_activity_text_size" />
+            android:textSize="@dimen/main_activity_text_size"
+            customNs:mBorderColor="@color/colorSeparator" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/separatorView" />
-
-        <TextView
+        <com.github.andrei1993ak.finances.app.customViews.BottomBorderTextView
             android:id="@+id/tvCurrency"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -109,14 +86,10 @@
             android:duplicateParentState="true"
             android:onClick="onSelectedCategoryViewClick"
             android:text="@string/currencies"
-            android:textSize="@dimen/main_activity_text_size" />
+            android:textSize="@dimen/main_activity_text_size"
+            customNs:mBorderColor="@color/colorSeparator" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/separatorView" />
-
-        <TextView
+        <com.github.andrei1993ak.finances.app.customViews.BottomBorderTextView
             android:id="@+id/tvSettings"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

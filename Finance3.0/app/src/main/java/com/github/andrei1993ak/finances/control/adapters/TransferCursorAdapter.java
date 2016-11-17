@@ -9,9 +9,9 @@ import android.widget.CursorAdapter;
 import android.widget.TextView;
 
 
-import com.github.andrei1993ak.finances.model.dbHelpers.DBHelperPurse;
+import com.github.andrei1993ak.finances.model.dbHelpers.DBHelperWallet;
 import com.github.andrei1993ak.finances.model.models.Currency;
-import com.github.andrei1993ak.finances.model.models.Purse;
+import com.github.andrei1993ak.finances.model.models.Wallet;
 import com.github.andrei1993ak.finances.R;
 import com.github.andrei1993ak.finances.model.dbHelpers.DBHelperCurrency;
 import com.github.andrei1993ak.finances.model.models.Transfer;
@@ -22,14 +22,14 @@ import java.util.Locale;
 public class TransferCursorAdapter extends CursorAdapter {
 
     private final LayoutInflater inflater;
-    private final DBHelperPurse helperPurse;
+    private final DBHelperWallet dbHelperWallet;
     private final DBHelperCurrency helperCurrency;
 
 
     public TransferCursorAdapter(final Context context, final Cursor cursor) {
         super(context, cursor, 0);
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        helperPurse = DBHelperPurse.getInstance();
+        dbHelperWallet = DBHelperWallet.getInstance();
         helperCurrency = DBHelperCurrency.getInstance();
 
     }
@@ -52,15 +52,15 @@ public class TransferCursorAdapter extends CursorAdapter {
         final String date = dateFormatter.format(time);
         textViewDate.setText(date);
 
-        final TextView textViewPurseFrom = (TextView) view.findViewById(R.id.LITransferFromPurse);
-        final Purse from = helperPurse.get(cursor.getLong(cursor.getColumnIndex(Transfer.FROM_PURSE_ID)));
-        textViewPurseFrom.setText(from.getName());
+        final TextView textViewWalletFrom = (TextView) view.findViewById(R.id.LITransferFromwWallet);
+        final Wallet from = dbHelperWallet.get(cursor.getLong(cursor.getColumnIndex(Transfer.FROM_WALLET_ID)));
+        textViewWalletFrom.setText(from.getName());
 
-        final TextView textViewPurseTo = (TextView) view.findViewById(R.id.LITransferToPurse);
-        final Purse to = helperPurse.get(cursor.getLong(cursor.getColumnIndex(Transfer.TO_PURSE_ID)));
-        textViewPurseTo.setText(to.getName());
+        final TextView textViewWalletTo = (TextView) view.findViewById(R.id.LITransferToWallet);
+        final Wallet to = dbHelperWallet.get(cursor.getLong(cursor.getColumnIndex(Transfer.TO_WALLET_ID)));
+        textViewWalletTo.setText(to.getName());
 
-        final TextView fromAmount = (TextView) view.findViewById(R.id.LIFromPurseAmount);
+        final TextView fromAmount = (TextView) view.findViewById(R.id.LIFromWalletAmount);
         final Currency currencyFrom = helperCurrency.get(from.getCurrencyId());
         final Double fromAmountDouble = cursor.getDouble(cursor.getColumnIndex(Transfer.FROM_AMOUNT));
         StringBuilder builder = new StringBuilder();
@@ -70,7 +70,7 @@ public class TransferCursorAdapter extends CursorAdapter {
         builder.append(currencyFrom.getCode());
         fromAmount.setText(builder.toString());
 
-        final TextView toAmount = (TextView) view.findViewById(R.id.LIToPurseAmount);
+        final TextView toAmount = (TextView) view.findViewById(R.id.LIToWalletAmount);
         final Currency currencyTo = helperCurrency.get(to.getCurrencyId());
         final Double toAmountDouble = cursor.getDouble(cursor.getColumnIndex(Transfer.TO_AMOUNT));
         //TODO prepare string before insert to DB

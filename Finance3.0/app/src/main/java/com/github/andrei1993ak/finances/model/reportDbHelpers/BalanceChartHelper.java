@@ -2,7 +2,7 @@ package com.github.andrei1993ak.finances.model.reportDbHelpers;
 
 import com.github.andrei1993ak.finances.model.dbHelpers.DBHelperCost;
 import com.github.andrei1993ak.finances.model.dbHelpers.DBHelperIncome;
-import com.github.andrei1993ak.finances.model.dbHelpers.DBHelperPurse;
+import com.github.andrei1993ak.finances.model.dbHelpers.DBHelperWallet;
 import com.github.andrei1993ak.finances.model.dbHelpers.DBHelperTransfer;
 import com.github.andrei1993ak.finances.model.models.Cost;
 import com.github.andrei1993ak.finances.model.models.Income;
@@ -25,10 +25,10 @@ public class BalanceChartHelper {
         return instance;
     }
 
-    public TimeSeries getSeries(final long purseId) {
-        final List<Income> incomesList = DBHelperIncome.getInstance().getAllToListByPurseId(purseId);
-        final List<Cost> costsList = DBHelperCost.getInstance().getAllToListByPurseId(purseId);
-        final List<Transfer> transferList = DBHelperTransfer.getInstance().getAllToListByPurseId(purseId);
+    public TimeSeries getSeries(final long walletId) {
+        final List<Income> incomesList = DBHelperIncome.getInstance().getAllToListByWalletId(walletId);
+        final List<Cost> costsList = DBHelperCost.getInstance().getAllToListByWalletId(walletId);
+        final List<Transfer> transferList = DBHelperTransfer.getInstance().getAllToListByWalletId(walletId);
 
         final HashMap<Date, Double> operations = new HashMap<>();
 
@@ -51,13 +51,13 @@ public class BalanceChartHelper {
         for (final Transfer transfer : transferList) {
             final Date date = new Date(transfer.getDate());
             if (operations.containsKey(date)) {
-                if (transfer.getFromPurseId() == purseId) {
+                if (transfer.getFromWalletId() == walletId) {
                     operations.put(date, operations.get(date) - transfer.getFromAmount());
                 } else {
                     operations.put(date, operations.get(date) + transfer.getToAmount());
                 }
             } else {
-                if (transfer.getFromPurseId() == purseId) {
+                if (transfer.getFromWalletId() == walletId) {
                     operations.put(date, -transfer.getFromAmount());
                 } else {
                     operations.put(date, transfer.getToAmount());
@@ -72,7 +72,7 @@ public class BalanceChartHelper {
         calendar.set(Calendar.MILLISECOND, 0);
 
         final TimeSeries series = new TimeSeries("Balance");
-        Double amount = DBHelperPurse.getInstance().get(purseId).getAmount();
+        Double amount = DBHelperWallet.getInstance().get(walletId).getAmount();
         int count = 0;
         for (final Date date = calendar.getTime(); count < operations.size(); date.setTime(date.getTime() - 86400000)) {
             if (operations.containsKey(date)) {

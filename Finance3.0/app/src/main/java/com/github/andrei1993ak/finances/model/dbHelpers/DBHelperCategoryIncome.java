@@ -38,7 +38,7 @@ public class DBHelperCategoryIncome implements DBHelperForModel<IncomeCategory> 
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         final ContentValues values = new ContentValues();
         values.put(IncomeCategory.NAME, incomeCategory.getName());
-        values.put(IncomeCategory.PARENT_ID, incomeCategory.getParent_id());
+        values.put(IncomeCategory.PARENT_ID, incomeCategory.getParentId());
         final long id;
         try {
             db.beginTransaction();
@@ -59,7 +59,7 @@ public class DBHelperCategoryIncome implements DBHelperForModel<IncomeCategory> 
             final IncomeCategory incomeCategory = new IncomeCategory();
             incomeCategory.setId(cursor.getLong(cursor.getColumnIndex(IncomeCategory.ID)));
             incomeCategory.setName(cursor.getString(cursor.getColumnIndex(IncomeCategory.NAME)));
-            incomeCategory.setParent_id(cursor.getLong(cursor.getColumnIndex(IncomeCategory.PARENT_ID)));
+            incomeCategory.setParentId(cursor.getLong(cursor.getColumnIndex(IncomeCategory.PARENT_ID)));
             cursor.close();
             return incomeCategory;
         } else {
@@ -80,7 +80,7 @@ public class DBHelperCategoryIncome implements DBHelperForModel<IncomeCategory> 
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         final ContentValues values = new ContentValues();
         values.put(IncomeCategory.NAME, incomeCategory.getName());
-        values.put(IncomeCategory.PARENT_ID, incomeCategory.getParent_id());
+        values.put(IncomeCategory.PARENT_ID, incomeCategory.getParentId());
         int count;
         try {
             db.beginTransaction();
@@ -95,7 +95,7 @@ public class DBHelperCategoryIncome implements DBHelperForModel<IncomeCategory> 
     @Override
     public int delete(final long id) {
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        if (get(id).getParent_id() == -1) {
+        if (get(id).getParentId() == -1) {
             final String query = "SELECT * FROM " + TableQueryGenerator.getTableName(IncomeCategory.class) + " WHERE " + IncomeCategory.PARENT_ID + " = " + id + " LIMIT 1";
             final Cursor cursor = db.rawQuery(query, null);
             if (cursor.moveToFirst()) {
@@ -162,7 +162,7 @@ public class DBHelperCategoryIncome implements DBHelperForModel<IncomeCategory> 
                 final IncomeCategory incomeCategory = new IncomeCategory();
                 incomeCategory.setId(cursor.getLong(cursor.getColumnIndex(IncomeCategory.ID)));
                 incomeCategory.setName(cursor.getString(cursor.getColumnIndex(IncomeCategory.NAME)));
-                incomeCategory.setParent_id(cursor.getLong(cursor.getColumnIndex(IncomeCategory.PARENT_ID)));
+                incomeCategory.setParentId(cursor.getLong(cursor.getColumnIndex(IncomeCategory.PARENT_ID)));
                 list.add(incomeCategory);
             } while (cursor.moveToNext());
         }
@@ -186,7 +186,7 @@ public class DBHelperCategoryIncome implements DBHelperForModel<IncomeCategory> 
                 final IncomeCategory incomeCategory = new IncomeCategory();
                 incomeCategory.setId(cursor.getLong(cursor.getColumnIndex(IncomeCategory.ID)));
                 incomeCategory.setName(cursor.getString(cursor.getColumnIndex(IncomeCategory.NAME)));
-                incomeCategory.setParent_id(cursor.getLong(cursor.getColumnIndex(IncomeCategory.PARENT_ID)));
+                incomeCategory.setParentId(cursor.getLong(cursor.getColumnIndex(IncomeCategory.PARENT_ID)));
                 list.add(incomeCategory);
             } while (cursor.moveToNext());
         }

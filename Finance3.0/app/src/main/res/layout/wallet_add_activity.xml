@@ -10,80 +10,75 @@
         android:layout_height="match_parent"
         android:background="?attr/colorControlNormal">
 
-        <LinearLayout
+        <TableLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="@dimen/background_margin"
             android:background="@drawable/shape"
-            android:orientation="vertical">
+            android:stretchColumns="1">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/line_indent"
-                android:orientation="horizontal">
+            <TableRow>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_marginRight="@dimen/table_indent"
                     android:text="@string/name"
-                    android:textSize="16sp" />
+                    android:textSize="@dimen/table_text_size" />
 
                 <EditText
-                    android:id="@+id/new_purse_name"
+                    android:id="@+id/new_wallet_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="@dimen/line_indent"
+                    android:layout_marginTop="@dimen/line_indent"
                     android:background="@drawable/shape_green_field"
                     android:inputType="text" />
-            </LinearLayout>
+            </TableRow>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/line_indent"
-                android:orientation="horizontal">
+            <TableRow>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_marginRight="@dimen/table_indent"
                     android:text="@string/amount"
-                    android:textSize="16sp" />
+                    android:textSize="@dimen/table_text_size" />
 
                 <EditText
-                    android:id="@+id/new_purse_amount"
+                    android:id="@+id/new_wallet_amount"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="@dimen/line_indent"
+                    android:layout_marginTop="@dimen/line_indent"
                     android:background="@drawable/shape_green_field"
                     android:ems="10"
                     android:inputType="numberDecimal" />
-            </LinearLayout>
+            </TableRow>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:layout_margin="@dimen/line_indent"
-                android:gravity="bottom"
-                android:orientation="horizontal">
+            <TableRow>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_marginRight="@dimen/table_indent"
                     android:text="@string/currency"
-                    android:textSize="16sp" />
+                    android:textSize="@dimen/table_text_size" />
 
                 <android.support.v7.widget.AppCompatSpinner
                     android:id="@+id/spinnerCurrencies"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
-                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="@dimen/line_indent"
+                    android:layout_marginTop="@dimen/line_indent"
                     android:background="@drawable/shape_green_field">
 
                 </android.support.v7.widget.AppCompatSpinner>
-            </LinearLayout>
-        </LinearLayout>
+            </TableRow>
+        </TableLayout>
     </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton

@@ -1,38 +1,33 @@
 package com.github.andrei1993ak.finances.app.addEditActivities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
+import com.github.andrei1993ak.finances.R;
+import com.github.andrei1993ak.finances.app.BaseActivity;
+import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
 import com.github.andrei1993ak.finances.control.base.RequestHolder;
 import com.github.andrei1993ak.finances.control.base.Result;
+import com.github.andrei1993ak.finances.control.executors.CurrencyOfficialExecutor;
 import com.github.andrei1993ak.finances.control.loaders.CurrencyAllCursorLoader;
 import com.github.andrei1993ak.finances.model.TableQueryGenerator;
 import com.github.andrei1993ak.finances.model.models.Currency;
 import com.github.andrei1993ak.finances.model.models.CurrencyOfficial;
-import com.github.andrei1993ak.finances.R;
-import com.github.andrei1993ak.finances.control.executors.CurrencyOfficialExecutor;
-import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
-import com.github.andrei1993ak.finances.util.Constants;
 
-public class CurrencyAddActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, OnTaskCompleted {
+public class CurrencyAddActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor>, OnTaskCompleted {
 
     public static final int MAIN_LOADER_ID = 0;
     private SimpleCursorAdapter simpleCursorAdapter;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
-        if (getSharedPreferences(Constants.PREFS, Context.MODE_PRIVATE).getBoolean(Constants.THEME, false)) {
-            setTheme(R.style.Dark);
-        }
         super.onCreate(savedInstanceState);
         setTitle(R.string.allCurrencies);
         setContentView(R.layout.currency_add_activity);

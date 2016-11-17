@@ -38,16 +38,16 @@ public class DBHelperTransfer implements DBHelperForModel<Transfer> {
         final ContentValues values = new ContentValues();
         values.put(Transfer.NAME, transfer.getName());
         values.put(Transfer.DATE, transfer.getDate());
-        values.put(Transfer.FROM_PURSE_ID, transfer.getFromPurseId());
-        values.put(Transfer.TO_PURSE_ID, transfer.getToPurseId());
+        values.put(Transfer.FROM_WALLET_ID, transfer.getFromWalletId());
+        values.put(Transfer.TO_WALLET_ID, transfer.getToWalletId());
         values.put(Transfer.FROM_AMOUNT, transfer.getFromAmount());
         values.put(Transfer.TO_AMOUNT, transfer.getToAmount());
         long id = -1;
         try {
             db.beginTransaction();
-            final DBHelperPurse helperPurse = DBHelperPurse.getInstance();
-            helperPurse.takeAmount(transfer.getFromPurseId(), transfer.getFromAmount());
-            helperPurse.addAmount(transfer.getToPurseId(), transfer.getToAmount());
+            final DBHelperWallet dbHelperWallet = DBHelperWallet.getInstance();
+            dbHelperWallet.takeAmount(transfer.getFromWalletId(), transfer.getFromAmount());
+            dbHelperWallet.addAmount(transfer.getToWalletId(), transfer.getToAmount());
             id = db.insert(TableQueryGenerator.getTableName(Transfer.class), null, values);
             db.setTransactionSuccessful();
         } finally {
@@ -67,8 +67,8 @@ public class DBHelperTransfer implements DBHelperForModel<Transfer> {
             transfer.setId(cursor.getLong(cursor.getColumnIndex(Transfer.ID)));
             transfer.setName(cursor.getString(cursor.getColumnIndex(Transfer.NAME)));
             transfer.setDate(cursor.getLong(cursor.getColumnIndex(Transfer.DATE)));
-            transfer.setFromPurseId(cursor.getLong(cursor.getColumnIndex(Transfer.FROM_PURSE_ID)));
-            transfer.setToPurseId(cursor.getLong(cursor.getColumnIndex(Transfer.TO_PURSE_ID)));
+            transfer.setFromWalletId(cursor.getLong(cursor.getColumnIndex(Transfer.FROM_WALLET_ID)));
+            transfer.setToWalletId(cursor.getLong(cursor.getColumnIndex(Transfer.TO_WALLET_ID)));
             transfer.setFromAmount(cursor.getDouble(cursor.getColumnIndex(Transfer.FROM_AMOUNT)));
             transfer.setToAmount(cursor.getDouble(cursor.getColumnIndex(Transfer.TO_AMOUNT)));
             //TODO final block
@@ -99,8 +99,8 @@ public class DBHelperTransfer implements DBHelperForModel<Transfer> {
                 transfer.setId(cursor.getLong(cursor.getColumnIndex(Transfer.ID)));
                 transfer.setName(cursor.getString(cursor.getColumnIndex(Transfer.NAME)));
                 transfer.setDate(cursor.getLong(cursor.getColumnIndex(Transfer.DATE)));
-                transfer.setFromPurseId(cursor.getLong(cursor.getColumnIndex(Transfer.FROM_PURSE_ID)));
-                transfer.setToPurseId(cursor.getLong(cursor.getColumnIndex(Transfer.TO_PURSE_ID)));
+                transfer.setFromWalletId(cursor.getLong(cursor.getColumnIndex(Transfer.FROM_WALLET_ID)));
+                transfer.setToWalletId(cursor.getLong(cursor.getColumnIndex(Transfer.TO_WALLET_ID)));
                 transfer.setFromAmount(cursor.getDouble(cursor.getColumnIndex(Transfer.FROM_AMOUNT)));
                 transfer.setToAmount(cursor.getDouble(cursor.getColumnIndex(Transfer.TO_AMOUNT)));
                 cursor.close();
@@ -120,24 +120,24 @@ public class DBHelperTransfer implements DBHelperForModel<Transfer> {
         final ContentValues values = new ContentValues();
         values.put(Transfer.NAME, transfer.getName());
         values.put(Transfer.DATE, transfer.getDate());
-        values.put(Transfer.FROM_PURSE_ID, transfer.getFromPurseId());
-        values.put(Transfer.TO_PURSE_ID, transfer.getToPurseId());
+        values.put(Transfer.FROM_WALLET_ID, transfer.getFromWalletId());
+        values.put(Transfer.TO_WALLET_ID, transfer.getToWalletId());
         values.put(Transfer.FROM_AMOUNT, transfer.getFromAmount());
         values.put(Transfer.TO_AMOUNT, transfer.getToAmount());
         final int id = db.update(TableQueryGenerator.getTableName(Transfer.class), values, Transfer.ID + "=?", new String[]{String.valueOf(transfer.getId())});
         final Transfer newTransfer = get(transfer.getId());
-        final DBHelperPurse helperPurse = DBHelperPurse.getInstance();
-        if (oldTransfer.getFromPurseId() != newTransfer.getFromPurseId()) {
-            helperPurse.addAmount(oldTransfer.getFromPurseId(), oldTransfer.getFromAmount());
-            helperPurse.takeAmount(newTransfer.getFromPurseId(), newTransfer.getFromAmount());
+        final DBHelperWallet dbHelperWallet = DBHelperWallet.getInstance();
+        if (oldTransfer.getFromWalletId() != newTransfer.getFromWalletId()) {
+            dbHelperWallet.addAmount(oldTransfer.getFromWalletId(), oldTransfer.getFromAmount());
+            dbHelperWallet.takeAmount(newTransfer.getFromWalletId(), newTransfer.getFromAmount());
         } else if (oldTransfer.getFromAmount() != newTransfer.getFromAmount()) {
-            helperPurse.takeAmount(newTransfer.getFromPurseId(), (newTransfer.getFromAmount() - oldTransfer.getFromAmount()));
+            dbHelperWallet.takeAmount(newTransfer.getFromWalletId(), (newTransfer.getFromAmount() - oldTransfer.getFromAmount()));
         }
-        if (oldTransfer.getToPurseId() != newTransfer.getToPurseId()) {
-            helperPurse.takeAmount(oldTransfer.getToPurseId(), oldTransfer.getToAmount());
-            helperPurse.addAmount(newTransfer.getToPurseId(), newTransfer.getToAmount());
+        if (oldTransfer.getToWalletId() != newTransfer.getToWalletId()) {
+            dbHelperWallet.takeAmount(oldTransfer.getToWalletId(), oldTransfer.getToAmount());
+            dbHelperWallet.addAmount(newTransfer.getToWalletId(), newTransfer.getToAmount());
         } else if (oldTransfer.getToAmount() != newTransfer.getToAmount()) {
-            helperPurse.addAmount(newTransfer.getToPurseId(), (newTransfer.getToAmount() - oldTransfer.getToAmount()));
+            dbHelperWallet.addAmount(newTransfer.getToWalletId(), (newTransfer.getToAmount() - oldTransfer.getToAmount()));
         }
         return id;
     }
@@ -145,10 +145,10 @@ public class DBHelperTransfer implements DBHelperForModel<Transfer> {
     @Override
     public int delete(final long id) {
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        final DBHelperPurse helperPurse = DBHelperPurse.getInstance();
+        final DBHelperWallet dbHelperWallet = DBHelperWallet.getInstance();
         final Transfer transfer = get(id);
-        helperPurse.addAmount(transfer.getFromPurseId(), transfer.getFromAmount());
-        helperPurse.takeAmount(transfer.getToPurseId(), transfer.getToAmount());
+        dbHelperWallet.addAmount(transfer.getFromWalletId(), transfer.getFromAmount());
+        dbHelperWallet.takeAmount(transfer.getToWalletId(), transfer.getToAmount());
         return db.delete(TableQueryGenerator.getTableName(Transfer.class), Transfer.ID + " = " + id, null);
     }
 
@@ -162,10 +162,10 @@ public class DBHelperTransfer implements DBHelperForModel<Transfer> {
         return null;
     }
 
-    public List<Transfer> getAllToListByPurseId(final Long id) {
+    public List<Transfer> getAllToListByWalletId(final Long id) {
         final List<Transfer> transfers = new ArrayList<>();
         final String selectQuery = "SELECT * FROM " + TableQueryGenerator.getTableName(Transfer.class) +
-                " WHERE " + Transfer.FROM_PURSE_ID + " = " + id + " OR " + Transfer.TO_PURSE_ID + " = " + id;
+                " WHERE " + Transfer.FROM_WALLET_ID + " = " + id + " OR " + Transfer.TO_WALLET_ID + " = " + id;
         final SQLiteDatabase db = dbHelper.getReadableDatabase();
         final Cursor cursor = db.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
@@ -174,8 +174,8 @@ public class DBHelperTransfer implements DBHelperForModel<Transfer> {
                 transfer.setId(cursor.getLong(cursor.getColumnIndex(Transfer.ID)));
                 transfer.setName(cursor.getString(cursor.getColumnIndex(Transfer.NAME)));
                 transfer.setDate(cursor.getLong(cursor.getColumnIndex(Transfer.DATE)));
-                transfer.setFromPurseId(cursor.getLong(cursor.getColumnIndex(Transfer.FROM_PURSE_ID)));
-                transfer.setToPurseId(cursor.getLong(cursor.getColumnIndex(Transfer.TO_PURSE_ID)));
+                transfer.setFromWalletId(cursor.getLong(cursor.getColumnIndex(Transfer.FROM_WALLET_ID)));
+                transfer.setToWalletId(cursor.getLong(cursor.getColumnIndex(Transfer.TO_WALLET_ID)));
                 transfer.setFromAmount(cursor.getDouble(cursor.getColumnIndex(Transfer.FROM_AMOUNT)));
                 transfer.setToAmount(cursor.getDouble(cursor.getColumnIndex(Transfer.TO_AMOUNT)));
                 transfers.add(transfer);

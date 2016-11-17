@@ -1,22 +1,20 @@
-package com.github.andrei1993ak.finances.app.reports;
+package com.github.andrei1993ak.finances.app.reportsActivities;
 
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatSpinner;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import com.github.andrei1993ak.finances.app.BaseActivity;
 import com.github.andrei1993ak.finances.model.models.Income;
 import com.github.andrei1993ak.finances.R;
 import com.github.andrei1993ak.finances.control.adapters.PieChartItemAdapter;
 import com.github.andrei1993ak.finances.control.loaders.PieReportLoader;
 import com.github.andrei1993ak.finances.model.reportModels.PieChartItem;
-import com.github.andrei1993ak.finances.util.Constants;
 
 import org.achartengine.ChartFactory;
 import org.achartengine.GraphicalView;
@@ -26,7 +24,7 @@ import org.achartengine.renderer.SimpleSeriesRenderer;
 
 import java.util.ArrayList;
 
-public class PieChartActivityNext extends AppCompatActivity implements LoaderManager.LoaderCallbacks<ArrayList<PieChartItem>> {
+public class PieChartActivityNext extends BaseActivity implements LoaderManager.LoaderCallbacks<ArrayList<PieChartItem>> {
 
     public static final int MAIN_LOADER = 0;
     private ListView listView;
@@ -36,9 +34,6 @@ public class PieChartActivityNext extends AppCompatActivity implements LoaderMan
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
-        if (getSharedPreferences(Constants.PREFS, Context.MODE_PRIVATE).getBoolean(Constants.THEME, false)) {
-            setTheme(R.style.Dark);
-        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.report_income_pie_next);
         if (getIntent().getBooleanExtra(PieChartItem.TYPE, false)) {
@@ -47,7 +42,7 @@ public class PieChartActivityNext extends AppCompatActivity implements LoaderMan
             setTitle(R.string.costsByCategories);
         }
         final Bundle args = new Bundle();
-        args.putLong(Income.PURSE_ID, getIntent().getLongExtra(Income.PURSE_ID, -1));
+        args.putLong(Income.WALLET_ID, getIntent().getLongExtra(Income.WALLET_ID, -1));
         args.putLong(Income.CATEGORY_ID, getIntent().getLongExtra(Income.CATEGORY_ID, -1));
         args.putBoolean(PieChartItem.TYPE, getIntent().getBooleanExtra(PieChartItem.TYPE, false));
         getSupportLoaderManager().restartLoader(MAIN_LOADER, args, this);

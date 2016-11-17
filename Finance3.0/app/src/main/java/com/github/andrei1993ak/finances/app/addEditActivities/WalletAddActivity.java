@@ -1,50 +1,45 @@
 package com.github.andrei1993ak.finances.app.addEditActivities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatSpinner;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 
+import com.github.andrei1993ak.finances.R;
+import com.github.andrei1993ak.finances.app.BaseActivity;
+import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
 import com.github.andrei1993ak.finances.control.base.RequestHolder;
 import com.github.andrei1993ak.finances.control.base.Result;
 import com.github.andrei1993ak.finances.control.executors.CurrencyExecutor;
 import com.github.andrei1993ak.finances.model.TableQueryGenerator;
 import com.github.andrei1993ak.finances.model.models.Currency;
-import com.github.andrei1993ak.finances.model.models.Purse;
-import com.github.andrei1993ak.finances.R;
-import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
-import com.github.andrei1993ak.finances.util.Constants;
+import com.github.andrei1993ak.finances.model.models.Wallet;
 
 import java.util.List;
 
-public class PurseAddActivity extends AppCompatActivity implements OnTaskCompleted {
+public class WalletAddActivity extends BaseActivity implements OnTaskCompleted {
 
     private AppCompatSpinner spinnerCurrencies;
     private List<Currency> currencies;
-    private EditText newPurseName;
-    private EditText newPurseAmount;
+    private EditText newWalletName;
+    private EditText newWalletAmount;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
-        if (getSharedPreferences(Constants.PREFS, Context.MODE_PRIVATE).getBoolean(Constants.THEME, false)) {
-            setTheme(R.style.Dark);
-        }
         super.onCreate(savedInstanceState);
-        setTitle(R.string.newPurse);
-        setContentView(R.layout.purse_add_activity);
+        setTitle(R.string.newWallet);
+        setContentView(R.layout.wallet_add_activity);
         findViewsById();
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_pur_add);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
-                addNewPurse();
+                addNewWallet();
             }
         });
         new CurrencyExecutor(this).execute(new RequestHolder<Currency>().getAllToList(RequestHolder.SELECTION_ALL));
@@ -52,49 +47,49 @@ public class PurseAddActivity extends AppCompatActivity implements OnTaskComplet
 
     private void findViewsById() {
         spinnerCurrencies = (AppCompatSpinner) findViewById(R.id.spinnerCurrencies);
-        newPurseName = (EditText) findViewById(R.id.new_purse_name);
-        newPurseAmount = (EditText) findViewById(R.id.new_purse_amount);
+        newWalletName = (EditText) findViewById(R.id.new_wallet_name);
+        newWalletAmount = (EditText) findViewById(R.id.new_wallet_amount);
     }
 
-    public void addNewPurse() {
-        final Purse purse = checkFields();
-        if (purse != null) {
+    public void addNewWallet() {
+        final Wallet wallet = checkFields();
+        if (wallet != null) {
             final Intent intent = new Intent();
-            intent.putExtra(TableQueryGenerator.getTableName(Purse.class), purse);
+            intent.putExtra(TableQueryGenerator.getTableName(Wallet.class), wallet);
             setResult(RESULT_OK, intent);
             finish();
         }
     }
 
     @Nullable
-    private Purse checkFields() {
-        final Purse purse = new Purse();
+    private Wallet checkFields() {
+        final Wallet wallet = new Wallet();
         boolean flag = true;
         try {
-            final double amount = Double.parseDouble(newPurseAmount.getText().toString());
+            final double amount = Double.parseDouble(newWalletAmount.getText().toString());
             if (amount < 0) {
-                newPurseAmount.setBackground(ContextCompat.getDrawable(this, R.drawable.shape_red_field));
+                newWalletAmount.setBackground(ContextCompat.getDrawable(this, R.drawable.shape_red_field));
                 flag = false;
             } else {
-                purse.setAmount(amount);
-                newPurseAmount.setBackground(ContextCompat.getDrawable(this, R.drawable.shape_green_field));
+                wallet.setAmount(amount);
+                newWalletAmount.setBackground(ContextCompat.getDrawable(this, R.drawable.shape_green_field));
             }
         } catch (final NumberFormatException e) {
-            newPurseAmount.setBackground(ContextCompat.getDrawable(this, R.drawable.shape_red_field));
+            newWalletAmount.setBackground(ContextCompat.getDrawable(this, R.drawable.shape_red_field));
             flag = false;
         }
-        if (newPurseName.getText().toString().length() == 0) {
-            newPurseName.setBackground(ContextCompat.getDrawable(this, R.drawable.shape_red_field));
+        if (newWalletName.getText().toString().length() == 0) {
+            newWalletName.setBackground(ContextCompat.getDrawable(this, R.drawable.shape_red_field));
             flag = false;
         } else {
-            purse.setName(newPurseName.getText().toString());
-            newPurseName.setBackground(ContextCompat.getDrawable(this, R.drawable.shape_green_field));
+            wallet.setName(newWalletName.getText().toString());
+            newWalletName.setBackground(ContextCompat.getDrawable(this, R.drawable.shape_green_field));
         }
-        purse.setCurrencyId(currencies.get(spinnerCurrencies.getSelectedItemPosition()).getId());
+        wallet.setCurrencyId(currencies.get(spinnerCurrencies.getSelectedItemPosition()).getId());
         if (!flag) {
             return null;
         } else {
-            return purse;
+            return wallet;
         }
     }
 

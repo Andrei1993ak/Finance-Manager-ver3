@@ -1,30 +1,27 @@
 package com.github.andrei1993ak.finances.app.addEditActivities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatSpinner;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 
+import com.github.andrei1993ak.finances.R;
+import com.github.andrei1993ak.finances.app.BaseActivity;
 import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
 import com.github.andrei1993ak.finances.control.base.RequestHolder;
 import com.github.andrei1993ak.finances.control.base.Result;
 import com.github.andrei1993ak.finances.control.executors.CostCategoryExecutor;
 import com.github.andrei1993ak.finances.model.TableQueryGenerator;
 import com.github.andrei1993ak.finances.model.models.CostCategory;
-import com.github.andrei1993ak.finances.R;
-import com.github.andrei1993ak.finances.util.Constants;
-
 
 import java.util.List;
 
-public class CostCategoryEditActivity extends AppCompatActivity implements OnTaskCompleted {
+public class CostCategoryEditActivity extends BaseActivity implements OnTaskCompleted {
 
     private EditText editCategoryName;
     private AppCompatSpinner parentCategories;
@@ -34,9 +31,6 @@ public class CostCategoryEditActivity extends AppCompatActivity implements OnTas
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
-        if (getSharedPreferences(Constants.PREFS, Context.MODE_PRIVATE).getBoolean(Constants.THEME, false)) {
-            setTheme(R.style.Dark);
-        }
         setTitle(R.string.editing);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.category_add_edit_activity);
@@ -80,13 +74,13 @@ public class CostCategoryEditActivity extends AppCompatActivity implements OnTas
             editCategoryName.setBackground(ContextCompat.getDrawable(this, R.drawable.shape_green_field));
             editCostCategory.setName(editCategoryName.getText().toString());
         }
-        if (costCategory.getParent_id() == -1) {
-            editCostCategory.setParent_id(-1);
+        if (costCategory.getParentId() == -1) {
+            editCostCategory.setParentId(-1);
         } else {
             if (parentCategories.getSelectedItemPosition() == (spinnerAdapter.getCount() - 1)) {
-                editCostCategory.setParent_id(-1);
+                editCostCategory.setParentId(-1);
             } else {
-                editCostCategory.setParent_id(parentsList.get(parentCategories.getSelectedItemPosition()).getId());
+                editCostCategory.setParentId(parentsList.get(parentCategories.getSelectedItemPosition()).getId());
             }
         }
         if (!flag) {
@@ -105,7 +99,7 @@ public class CostCategoryEditActivity extends AppCompatActivity implements OnTas
                 int i = 0;
                 int position = 0;
                 for (final CostCategory category : parentsList) {
-                    if (costCategory.getParent_id() == category.getId()) {
+                    if (costCategory.getParentId() == category.getId()) {
                         position = i;
                     }
                     names[i++] = category.getName();
@@ -119,7 +113,7 @@ public class CostCategoryEditActivity extends AppCompatActivity implements OnTas
             case CostCategoryExecutor.KEY_RESULT_GET:
                 costCategory = (CostCategory) result.getObject();
                 editCategoryName.setText(costCategory.getName());
-                if (costCategory.getParent_id() == -1) {
+                if (costCategory.getParentId() == -1) {
                     parentCategories.setBackground(getResources().getDrawable(R.drawable.shape_gray_field));
                     parentCategories.setEnabled(false);
                 } else {

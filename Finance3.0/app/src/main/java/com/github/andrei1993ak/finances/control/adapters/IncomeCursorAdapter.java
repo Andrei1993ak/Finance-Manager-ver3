@@ -12,9 +12,9 @@ import com.github.andrei1993ak.finances.model.models.Income;
 import com.github.andrei1993ak.finances.R;
 import com.github.andrei1993ak.finances.model.dbHelpers.DBHelperCategoryIncome;
 import com.github.andrei1993ak.finances.model.dbHelpers.DBHelperCurrency;
-import com.github.andrei1993ak.finances.model.dbHelpers.DBHelperPurse;
+import com.github.andrei1993ak.finances.model.dbHelpers.DBHelperWallet;
 import com.github.andrei1993ak.finances.model.models.Currency;
-import com.github.andrei1993ak.finances.model.models.Purse;
+import com.github.andrei1993ak.finances.model.models.Wallet;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -22,14 +22,14 @@ import java.util.Locale;
 public class IncomeCursorAdapter extends CursorAdapter {
 
     private final LayoutInflater inflater;
-    private final DBHelperPurse helperPurse;
+    private final DBHelperWallet dbHelperWallet;
     private final DBHelperCurrency helperCurrency;
     private final DBHelperCategoryIncome helperIncomeCategory;
 
     public IncomeCursorAdapter(final Context context, final Cursor cursor) {
         super(context, cursor, 0);
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        helperPurse = DBHelperPurse.getInstance();
+        dbHelperWallet = DBHelperWallet.getInstance();
         helperCurrency = DBHelperCurrency.getInstance();
         helperIncomeCategory = DBHelperCategoryIncome.getInstance();
     }
@@ -51,9 +51,9 @@ public class IncomeCursorAdapter extends CursorAdapter {
         final String date = dateFormatter.format(time);
         textViewDate.setText(date);
 
-        final TextView tvAmount = (TextView) view.findViewById(R.id.LIIncomePurseAmount);
-        final Purse purse = helperPurse.get(cursor.getLong(cursor.getColumnIndex(Income.PURSE_ID)));
-        final Currency currency = helperCurrency.get(purse.getCurrencyId());
+        final TextView tvAmount = (TextView) view.findViewById(R.id.LIIncomeWalletAmount);
+        final Wallet wallet = dbHelperWallet.get(cursor.getLong(cursor.getColumnIndex(Income.WALLET_ID)));
+        final Currency currency = helperCurrency.get(wallet.getCurrencyId());
         final Double amount = cursor.getDouble(cursor.getColumnIndex(Income.AMOUNT));
         String amountString = String.format(Locale.US, "%.2f", amount);
         amountString += " ";

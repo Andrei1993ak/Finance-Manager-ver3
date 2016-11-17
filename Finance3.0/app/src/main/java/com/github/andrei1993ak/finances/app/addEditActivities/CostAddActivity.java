@@ -13,7 +13,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatSpinner;
 import android.view.View;
 import android.widget.AdapterView;
@@ -24,16 +23,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.github.andrei1993ak.finances.R;
+import com.github.andrei1993ak.finances.app.BaseActivity;
 import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
 import com.github.andrei1993ak.finances.control.base.RequestHolder;
 import com.github.andrei1993ak.finances.control.base.Result;
 import com.github.andrei1993ak.finances.control.executors.CostCategoryExecutor;
-import com.github.andrei1993ak.finances.control.executors.PurseExecutor;
+import com.github.andrei1993ak.finances.control.executors.WalletExecutor;
 import com.github.andrei1993ak.finances.model.DBHelper;
 import com.github.andrei1993ak.finances.model.TableQueryGenerator;
 import com.github.andrei1993ak.finances.model.models.Cost;
 import com.github.andrei1993ak.finances.model.models.CostCategory;
-import com.github.andrei1993ak.finances.model.models.Purse;
+import com.github.andrei1993ak.finances.model.models.Wallet;
 import com.github.andrei1993ak.finances.util.Constants;
 import com.github.andrei1993ak.finances.util.universalLoader.ImageNameGenerator;
 import com.google.common.io.Files;
@@ -46,18 +46,17 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class CostAddActivity extends AppCompatActivity implements OnTaskCompleted {
+public class CostAddActivity extends BaseActivity implements OnTaskCompleted {
 
     private static final int CAMERA_REQUEST = 1;
-    public static final String AUTHORITY = "com.github.andrei1993ak.finances.fileProvider";
 
     private EditText newCostName;
     private EditText newCostAmount;
     private TextView newCostDate;
-    private AppCompatSpinner newCostPurse;
+    private AppCompatSpinner newCostWallets;
     private AppCompatSpinner newCostCategory;
     private AppCompatSpinner newCostSubCategory;
-    private List<Purse> pursesList;
+    private List<Wallet> wallets;
     private List<CostCategory> categoriesList;
     private List<CostCategory> subCategoriesList;
     private SimpleDateFormat dateFormatter;
@@ -66,21 +65,18 @@ public class CostAddActivity extends AppCompatActivity implements OnTaskComplete
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
-        if (getSharedPreferences(Constants.PREFS, Context.MODE_PRIVATE).getBoolean(Constants.THEME, false)) {
-            setTheme(R.style.Dark);
-        }
-        setTitle(R.string.newCost);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.cost_add_activity);
+        setContentView(R.layout.cost_add_edit_activity);
+        setTitle(R.string.newCost);
         findViewsBuId();
-        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_cost_add);
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_cost_add_edit);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
                 addNewCost();
             }
         });
-        new PurseExecutor(this).execute(new RequestHolder<Purse>().getAllToList(RequestHolder.SELECTION_ALL));
+        new WalletExecutor(this).execute(new RequestHolder<Wallet>().getAllToList(RequestHolder.SELECTION_ALL));
         new CostCategoryExecutor(this).execute(new RequestHolder<CostCategory>().getAllToList(RequestHolder.SELECTION_PARENT_CATEGORIES));
         setDatePickerDialog();
     }
@@ -106,15 +102,15 @@ public class CostAddActivity extends AppCompatActivity implements OnTaskComplete
     }
 
     private void findViewsBuId() {
-        newCostName = (EditText) findViewById(R.id.new_cost_name);
-        newCostAmount = (EditText) findViewById(R.id.new_cost_amount);
-        newCostDate = (TextView) findViewById(R.id.new_cost_date);
-        newCostPurse = (AppCompatSpinner) findViewById(R.id.new_cost_purse);
-        newCostCategory = (AppCompatSpinner) findViewById(R.id.new_cost_category);
-        newCostSubCategory = (AppCompatSpinner) findViewById(R.id.new_cost_subCategory);
+        newCostName = (EditText) findViewById(R.id.cost_name);
+        newCostAmount = (EditText) findViewById(R.id.cost_amount);
+        newCostDate = (TextView) findViewById(R.id.cost_date);
+        newCostWallets = (AppCompatSpinner) findViewById(R.id.cost_wallet);
+        newCostCategory = (AppCompatSpinner) findViewById(R.id.cost_category);
+        newCostSubCategory = (AppCompatSpinner) findViewById(R.id.cost_subCategory);
         final PackageManager pm = getApplicationContext().getPackageManager();
         if (!pm.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
-            findViewById(R.id.add_photo_button).setVisibility(View.INVISIBLE);
+            findViewById(R.id.add_edit_photo_button).setVisibility(View.INVISIBLE);
         }
     }
 
@@ -161,7 +157,7 @@ public class CostAddActivity extends AppCompatActivity implements OnTaskComplete
         } else {
             newCostAmount.setBackground(ContextCompat.getDrawable(this, R.drawable.shape_green_field));
         }
-        cost.setPurseId(pursesList.get(newCostPurse.getSelectedItemPosition()).getId());
+        cost.setWalletId(wallets.get(newCostWallets.getSelectedItemPosition()).getId());
         if (newCostSubCategory.getVisibility() == View.GONE) {
             cost.setCategoryId(categoriesList.get(newCostCategory.getSelectedItemPosition()).getId());
         } else {
@@ -191,33 +187,24 @@ public class CostAddActivity extends AppCompatActivity implements OnTaskComplete
             imagePath.mkdirs();
         }
         final File file = new File(imagePath, "tmp.jpg");
-        final Uri outputFileUri = FileProvider.getUriForFile(context, AUTHORITY, file);
+        final Uri outputFileUri = FileProvider.getUriForFile(context, Constants.AUTHORITY, file);
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
         startActivityForResult(cameraIntent, CAMERA_REQUEST);
     }
 
-
-//    public void addPhoto(final View view) {
-////        final Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-////        final File file = new File(App.getTempImagePath());
-////        final Uri outputFileUri = Uri.fromFile(file);
-////        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
-////        startActivityForResult(cameraIntent, CAMERA_REQUEST);
-//    }
-
     @Override
     public void onTaskCompleted(final Result result) {
         switch (result.getId()) {
-            case PurseExecutor.KEY_RESULT_GET_ALL_TO_LIST:
-                pursesList = (List<Purse>) result.getObject();
-                final String[] pursesNames = new String[pursesList.size()];
+            case WalletExecutor.KEY_RESULT_GET_ALL_TO_LIST:
+                wallets = (List<Wallet>) result.getObject();
+                final String[] walletsNames = new String[wallets.size()];
                 int i = 0;
-                for (final Purse purse : pursesList) {
-                    pursesNames[i++] = purse.getName();
+                for (final Wallet wallet : wallets) {
+                    walletsNames[i++] = wallet.getName();
                 }
-                final ArrayAdapter<String> spinnerPursesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, pursesNames);
-                spinnerPursesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                newCostPurse.setAdapter(spinnerPursesAdapter);
+                final ArrayAdapter<String> spinnerWalletsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, walletsNames);
+                spinnerWalletsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                newCostWallets.setAdapter(spinnerWalletsAdapter);
                 break;
             case CostCategoryExecutor.KEY_RESULT_GET_ALL_TO_LIST:
                 categoriesList = (List<CostCategory>) result.getObject();
@@ -272,7 +259,7 @@ public class CostAddActivity extends AppCompatActivity implements OnTaskComplete
             }
             final File file = new File(imagePath, "tmp.jpg");
             photo = BitmapFactory.decodeFile(file.getPath());
-            final ImageView view = (ImageView) findViewById(R.id.new_cost_photo);
+            final ImageView view = (ImageView) findViewById(R.id.cost_photo);
             view.setImageBitmap(photo);
             final String path = ImageNameGenerator.getImagePath(DBHelper.getInstance(this).getNextId());
             final File toFile = new File(path);

@@ -1,12 +1,10 @@
-package com.github.andrei1993ak.finances.app.reports;
+package com.github.andrei1993ak.finances.app.reportsActivities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatSpinner;
 import android.view.View;
 import android.widget.AdapterView;
@@ -14,17 +12,17 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import com.github.andrei1993ak.finances.app.BaseActivity;
 import com.github.andrei1993ak.finances.control.adapters.PieChartItemAdapter;
 import com.github.andrei1993ak.finances.control.base.Result;
 import com.github.andrei1993ak.finances.model.models.Income;
-import com.github.andrei1993ak.finances.model.models.Purse;
+import com.github.andrei1993ak.finances.model.models.Wallet;
 import com.github.andrei1993ak.finances.R;
 import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
 import com.github.andrei1993ak.finances.control.base.RequestHolder;
-import com.github.andrei1993ak.finances.control.executors.PurseExecutor;
+import com.github.andrei1993ak.finances.control.executors.WalletExecutor;
 import com.github.andrei1993ak.finances.control.loaders.PieReportLoader;
 import com.github.andrei1993ak.finances.model.reportModels.PieChartItem;
-import com.github.andrei1993ak.finances.util.Constants;
 
 import org.achartengine.ChartFactory;
 import org.achartengine.GraphicalView;
@@ -35,20 +33,17 @@ import org.achartengine.renderer.SimpleSeriesRenderer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PieChartActivity extends AppCompatActivity implements OnTaskCompleted, LoaderManager.LoaderCallbacks<ArrayList<PieChartItem>> {
+public class PieChartActivity extends BaseActivity implements OnTaskCompleted, LoaderManager.LoaderCallbacks<ArrayList<PieChartItem>> {
 
     public static final int MAIN_LOADER = 0;
     public static final String POSITION = "position";
     private GraphicalView mChartView;
-    private List<Purse> pursesList;
+    private List<Wallet> wallets;
     private AppCompatSpinner spinner;
     private int position;
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
-        if (getSharedPreferences(Constants.PREFS, Context.MODE_PRIVATE).getBoolean(Constants.THEME, false)) {
-            setTheme(R.style.Dark);
-        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.report_income_pie);
         if (getIntent().getBooleanExtra(PieChartItem.TYPE, false)){
@@ -56,13 +51,13 @@ public class PieChartActivity extends AppCompatActivity implements OnTaskComplet
         } else {
             setTitle(R.string.costsByCategories);
         }
-        spinner = (AppCompatSpinner) findViewById(R.id.pursesNames);
+        spinner = (AppCompatSpinner) findViewById(R.id.walletsNames);
         if (savedInstanceState == null) {
             position = 0;
         } else {
             position = savedInstanceState.getInt(POSITION);
         }
-        new PurseExecutor(this).execute(new RequestHolder<Purse>().getAllToList(RequestHolder.SELECTION_ALL));
+        new WalletExecutor(this).execute(new RequestHolder<Wallet>().getAllToList(RequestHolder.SELECTION_ALL));
     }
 
     protected void onResume() {
@@ -95,12 +90,12 @@ public class PieChartActivity extends AppCompatActivity implements OnTaskComplet
     @Override
     public void onTaskCompleted(final Result result) {
         final int id = result.getId();
-        if (id == PurseExecutor.KEY_RESULT_GET_ALL_TO_LIST) {
-            pursesList = (List<Purse>) result.getObject();
-            final String[] pursesNames = new String[pursesList.size()];
+        if (id == WalletExecutor.KEY_RESULT_GET_ALL_TO_LIST) {
+            wallets = (List<Wallet>) result.getObject();
+            final String[] pursesNames = new String[wallets.size()];
             int i = 0;
-            for (final Purse purse : pursesList) {
-                pursesNames[i++] = purse.getName();
+            for (final Wallet wallet : wallets) {
+                pursesNames[i++] = wallet.getName();
             }
             final ArrayAdapter<String> spinnerPursesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, pursesNames);
             spinnerPursesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -108,9 +103,9 @@ public class PieChartActivity extends AppCompatActivity implements OnTaskComplet
             spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(final AdapterView<?> parent, final View view, final int position, final long id) {
-                    final long purseId = (pursesList.get(position).getId());
+                    final long purseId = (wallets.get(position).getId());
                     final Bundle args = new Bundle();
-                    args.putLong(Income.PURSE_ID, purseId);
+                    args.putLong(Income.WALLET_ID, purseId);
                     args.putBoolean(PieChartItem.TYPE, getIntent().getBooleanExtra(PieChartItem.TYPE, false));
                     args.putLong(Income.CATEGORY_ID, -1L);
                     getSupportLoaderManager().restartLoader(MAIN_LOADER, args, PieChartActivity.this);
@@ -144,7 +139,7 @@ public class PieChartActivity extends AppCompatActivity implements OnTaskComplet
                 final Intent intent = new Intent(PieChartActivity.this, PieChartActivityNext.class);
                 intent.putExtra(Income.CATEGORY_ID, mId);
                 intent.putExtra(PieChartItem.TYPE, getIntent().getBooleanExtra(PieChartItem.TYPE, false));
-                intent.putExtra(Income.PURSE_ID, pursesList.get(spinner.getSelectedItemPosition()).getId());
+                intent.putExtra(Income.WALLET_ID, wallets.get(spinner.getSelectedItemPosition()).getId());
                 startActivity(intent);
             }
         });

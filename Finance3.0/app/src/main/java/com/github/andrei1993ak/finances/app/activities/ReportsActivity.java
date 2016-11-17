@@ -1,25 +1,20 @@
 package com.github.andrei1993ak.finances.app.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.github.andrei1993ak.finances.R;
+import com.github.andrei1993ak.finances.app.BaseActivity;
+import com.github.andrei1993ak.finances.app.reportsActivities.BalanceChartActivity;
+import com.github.andrei1993ak.finances.app.reportsActivities.PieChartActivity;
 import com.github.andrei1993ak.finances.model.reportModels.PieChartItem;
-import com.github.andrei1993ak.finances.util.Constants;
-import com.github.andrei1993ak.finances.app.reports.BalanceChartActivity;
-import com.github.andrei1993ak.finances.app.reports.PieChartActivity;
 
-public class ReportsActivity extends AppCompatActivity {
+public class ReportsActivity extends BaseActivity {
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
-        if (getSharedPreferences(Constants.PREFS, Context.MODE_PRIVATE).getBoolean(Constants.THEME, false)) {
-            setTheme(R.style.Dark);
-        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.reports);
         setTitle(R.string.reports);

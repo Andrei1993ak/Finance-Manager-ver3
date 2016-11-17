@@ -19,7 +19,7 @@ public abstract class PojoExecutor<Model> extends AsyncTask<Request<Model>, Void
     private static final int KEY_DELETE_ALL = 6;
     private static final int KEY_GET_ALL_TO_LIST = 7;
     private static final int KEY_GET_ALL_TO_LIST_BY_CATEGORY_ID = 8;
-    private static final int KEY_GET_ALL_TO_LIST_BY_PURSE_ID = 9;
+    private static final int KEY_GET_ALL_TO_LIST_BY_WALLET_ID = 9;
     private static final int KEY_GET_ALL_TO_LIST_BY_DATES = 10;
 
     private final OnTaskCompleted listener;
@@ -58,8 +58,8 @@ public abstract class PojoExecutor<Model> extends AsyncTask<Request<Model>, Void
             case KEY_GET_ALL_TO_LIST_BY_CATEGORY_ID:
                 result = getAllToListByCategoryId((Long) requests[0].getObject());
                 break;
-            case KEY_GET_ALL_TO_LIST_BY_PURSE_ID:
-                result = getAllToListByPurseId((Long) requests[0].getObject());
+            case KEY_GET_ALL_TO_LIST_BY_WALLET_ID:
+                result = getAllToListByWalletId((Long) requests[0].getObject());
                 break;
             case KEY_GET_ALL_TO_LIST_BY_DATES:
                 result = getAllToListByDates((ArrayList<Long>) requests[0].getObject());
@@ -71,7 +71,7 @@ public abstract class PojoExecutor<Model> extends AsyncTask<Request<Model>, Void
         return null;
     }
 
-    protected Result<List<Model>> getAllToListByPurseId(final Long purseId) {
+    protected Result<List<Model>> getAllToListByWalletId(final Long walletId) {
         return null;
     }
 

@@ -30,7 +30,7 @@ public class PieChartItemHelper {
         return instance;
     }
 
-    public ArrayList<PieChartItem> gRepInfoIncome(final long purseId, final long categoryId) {
+    public ArrayList<PieChartItem> gRepInfoIncome(final long walletId, final long categoryId) {
         final ArrayList<PieChartItem> list = new ArrayList<>();
         final List<IncomeCategory> allParents = DBHelperCategoryIncome.getInstance().getAllToListByParentId(categoryId);
         if (categoryId != -1) {
@@ -42,12 +42,12 @@ public class PieChartItemHelper {
             sums.put(parent.getId(), 0.0);
             names.put(parent.getId(), parent.getName());
         }
-        final List<Income> allIncomes = DBHelperIncome.getInstance().getAllToListByPurseId(purseId);
+        final List<Income> allIncomes = DBHelperIncome.getInstance().getAllToListByWalletId(walletId);
         for (final Income income : allIncomes) {
             if (sums.containsKey(income.getCategoryId())) {
                 sums.put(income.getCategoryId(), (sums.get(income.getCategoryId()) + income.getAmount()));
             } else if (categoryId == -1) {
-                final Long parentId = DBHelperCategoryIncome.getInstance().get(income.getCategoryId()).getParent_id();
+                final Long parentId = DBHelperCategoryIncome.getInstance().get(income.getCategoryId()).getParentId();
                 sums.put(parentId, (sums.get(parentId) + income.getAmount()));
             }
         }
@@ -59,7 +59,7 @@ public class PieChartItemHelper {
         return list;
     }
 
-    public ArrayList<PieChartItem> gRepInfoCost(final long purseId, final long categoryId) {
+    public ArrayList<PieChartItem> gRepInfoCost(final long walletId, final long categoryId) {
         final ArrayList<PieChartItem> list = new ArrayList<>();
         final List<CostCategory> allParents = DBHelperCategoryCost.getInstance().getAllToListByParentId(categoryId);
         if (categoryId != -1) {
@@ -71,12 +71,12 @@ public class PieChartItemHelper {
             sums.put(parent.getId(), 0.0);
             names.put(parent.getId(), parent.getName());
         }
-        final List<Cost> allCosts = DBHelperCost.getInstance().getAllToListByPurseId(purseId);
+        final List<Cost> allCosts = DBHelperCost.getInstance().getAllToListByWalletId(walletId);
         for (final Cost cost : allCosts) {
             if (sums.containsKey(cost.getCategoryId())) {
                 sums.put(cost.getCategoryId(), (sums.get(cost.getCategoryId()) + cost.getAmount()));
             } else if (categoryId == -1) {
-                final Long parentId = DBHelperCategoryCost.getInstance().get(cost.getCategoryId()).getParent_id();
+                final Long parentId = DBHelperCategoryCost.getInstance().get(cost.getCategoryId()).getParentId();
                 sums.put(parentId, (sums.get(parentId) + cost.getAmount()));
             }
         }

@@ -5,161 +5,157 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?attr/colorControlNormal">
+        android:background="?attr/colorControlNormal"
+        android:padding="@dimen/background_margin">
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="@dimen/background_margin"
             android:background="@drawable/shape">
 
-            <LinearLayout
+            <TableLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/shape"
-                android:orientation="vertical">
+                android:stretchColumns="1">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/line_indent"
-                    android:orientation="horizontal">
+                <TableRow>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:layout_marginRight="@dimen/table_indent"
                         android:text="@string/name"
-                        android:textSize="16sp" />
+                        android:textSize="@dimen/table_text_size" />
 
                     <EditText
-                        android:id="@+id/edit_income_name"
+                        android:id="@+id/income_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="30dp"
+                        android:layout_marginRight="@dimen/line_indent"
+                        android:layout_marginTop="@dimen/line_indent"
                         android:background="@drawable/shape_green_field"
-                        android:inputType="text" />
-                </LinearLayout>
+                        android:inputType="text"
+                        android:paddingLeft="@dimen/table_padding_left" />
+                </TableRow>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/line_indent"
-                    android:orientation="horizontal">
+                <TableRow>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/purse"
-                        android:textSize="16sp" />
+                        android:layout_gravity="bottom"
+                        android:layout_marginRight="@dimen/table_indent"
+                        android:text="@string/wallet"
+                        android:textSize="@dimen/table_text_size" />
 
                     <android.support.v7.widget.AppCompatSpinner
-                        android:id="@+id/edit_income_purse"
+                        android:id="@+id/income_wallet"
                         android:layout_width="match_parent"
                         android:layout_height="30dp"
-                        android:layout_marginLeft="30dp"
+                        android:layout_marginRight="@dimen/line_indent"
+                        android:layout_marginTop="@dimen/line_indent"
                         android:background="@drawable/shape_green_field" />
 
-                </LinearLayout>
+                </TableRow>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/line_indent"
-                    android:orientation="horizontal">
+                <TableRow>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:layout_marginRight="@dimen/table_indent"
                         android:text="@string/amount"
-                        android:textSize="16sp" />
+                        android:textSize="@dimen/table_text_size" />
 
                     <EditText
-                        android:id="@+id/edit_income_amount"
+                        android:id="@+id/income_amount"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="30dp"
+                        android:layout_marginRight="@dimen/line_indent"
+                        android:layout_marginTop="@dimen/line_indent"
                         android:background="@drawable/shape_green_field"
                         android:ems="10"
-                        android:inputType="numberDecimal" />
-                </LinearLayout>
+                        android:inputType="numberDecimal"
+                        android:paddingLeft="@dimen/table_padding_left" />
+                </TableRow>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:layout_margin="@dimen/line_indent"
-                    android:gravity="bottom"
-                    android:orientation="horizontal">
+                <TableRow>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:layout_marginRight="@dimen/table_indent"
                         android:text="@string/date"
-                        android:textSize="16sp" />
+                        android:textSize="@dimen/table_text_size" />
 
                     <TextView
-                        android:id="@+id/edit_income_date"
+                        android:id="@+id/income_date"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="30dp"
-                        android:background="@drawable/shape_green_field" />
+                        android:layout_marginRight="@dimen/line_indent"
+                        android:layout_marginTop="@dimen/line_indent"
+                        android:background="@drawable/shape_green_field"
+                        android:paddingLeft="@dimen/table_padding_left" />
 
-                </LinearLayout>
+                </TableRow>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/line_indent"
-                    android:orientation="horizontal">
+                <TableRow>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:layout_marginRight="@dimen/table_indent"
                         android:text="@string/category"
-                        android:textSize="16sp" />
+                        android:textSize="@dimen/table_text_size" />
 
                     <android.support.v7.widget.AppCompatSpinner
-                        android:id="@+id/edit_income_category"
+                        android:id="@+id/income_category"
                         android:layout_width="match_parent"
                         android:layout_height="30dp"
-                        android:layout_marginLeft="30dp"
+                        android:layout_marginRight="@dimen/line_indent"
+                        android:layout_marginTop="@dimen/line_indent"
                         android:background="@drawable/shape_green_field" />
 
-                </LinearLayout>
+                </TableRow>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/line_indent"
-                    android:orientation="horizontal">
+                <TableRow>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:layout_marginRight="@dimen/table_indent"
                         android:text="@string/subCategory"
-                        android:textSize="16sp" />
+                        android:textSize="@dimen/table_text_size" />
 
                     <android.support.v7.widget.AppCompatSpinner
-                        android:id="@+id/edit_income_subCategory"
+                        android:id="@+id/income_subCategory"
                         android:layout_width="match_parent"
                         android:layout_height="30dp"
-                        android:layout_marginLeft="30dp"
+                        android:layout_marginRight="@dimen/line_indent"
+                        android:layout_marginTop="@dimen/line_indent"
                         android:background="@drawable/shape_green_field" />
 
-                </LinearLayout>
+                </TableRow>
 
-            </LinearLayout>
+            </TableLayout>
         </ScrollView>
     </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_income_edit"
+        android:id="@+id/fab_income_add_edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_menu_edit" />
+        app:srcCompat="@android:drawable/ic_menu_add" />
 </android.support.design.widget.CoordinatorLayout>

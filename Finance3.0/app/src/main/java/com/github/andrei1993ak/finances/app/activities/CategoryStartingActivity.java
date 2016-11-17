@@ -1,25 +1,19 @@
 package com.github.andrei1993ak.finances.app.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.github.andrei1993ak.finances.R;
-import com.github.andrei1993ak.finances.util.Constants;
+import com.github.andrei1993ak.finances.app.BaseActivity;
 
-public class CategoryStartingActivity extends AppCompatActivity {
+public class CategoryStartingActivity extends BaseActivity {
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
-
-        if (getSharedPreferences(Constants.PREFS, Context.MODE_PRIVATE).getBoolean(Constants.THEME, false)) {
-            setTheme(R.style.Dark);
-        }
-        setTitle(R.string.categories);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.category_starting_activity);
+        setTitle(R.string.categories);
     }
 
 

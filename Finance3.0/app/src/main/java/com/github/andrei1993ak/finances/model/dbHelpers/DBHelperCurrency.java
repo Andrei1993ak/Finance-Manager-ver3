@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.github.andrei1993ak.finances.model.DBHelper;
 import com.github.andrei1993ak.finances.model.TableQueryGenerator;
 import com.github.andrei1993ak.finances.model.models.Currency;
-import com.github.andrei1993ak.finances.model.models.Purse;
+import com.github.andrei1993ak.finances.model.models.Wallet;
 import com.github.andrei1993ak.finances.util.ContextHolder;
 
 import java.util.ArrayList;
@@ -111,7 +111,7 @@ public class DBHelperCurrency implements DBHelperForModel<Currency> {
     @Override
     public int delete(final long id) {
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        final String selectQuery = "SELECT * FROM " + TableQueryGenerator.getTableName(Purse.class) + " WHERE " + Purse.CURRENCY_ID + " = " + id + " LIMIT 1";
+        final String selectQuery = "SELECT * FROM " + TableQueryGenerator.getTableName(Wallet.class) + " WHERE " + Wallet.CURRENCY_ID + " = " + id + " LIMIT 1";
         final Cursor cursor = db.rawQuery(selectQuery, null);
         int count = -1;
         if (!cursor.moveToFirst()) {

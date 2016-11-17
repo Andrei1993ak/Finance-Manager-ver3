@@ -14,14 +14,14 @@ import java.util.ArrayList;
 public class PieReportLoader extends Loader<ArrayList<PieChartItem>> {
 
     private GetValuesTask task;
-    private final long purseId;
+    private final long walletId;
     private final boolean type;
     private final long categoryId;
 
     public PieReportLoader(final Context context, final Bundle args) {
 
         super(context);
-        purseId = args.getLong(Income.PURSE_ID);
+        walletId = args.getLong(Income.WALLET_ID);
         type = args.getBoolean(PieChartItem.TYPE);
         categoryId = args.getLong(Income.CATEGORY_ID);
     }
@@ -33,7 +33,7 @@ public class PieReportLoader extends Loader<ArrayList<PieChartItem>> {
             task.cancel(true);
         }
         task = new GetValuesTask();
-        task.execute(purseId, categoryId);
+        task.execute(walletId, categoryId);
     }
 
     private void getResultFromTask(final ArrayList<PieChartItem> result) {

@@ -35,7 +35,7 @@ public class DBHelperCost implements DBHelperForModel<Cost> {
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         final ContentValues values = new ContentValues();
         values.put(Cost.NAME, cost.getName());
-        values.put(Cost.PURSE_ID, cost.getPurseId());
+        values.put(Cost.WALLET_ID, cost.getWalletId());
         values.put(Cost.AMOUNT, cost.getAmount());
         values.put(Cost.CATEGORY_ID, cost.getCategoryId());
         values.put(Cost.DATE, cost.getDate());
@@ -43,8 +43,8 @@ public class DBHelperCost implements DBHelperForModel<Cost> {
         long id;
         try {
             db.beginTransaction();
-            final DBHelperPurse helperPurse = DBHelperPurse.getInstance();
-            helperPurse.takeAmount(cost.getPurseId(), cost.getAmount());
+            final DBHelperWallet dbHelperWallet = DBHelperWallet.getInstance();
+            dbHelperWallet.takeAmount(cost.getWalletId(), cost.getAmount());
             id = db.insert(TableQueryGenerator.getTableName(Cost.class), null, values);
             db.setTransactionSuccessful();
         } finally {
@@ -65,7 +65,7 @@ public class DBHelperCost implements DBHelperForModel<Cost> {
             //TODO generate fields from annotated members
             cost.setId(cursor.getLong(cursor.getColumnIndex(Cost.ID)));
             cost.setName(cursor.getString(cursor.getColumnIndex(Cost.NAME)));
-            cost.setPurseId(cursor.getLong(cursor.getColumnIndex(Cost.PURSE_ID)));
+            cost.setWalletId(cursor.getLong(cursor.getColumnIndex(Cost.WALLET_ID)));
             cost.setAmount(cursor.getDouble(cursor.getColumnIndex(Cost.AMOUNT)));
             cost.setCategoryId(cursor.getLong(cursor.getColumnIndex(Cost.CATEGORY_ID)));
             cost.setDate(cursor.getLong(cursor.getColumnIndex(Cost.DATE)));
@@ -91,7 +91,7 @@ public class DBHelperCost implements DBHelperForModel<Cost> {
         final Cost oldCost = get(cost.getId());
         final ContentValues values = new ContentValues();
         values.put(Cost.NAME, cost.getName());
-        values.put(Cost.PURSE_ID, cost.getPurseId());
+        values.put(Cost.WALLET_ID, cost.getWalletId());
         values.put(Cost.AMOUNT, cost.getAmount());
         values.put(Cost.CATEGORY_ID, cost.getCategoryId());
         values.put(Cost.DATE, cost.getDate());
@@ -101,12 +101,12 @@ public class DBHelperCost implements DBHelperForModel<Cost> {
             db.beginTransaction();
             count = db.update(TableQueryGenerator.getTableName(Cost.class), values, Cost.ID + "=?", new String[]{String.valueOf(cost.getId())});
             final Cost newCost = get(cost.getId());
-            final DBHelperPurse helperPurse = DBHelperPurse.getInstance();
-            if (oldCost.getPurseId() != newCost.getPurseId()) {
-                helperPurse.addAmount(oldCost.getPurseId(), oldCost.getAmount());
-                helperPurse.takeAmount(newCost.getPurseId(), newCost.getAmount());
+            final DBHelperWallet dbHelperWallet = DBHelperWallet.getInstance();
+            if (oldCost.getWalletId() != newCost.getWalletId()) {
+                dbHelperWallet.addAmount(oldCost.getWalletId(), oldCost.getAmount());
+                dbHelperWallet.takeAmount(newCost.getWalletId(), newCost.getAmount());
             } else if (newCost.getAmount() != oldCost.getAmount()) {
-                helperPurse.takeAmount(newCost.getPurseId(), (newCost.getAmount() - oldCost.getAmount()));
+                dbHelperWallet.takeAmount(newCost.getWalletId(), (newCost.getAmount() - oldCost.getAmount()));
             }
             db.setTransactionSuccessful();
         } finally {
@@ -118,12 +118,12 @@ public class DBHelperCost implements DBHelperForModel<Cost> {
     @Override
     public int delete(final long id) {
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        final DBHelperPurse helperPurse = DBHelperPurse.getInstance();
+        final DBHelperWallet dbHelperWallet = DBHelperWallet.getInstance();
         final Cost cost = get(id);
         int count;
         try {
             db.beginTransaction();
-            helperPurse.addAmount(cost.getPurseId(), cost.getAmount());
+            dbHelperWallet.addAmount(cost.getWalletId(), cost.getAmount());
             count = db.delete(TableQueryGenerator.getTableName(Cost.class), Cost.ID + " = " + id, null);
             db.setTransactionSuccessful();
         } finally {
@@ -148,7 +148,7 @@ public class DBHelperCost implements DBHelperForModel<Cost> {
                 final Cost cost = new Cost();
                 cost.setId(cursor.getLong(cursor.getColumnIndex(Cost.ID)));
                 cost.setName(cursor.getString(cursor.getColumnIndex(Cost.NAME)));
-                cost.setPurseId(cursor.getLong(cursor.getColumnIndex(Cost.PURSE_ID)));
+                cost.setWalletId(cursor.getLong(cursor.getColumnIndex(Cost.WALLET_ID)));
                 cost.setAmount(cursor.getDouble(cursor.getColumnIndex(Cost.AMOUNT)));
                 cost.setCategoryId(cursor.getLong(cursor.getColumnIndex(Cost.CATEGORY_ID)));
                 cost.setDate(cursor.getLong(cursor.getColumnIndex(Cost.DATE)));
@@ -164,10 +164,10 @@ public class DBHelperCost implements DBHelperForModel<Cost> {
         return null;
     }
 
-    public List<Cost> getAllToListByPurseId(final long id) {
+    public List<Cost> getAllToListByWalletId(final long id) {
         final List<Cost> incomeList = new ArrayList<>();
         final String selectQuery = "SELECT * FROM " + TableQueryGenerator.getTableName(Cost.class) +
-                " WHERE " + Cost.PURSE_ID + " = " + id;
+                " WHERE " + Cost.WALLET_ID + " = " + id;
         final SQLiteDatabase db = dbHelper.getReadableDatabase();
         final Cursor cursor = db.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
@@ -175,7 +175,7 @@ public class DBHelperCost implements DBHelperForModel<Cost> {
                 final Cost income = new Cost();
                 income.setId(cursor.getLong(cursor.getColumnIndex(Cost.ID)));
                 income.setName(cursor.getString(cursor.getColumnIndex(Cost.NAME)));
-                income.setPurseId(cursor.getLong(cursor.getColumnIndex(Cost.PURSE_ID)));
+                income.setWalletId(cursor.getLong(cursor.getColumnIndex(Cost.WALLET_ID)));
                 income.setAmount(cursor.getDouble(cursor.getColumnIndex(Cost.AMOUNT)));
                 income.setCategoryId(cursor.getLong(cursor.getColumnIndex(Cost.CATEGORY_ID)));
                 income.setDate(cursor.getLong(cursor.getColumnIndex(Cost.DATE)));

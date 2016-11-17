@@ -24,7 +24,7 @@ public class TransferExecutor extends PojoExecutor<Transfer> {
     public static final int KEY_RESULT_DELETE_ALL = 806;
     public static final int KEY_RESULT_GET_ALL_TO_LIST= 807;
     public static final int KEY_RESULT_GET_ALL_TO_LIST_BY_CATEGORY_ID = 808;
-    public static final int KEY_RESULT_GET_ALL_TO_LIST_BY_PURSE_ID = 809;
+    public static final int KEY_RESULT_GET_ALL_TO_LIST_BY_WALLET_ID = 809;
     public static final int KEY_RESULT_GET_ALL_TO_LIST_BY_DATES = 810;
 
     public TransferExecutor(OnTaskCompleted listener) {
@@ -72,8 +72,8 @@ public class TransferExecutor extends PojoExecutor<Transfer> {
     }
 
     @Override
-    protected Result<List<Transfer>> getAllToListByPurseId(Long id) {
-        return new Result<>(KEY_RESULT_GET_ALL_TO_LIST_BY_PURSE_ID,DBHelperTransfer.getInstance().getAllToListByPurseId(id));
+    protected Result<List<Transfer>> getAllToListByWalletId(Long walletId) {
+        return new Result<>(KEY_RESULT_GET_ALL_TO_LIST_BY_WALLET_ID,DBHelperTransfer.getInstance().getAllToListByWalletId(walletId));
     }
 
     @Override

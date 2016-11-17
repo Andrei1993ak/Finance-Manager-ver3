@@ -40,7 +40,7 @@ public class DBHelperCategoryCost implements DBHelperForModel<CostCategory> {
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         final ContentValues values = new ContentValues();
         values.put(CostCategory.NAME, costCategory.getName());
-        values.put(CostCategory.PARENT_ID, costCategory.getParent_id());
+        values.put(CostCategory.PARENT_ID, costCategory.getParentId());
         long id;
         try {
             db.beginTransaction();
@@ -61,7 +61,7 @@ public class DBHelperCategoryCost implements DBHelperForModel<CostCategory> {
             final CostCategory costCategory = new CostCategory();
             costCategory.setId(cursor.getLong(cursor.getColumnIndex(CostCategory.ID)));
             costCategory.setName(cursor.getString(cursor.getColumnIndex(CostCategory.NAME)));
-            costCategory.setParent_id(cursor.getLong(cursor.getColumnIndex(CostCategory.PARENT_ID)));
+            costCategory.setParentId(cursor.getLong(cursor.getColumnIndex(CostCategory.PARENT_ID)));
             cursor.close();
             return costCategory;
         } else {
@@ -82,7 +82,7 @@ public class DBHelperCategoryCost implements DBHelperForModel<CostCategory> {
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         final ContentValues values = new ContentValues();
         values.put(CostCategory.NAME, costCategory.getName());
-        values.put(CostCategory.PARENT_ID, costCategory.getParent_id());
+        values.put(CostCategory.PARENT_ID, costCategory.getParentId());
         int count;
         try {
             db.beginTransaction();
@@ -98,7 +98,7 @@ public class DBHelperCategoryCost implements DBHelperForModel<CostCategory> {
     public int delete(final long id) {
 
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        if (get(id).getParent_id() == -1) {
+        if (get(id).getParentId() == -1) {
             final String query = "SELECT * FROM " + TableQueryGenerator.getTableName(CostCategory.class) + " WHERE " + CostCategory.PARENT_ID + " = " + id + " LIMIT 1";
             final Cursor cursor = db.rawQuery(query, null);
             if (cursor.moveToFirst()) {
@@ -165,7 +165,7 @@ public class DBHelperCategoryCost implements DBHelperForModel<CostCategory> {
                 final CostCategory costCategory = new CostCategory();
                 costCategory.setId(cursor.getLong(cursor.getColumnIndex(CostCategory.ID)));
                 costCategory.setName(cursor.getString(cursor.getColumnIndex(CostCategory.NAME)));
-                costCategory.setParent_id(cursor.getLong(cursor.getColumnIndex(CostCategory.PARENT_ID)));
+                costCategory.setParentId(cursor.getLong(cursor.getColumnIndex(CostCategory.PARENT_ID)));
                 list.add(costCategory);
             } while (cursor.moveToNext());
         }
@@ -189,7 +189,7 @@ public class DBHelperCategoryCost implements DBHelperForModel<CostCategory> {
                 final CostCategory costCategory = new CostCategory();
                 costCategory.setId(cursor.getLong(cursor.getColumnIndex(CostCategory.ID)));
                 costCategory.setName(cursor.getString(cursor.getColumnIndex(CostCategory.NAME)));
-                costCategory.setParent_id(cursor.getLong(cursor.getColumnIndex(CostCategory.PARENT_ID)));
+                costCategory.setParentId(cursor.getLong(cursor.getColumnIndex(CostCategory.PARENT_ID)));
                 list.add(costCategory);
             } while (cursor.moveToNext());
         }

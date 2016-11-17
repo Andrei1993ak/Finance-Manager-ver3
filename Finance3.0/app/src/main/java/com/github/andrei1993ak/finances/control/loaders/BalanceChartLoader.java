@@ -10,12 +10,12 @@ import org.achartengine.model.TimeSeries;
 
 public class BalanceChartLoader extends Loader<TimeSeries> {
 
-    private long purseId;
+    private long walletID;
     private GetTimeSeriesTask task;
 
-    public BalanceChartLoader(final Context context, final long purseId) {
+    public BalanceChartLoader(final Context context, final long walletID) {
         super(context);
-        this.purseId = purseId;
+        this.walletID = walletID;
     }
 
     @Override
@@ -25,7 +25,7 @@ public class BalanceChartLoader extends Loader<TimeSeries> {
             task.cancel(true);
         }
         task = new GetTimeSeriesTask();
-        task.execute(purseId, purseId);
+        task.execute(walletID, walletID);
     }
 
     private class GetTimeSeriesTask extends AsyncTask<Long, Void, TimeSeries> {

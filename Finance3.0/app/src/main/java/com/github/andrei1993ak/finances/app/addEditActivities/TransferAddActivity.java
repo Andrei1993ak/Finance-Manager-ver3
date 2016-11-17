@@ -1,13 +1,11 @@
 package com.github.andrei1993ak.finances.app.addEditActivities;
 
 import android.app.DatePickerDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatSpinner;
 import android.view.View;
 import android.widget.AdapterView;
@@ -16,17 +14,17 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.github.andrei1993ak.finances.control.base.Result;
-import com.github.andrei1993ak.finances.control.executors.PurseExecutor;
-import com.github.andrei1993ak.finances.model.TableQueryGenerator;
-import com.github.andrei1993ak.finances.model.models.Purse;
-import com.github.andrei1993ak.finances.util.Constants;
-import com.github.andrei1993ak.finances.util.transferRateParser.OnParseCompleted;
-import com.github.andrei1993ak.finances.util.transferRateParser.RateJsonParser;
 import com.github.andrei1993ak.finances.R;
+import com.github.andrei1993ak.finances.app.BaseActivity;
 import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
 import com.github.andrei1993ak.finances.control.base.RequestHolder;
+import com.github.andrei1993ak.finances.control.base.Result;
+import com.github.andrei1993ak.finances.control.executors.WalletExecutor;
+import com.github.andrei1993ak.finances.model.TableQueryGenerator;
+import com.github.andrei1993ak.finances.model.models.Wallet;
 import com.github.andrei1993ak.finances.model.models.Transfer;
+import com.github.andrei1993ak.finances.util.transferRateParser.OnParseCompleted;
+import com.github.andrei1993ak.finances.util.transferRateParser.RateJsonParser;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -34,23 +32,20 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class TransferAddActivity extends AppCompatActivity implements OnTaskCompleted, OnParseCompleted {
+public class TransferAddActivity extends BaseActivity implements OnTaskCompleted, OnParseCompleted {
 
     private EditText newTransferName;
     private TextView newTransferDate;
-    private AppCompatSpinner newTransferFromPurse;
-    private AppCompatSpinner newTransferToPurse;
+    private AppCompatSpinner newTransferFromWallet;
+    private AppCompatSpinner newTransferToWallet;
     private EditText newTransferFromAmount;
     private EditText newTransferToAmount;
-    private List<Purse> allPurses;
+    private List<Wallet> allWallets;
     private SimpleDateFormat dateFormatter;
     private TextView officialRate;
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
-        if (getSharedPreferences(Constants.PREFS, Context.MODE_PRIVATE).getBoolean(Constants.THEME, false)) {
-            setTheme(R.style.Dark);
-        }
         super.onCreate(savedInstanceState);
         setTitle(R.string.newTransfer);
         setContentView(R.layout.transfer_add_edit_activity);
@@ -63,14 +58,14 @@ public class TransferAddActivity extends AppCompatActivity implements OnTaskComp
                 addTransfer();
             }
         });
-        new PurseExecutor(this).execute(new RequestHolder<Purse>().getAllToList(RequestHolder.SELECTION_ALL));
+        new WalletExecutor(this).execute(new RequestHolder<Wallet>().getAllToList(RequestHolder.SELECTION_ALL));
     }
 
     private void findViewsByIds() {
         newTransferName = (EditText) findViewById(R.id.transfer_name);
         newTransferDate = (TextView) findViewById(R.id.transfer_date);
-        newTransferFromPurse = (AppCompatSpinner) findViewById(R.id.transfer_from_purse);
-        newTransferToPurse = (AppCompatSpinner) findViewById(R.id.transfer_to_purse);
+        newTransferFromWallet = (AppCompatSpinner) findViewById(R.id.transfer_from_wallet);
+        newTransferToWallet = (AppCompatSpinner) findViewById(R.id.transfer_to_wallet);
         newTransferFromAmount = (EditText) findViewById(R.id.transfer_from_amount);
         newTransferToAmount = (EditText) findViewById(R.id.transfer_to_amount);
         officialRate = (TextView) findViewById(R.id.official_rate);
@@ -148,15 +143,15 @@ public class TransferAddActivity extends AppCompatActivity implements OnTaskComp
             newTransferToAmount.setBackground(ContextCompat.getDrawable(this, R.drawable.shape_red_field));
             flag = false;
         }
-        if (newTransferFromPurse.getSelectedItemPosition() == newTransferToPurse.getSelectedItemPosition()) {
-            newTransferFromPurse.setBackground(ContextCompat.getDrawable(this, R.drawable.shape_red_field));
-            newTransferToPurse.setBackground(ContextCompat.getDrawable(this, R.drawable.shape_red_field));
+        if (newTransferFromWallet.getSelectedItemPosition() == newTransferToWallet.getSelectedItemPosition()) {
+            newTransferFromWallet.setBackground(ContextCompat.getDrawable(this, R.drawable.shape_red_field));
+            newTransferToWallet.setBackground(ContextCompat.getDrawable(this, R.drawable.shape_red_field));
             flag = false;
         } else {
-            newTransferFromPurse.setBackground(ContextCompat.getDrawable(this, R.drawable.shape_green_field));
-            newTransferToPurse.setBackground(ContextCompat.getDrawable(this, R.drawable.shape_green_field));
-            transfer.setFromPurseId(allPurses.get(newTransferFromPurse.getSelectedItemPosition()).getId());
-            transfer.setToPurseId(allPurses.get(newTransferToPurse.getSelectedItemPosition()).getId());
+            newTransferFromWallet.setBackground(ContextCompat.getDrawable(this, R.drawable.shape_green_field));
+            newTransferToWallet.setBackground(ContextCompat.getDrawable(this, R.drawable.shape_green_field));
+            transfer.setFromWalletId(allWallets.get(newTransferFromWallet.getSelectedItemPosition()).getId());
+            transfer.setToWalletId(allWallets.get(newTransferToWallet.getSelectedItemPosition()).getId());
         }
         if (!flag) {
             return null;
@@ -168,19 +163,19 @@ public class TransferAddActivity extends AppCompatActivity implements OnTaskComp
     @Override
     public void onTaskCompleted(final Result result) {
         switch (result.getId()) {
-            case PurseExecutor.KEY_RESULT_GET_ALL_TO_LIST:
-                allPurses = (List<Purse>) result.getObject();
-                final String[] pursesNames = new String[allPurses.size()];
+            case WalletExecutor.KEY_RESULT_GET_ALL_TO_LIST:
+                allWallets = (List<Wallet>) result.getObject();
+                final String[] walletsNames = new String[allWallets.size()];
                 int i = 0;
-                for (final Purse purse : allPurses) {
-                    pursesNames[i++] = purse.getName();
+                for (final Wallet wallet : allWallets) {
+                    walletsNames[i++] = wallet.getName();
                 }
-                final ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, pursesNames);
+                final ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, walletsNames);
                 spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                newTransferFromPurse.setAdapter(spinnerAdapter);
-                newTransferToPurse.setAdapter(spinnerAdapter);
-                newTransferToPurse.setOnItemSelectedListener(new MyItemSelectedListener());
-                newTransferFromPurse.setOnItemSelectedListener(new MyItemSelectedListener());
+                newTransferFromWallet.setAdapter(spinnerAdapter);
+                newTransferToWallet.setAdapter(spinnerAdapter);
+                newTransferToWallet.setOnItemSelectedListener(new MyItemSelectedListener());
+                newTransferFromWallet.setOnItemSelectedListener(new MyItemSelectedListener());
                 break;
         }
     }
@@ -198,11 +193,11 @@ public class TransferAddActivity extends AppCompatActivity implements OnTaskComp
 
         @Override
         public void onItemSelected(final AdapterView<?> parent, final View view, final int position, final long id) {
-            if (newTransferFromPurse.getSelectedItemPosition() == newTransferToPurse.getSelectedItemPosition()) {
+            if (newTransferFromWallet.getSelectedItemPosition() == newTransferToWallet.getSelectedItemPosition()) {
                 officialRate.setText("");
             } else {
-                final long idFrom = (allPurses.get(newTransferFromPurse.getSelectedItemPosition()).getCurrencyId());
-                final long idTo = (allPurses.get(newTransferToPurse.getSelectedItemPosition()).getCurrencyId());
+                final long idFrom = (allWallets.get(newTransferFromWallet.getSelectedItemPosition()).getCurrencyId());
+                final long idTo = (allWallets.get(newTransferToWallet.getSelectedItemPosition()).getCurrencyId());
                 new RateJsonParser(TransferAddActivity.this).execute(idFrom, idTo);
             }
         }

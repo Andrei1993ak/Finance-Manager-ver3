@@ -11,7 +11,7 @@ import com.github.andrei1993ak.finances.model.annotations.types.DBInteger;
 public class Cost extends TableClass implements Parcelable {
 
     @DBInteger
-    public static final String PURSE_ID = "purse_id";
+    public static final String WALLET_ID = "purse_id";
 
     @DBDouble
     public static final String AMOUNT = "amount";
@@ -27,21 +27,21 @@ public class Cost extends TableClass implements Parcelable {
 
     private long _id;
     private String name;
-    private long purse_id;
+    private long walletId;
     private double amount;
-    private long category_id;
+    private long categoryId;
     private long date;
     private int photo;
 
     public Cost() {
     }
 
-    public Cost(final String name, final long purse_id, final double amount, final long category_id,
+    public Cost(final String name, final long walletId, final double amount, final long categoryId,
                 final long date, final int photo) {
         this.name = name;
-        this.purse_id = purse_id;
+        this.walletId = walletId;
         this.amount = amount;
-        this.category_id = category_id;
+        this.categoryId = categoryId;
         this.date = date;
         this.photo = photo;
     }
@@ -62,12 +62,12 @@ public class Cost extends TableClass implements Parcelable {
         this.name = name;
     }
 
-    public long getPurseId() {
-        return purse_id;
+    public long getWalletId() {
+        return walletId;
     }
 
-    public void setPurseId(final long purse_id) {
-        this.purse_id = purse_id;
+    public void setWalletId(final long walletId) {
+        this.walletId = walletId;
     }
 
     public double getAmount() {
@@ -79,11 +79,11 @@ public class Cost extends TableClass implements Parcelable {
     }
 
     public long getCategoryId() {
-        return category_id;
+        return categoryId;
     }
 
-    public void setCategoryId(final long category_id) {
-        this.category_id = category_id;
+    public void setCategoryId(final long categoryId) {
+        this.categoryId = categoryId;
     }
 
     public long getDate() {
@@ -111,9 +111,9 @@ public class Cost extends TableClass implements Parcelable {
     public void writeToParcel(final Parcel dest, final int flags) {
         dest.writeLong(this._id);
         dest.writeString(this.name);
-        dest.writeLong(this.purse_id);
+        dest.writeLong(this.walletId);
         dest.writeDouble(this.amount);
-        dest.writeLong(this.category_id);
+        dest.writeLong(this.categoryId);
         dest.writeLong(this.date);
         dest.writeInt(this.photo);
     }
@@ -121,9 +121,9 @@ public class Cost extends TableClass implements Parcelable {
     protected Cost(final Parcel in) {
         this._id = in.readLong();
         this.name = in.readString();
-        this.purse_id = in.readLong();
+        this.walletId = in.readLong();
         this.amount = in.readDouble();
-        this.category_id = in.readLong();
+        this.categoryId = in.readLong();
         this.date = in.readLong();
         this.photo = in.readInt();
     }

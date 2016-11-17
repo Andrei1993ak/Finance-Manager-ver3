@@ -8,7 +8,7 @@ import com.github.andrei1993ak.finances.model.annotations.Table;
 import com.github.andrei1993ak.finances.model.annotations.types.DBInteger;
 
 @Table(name = "purses")
-public class Purse extends TableClass implements Parcelable {
+public class Wallet extends TableClass implements Parcelable {
 
     @DBDouble
     public static String AMOUNT = "amount";
@@ -21,17 +21,17 @@ public class Purse extends TableClass implements Parcelable {
     private long currencyId;
     private double amount;
 
-    public Purse() {
+    public Wallet() {
 
     }
 
-    public Purse(final String name, final long currencyId, final double amount) {
+    public Wallet(final String name, final long currencyId, final double amount) {
         this.name = name;
         this.currencyId = currencyId;
         this.amount = amount;
     }
 
-    public Purse(final long id, final String name, final long currencyId, final double amount) {
+    public Wallet(final long id, final String name, final long currencyId, final double amount) {
         this.id = id;
         this.name = name;
         this.currencyId = currencyId;
@@ -39,28 +39,28 @@ public class Purse extends TableClass implements Parcelable {
 
     }
 
-    public Purse(final String name, final long currencyId) {
+    public Wallet(final String name, final long currencyId) {
         this.name = name;
         this.currencyId = currencyId;
         this.amount = 0.0;
     }
 
-    protected Purse(final Parcel in) {
+    protected Wallet(final Parcel in) {
         id = in.readLong();
         name = in.readString();
         currencyId = in.readLong();
         amount = in.readDouble();
     }
 
-    public static final Creator<Purse> CREATOR = new Creator<Purse>() {
+    public static final Creator<Wallet> CREATOR = new Creator<Wallet>() {
         @Override
-        public Purse createFromParcel(final Parcel in) {
-            return new Purse(in);
+        public Wallet createFromParcel(final Parcel in) {
+            return new Wallet(in);
         }
 
         @Override
-        public Purse[] newArray(final int size) {
-            return new Purse[size];
+        public Wallet[] newArray(final int size) {
+            return new Wallet[size];
         }
     };
 

@@ -1,6 +1,5 @@
 package com.github.andrei1993ak.finances.app.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -8,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,45 +14,42 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.github.andrei1993ak.finances.control.base.Result;
-import com.github.andrei1993ak.finances.control.loaders.PurseCursorLoader;
-import com.github.andrei1993ak.finances.model.models.Purse;
-import com.github.andrei1993ak.finances.util.Constants;
-import com.github.andrei1993ak.finances.app.addEditActivities.PurseEditActivity;
 import com.github.andrei1993ak.finances.R;
-import com.github.andrei1993ak.finances.control.adapters.PurseCursorAdapter;
+import com.github.andrei1993ak.finances.app.BaseActivity;
+import com.github.andrei1993ak.finances.app.addEditActivities.WalletAddActivity;
+import com.github.andrei1993ak.finances.app.addEditActivities.WalletEditActivity;
+import com.github.andrei1993ak.finances.control.adapters.WalletCursorAdapter;
 import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
 import com.github.andrei1993ak.finances.control.base.RequestHolder;
-import com.github.andrei1993ak.finances.control.executors.PurseExecutor;
+import com.github.andrei1993ak.finances.control.base.Result;
+import com.github.andrei1993ak.finances.control.executors.WalletExecutor;
+import com.github.andrei1993ak.finances.control.loaders.WalletCursorLoader;
 import com.github.andrei1993ak.finances.model.TableQueryGenerator;
-import com.github.andrei1993ak.finances.app.addEditActivities.PurseAddActivity;
+import com.github.andrei1993ak.finances.model.models.Wallet;
 
-public class PurseActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, OnTaskCompleted {
+public class WalletActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor>, OnTaskCompleted {
 
 
-    private static final int ADD_PURSE_REQUEST = 1;
-    private static final int EDIT_PURSE_REQUEST = 2;
+    private static final int ADD_WALLET_REQUEST = 1;
+    private static final int EDIT_WALLET_REQUEST = 2;
 
     public static final int MAIN_LOADER_ID = 0;
 
-    private PurseCursorAdapter purseCursorAdapter;
-    private RequestHolder<Purse> requestHolder;
-    private ListView lvPurses;
+    private WalletCursorAdapter walletCursorAdapter;
+    private RequestHolder<Wallet> requestHolder;
+    private ListView lvWallets;
     private long itemId = -1;
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
-        if (getSharedPreferences(Constants.PREFS, Context.MODE_PRIVATE).getBoolean(Constants.THEME, false)) {
-            setTheme(R.style.Dark);
-        }
         super.onCreate(savedInstanceState);
-        setTitle(R.string.purses);
+        setTitle(R.string.wallets);
         setContentView(R.layout.standart_activity);
         requestHolder = new RequestHolder<>();
-        purseCursorAdapter = new PurseCursorAdapter(this, null);
-        lvPurses = (ListView) findViewById(R.id.standardListView);
-        lvPurses.setAdapter(purseCursorAdapter);
-        lvPurses.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        walletCursorAdapter = new WalletCursorAdapter(this, null);
+        lvWallets = (ListView) findViewById(R.id.standardListView);
+        lvWallets.setAdapter(walletCursorAdapter);
+        lvWallets.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
                 itemId = id;
@@ -64,8 +59,8 @@ public class PurseActivity extends AppCompatActivity implements LoaderManager.Lo
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
-                final Intent intent = new Intent(PurseActivity.this, PurseAddActivity.class);
-                startActivityForResult(intent, ADD_PURSE_REQUEST);
+                final Intent intent = new Intent(WalletActivity.this, WalletAddActivity.class);
+                startActivityForResult(intent, ADD_WALLET_REQUEST);
             }
         });
         getSupportLoaderManager().restartLoader(MAIN_LOADER_ID, null, this);
@@ -82,12 +77,12 @@ public class PurseActivity extends AppCompatActivity implements LoaderManager.Lo
         final int id = item.getItemId();
         if (itemId != -1) {
             if (id == R.id.action_edit) {
-                final Intent intent = new Intent(this, PurseEditActivity.class);
-                intent.putExtra(Purse.ID, itemId);
-                startActivityForResult(intent, EDIT_PURSE_REQUEST);
+                final Intent intent = new Intent(this, WalletEditActivity.class);
+                intent.putExtra(Wallet.ID, itemId);
+                startActivityForResult(intent, EDIT_WALLET_REQUEST);
                 return true;
             } else {
-                new PurseExecutor(this).execute(requestHolder.delete(itemId));
+                new WalletExecutor(this).execute(requestHolder.delete(itemId));
                 return true;
             }
         }
@@ -98,13 +93,13 @@ public class PurseActivity extends AppCompatActivity implements LoaderManager.Lo
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
-                case ADD_PURSE_REQUEST:
-                    final Purse newPurse = data.getParcelableExtra(TableQueryGenerator.getTableName(Purse.class));
-                    new PurseExecutor(this).execute(requestHolder.add(newPurse));
+                case ADD_WALLET_REQUEST:
+                    final Wallet newWallet = data.getParcelableExtra(TableQueryGenerator.getTableName(Wallet.class));
+                    new WalletExecutor(this).execute(requestHolder.add(newWallet));
                     break;
-                case EDIT_PURSE_REQUEST:
-                    final Purse editPurse = data.getParcelableExtra(TableQueryGenerator.getTableName(Purse.class));
-                    new PurseExecutor(this).execute(requestHolder.edit(editPurse));
+                case EDIT_WALLET_REQUEST:
+                    final Wallet editWallet = data.getParcelableExtra(TableQueryGenerator.getTableName(Wallet.class));
+                    new WalletExecutor(this).execute(requestHolder.edit(editWallet));
                     break;
                 default:
                     break;
@@ -115,36 +110,36 @@ public class PurseActivity extends AppCompatActivity implements LoaderManager.Lo
 
     @Override
     public Loader<Cursor> onCreateLoader(final int id, final Bundle args) {
-        return new PurseCursorLoader(this);
+        return new WalletCursorLoader(this);
     }
 
     @Override
     public void onLoadFinished(final Loader<Cursor> loader, final Cursor data) {
-        purseCursorAdapter.swapCursor(data);
+        walletCursorAdapter.swapCursor(data);
     }
 
     @Override
     public void onLoaderReset(final Loader<Cursor> loader) {
-        purseCursorAdapter.swapCursor(null);
+        walletCursorAdapter.swapCursor(null);
     }
 
     @Override
     public void onTaskCompleted(final Result result) {
         final int id = result.getId();
         switch (id) {
-            case PurseExecutor.KEY_RESULT_ADD:
+            case WalletExecutor.KEY_RESULT_ADD:
                 if (getSupportLoaderManager().getLoader(MAIN_LOADER_ID) != null) {
                     getSupportLoaderManager().getLoader(MAIN_LOADER_ID).forceLoad();
                 }
                 break;
-            case PurseExecutor.KEY_RESULT_EDIT:
+            case WalletExecutor.KEY_RESULT_EDIT:
                 if (getSupportLoaderManager().getLoader(MAIN_LOADER_ID) != null) {
                     getSupportLoaderManager().getLoader(MAIN_LOADER_ID).forceLoad();
                 }
                 break;
-            case PurseExecutor.KEY_RESULT_DELETE:
+            case WalletExecutor.KEY_RESULT_DELETE:
                 if ((Integer) result.getObject() == -1) {
-                    Toast.makeText(this, R.string.unpossibleToDeletePurse, Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, R.string.unpossibleToDeleteWallet, Toast.LENGTH_LONG).show();
                 } else {
                     if (getSupportLoaderManager().getLoader(MAIN_LOADER_ID) != null) {
                         getSupportLoaderManager().getLoader(MAIN_LOADER_ID).forceLoad();

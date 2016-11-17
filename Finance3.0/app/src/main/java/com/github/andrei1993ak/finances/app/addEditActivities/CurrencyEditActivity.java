@@ -1,25 +1,23 @@
 package com.github.andrei1993ak.finances.app.addEditActivities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.github.andrei1993ak.finances.R;
+import com.github.andrei1993ak.finances.app.BaseActivity;
 import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
 import com.github.andrei1993ak.finances.control.base.RequestHolder;
 import com.github.andrei1993ak.finances.control.base.Result;
 import com.github.andrei1993ak.finances.control.executors.CurrencyExecutor;
 import com.github.andrei1993ak.finances.model.TableQueryGenerator;
 import com.github.andrei1993ak.finances.model.models.Currency;
-import com.github.andrei1993ak.finances.util.Constants;
 
-public class CurrencyEditActivity extends AppCompatActivity implements OnTaskCompleted {
+public class CurrencyEditActivity extends BaseActivity implements OnTaskCompleted {
 
 
     private TextView editCurrencyCode;
@@ -28,9 +26,6 @@ public class CurrencyEditActivity extends AppCompatActivity implements OnTaskCom
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
-        if (getSharedPreferences(Constants.PREFS, Context.MODE_PRIVATE).getBoolean(Constants.THEME, false)) {
-            setTheme(R.style.Dark);
-        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.currency_edit_activity);
         setTitle(R.string.editing);

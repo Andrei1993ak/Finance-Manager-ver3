@@ -1,26 +1,24 @@
-package com.github.andrei1993ak.finances.app.reports;
+package com.github.andrei1993ak.finances.app.reportsActivities;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatSpinner;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 
+import com.github.andrei1993ak.finances.app.BaseActivity;
 import com.github.andrei1993ak.finances.control.base.Result;
 import com.github.andrei1993ak.finances.control.loaders.BalanceChartLoader;
 import com.github.andrei1993ak.finances.R;
 import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
 import com.github.andrei1993ak.finances.control.base.RequestHolder;
-import com.github.andrei1993ak.finances.control.executors.PurseExecutor;
-import com.github.andrei1993ak.finances.model.models.Purse;
-import com.github.andrei1993ak.finances.util.Constants;
+import com.github.andrei1993ak.finances.control.executors.WalletExecutor;
+import com.github.andrei1993ak.finances.model.models.Wallet;
 
 import org.achartengine.ChartFactory;
 import org.achartengine.GraphicalView;
@@ -32,29 +30,26 @@ import org.achartengine.renderer.XYSeriesRenderer;
 
 import java.util.List;
 
-public class BalanceChartActivity extends AppCompatActivity implements OnTaskCompleted, LoaderManager.LoaderCallbacks<TimeSeries> {
+public class BalanceChartActivity extends BaseActivity implements OnTaskCompleted, LoaderManager.LoaderCallbacks<TimeSeries> {
 
     public static final int MAIN_LOADER = 0;
     public static final String POSITION = "position";
     private int position;
     private AppCompatSpinner spinner;
-    private List<Purse> pursesList;
+    private List<Wallet> wallets;
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
-        if (getSharedPreferences(Constants.PREFS, Context.MODE_PRIVATE).getBoolean(Constants.THEME, false)) {
-            setTheme(R.style.Dark);
-        }
+        super.onCreate(savedInstanceState);
         setTitle(R.string.balanceCHart);
         if (savedInstanceState == null) {
             position = 0;
         } else {
             position = savedInstanceState.getInt(POSITION);
         }
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.report_balance_activity);
-        spinner = (AppCompatSpinner) findViewById(R.id.pursesNamesBalanceChart);
-        new PurseExecutor(this).execute(new RequestHolder<Purse>().getAllToList(RequestHolder.SELECTION_ALL));
+        spinner = (AppCompatSpinner) findViewById(R.id.walletsNamesBalanceChart);
+        new WalletExecutor(this).execute(new RequestHolder<Wallet>().getAllToList(RequestHolder.SELECTION_ALL));
     }
 
     private GraphicalView buildView(final TimeSeries series) {
@@ -91,22 +86,22 @@ public class BalanceChartActivity extends AppCompatActivity implements OnTaskCom
     @Override
     public void onTaskCompleted(final Result result) {
         final int id = result.getId();
-        if (id == PurseExecutor.KEY_RESULT_GET_ALL_TO_LIST) {
-            pursesList = (List<Purse>) result.getObject();
-            final String[] pursesNames = new String[pursesList.size()];
+        if (id == WalletExecutor.KEY_RESULT_GET_ALL_TO_LIST) {
+            wallets = (List<Wallet>) result.getObject();
+            final String[] walletsNames = new String[wallets.size()];
             int i = 0;
-            for (final Purse purse : pursesList) {
-                pursesNames[i++] = purse.getName();
+            for (final Wallet wallet : wallets) {
+                walletsNames[i++] = wallet.getName();
             }
-            final ArrayAdapter<String> spinnerPursesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, pursesNames);
-            spinnerPursesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinner.setAdapter(spinnerPursesAdapter);
+            final ArrayAdapter<String> spinnerWalletsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, walletsNames);
+            spinnerWalletsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinner.setAdapter(spinnerWalletsAdapter);
             spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(final AdapterView<?> parent, final View view, final int position, final long id) {
-                    final long purseId = (pursesList.get(position).getId());
+                    final long walletID = (wallets.get(position).getId());
                     final Bundle args = new Bundle();
-                    args.putLong(Purse.ID, purseId);
+                    args.putLong(Wallet.ID, walletID);
                     getSupportLoaderManager().restartLoader(MAIN_LOADER, args, BalanceChartActivity.this);
                     final Loader<Object> loader = BalanceChartActivity.this.getSupportLoaderManager().getLoader(MAIN_LOADER);
                     loader.forceLoad();
@@ -123,7 +118,7 @@ public class BalanceChartActivity extends AppCompatActivity implements OnTaskCom
 
     @Override
     public Loader<TimeSeries> onCreateLoader(final int id, final Bundle args) {
-        return new BalanceChartLoader(this, args.getLong(Purse.ID));
+        return new BalanceChartLoader(this, args.getLong(Wallet.ID));
     }
 
     @Override

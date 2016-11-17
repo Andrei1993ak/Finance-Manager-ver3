@@ -1,6 +1,5 @@
 package com.github.andrei1993ak.finances.app.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -8,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.support.v7.app.AppCompatActivity;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,20 +14,20 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.github.andrei1993ak.finances.control.base.Result;
-import com.github.andrei1993ak.finances.control.loaders.TransferCursorLoader;
 import com.github.andrei1993ak.finances.R;
+import com.github.andrei1993ak.finances.app.BaseActivity;
+import com.github.andrei1993ak.finances.app.addEditActivities.TransferAddActivity;
+import com.github.andrei1993ak.finances.app.addEditActivities.TransferEditActivity;
 import com.github.andrei1993ak.finances.control.adapters.TransferCursorAdapter;
 import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
 import com.github.andrei1993ak.finances.control.base.RequestHolder;
+import com.github.andrei1993ak.finances.control.base.Result;
 import com.github.andrei1993ak.finances.control.executors.TransferExecutor;
+import com.github.andrei1993ak.finances.control.loaders.TransferCursorLoader;
 import com.github.andrei1993ak.finances.model.TableQueryGenerator;
 import com.github.andrei1993ak.finances.model.models.Transfer;
-import com.github.andrei1993ak.finances.util.Constants;
-import com.github.andrei1993ak.finances.app.addEditActivities.TransferAddActivity;
-import com.github.andrei1993ak.finances.app.addEditActivities.TransferEditActivity;
 
-public class TransferActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, OnTaskCompleted {
+public class TransferActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor>, OnTaskCompleted {
 
     private static final int CM_EDIT_ID = 1;
     private static final int CM_DELETE_ID = 2;
@@ -47,10 +45,6 @@ public class TransferActivity extends AppCompatActivity implements LoaderManager
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
-        //TODO create BaseActivity
-        if (getSharedPreferences(Constants.PREFS, Context.MODE_PRIVATE).getBoolean(Constants.THEME, false)) {
-            setTheme(R.style.Dark);
-        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.standart_activity);
         setTitle(R.string.transfers);
