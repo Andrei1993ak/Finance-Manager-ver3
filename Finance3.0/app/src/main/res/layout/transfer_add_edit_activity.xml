@@ -8,8 +8,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="10dp"
-        android:background="?attr/colorControlNormal">
+        android:background="?attr/colorControlNormal"
+        android:padding="@dimen/background_margin">
 
 
         <ScrollView
@@ -17,162 +17,162 @@
             android:layout_height="match_parent"
             android:background="@drawable/shape">
 
-            <LinearLayout
+            <TableLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:stretchColumns="1">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:orientation="horizontal">
+                <TableRow>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:layout_marginRight="@dimen/table_indent"
                         android:text="@string/name"
-                        android:textSize="16sp" />
+                        android:textSize="@dimen/table_text_size" />
 
                     <EditText
                         android:id="@+id/transfer_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="30dp"
-                        android:background="@drawable/shape_green_field" />
-                </LinearLayout>
+                        android:layout_marginRight="@dimen/line_indent"
+                        android:background="@drawable/shape_green_field"
+                        android:inputType="text"
+                        android:paddingLeft="@dimen/table_padding_left" />
+                </TableRow>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:orientation="horizontal">
+                <TableRow>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:layout_marginRight="@dimen/table_indent"
                         android:text="@string/fromPurse"
-                        android:textSize="16sp" />
+                        android:textSize="@dimen/table_text_size" />
 
                     <android.support.v7.widget.AppCompatSpinner
                         android:id="@+id/transfer_from_purse"
                         android:layout_width="match_parent"
                         android:layout_height="30dp"
-                        android:layout_marginLeft="30dp"
+                        android:layout_marginBottom="@dimen/line_indent"
+                        android:layout_marginRight="@dimen/line_indent"
+                        android:layout_marginTop="@dimen/line_indent"
                         android:background="@drawable/shape_green_field" />
 
-                </LinearLayout>
+                </TableRow>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:orientation="horizontal">
+                <TableRow>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:layout_marginRight="@dimen/table_indent"
                         android:text="@string/amount"
-                        android:textSize="16sp" />
+                        android:textSize="@dimen/table_text_size" />
 
                     <EditText
                         android:id="@+id/transfer_from_amount"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="30dp"
+                        android:layout_marginRight="@dimen/line_indent"
+                        android:layout_marginTop="@dimen/line_indent"
                         android:background="@drawable/shape_green_field"
                         android:ems="10"
-                        android:inputType="numberDecimal" />
-                </LinearLayout>
+                        android:inputType="numberDecimal"
+                        android:paddingLeft="@dimen/table_padding_left" />
+                </TableRow>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:orientation="horizontal">
+                <TableRow>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:layout_marginRight="@dimen/table_indent"
                         android:text="@string/toPurse"
-                        android:textSize="16sp" />
+                        android:textSize="@dimen/table_text_size" />
 
                     <android.support.v7.widget.AppCompatSpinner
                         android:id="@+id/transfer_to_purse"
                         android:layout_width="match_parent"
                         android:layout_height="30dp"
-                        android:layout_marginLeft="30dp"
+                        android:layout_marginBottom="@dimen/line_indent"
+                        android:layout_marginRight="@dimen/line_indent"
+                        android:layout_marginTop="@dimen/line_indent"
                         android:background="@drawable/shape_green_field" />
 
-                </LinearLayout>
+                </TableRow>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:orientation="horizontal">
+                <TableRow>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:layout_marginRight="@dimen/table_indent"
                         android:text="@string/amount"
-                        android:textSize="16sp" />
+                        android:textSize="@dimen/table_text_size" />
 
                     <EditText
                         android:id="@+id/transfer_to_amount"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="30dp"
+                        android:layout_marginRight="@dimen/line_indent"
+                        android:layout_marginTop="@dimen/line_indent"
                         android:background="@drawable/shape_green_field"
                         android:ems="10"
-                        android:inputType="numberDecimal" />
-                </LinearLayout>
+                        android:inputType="numberDecimal"
+                        android:paddingLeft="@dimen/table_padding_left" />
+                </TableRow>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:layout_margin="5dp"
-                    android:gravity="bottom"
-                    android:orientation="horizontal">
+                <TableRow>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:layout_marginRight="@dimen/table_indent"
                         android:text="@string/date"
-                        android:textSize="16sp" />
+                        android:textSize="@dimen/table_text_size" />
 
                     <TextView
                         android:id="@+id/transfer_date"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="30dp"
-                        android:background="@drawable/shape_green_field" />
+                        android:layout_marginRight="@dimen/line_indent"
+                        android:layout_marginTop="@dimen/line_indent"
+                        android:background="@drawable/shape_green_field"
+                        android:paddingLeft="@dimen/table_padding_left" />
 
-                </LinearLayout>
+                </TableRow>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
+                    android:layout_margin="@dimen/line_indent"
                     android:orientation="horizontal">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
                         android:text="@string/official_rate"
-                        android:textSize="16sp" />
+                        android:textSize="@dimen/table_text_size" />
 
                     <TextView
                         android:id="@+id/official_rate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="30dp"
-                        android:background="@drawable/shape_green_field" />
+                        android:background="@drawable/shape_gray_field" />
                 </LinearLayout>
 
 
-            </LinearLayout>
+            </TableLayout>
         </ScrollView>
     </LinearLayout>
 

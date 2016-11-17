@@ -4,12 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorControlNormal"
-    android:padding="10dp">
+    android:padding="@dimen/background_margin">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="@dimen/background_margin"
         android:background="@drawable/shape"
         android:layout_below="@+id/mainList"
         android:layout_alignParentLeft="true"
@@ -18,7 +18,7 @@
 
     <include
         android:id="@+id/mainList"
-        layout="@layout/main_category_list"
+        layout="@layout/activity_main_category_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_heightPercent="75%"

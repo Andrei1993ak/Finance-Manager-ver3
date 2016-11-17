@@ -1,18 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">@android:color/background_light</color>
-    <color name="colorPrimaryDark">@android:color/darker_gray</color>
-    <!--<color name="colorPrimaryDark">#383a3b</color>-->
     <color name="colorAddButton">#ad79ca47</color>
     <color name="colorGreenText">#d0aaea8c</color>
     <color name="colorGrayText">#d0c0c4be</color>
     <color name="colorRedText">#d4ec4832</color>
     <color name="separatorView">@android:color/darker_gray</color>
 
-
-    <!--<color name="pieColor2">#80ede2</color>-->
-    <!--<color name="pieColor3">#ed9a80</color>-->
-    <!--<color name="pieColor4">#d08ca5ea</color>-->
-    <!--<color name="pieColor5">#d0eae18c</color>-->
-    <!--<color name="pieColor6">#d0ea8ca4</color>-->
 </resources>

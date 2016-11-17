@@ -7,7 +7,6 @@ import com.github.andrei1993ak.finances.model.annotations.types.DBDouble;
 import com.github.andrei1993ak.finances.model.annotations.Table;
 import com.github.andrei1993ak.finances.model.annotations.types.DBInteger;
 
-//TODO runtime/compile time annotation and describe plusses and minuses?
 @Table(name = "purses")
 public class Purse extends TableClass implements Parcelable {
 
@@ -19,38 +18,37 @@ public class Purse extends TableClass implements Parcelable {
 
     private long id;
     private String name;
-    private long currency_id;
+    private long currencyId;
     private double amount;
 
     public Purse() {
 
     }
 
-    //TODO _
-    public Purse(final String name, final long currency_id, final double amount) {
+    public Purse(final String name, final long currencyId, final double amount) {
         this.name = name;
-        this.currency_id = currency_id;
+        this.currencyId = currencyId;
         this.amount = amount;
     }
 
-    public Purse(final long id, final String name, final long currency_id, final double amount) {
+    public Purse(final long id, final String name, final long currencyId, final double amount) {
         this.id = id;
         this.name = name;
-        this.currency_id = currency_id;
+        this.currencyId = currencyId;
         this.amount = amount;
 
     }
 
-    public Purse(final String name, final long currency_id) {
+    public Purse(final String name, final long currencyId) {
         this.name = name;
-        this.currency_id = currency_id;
+        this.currencyId = currencyId;
         this.amount = 0.0;
     }
 
     protected Purse(final Parcel in) {
         id = in.readLong();
         name = in.readString();
-        currency_id = in.readLong();
+        currencyId = in.readLong();
         amount = in.readDouble();
     }
 
@@ -83,11 +81,11 @@ public class Purse extends TableClass implements Parcelable {
     }
 
     public long getCurrencyId() {
-        return currency_id;
+        return currencyId;
     }
 
     public void setCurrencyId(final long currency_id) {
-        this.currency_id = currency_id;
+        this.currencyId = currency_id;
     }
 
     public double getAmount() {
@@ -107,7 +105,7 @@ public class Purse extends TableClass implements Parcelable {
     public void writeToParcel(final Parcel dest, final int flags) {
         dest.writeLong(id);
         dest.writeString(name);
-        dest.writeLong(currency_id);
+        dest.writeLong(currencyId);
         dest.writeDouble(amount);
     }
 }

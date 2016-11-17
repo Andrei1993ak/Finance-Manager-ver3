@@ -9,13 +9,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="?attr/colorControlNormal"
-        android:padding="10dp">
+        android:padding="@dimen/background_margin">
 
         <ExpandableListView
             android:id="@+id/CategoryExpListView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/background_margin"
             android:background="@drawable/shape" />
 
     </FrameLayout>

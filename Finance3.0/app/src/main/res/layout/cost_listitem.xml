@@ -12,10 +12,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
-            android:paddingLeft="5dp"
-            android:text="Зарплата"
+            android:paddingLeft="@dimen/line_indent"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textSize="18dp"
+            android:textSize="18sp"
             android:textStyle="bold" />
 
         <TextView
@@ -23,23 +22,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
-            android:paddingRight="5dp"
-            android:text="+300 BYN"
+            android:paddingRight="@dimen/line_indent"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@android:color/holo_red_light"
-            android:textSize="18dp"
+            android:textSize="18sp"
             android:textStyle="bold" />
 
     </TableRow>
 
-    <TableRow android:paddingBottom="5dp">
+    <TableRow android:paddingBottom="4dp">
 
         <TextView
             android:id="@+id/LiCostCategory"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="5dp"
-            android:text="зарплата виватон"
+            android:paddingLeft="@dimen/line_indent"
             android:textSize="14sp" />
 
         <TextView
@@ -47,8 +44,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
-            android:paddingRight="5dp"
-            android:text="10-11-2016"
+            android:paddingRight="@dimen/line_indent"
             android:textSize="14sp" />
     </TableRow>
 </TableLayout>

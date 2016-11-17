@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         android:background="?attr/colorControlNormal"
         android:orientation="vertical"
-        android:padding="@dimen/activity_horizontal_margin">
+        android:padding="@dimen/background_margin">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -32,7 +32,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
+                        android:layout_margin="@dimen/line_indent"
                         android:orientation="horizontal">
 
                         <TextView
@@ -46,13 +46,14 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="30dp"
-                            android:background="@drawable/shape_green_field" />
+                            android:background="@drawable/shape_green_field"
+                            android:inputType="text" />
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
+                        android:layout_margin="@dimen/line_indent"
                         android:orientation="horizontal">
 
                         <TextView
@@ -73,7 +74,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
+                        android:layout_margin="@dimen/line_indent"
                         android:orientation="horizontal">
 
                         <TextView
@@ -96,7 +97,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom"
-                        android:layout_margin="5dp"
+                        android:layout_margin="@dimen/line_indent"
                         android:gravity="bottom"
                         android:orientation="horizontal">
 
@@ -118,7 +119,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
+                        android:layout_margin="@dimen/line_indent"
                         android:orientation="horizontal">
 
                         <TextView
@@ -139,7 +140,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
+                        android:layout_margin="@dimen/line_indent"
                         android:orientation="horizontal">
 
                         <TextView

@@ -9,10 +9,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="?attr/colorControlNormal"
-        android:padding="10dp">
+        android:padding="@dimen/background_margin">
 
         <ListView
-            android:id="@+id/standartListView"
+            android:id="@+id/standardListView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/shape"

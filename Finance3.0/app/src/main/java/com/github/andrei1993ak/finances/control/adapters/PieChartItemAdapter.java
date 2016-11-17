@@ -43,7 +43,7 @@ public class PieChartItemAdapter extends BaseAdapter {
     public View getView(final int position, final View convertView, final ViewGroup parent) {
         View view = convertView;
         if (view == null) {
-            view = layoutInflater.inflate(R.layout.pie_chart_listitem, parent, false);
+            view = layoutInflater.inflate(R.layout.reports_pie_chart_listitem, parent, false);
         }
         final PieChartItem item = (PieChartItem) getItem(position);
         ((TextView) view.findViewById(R.id.pieChartItemName)).setText(item.getCategoryName());

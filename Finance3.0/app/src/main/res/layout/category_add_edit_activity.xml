@@ -11,57 +11,57 @@
         android:background="?attr/colorControlNormal">
 
 
-        <LinearLayout
+        <TableLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="10dp"
+            android:layout_margin="@dimen/background_margin"
             android:background="@drawable/shape"
-            android:orientation="vertical">
+            android:stretchColumns="1">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:orientation="horizontal">
+            <TableRow>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_marginRight="@dimen/table_indent"
                     android:text="@string/name"
-                    android:textSize="16sp" />
+                    android:textSize="@dimen/table_text_size" />
 
                 <EditText
                     android:id="@+id/add_edit_category_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="30dp"
-                    android:background="@drawable/shape_green_field" />
-            </LinearLayout>
+                    android:layout_marginRight="@dimen/line_indent"
+                    android:layout_marginTop="@dimen/line_indent"
+                    android:background="@drawable/shape_green_field"
+                    android:inputType="text"
+                    android:paddingLeft="@dimen/table_padding_left" />
+            </TableRow>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:layout_margin="5dp"
-                android:gravity="bottom"
-                android:orientation="horizontal">
+            <TableRow>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_marginRight="@dimen/table_indent"
+                    android:layout_marginBottom="@dimen/line_indent"
                     android:text="@string/parent"
-                    android:textSize="16sp" />
+                    android:textSize="@dimen/table_text_size" />
 
                 <android.support.v7.widget.AppCompatSpinner
                     android:id="@+id/spinnerParentCategories"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="30dp"
-                    android:layout_marginLeft="30dp"
+                    android:layout_marginBottom="@dimen/line_indent"
+                    android:layout_marginRight="@dimen/line_indent"
+                    android:layout_marginTop="@dimen/line_indent"
                     android:background="@drawable/shape_green_field">
 
                 </android.support.v7.widget.AppCompatSpinner>
-            </LinearLayout>
-        </LinearLayout>
+            </TableRow>
+        </TableLayout>
     </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton

@@ -5,15 +5,14 @@
     android:orientation="vertical"
     android:stretchColumns="1">
 
-    <TableRow android:paddingTop="5dp">
+    <TableRow android:paddingTop="4dp">
 
         <TextView
             android:id="@+id/LITransferName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
-            android:paddingLeft="5dp"
-            android:text="Перевод"
+            android:paddingLeft="4dp"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
@@ -21,8 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
-            android:paddingRight="10dp"
-            android:text="Основной"
+            android:paddingRight="@dimen/background_margin"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
@@ -31,7 +29,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:paddingRight="5dp"
-            android:text="-200.01 BYN"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@android:color/holo_red_light" />
 
@@ -44,7 +41,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="5dp"
-            android:text="03.10.2016"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
@@ -53,7 +49,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:paddingRight="10dp"
-            android:text="Доллары"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
@@ -62,7 +57,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:paddingRight="5dp"
-            android:text="+1000.45 USD"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@android:color/holo_green_light" />
     </TableRow>

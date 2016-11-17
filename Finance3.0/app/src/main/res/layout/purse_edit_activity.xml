@@ -13,14 +13,14 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="10dp"
+            android:layout_margin="@dimen/background_margin"
             android:background="@drawable/shape"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
+                android:layout_margin="@dimen/line_indent"
                 android:orientation="horizontal">
 
                 <TextView
@@ -34,13 +34,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="30dp"
-                    android:background="@drawable/shape_green_field" />
+                    android:background="@drawable/shape_green_field"
+                    android:inputType="text" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
+                android:layout_margin="@dimen/line_indent"
                 android:orientation="horizontal">
 
                 <TextView
@@ -55,21 +56,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="30dp"
                     android:background="@drawable/shape_gray_field" />
-                <!--<EditText-->
-                <!--android:id="@+id/new_purse_amount"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginLeft="30dp"-->
-                <!--android:inputType="numberDecimal"-->
-                <!--android:ems="10"-->
-                <!--android:background="@drawable/shape_green_field" />-->
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:layout_margin="5dp"
+                android:layout_margin="@dimen/line_indent"
                 android:gravity="bottom"
                 android:orientation="horizontal">
 

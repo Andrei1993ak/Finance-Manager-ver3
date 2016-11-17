@@ -8,7 +8,7 @@
         android:id="@+id/categoryListVIew"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="10dp"
+        android:layout_margin="@dimen/background_margin"
         android:background="@drawable/shape"
         android:orientation="vertical">
 
@@ -19,7 +19,7 @@
             android:duplicateParentState="true"
             android:onClick="selectCategory"
             android:text="@string/incomes"
-            android:textSize="40sp" />
+            android:textSize="@dimen/main_activity_text_size" />
 
         <View
             android:layout_width="match_parent"
@@ -33,7 +33,7 @@
             android:onClick="selectCategory"
             android:text="@string/costs"
             android:textIsSelectable="false"
-            android:textSize="40sp" />
+            android:textSize="@dimen/main_activity_text_size" />
 
         <View
             android:layout_width="match_parent"
