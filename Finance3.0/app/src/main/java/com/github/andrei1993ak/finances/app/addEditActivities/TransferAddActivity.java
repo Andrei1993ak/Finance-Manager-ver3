@@ -17,12 +17,12 @@ import android.widget.TextView;
 import com.github.andrei1993ak.finances.R;
 import com.github.andrei1993ak.finances.app.BaseActivity;
 import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
-import com.github.andrei1993ak.finances.control.base.RequestHolder;
+import com.github.andrei1993ak.finances.control.base.RequestAdapter;
 import com.github.andrei1993ak.finances.control.base.Result;
 import com.github.andrei1993ak.finances.control.executors.WalletExecutor;
 import com.github.andrei1993ak.finances.model.TableQueryGenerator;
-import com.github.andrei1993ak.finances.model.models.Wallet;
 import com.github.andrei1993ak.finances.model.models.Transfer;
+import com.github.andrei1993ak.finances.model.models.Wallet;
 import com.github.andrei1993ak.finances.util.transferRateParser.OnParseCompleted;
 import com.github.andrei1993ak.finances.util.transferRateParser.RateJsonParser;
 
@@ -47,21 +47,13 @@ public class TransferAddActivity extends BaseActivity implements OnTaskCompleted
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle(R.string.newTransfer);
         setContentView(R.layout.transfer_add_edit_activity);
-        findViewsByIds();
-        setDatePickerDialog();
-        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_transfer_add_edit);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View view) {
-                addTransfer();
-            }
-        });
-        new WalletExecutor(this).execute(new RequestHolder<Wallet>().getAllToList(RequestHolder.SELECTION_ALL));
+        setTitle(R.string.newTransfer);
+        initFields();
+        new WalletExecutor(this).execute(new RequestAdapter<Wallet>().getAllToList(RequestAdapter.SELECTION_ALL));
     }
 
-    private void findViewsByIds() {
+    private void initFields() {
         newTransferName = (EditText) findViewById(R.id.transfer_name);
         newTransferDate = (TextView) findViewById(R.id.transfer_date);
         newTransferFromWallet = (AppCompatSpinner) findViewById(R.id.transfer_from_wallet);
@@ -69,7 +61,14 @@ public class TransferAddActivity extends BaseActivity implements OnTaskCompleted
         newTransferFromAmount = (EditText) findViewById(R.id.transfer_from_amount);
         newTransferToAmount = (EditText) findViewById(R.id.transfer_to_amount);
         officialRate = (TextView) findViewById(R.id.official_rate);
-
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_transfer_add_edit);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                addTransfer();
+            }
+        });
+        setDatePickerDialog();
     }
 
     private void setDatePickerDialog() {

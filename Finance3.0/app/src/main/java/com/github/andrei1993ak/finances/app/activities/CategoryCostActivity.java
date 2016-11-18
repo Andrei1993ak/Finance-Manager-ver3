@@ -8,6 +8,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.view.ContextMenu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
@@ -19,34 +20,35 @@ import com.github.andrei1993ak.finances.app.addEditActivities.CostCategoryAddAct
 import com.github.andrei1993ak.finances.app.addEditActivities.CostCategoryEditActivity;
 import com.github.andrei1993ak.finances.control.adapters.ExpListAdapter;
 import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
-import com.github.andrei1993ak.finances.control.base.RequestHolder;
+import com.github.andrei1993ak.finances.control.base.RequestAdapter;
 import com.github.andrei1993ak.finances.control.base.Result;
 import com.github.andrei1993ak.finances.control.executors.CostCategoryExecutor;
 import com.github.andrei1993ak.finances.control.loaders.CostCategoryCursorLoader;
 import com.github.andrei1993ak.finances.model.TableQueryGenerator;
 import com.github.andrei1993ak.finances.model.dbHelpers.DBHelperCategoryCost;
 import com.github.andrei1993ak.finances.model.models.CostCategory;
+import com.github.andrei1993ak.finances.util.Constants;
 
 public class CategoryCostActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor>, OnTaskCompleted {
 
-    private static final int CM_EDIT_ID = 1;
-    private static final int CM_DELETE_ID = 2;
-
-    private static final int ADD_CATEGORY_REQUEST = 1;
-    private static final int EDIT_CATEGORY_REQUEST = 2;
-
     private ExpandableListView costCategoryExpListView;
     private ExpListAdapter adapter;
+    private MenuInflater inflater;
 
     private int deleteGroupId = -1;
-
-    public static final int ROOT_LOADER_ID = -1;
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.category_activity);
         setTitle(R.string.costCategories);
+        initFields();
+        inflater = getMenuInflater();
+        registerForContextMenu(costCategoryExpListView);
+        getSupportLoaderManager().restartLoader(Constants.EXP_LIST_ROOT_LOADER_ID, null, this);
+    }
+
+    private void initFields() {
         costCategoryExpListView = (ExpandableListView) findViewById(R.id.CategoryExpListView);
         final String[] parentsFrom = {CostCategory.NAME};
         final int[] parentsTo = {android.R.id.text1};
@@ -62,8 +64,6 @@ public class CategoryCostActivity extends BaseActivity implements LoaderManager.
                 addCategory();
             }
         });
-        getSupportLoaderManager().restartLoader(ROOT_LOADER_ID, null, this);
-        registerForContextMenu(costCategoryExpListView);
     }
 
     @Override
@@ -75,14 +75,13 @@ public class CategoryCostActivity extends BaseActivity implements LoaderManager.
 
     public void addCategory() {
         final Intent intent = new Intent(this, CostCategoryAddActivity.class);
-        startActivityForResult(intent, ADD_CATEGORY_REQUEST);
+        startActivityForResult(intent, Constants.ADD_REQUEST);
     }
 
     @Override
     public void onCreateContextMenu(final ContextMenu menu, final View v, final ContextMenu.ContextMenuInfo menuInfo) {
+        inflater.inflate(R.menu.context_menu, menu);
         super.onCreateContextMenu(menu, v, menuInfo);
-        menu.add(0, CM_EDIT_ID, 0, R.string.edit);
-        menu.add(0, CM_DELETE_ID, 0, R.string.delete);
     }
 
     @Override
@@ -91,16 +90,16 @@ public class CategoryCostActivity extends BaseActivity implements LoaderManager.
         final int type = ExpandableListView.getPackedPositionType(info.packedPosition);
         final int groupPosition = ExpandableListView.getPackedPositionGroup(info.packedPosition);
         switch (item.getItemId()) {
-            case CM_DELETE_ID:
+            case R.id.cm_delete:
                 if (type == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
                     deleteGroupId = adapter.getIdToPos().get(groupPosition);
                 }
-                new CostCategoryExecutor(this).execute(new RequestHolder().delete(info.id));
+                new CostCategoryExecutor(this).execute(new RequestAdapter().delete(info.id));
                 return true;
-            case CM_EDIT_ID:
+            case R.id.cm_edit:
                 final Intent intent = new Intent(this, CostCategoryEditActivity.class);
                 intent.putExtra(CostCategory.ID, info.id);
-                startActivityForResult(intent, EDIT_CATEGORY_REQUEST);
+                startActivityForResult(intent, Constants.EDIT_REQUEST);
                 return true;
             default:
                 return false;
@@ -115,7 +114,7 @@ public class CategoryCostActivity extends BaseActivity implements LoaderManager.
     @Override
     public void onLoadFinished(final Loader<Cursor> loader, final Cursor data) {
         final int id = loader.getId();
-        if (id != ROOT_LOADER_ID) {
+        if (id != Constants.EXP_LIST_ROOT_LOADER_ID) {
             final int groupPos = adapter.getPosToId().get(id);
             adapter.setChildrenCursor(groupPos, data);
         } else {
@@ -138,13 +137,13 @@ public class CategoryCostActivity extends BaseActivity implements LoaderManager.
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
-                case ADD_CATEGORY_REQUEST:
+                case Constants.ADD_REQUEST:
                     final CostCategory newCostCategory = data.getParcelableExtra(TableQueryGenerator.getTableName(CostCategory.class));
-                    new CostCategoryExecutor(this).execute(new RequestHolder<CostCategory>().add(newCostCategory));
+                    new CostCategoryExecutor(this).execute(new RequestAdapter<CostCategory>().add(newCostCategory));
                     break;
-                case EDIT_CATEGORY_REQUEST:
+                case Constants.EDIT_REQUEST:
                     final CostCategory editCostCategory = data.getParcelableExtra(TableQueryGenerator.getTableName(CostCategory.class));
-                    new CostCategoryExecutor(this).execute(new RequestHolder<CostCategory>().edit(editCostCategory));
+                    new CostCategoryExecutor(this).execute(new RequestAdapter<CostCategory>().edit(editCostCategory));
                     break;
                 default:
                     break;
@@ -155,35 +154,35 @@ public class CategoryCostActivity extends BaseActivity implements LoaderManager.
     @Override
     public void onTaskCompleted(final Result result) {
         final int id = result.getId();
+        final Loader<CostCategory> loader = getSupportLoaderManager().getLoader(Constants.EXP_LIST_ROOT_LOADER_ID);
         switch (id) {
             case CostCategoryExecutor.KEY_RESULT_DELETE:
-                if (deleteGroupId == -1 && getSupportLoaderManager().getLoader(ROOT_LOADER_ID) != null) {
+                if (deleteGroupId == -1 && loader != null) {
                     if ((Integer) result.getObject() == DBHelperCategoryCost.hasChildrens) {
                         Toast.makeText(this, R.string.hasChilds, Toast.LENGTH_LONG).show();
                     } else if ((Integer) result.getObject() == DBHelperCategoryCost.usable) {
                         Toast.makeText(this, R.string.categoryUsable, Toast.LENGTH_LONG).show();
                     } else {
-                        getSupportLoaderManager().getLoader(ROOT_LOADER_ID).forceLoad();
+                        loader.forceLoad();
                     }
-                } else if (getSupportLoaderManager().getLoader(ROOT_LOADER_ID) != null
-                        && getSupportLoaderManager().getLoader(deleteGroupId) != null) {
+                } else if (loader != null && getSupportLoaderManager().getLoader(deleteGroupId) != null) {
                     if ((Integer) result.getObject() == DBHelperCategoryCost.usable) {
                         Toast.makeText(this, R.string.categoryUsable, Toast.LENGTH_LONG).show();
                     } else {
                         getSupportLoaderManager().getLoader(deleteGroupId).forceLoad();
-                        getSupportLoaderManager().getLoader(ROOT_LOADER_ID).forceLoad();
+                        loader.forceLoad();
                         deleteGroupId = -1;
                     }
                 }
                 break;
             case CostCategoryExecutor.KEY_RESULT_ADD:
-                if (getSupportLoaderManager().getLoader(ROOT_LOADER_ID) != null) {
-                    getSupportLoaderManager().getLoader(ROOT_LOADER_ID).forceLoad();
+                if (loader != null) {
+                    loader.forceLoad();
                 }
                 break;
             case CostCategoryExecutor.KEY_RESULT_EDIT:
-                if (getSupportLoaderManager().getLoader(ROOT_LOADER_ID) != null) {
-                    getSupportLoaderManager().getLoader(ROOT_LOADER_ID).forceLoad();
+                if (loader != null) {
+                    loader.forceLoad();
                 }
                 break;
             default:

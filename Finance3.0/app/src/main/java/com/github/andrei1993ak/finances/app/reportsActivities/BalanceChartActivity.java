@@ -16,9 +16,10 @@ import com.github.andrei1993ak.finances.control.base.Result;
 import com.github.andrei1993ak.finances.control.loaders.BalanceChartLoader;
 import com.github.andrei1993ak.finances.R;
 import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
-import com.github.andrei1993ak.finances.control.base.RequestHolder;
+import com.github.andrei1993ak.finances.control.base.RequestAdapter;
 import com.github.andrei1993ak.finances.control.executors.WalletExecutor;
 import com.github.andrei1993ak.finances.model.models.Wallet;
+import com.github.andrei1993ak.finances.util.Constants;
 
 import org.achartengine.ChartFactory;
 import org.achartengine.GraphicalView;
@@ -32,7 +33,6 @@ import java.util.List;
 
 public class BalanceChartActivity extends BaseActivity implements OnTaskCompleted, LoaderManager.LoaderCallbacks<TimeSeries> {
 
-    public static final int MAIN_LOADER = 0;
     public static final String POSITION = "position";
     private int position;
     private AppCompatSpinner spinner;
@@ -41,15 +41,15 @@ public class BalanceChartActivity extends BaseActivity implements OnTaskComplete
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.report_balance_activity);
         setTitle(R.string.balanceCHart);
         if (savedInstanceState == null) {
             position = 0;
         } else {
             position = savedInstanceState.getInt(POSITION);
         }
-        setContentView(R.layout.report_balance_activity);
         spinner = (AppCompatSpinner) findViewById(R.id.walletsNamesBalanceChart);
-        new WalletExecutor(this).execute(new RequestHolder<Wallet>().getAllToList(RequestHolder.SELECTION_ALL));
+        new WalletExecutor(this).execute(new RequestAdapter<Wallet>().getAllToList(RequestAdapter.SELECTION_ALL));
     }
 
     private GraphicalView buildView(final TimeSeries series) {
@@ -80,7 +80,7 @@ public class BalanceChartActivity extends BaseActivity implements OnTaskComplete
         mRenderer.setShowGrid(true);
         mRenderer.setYAxisMin(series.getMinY());
         mRenderer.setYAxisMax(series.getMaxY());
-        return ChartFactory.getTimeChartView(this, dataSet, mRenderer, "dd-MMM-yyyy");
+        return ChartFactory.getTimeChartView(this, dataSet, mRenderer, Constants.CHART_DATE_FORMAT);
     }
 
     @Override
@@ -102,8 +102,8 @@ public class BalanceChartActivity extends BaseActivity implements OnTaskComplete
                     final long walletID = (wallets.get(position).getId());
                     final Bundle args = new Bundle();
                     args.putLong(Wallet.ID, walletID);
-                    getSupportLoaderManager().restartLoader(MAIN_LOADER, args, BalanceChartActivity.this);
-                    final Loader<Object> loader = BalanceChartActivity.this.getSupportLoaderManager().getLoader(MAIN_LOADER);
+                    getSupportLoaderManager().restartLoader(Constants.MAIN_LOADER_ID, args, BalanceChartActivity.this);
+                    final Loader<Object> loader = BalanceChartActivity.this.getSupportLoaderManager().getLoader(Constants.MAIN_LOADER_ID);
                     loader.forceLoad();
                 }
 

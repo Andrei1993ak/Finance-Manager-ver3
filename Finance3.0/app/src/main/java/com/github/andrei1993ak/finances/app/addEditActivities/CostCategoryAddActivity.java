@@ -13,7 +13,7 @@ import android.widget.EditText;
 import com.github.andrei1993ak.finances.R;
 import com.github.andrei1993ak.finances.app.BaseActivity;
 import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
-import com.github.andrei1993ak.finances.control.base.RequestHolder;
+import com.github.andrei1993ak.finances.control.base.RequestAdapter;
 import com.github.andrei1993ak.finances.control.base.Result;
 import com.github.andrei1993ak.finances.control.executors.CostCategoryExecutor;
 import com.github.andrei1993ak.finances.model.TableQueryGenerator;
@@ -31,13 +31,13 @@ public class CostCategoryAddActivity extends BaseActivity implements OnTaskCompl
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle(R.string.newCategory);
         setContentView(R.layout.category_add_edit_activity);
-        findViewsById();
-        new CostCategoryExecutor(this).execute(new RequestHolder<CostCategory>().getAllToList(RequestHolder.SELECTION_PARENT_CATEGORIES));
+        setTitle(R.string.newCategory);
+        initFields();
+        new CostCategoryExecutor(this).execute(new RequestAdapter<CostCategory>().getAllToList(RequestAdapter.SELECTION_PARENT_CATEGORIES));
     }
 
-    private void findViewsById() {
+    private void initFields() {
         newCategoryName = (EditText) findViewById(R.id.add_edit_category_name);
         parentCategories = (AppCompatSpinner) findViewById(R.id.spinnerParentCategories);
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_cat_add);

@@ -18,6 +18,10 @@ public class SettingsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings);
         setTitle(R.string.settings);
+        initFields();
+    }
+
+    private void initFields() {
         final Switch themeSwitch = (Switch) findViewById(R.id.themeSwitch);
         if (getSharedPreferences(Constants.PREFS, Context.MODE_PRIVATE).getBoolean(Constants.THEME, false)) {
             themeSwitch.setChecked(true);

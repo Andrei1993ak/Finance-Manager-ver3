@@ -25,7 +25,7 @@ import android.widget.TextView;
 import com.github.andrei1993ak.finances.R;
 import com.github.andrei1993ak.finances.app.BaseActivity;
 import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
-import com.github.andrei1993ak.finances.control.base.RequestHolder;
+import com.github.andrei1993ak.finances.control.base.RequestAdapter;
 import com.github.andrei1993ak.finances.control.base.Result;
 import com.github.andrei1993ak.finances.control.executors.CostCategoryExecutor;
 import com.github.andrei1993ak.finances.control.executors.CostExecutor;
@@ -34,6 +34,7 @@ import com.github.andrei1993ak.finances.model.TableQueryGenerator;
 import com.github.andrei1993ak.finances.model.models.Cost;
 import com.github.andrei1993ak.finances.model.models.CostCategory;
 import com.github.andrei1993ak.finances.model.models.Wallet;
+import com.github.andrei1993ak.finances.util.Constants;
 import com.github.andrei1993ak.finances.util.universalLoader.ImageNameGenerator;
 import com.github.andrei1993ak.finances.util.universalLoader.loaders.BitmapLoader;
 import com.google.common.io.Files;
@@ -49,7 +50,6 @@ import java.util.Locale;
 
 public class CostEditActivity extends BaseActivity implements OnTaskCompleted {
 
-    public static final String AUTHORITY = "com.github.andrei1993ak.finances.fileProvider";
     private Cost cost;
     private EditText editCostName;
     private EditText editCostAmount;
@@ -74,7 +74,7 @@ public class CostEditActivity extends BaseActivity implements OnTaskCompleted {
         setTitle(R.string.editing);
         findViewsBuId();
         id = getIntent().getLongExtra(Cost.ID, -1);
-        new CostExecutor(this).execute(new RequestHolder<Cost>().get(id));
+        new CostExecutor(this).execute(new RequestAdapter<Cost>().get(id));
         setDatePickerDialog();
     }
 
@@ -182,15 +182,15 @@ public class CostEditActivity extends BaseActivity implements OnTaskCompleted {
         }
     }
 
-    public void editPhoto(final View view) {
+    public void addEditPhoto(final View view) {
         final Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
         final Context context = this;
-        final File imagePath = new File(context.getFilesDir(), "public");
+        final File imagePath = new File(context.getFilesDir(), Constants.SHARE_FOLDER);
         if (!imagePath.exists()) {
             imagePath.mkdirs();
         }
-        final File file = new File(imagePath, "tmp.jpg");
-        final Uri outputFileUri = FileProvider.getUriForFile(context, AUTHORITY, file);
+        final File file = new File(imagePath, Constants.TEMP_PHOTO_NAME);
+        final Uri outputFileUri = FileProvider.getUriForFile(context, Constants.AUTHORITY, file);
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
         startActivityForResult(cameraIntent, CAMERA_REQUEST);
     }
@@ -213,10 +213,10 @@ public class CostEditActivity extends BaseActivity implements OnTaskCompleted {
                         e.printStackTrace();
                     }
                 }
-                final RequestHolder<Wallet> walletRequestHolder = new RequestHolder<>();
-                new WalletExecutor(this).execute(walletRequestHolder.getAllToList(0));
-                final RequestHolder<CostCategory> categoryRequestHolder = new RequestHolder<>();
-                new CostCategoryExecutor(this).execute(categoryRequestHolder.get(cost.getCategoryId()));
+                final RequestAdapter<Wallet> walletRequestAdapter = new RequestAdapter<>();
+                new WalletExecutor(this).execute(walletRequestAdapter.getAllToList(0));
+                final RequestAdapter<CostCategory> categoryRequestAdapter = new RequestAdapter<>();
+                new CostCategoryExecutor(this).execute(categoryRequestAdapter.get(cost.getCategoryId()));
                 break;
             case WalletExecutor.KEY_RESULT_GET_ALL_TO_LIST:
                 wallets = (List<Wallet>) result.getObject();
@@ -237,8 +237,8 @@ public class CostEditActivity extends BaseActivity implements OnTaskCompleted {
             case CostCategoryExecutor.KEY_RESULT_GET:
                 final CostCategory category = (CostCategory) result.getObject();
                 parentId = category.getParentId();
-                final RequestHolder<CostCategory> costCategoryRequestHolder = new RequestHolder<>();
-                new CostCategoryExecutor(this).execute(costCategoryRequestHolder.getAllToList(1));
+                final RequestAdapter<CostCategory> costCategoryRequestAdapter = new RequestAdapter<>();
+                new CostCategoryExecutor(this).execute(costCategoryRequestAdapter.getAllToList(1));
                 break;
             case CostCategoryExecutor.KEY_RESULT_GET_ALL_TO_LIST:
                 categoriesList = (List<CostCategory>) result.getObject();
@@ -264,8 +264,8 @@ public class CostEditActivity extends BaseActivity implements OnTaskCompleted {
                 editCostCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(final AdapterView<?> parent, final View view, final int position, final long id) {
-                        final RequestHolder<CostCategory> categoryRequestHolder = new RequestHolder<>();
-                        new CostCategoryExecutor(CostEditActivity.this).execute(categoryRequestHolder.getAllToListByCategory(categoriesList.get(position).getId()));
+                        final RequestAdapter<CostCategory> categoryRequestAdapter = new RequestAdapter<>();
+                        new CostCategoryExecutor(CostEditActivity.this).execute(categoryRequestAdapter.getAllToListByCategory(categoriesList.get(position).getId()));
                     }
 
                     @Override
@@ -301,11 +301,11 @@ public class CostEditActivity extends BaseActivity implements OnTaskCompleted {
 
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
-            final File imagePath = new File(this.getFilesDir(), "public");
+            final File imagePath = new File(this.getFilesDir(), Constants.SHARE_FOLDER);
             if (!imagePath.exists()) {
                 imagePath.mkdirs();
             }
-            final File file = new File(imagePath, "tmp.jpg");
+            final File file = new File(imagePath, Constants.TEMP_PHOTO_NAME);
             final ImageView view = (ImageView) findViewById(R.id.cost_photo);
             final String path = ImageNameGenerator.getImagePath(id);
             final File toFile = new File(path);

@@ -2,6 +2,7 @@ package com.github.andrei1993ak.finances.control.executors;
 
 import android.database.Cursor;
 
+import com.github.andrei1993ak.finances.App;
 import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
 import com.github.andrei1993ak.finances.control.base.PojoExecutor;
 import com.github.andrei1993ak.finances.control.base.Result;
@@ -27,57 +28,57 @@ public class TransferExecutor extends PojoExecutor<Transfer> {
     public static final int KEY_RESULT_GET_ALL_TO_LIST_BY_WALLET_ID = 809;
     public static final int KEY_RESULT_GET_ALL_TO_LIST_BY_DATES = 810;
 
-    public TransferExecutor(OnTaskCompleted listener) {
+    public TransferExecutor(final OnTaskCompleted listener) {
         super(listener);
     }
 
     @Override
-    public Result<Transfer> getPojo(long id) {
-        return new Result<>(KEY_RESULT_GET, DBHelperTransfer.getInstance().get(id));
+    public Result<Transfer> getPojo(final long id) {
+        return new Result<>(KEY_RESULT_GET, ((DBHelperTransfer)App.getDbHelper(Transfer.class)).get(id));
     }
 
     @Override
-    public Result<Long> addPojo(Transfer transfer) {
-        return new Result<>(KEY_RESULT_ADD, DBHelperTransfer.getInstance().add(transfer));
+    public Result<Long> addPojo(final Transfer transfer) {
+        return new Result<>(KEY_RESULT_ADD, ((DBHelperTransfer)App.getDbHelper(Transfer.class)).add(transfer));
     }
 
     @Override
-    public Result<Integer> deletePojo(long id) {
-        return new Result<>(KEY_RESULT_DELETE, DBHelperTransfer.getInstance().delete(id));
+    public Result<Integer> deletePojo(final long id) {
+        return new Result<>(KEY_RESULT_DELETE, ((DBHelperTransfer)App.getDbHelper(Transfer.class)).delete(id));
     }
 
     @Override
-    public Result<Integer> updatePojo(Transfer transfer) {
-        return new Result<>(KEY_RESULT_EDIT, DBHelperTransfer.getInstance().update(transfer));
+    public Result<Integer> updatePojo(final Transfer transfer) {
+        return new Result<>(KEY_RESULT_EDIT, ((DBHelperTransfer)App.getDbHelper(Transfer.class)).update(transfer));
     }
 
     @Override
     public Result<Cursor> getAll() {
-        return new Result<>(KEY_RESULT_GET_ALL, DBHelperTransfer.getInstance().getAll());
+        return new Result<>(KEY_RESULT_GET_ALL, ((DBHelperTransfer)App.getDbHelper(Transfer.class)).getAll());
     }
 
     @Override
     public Result<Integer> deleteAll() {
-        return  new Result<>(KEY_RESULT_DELETE_ALL, DBHelperTransfer.getInstance().deleteAll());
+        return  new Result<>(KEY_RESULT_DELETE_ALL, ((DBHelperTransfer)App.getDbHelper(Transfer.class)).deleteAll());
     }
 
     @Override
-    public Result<List<Transfer>> getAllToList(int selection) {
-        return new Result<>(KEY_RESULT_DELETE_ALL, DBHelperTransfer.getInstance().getAllToList());
+    public Result<List<Transfer>> getAllToList(final int selection) {
+        return new Result<>(KEY_RESULT_DELETE_ALL, ((DBHelperTransfer)App.getDbHelper(Transfer.class)).getAllToList());
     }
 
     @Override
-    protected Result<List<Transfer>> getAllToListByDates(ArrayList<Long> dates) {
-        return new Result<>(KEY_RESULT_GET_ALL_TO_LIST_BY_DATES,DBHelperTransfer.getInstance().getAllToListByDates(dates.get(0), dates.get(1)));
+    protected Result<List<Transfer>> getAllToListByDates(final ArrayList<Long> dates) {
+        return new Result<>(KEY_RESULT_GET_ALL_TO_LIST_BY_DATES,((DBHelperTransfer)App.getDbHelper(Transfer.class)).getAllToListByDates(dates.get(0), dates.get(1)));
     }
 
     @Override
-    protected Result<List<Transfer>> getAllToListByWalletId(Long walletId) {
-        return new Result<>(KEY_RESULT_GET_ALL_TO_LIST_BY_WALLET_ID,DBHelperTransfer.getInstance().getAllToListByWalletId(walletId));
+    protected Result<List<Transfer>> getAllToListByWalletId(final Long walletId) {
+        return new Result<>(KEY_RESULT_GET_ALL_TO_LIST_BY_WALLET_ID,((DBHelperTransfer)App.getDbHelper(Transfer.class)).getAllToListByWalletId(walletId));
     }
 
     @Override
-    protected Result<List<Transfer>> getAllToListByCategoryId(Long id) {
-        return new Result<>(KEY_RESULT_GET_ALL_TO_LIST_BY_CATEGORY_ID,DBHelperTransfer.getInstance().getAllToListByCategoryId(id));
+    protected Result<List<Transfer>> getAllToListByCategoryId(final Long id) {
+        return new Result<>(KEY_RESULT_GET_ALL_TO_LIST_BY_CATEGORY_ID,((DBHelperTransfer)App.getDbHelper(Transfer.class)).getAllToListByCategoryId(id));
     }
 }

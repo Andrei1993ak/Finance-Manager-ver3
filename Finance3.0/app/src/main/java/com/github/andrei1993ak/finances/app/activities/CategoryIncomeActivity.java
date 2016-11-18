@@ -8,6 +8,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.view.ContextMenu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
@@ -19,27 +20,20 @@ import com.github.andrei1993ak.finances.app.addEditActivities.IncomeCategoryAddA
 import com.github.andrei1993ak.finances.app.addEditActivities.IncomeCategoryEditActivity;
 import com.github.andrei1993ak.finances.control.adapters.ExpListAdapter;
 import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
-import com.github.andrei1993ak.finances.control.base.RequestHolder;
+import com.github.andrei1993ak.finances.control.base.RequestAdapter;
 import com.github.andrei1993ak.finances.control.base.Result;
 import com.github.andrei1993ak.finances.control.executors.IncomeCategoryExecutor;
 import com.github.andrei1993ak.finances.control.loaders.IncomeCategoryCursorLoader;
 import com.github.andrei1993ak.finances.model.TableQueryGenerator;
 import com.github.andrei1993ak.finances.model.dbHelpers.DBHelperCategoryIncome;
 import com.github.andrei1993ak.finances.model.models.IncomeCategory;
+import com.github.andrei1993ak.finances.util.Constants;
 
 public class CategoryIncomeActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor>, OnTaskCompleted {
 
-    private static final int CM_EDIT_ID = 1;
-    private static final int CM_DELETE_ID = 2;
-
-    private static final int ADD_CATEGORY_REQUEST = 1;
-    private static final int EDIT_CATEGORY_REQUEST = 2;
-
-    public static final int ROOT_LOADER_ID = -1;
-
     private ExpandableListView incomeCategoryExpListView;
     private ExpListAdapter adapter;
-
+    private MenuInflater inflater;
     private int deleteGroupId = -1;
 
 
@@ -48,6 +42,13 @@ public class CategoryIncomeActivity extends BaseActivity implements LoaderManage
         super.onCreate(savedInstanceState);
         setContentView(R.layout.category_activity);
         setTitle(R.string.incomeCategories);
+        initFields();
+        inflater = getMenuInflater();
+        registerForContextMenu(incomeCategoryExpListView);
+        getSupportLoaderManager().restartLoader(Constants.EXP_LIST_ROOT_LOADER_ID, null, this);
+    }
+
+    private void initFields() {
         incomeCategoryExpListView = (ExpandableListView) findViewById(R.id.CategoryExpListView);
         final String[] parentsFrom = {IncomeCategory.NAME};
         final int[] parentsTo = {android.R.id.text1};
@@ -63,9 +64,6 @@ public class CategoryIncomeActivity extends BaseActivity implements LoaderManage
                 addCategory();
             }
         });
-        getSupportLoaderManager().restartLoader(ROOT_LOADER_ID, null, this);
-
-        registerForContextMenu(incomeCategoryExpListView);
     }
 
     @Override
@@ -77,14 +75,13 @@ public class CategoryIncomeActivity extends BaseActivity implements LoaderManage
 
     public void addCategory() {
         final Intent intent = new Intent(this, IncomeCategoryAddActivity.class);
-        startActivityForResult(intent, ADD_CATEGORY_REQUEST);
+        startActivityForResult(intent, Constants.ADD_REQUEST);
     }
 
     @Override
     public void onCreateContextMenu(final ContextMenu menu, final View v, final ContextMenu.ContextMenuInfo menuInfo) {
+        inflater.inflate(R.menu.context_menu,menu);
         super.onCreateContextMenu(menu, v, menuInfo);
-        menu.add(0, CM_EDIT_ID, 0, R.string.edit);
-        menu.add(0, CM_DELETE_ID, 0, R.string.delete);
     }
 
     @Override
@@ -93,16 +90,16 @@ public class CategoryIncomeActivity extends BaseActivity implements LoaderManage
         final int type = ExpandableListView.getPackedPositionType(info.packedPosition);
         final int groupPosition = ExpandableListView.getPackedPositionGroup(info.packedPosition);
         switch (item.getItemId()) {
-            case CM_DELETE_ID:
+            case R.id.cm_delete:
                 if (type == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
                     deleteGroupId = adapter.getIdToPos().get(groupPosition);
                 }
-                new IncomeCategoryExecutor(this).execute(new RequestHolder().delete(info.id));
+                new IncomeCategoryExecutor(this).execute(new RequestAdapter().delete(info.id));
                 return true;
-            case CM_EDIT_ID:
+            case R.id.cm_edit:
                 final Intent intent = new Intent(this, IncomeCategoryEditActivity.class);
                 intent.putExtra(IncomeCategory.ID, info.id);
-                startActivityForResult(intent, EDIT_CATEGORY_REQUEST);
+                startActivityForResult(intent, Constants.EDIT_REQUEST);
                 return true;
             default:
                 return false;
@@ -117,7 +114,7 @@ public class CategoryIncomeActivity extends BaseActivity implements LoaderManage
     @Override
     public void onLoadFinished(final Loader<Cursor> loader, final Cursor data) {
         final int id = loader.getId();
-        if (id != ROOT_LOADER_ID) {
+        if (id != Constants.EXP_LIST_ROOT_LOADER_ID) {
             final int groupPos = adapter.getPosToId().get(id);
             adapter.setChildrenCursor(groupPos, data);
         } else {
@@ -140,13 +137,13 @@ public class CategoryIncomeActivity extends BaseActivity implements LoaderManage
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
-                case ADD_CATEGORY_REQUEST:
+                case Constants.ADD_REQUEST:
                     final IncomeCategory newIncomeCategory = data.getParcelableExtra(TableQueryGenerator.getTableName(IncomeCategory.class));
-                    new IncomeCategoryExecutor(this).execute(new RequestHolder<IncomeCategory>().add(newIncomeCategory));
+                    new IncomeCategoryExecutor(this).execute(new RequestAdapter<IncomeCategory>().add(newIncomeCategory));
                     break;
-                case EDIT_CATEGORY_REQUEST:
+                case Constants.EDIT_REQUEST:
                     final IncomeCategory editIncomeCategory = data.getParcelableExtra(TableQueryGenerator.getTableName(IncomeCategory.class));
-                    new IncomeCategoryExecutor(this).execute(new RequestHolder<IncomeCategory>().edit(editIncomeCategory));
+                    new IncomeCategoryExecutor(this).execute(new RequestAdapter<IncomeCategory>().edit(editIncomeCategory));
                     break;
                 default:
                     break;
@@ -157,35 +154,39 @@ public class CategoryIncomeActivity extends BaseActivity implements LoaderManage
     @Override
     public void onTaskCompleted(final Result result) {
         final int id = result.getId();
+        final Loader<IncomeCategory> loader = getSupportLoaderManager().getLoader(Constants.EXP_LIST_ROOT_LOADER_ID);
         switch (id) {
             case IncomeCategoryExecutor.KEY_RESULT_DELETE:
-                if (deleteGroupId == -1 && getSupportLoaderManager().getLoader(ROOT_LOADER_ID) != null) {
+                if (deleteGroupId == -1 && loader != null) {
                     if ((Integer) result.getObject() == DBHelperCategoryIncome.hasChildrens) {
                         Toast.makeText(this, R.string.hasChilds, Toast.LENGTH_LONG).show();
                     } else if ((Integer) result.getObject() == DBHelperCategoryIncome.usable) {
                         Toast.makeText(this, R.string.categoryUsable, Toast.LENGTH_LONG).show();
                     } else {
-                        getSupportLoaderManager().getLoader(ROOT_LOADER_ID).forceLoad();
+                        loader.forceLoad();
                     }
-                } else if (getSupportLoaderManager().getLoader(ROOT_LOADER_ID) != null
-                        && getSupportLoaderManager().getLoader(deleteGroupId) != null) {
-                    if ((Integer) result.getObject() == DBHelperCategoryIncome.usable) {
-                        Toast.makeText(this, R.string.categoryUsable, Toast.LENGTH_LONG).show();
-                    } else {
-                        getSupportLoaderManager().getLoader(deleteGroupId).forceLoad();
-                        getSupportLoaderManager().getLoader(ROOT_LOADER_ID).forceLoad();
-                        deleteGroupId = -1;
+                } else {
+                    final Loader<Object> innerLoader = getSupportLoaderManager().getLoader(deleteGroupId);
+                    if (loader != null
+                            && innerLoader != null) {
+                        if ((Integer) result.getObject() == DBHelperCategoryIncome.usable) {
+                            Toast.makeText(this, R.string.categoryUsable, Toast.LENGTH_LONG).show();
+                        } else {
+                            innerLoader.forceLoad();
+                            loader.forceLoad();
+                            deleteGroupId = -1;
+                        }
                     }
                 }
                 break;
             case IncomeCategoryExecutor.KEY_RESULT_ADD:
-                if (getSupportLoaderManager().getLoader(ROOT_LOADER_ID) != null) {
-                    getSupportLoaderManager().getLoader(ROOT_LOADER_ID).forceLoad();
+                if (loader != null) {
+                    loader.forceLoad();
                 }
                 break;
             case IncomeCategoryExecutor.KEY_RESULT_EDIT:
-                if (getSupportLoaderManager().getLoader(ROOT_LOADER_ID) != null) {
-                    getSupportLoaderManager().getLoader(ROOT_LOADER_ID).forceLoad();
+                if (loader != null) {
+                    loader.forceLoad();
                 }
                 break;
             default:

@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:duplicateParentState="true"
-            android:onClick="selectReport"
+            android:onClick="onSelectReportViewClicked"
             android:text="@string/incomesByCategories"
             android:textSize="24sp" />
 
@@ -31,7 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:duplicateParentState="true"
-            android:onClick="selectReport"
+            android:onClick="onSelectReportViewClicked"
             android:text="@string/costsByCategories"
             android:textSize="24sp" />
 
@@ -45,7 +45,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:duplicateParentState="true"
-            android:onClick="selectReport"
+            android:onClick="onSelectReportViewClicked"
             android:text="@string/balanceCHart"
             android:textSize="24sp" />
     </LinearLayout>

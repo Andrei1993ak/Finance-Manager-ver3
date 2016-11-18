@@ -20,7 +20,7 @@ public class ReportsActivity extends BaseActivity {
         setTitle(R.string.reports);
     }
 
-    public void selectReport(final View view) {
+    public void onSelectReportViewClicked(final View view) {
         switch (view.getId()) {
             case R.id.reportIncomesPie:
                 Intent intent = new Intent(this, PieChartActivity.class);

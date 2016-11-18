@@ -19,10 +19,11 @@ import com.github.andrei1993ak.finances.model.models.Income;
 import com.github.andrei1993ak.finances.model.models.Wallet;
 import com.github.andrei1993ak.finances.R;
 import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
-import com.github.andrei1993ak.finances.control.base.RequestHolder;
+import com.github.andrei1993ak.finances.control.base.RequestAdapter;
 import com.github.andrei1993ak.finances.control.executors.WalletExecutor;
 import com.github.andrei1993ak.finances.control.loaders.PieReportLoader;
 import com.github.andrei1993ak.finances.model.reportModels.PieChartItem;
+import com.github.andrei1993ak.finances.util.Constants;
 
 import org.achartengine.ChartFactory;
 import org.achartengine.GraphicalView;
@@ -35,9 +36,8 @@ import java.util.List;
 
 public class PieChartActivity extends BaseActivity implements OnTaskCompleted, LoaderManager.LoaderCallbacks<ArrayList<PieChartItem>> {
 
-    public static final int MAIN_LOADER = 0;
     public static final String POSITION = "position";
-    private GraphicalView mChartView;
+    private GraphicalView chartView;
     private List<Wallet> wallets;
     private AppCompatSpinner spinner;
     private int position;
@@ -57,13 +57,13 @@ public class PieChartActivity extends BaseActivity implements OnTaskCompleted, L
         } else {
             position = savedInstanceState.getInt(POSITION);
         }
-        new WalletExecutor(this).execute(new RequestHolder<Wallet>().getAllToList(RequestHolder.SELECTION_ALL));
+        new WalletExecutor(this).execute(new RequestAdapter<Wallet>().getAllToList(RequestAdapter.SELECTION_ALL));
     }
 
     protected void onResume() {
         super.onResume();
-        if (mChartView != null) {
-            mChartView.repaint();
+        if (chartView != null) {
+            chartView.repaint();
         }
     }
 
@@ -92,24 +92,24 @@ public class PieChartActivity extends BaseActivity implements OnTaskCompleted, L
         final int id = result.getId();
         if (id == WalletExecutor.KEY_RESULT_GET_ALL_TO_LIST) {
             wallets = (List<Wallet>) result.getObject();
-            final String[] pursesNames = new String[wallets.size()];
+            final String[] walletsNames = new String[wallets.size()];
             int i = 0;
             for (final Wallet wallet : wallets) {
-                pursesNames[i++] = wallet.getName();
+                walletsNames[i++] = wallet.getName();
             }
-            final ArrayAdapter<String> spinnerPursesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, pursesNames);
-            spinnerPursesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinner.setAdapter(spinnerPursesAdapter);
+            final ArrayAdapter<String> spinnerWalletsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, walletsNames);
+            spinnerWalletsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinner.setAdapter(spinnerWalletsAdapter);
             spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(final AdapterView<?> parent, final View view, final int position, final long id) {
-                    final long purseId = (wallets.get(position).getId());
+                    final long walletId = (wallets.get(position).getId());
                     final Bundle args = new Bundle();
-                    args.putLong(Income.WALLET_ID, purseId);
+                    args.putLong(Income.WALLET_ID, walletId);
                     args.putBoolean(PieChartItem.TYPE, getIntent().getBooleanExtra(PieChartItem.TYPE, false));
                     args.putLong(Income.CATEGORY_ID, -1L);
-                    getSupportLoaderManager().restartLoader(MAIN_LOADER, args, PieChartActivity.this);
-                    final Loader<Object> loader = PieChartActivity.this.getSupportLoaderManager().getLoader(MAIN_LOADER);
+                    getSupportLoaderManager().restartLoader(Constants.MAIN_LOADER_ID, args, PieChartActivity.this);
+                    final Loader<Object> loader = PieChartActivity.this.getSupportLoaderManager().getLoader(Constants.MAIN_LOADER_ID);
                     loader.forceLoad();
                 }
 
@@ -152,8 +152,8 @@ public class PieChartActivity extends BaseActivity implements OnTaskCompleted, L
             names[i] = pieChartItem.getCategoryName();
             values[i++] = pieChartItem.getAmount();
         }
-        mChartView = buildView(names, values);
-        layout.addView(mChartView, new LinearLayout.LayoutParams
+        chartView = buildView(names, values);
+        layout.addView(chartView, new LinearLayout.LayoutParams
                 (LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
     }
 

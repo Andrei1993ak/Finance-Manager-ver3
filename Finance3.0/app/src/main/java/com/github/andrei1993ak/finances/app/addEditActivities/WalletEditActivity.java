@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.github.andrei1993ak.finances.R;
 import com.github.andrei1993ak.finances.app.BaseActivity;
 import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
-import com.github.andrei1993ak.finances.control.base.RequestHolder;
+import com.github.andrei1993ak.finances.control.base.RequestAdapter;
 import com.github.andrei1993ak.finances.control.base.Result;
 import com.github.andrei1993ak.finances.control.executors.CurrencyExecutor;
 import com.github.andrei1993ak.finances.control.executors.WalletExecutor;
@@ -30,10 +30,17 @@ public class WalletEditActivity extends BaseActivity implements OnTaskCompleted 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle(R.string.editing);
         setContentView(R.layout.wallet_edit_activity);
-        findViewsById();
+        setTitle(R.string.editing);
+        initFields();
         final long walletId = getIntent().getLongExtra(Wallet.ID, -1);
+        new WalletExecutor(this).execute(new RequestAdapter<Wallet>().get(walletId));
+    }
+
+    private void initFields() {
+        editWalletName = (EditText) findViewById(R.id.edit_wallet_name);
+        editWalletAmount = (TextView) findViewById(R.id.edit_wallet_amount);
+        editWalletCurrency = (TextView) findViewById(R.id.edit_wallet_currency);
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_pur_edit);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -41,13 +48,6 @@ public class WalletEditActivity extends BaseActivity implements OnTaskCompleted 
                 editWallet();
             }
         });
-        new WalletExecutor(this).execute(new RequestHolder<Wallet>().get(walletId));
-    }
-
-    private void findViewsById() {
-        editWalletName = (EditText) findViewById(R.id.edit_wallet_name);
-        editWalletAmount = (TextView) findViewById(R.id.edit_wallet_amount);
-        editWalletCurrency = (TextView) findViewById(R.id.edit_wallet_currency);
     }
 
     public void editWallet() {
@@ -92,7 +92,7 @@ public class WalletEditActivity extends BaseActivity implements OnTaskCompleted 
                 wallet = (Wallet) result.getObject();
                 editWalletName.setText(wallet.getName());
                 editWalletAmount.setText(String.valueOf(wallet.getAmount()));
-                new CurrencyExecutor(this).execute(new RequestHolder<Currency>().get(wallet.getCurrencyId()));
+                new CurrencyExecutor(this).execute(new RequestAdapter<Currency>().get(wallet.getCurrencyId()));
                 break;
             case CurrencyExecutor.KEY_RESULT_GET:
                 final Currency currency = (Currency) result.getObject();

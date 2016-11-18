@@ -13,17 +13,17 @@ import android.widget.SimpleCursorAdapter;
 import com.github.andrei1993ak.finances.R;
 import com.github.andrei1993ak.finances.app.BaseActivity;
 import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
-import com.github.andrei1993ak.finances.control.base.RequestHolder;
+import com.github.andrei1993ak.finances.control.base.RequestAdapter;
 import com.github.andrei1993ak.finances.control.base.Result;
 import com.github.andrei1993ak.finances.control.executors.CurrencyOfficialExecutor;
 import com.github.andrei1993ak.finances.control.loaders.CurrencyAllCursorLoader;
 import com.github.andrei1993ak.finances.model.TableQueryGenerator;
 import com.github.andrei1993ak.finances.model.models.Currency;
 import com.github.andrei1993ak.finances.model.models.CurrencyOfficial;
+import com.github.andrei1993ak.finances.util.Constants;
 
 public class CurrencyAddActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor>, OnTaskCompleted {
 
-    public static final int MAIN_LOADER_ID = 0;
     private SimpleCursorAdapter simpleCursorAdapter;
 
     @Override
@@ -31,6 +31,11 @@ public class CurrencyAddActivity extends BaseActivity implements LoaderManager.L
         super.onCreate(savedInstanceState);
         setTitle(R.string.allCurrencies);
         setContentView(R.layout.currency_add_activity);
+        initFields();
+        getSupportLoaderManager().initLoader(Constants.MAIN_LOADER_ID, null, this);
+    }
+
+    private void initFields(){
         final String[] from = new String[]{CurrencyOfficial.NAME};
         final int[] to = new int[]{R.id.currencyName};
         simpleCursorAdapter = new SimpleCursorAdapter(this, R.layout.currency_listitem, null, from, to, 0);
@@ -39,12 +44,11 @@ public class CurrencyAddActivity extends BaseActivity implements LoaderManager.L
         lvAllCurrencies.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(final AdapterView<?> parent, final View view, final int position, final long id) {
-                new CurrencyOfficialExecutor(CurrencyAddActivity.this).execute(new RequestHolder<CurrencyOfficial>().get(id));
+                new CurrencyOfficialExecutor(CurrencyAddActivity.this).execute(new RequestAdapter<CurrencyOfficial>().get(id));
                 return true;
 
             }
         });
-        getSupportLoaderManager().initLoader(MAIN_LOADER_ID, null, this);
     }
 
     @Override

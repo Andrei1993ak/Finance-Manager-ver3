@@ -17,13 +17,13 @@ import android.widget.TextView;
 import com.github.andrei1993ak.finances.R;
 import com.github.andrei1993ak.finances.app.BaseActivity;
 import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
-import com.github.andrei1993ak.finances.control.base.RequestHolder;
+import com.github.andrei1993ak.finances.control.base.RequestAdapter;
 import com.github.andrei1993ak.finances.control.base.Result;
-import com.github.andrei1993ak.finances.control.executors.WalletExecutor;
 import com.github.andrei1993ak.finances.control.executors.TransferExecutor;
+import com.github.andrei1993ak.finances.control.executors.WalletExecutor;
 import com.github.andrei1993ak.finances.model.TableQueryGenerator;
-import com.github.andrei1993ak.finances.model.models.Wallet;
 import com.github.andrei1993ak.finances.model.models.Transfer;
+import com.github.andrei1993ak.finances.model.models.Wallet;
 import com.github.andrei1993ak.finances.util.transferRateParser.OnParseCompleted;
 import com.github.andrei1993ak.finances.util.transferRateParser.RateJsonParser;
 
@@ -49,11 +49,21 @@ public class TransferEditActivity extends BaseActivity implements OnTaskComplete
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle(R.string.editing);
         setContentView(R.layout.transfer_add_edit_activity);
-        findViewsByIds();
-        setDatePickerDialog();
+        setTitle(R.string.editing);
+        initFields();
         final long transferId = getIntent().getLongExtra(Transfer.ID, -1);
+        new TransferExecutor(this).execute(new RequestAdapter<Transfer>().get(transferId));
+    }
+
+    private void initFields() {
+        editTransferName = (EditText) findViewById(R.id.transfer_name);
+        editTransferDate = (TextView) findViewById(R.id.transfer_date);
+        editTransferFromWallet = (AppCompatSpinner) findViewById(R.id.transfer_from_wallet);
+        editTransferToWallet = (AppCompatSpinner) findViewById(R.id.transfer_to_wallet);
+        editTransferFromAmount = (EditText) findViewById(R.id.transfer_from_amount);
+        editTransferToAmount = (EditText) findViewById(R.id.transfer_to_amount);
+        officialRate = (TextView) findViewById(R.id.official_rate);
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_transfer_add_edit);
         fab.setImageResource(android.R.drawable.ic_menu_edit);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -62,17 +72,7 @@ public class TransferEditActivity extends BaseActivity implements OnTaskComplete
                 editTransfer();
             }
         });
-        new TransferExecutor(this).execute(new RequestHolder<Transfer>().get(transferId));
-    }
-
-    private void findViewsByIds() {
-        editTransferName = (EditText) findViewById(R.id.transfer_name);
-        editTransferDate = (TextView) findViewById(R.id.transfer_date);
-        editTransferFromWallet = (AppCompatSpinner) findViewById(R.id.transfer_from_wallet);
-        editTransferToWallet = (AppCompatSpinner) findViewById(R.id.transfer_to_wallet);
-        editTransferFromAmount = (EditText) findViewById(R.id.transfer_from_amount);
-        editTransferToAmount = (EditText) findViewById(R.id.transfer_to_amount);
-        officialRate = (TextView) findViewById(R.id.official_rate);
+        setDatePickerDialog();
     }
 
     private void setDatePickerDialog() {
@@ -174,8 +174,8 @@ public class TransferEditActivity extends BaseActivity implements OnTaskComplete
                 editTransferDate.setText(dateFormatter.format(transfer.getDate()));
                 editTransferFromAmount.setText(String.valueOf(transfer.getFromAmount()));
                 editTransferToAmount.setText(String.valueOf(transfer.getToAmount()));
-                final RequestHolder<Wallet> walletRequestHolder = new RequestHolder<>();
-                new WalletExecutor(this).execute(walletRequestHolder.getAllToList(RequestHolder.SELECTION_ALL));
+                final RequestAdapter<Wallet> walletRequestAdapter = new RequestAdapter<>();
+                new WalletExecutor(this).execute(walletRequestAdapter.getAllToList(RequestAdapter.SELECTION_ALL));
                 break;
             case WalletExecutor.KEY_RESULT_GET_ALL_TO_LIST:
                 allWallets = (List<Wallet>) result.getObject();
@@ -191,7 +191,7 @@ public class TransferEditActivity extends BaseActivity implements OnTaskComplete
                     }
                     walletsNames[i++] = wallet.getName();
                 }
-                final ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, walletsNames);
+                final ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, walletsNames);
                 spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 editTransferFromWallet.setAdapter(spinnerAdapter);
                 editTransferToWallet.setAdapter(spinnerAdapter);
@@ -209,7 +209,7 @@ public class TransferEditActivity extends BaseActivity implements OnTaskComplete
             officialRate.setText(R.string.checkInternet);
 
         } else {
-            officialRate.setText(String.format("%.4f", result));
+            officialRate.setText(String.format(Locale.US, "%.4f", result));
         }
     }
 

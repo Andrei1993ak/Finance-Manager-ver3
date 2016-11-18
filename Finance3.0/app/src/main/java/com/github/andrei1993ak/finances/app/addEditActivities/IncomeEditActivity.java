@@ -17,7 +17,7 @@ import android.widget.TextView;
 import com.github.andrei1993ak.finances.R;
 import com.github.andrei1993ak.finances.app.BaseActivity;
 import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
-import com.github.andrei1993ak.finances.control.base.RequestHolder;
+import com.github.andrei1993ak.finances.control.base.RequestAdapter;
 import com.github.andrei1993ak.finances.control.base.Result;
 import com.github.andrei1993ak.finances.control.executors.IncomeCategoryExecutor;
 import com.github.andrei1993ak.finances.control.executors.IncomeExecutor;
@@ -47,20 +47,19 @@ public class IncomeEditActivity extends BaseActivity implements OnTaskCompleted 
     private List<IncomeCategory> subCategoriesList;
     private SimpleDateFormat dateFormatter;
     private long parentId;
-    private long id;
+    private long incomeId;
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.income_add_edit_activity);
         setTitle(R.string.editing);
-        id = getIntent().getLongExtra(Income.ID, -1);
-        findViewsBuId();
-        setDatePickerDialog();
-        new IncomeExecutor(this).execute(new RequestHolder<Income>().get(id));
+        initFields();
+        incomeId = getIntent().getLongExtra(Income.ID, -1);
+        new IncomeExecutor(this).execute(new RequestAdapter<Income>().get(incomeId));
     }
 
-    private void findViewsBuId() {
+    private void initFields() {
         editIncomeName = (EditText) findViewById(R.id.income_name);
         editIncomeAmount = (EditText) findViewById(R.id.income_amount);
         editIncomeDate = (TextView) findViewById(R.id.income_date);
@@ -75,6 +74,7 @@ public class IncomeEditActivity extends BaseActivity implements OnTaskCompleted 
                 editIncome();
             }
         });
+        setDatePickerDialog();
     }
 
     private void setDatePickerDialog() {
@@ -91,7 +91,7 @@ public class IncomeEditActivity extends BaseActivity implements OnTaskCompleted 
         editIncomeDate.setText(dateFormatter.format(newCalendar.getTime()));
         editIncomeDate.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
                 dialog.show();
             }
         });
@@ -100,7 +100,7 @@ public class IncomeEditActivity extends BaseActivity implements OnTaskCompleted 
     public void editIncome() {
         final Income income = checkFields();
         if (income != null) {
-            income.setId(id);
+            income.setId(incomeId);
             final Intent intent = new Intent();
             intent.putExtra(TableQueryGenerator.getTableName(Income.class), income);
             setResult(RESULT_OK, intent);
@@ -156,10 +156,10 @@ public class IncomeEditActivity extends BaseActivity implements OnTaskCompleted 
                 editIncomeName.setText(income.getName());
                 editIncomeAmount.setText(String.valueOf(income.getAmount()));
                 editIncomeDate.setText(dateFormatter.format(income.getDate()));
-                final RequestHolder<Wallet> walletsRequestHolder = new RequestHolder<>();
-                new WalletExecutor(this).execute(walletsRequestHolder.getAllToList(RequestHolder.SELECTION_ALL));
-                final RequestHolder<IncomeCategory> categoryRequestHolder = new RequestHolder<>();
-                new IncomeCategoryExecutor(this).execute(categoryRequestHolder.get(income.getCategoryId()));
+                final RequestAdapter<Wallet> walletsRequestAdapter = new RequestAdapter<>();
+                new WalletExecutor(this).execute(walletsRequestAdapter.getAllToList(RequestAdapter.SELECTION_ALL));
+                final RequestAdapter<IncomeCategory> categoryRequestAdapter = new RequestAdapter<>();
+                new IncomeCategoryExecutor(this).execute(categoryRequestAdapter.get(income.getCategoryId()));
                 break;
             case WalletExecutor.KEY_RESULT_GET_ALL_TO_LIST:
                 wallets = (List<Wallet>) result.getObject();
@@ -180,8 +180,8 @@ public class IncomeEditActivity extends BaseActivity implements OnTaskCompleted 
             case IncomeCategoryExecutor.KEY_RESULT_GET:
                 final IncomeCategory category = (IncomeCategory) result.getObject();
                 parentId = category.getParentId();
-                final RequestHolder<IncomeCategory> incomeCategoryRequestHolder = new RequestHolder<>();
-                new IncomeCategoryExecutor(this).execute(incomeCategoryRequestHolder.getAllToList(1));
+                final RequestAdapter<IncomeCategory> incomeCategoryRequestAdapter = new RequestAdapter<>();
+                new IncomeCategoryExecutor(this).execute(incomeCategoryRequestAdapter.getAllToList(1));
                 break;
             case IncomeCategoryExecutor.KEY_RESULT_GET_ALL_TO_LIST:
                 categoriesList = (List<IncomeCategory>) result.getObject();
@@ -207,8 +207,8 @@ public class IncomeEditActivity extends BaseActivity implements OnTaskCompleted 
                 editIncomeCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(final AdapterView<?> parent, final View view, final int position, final long id) {
-                        final RequestHolder<IncomeCategory> categoryRequestHolder = new RequestHolder<>();
-                        new IncomeCategoryExecutor(IncomeEditActivity.this).execute(categoryRequestHolder.getAllToListByCategory(categoriesList.get(position).getId()));
+                        final RequestAdapter<IncomeCategory> categoryRequestAdapter = new RequestAdapter<>();
+                        new IncomeCategoryExecutor(IncomeEditActivity.this).execute(categoryRequestAdapter.getAllToListByCategory(categoriesList.get(position).getId()));
                     }
 
                     @Override

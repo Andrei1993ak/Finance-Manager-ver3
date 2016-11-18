@@ -27,7 +27,6 @@ public class MainActivity extends BaseActivity implements LoaderManager.LoaderCa
     public static final int REQUEST_CODE_SETTING = 0;
 
     private RecyclerView recyclerView;
-    private WalletsRecycleViewAdapter adapter;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -90,9 +89,8 @@ public class MainActivity extends BaseActivity implements LoaderManager.LoaderCa
 
     @Override
     public void onLoadFinished(final Loader<Cursor> loader, final Cursor data) {
-        adapter = new WalletsRecycleViewAdapter(data, this);
+        final WalletsRecycleViewAdapter adapter = new WalletsRecycleViewAdapter(data, this);
         recyclerView.swapAdapter(adapter, true);
-
     }
 
     @Override

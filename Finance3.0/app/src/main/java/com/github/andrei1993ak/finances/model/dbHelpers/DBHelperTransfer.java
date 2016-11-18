@@ -18,16 +18,16 @@ public class DBHelperTransfer implements DBHelperForModel<Transfer> {
 
     //TODO bbeeee static
     //TODO move to App
-    private static DBHelperTransfer instance;
+//    private static DBHelperTransfer instance;
+//
+//    public static DBHelperTransfer getInstance() {
+//        //TODO {}
+//        if (instance == null)
+//            instance = new DBHelperTransfer();
+//        return instance;
+//    }
 
-    public static DBHelperTransfer getInstance() {
-        //TODO {}
-        if (instance == null)
-            instance = new DBHelperTransfer();
-        return instance;
-    }
-
-    private DBHelperTransfer() {
+    public DBHelperTransfer() {
         this.dbHelper = DBHelper.getInstance(ContextHolder.getInstance().getContext());
     }
 

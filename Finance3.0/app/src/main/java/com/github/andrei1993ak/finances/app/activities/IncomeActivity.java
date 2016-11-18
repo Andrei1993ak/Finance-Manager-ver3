@@ -9,6 +9,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.view.ContextMenu;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -20,36 +21,35 @@ import com.github.andrei1993ak.finances.app.addEditActivities.IncomeAddActivity;
 import com.github.andrei1993ak.finances.app.addEditActivities.IncomeEditActivity;
 import com.github.andrei1993ak.finances.control.adapters.IncomeCursorAdapter;
 import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
-import com.github.andrei1993ak.finances.control.base.RequestHolder;
+import com.github.andrei1993ak.finances.control.base.RequestAdapter;
 import com.github.andrei1993ak.finances.control.base.Result;
 import com.github.andrei1993ak.finances.control.executors.IncomeExecutor;
 import com.github.andrei1993ak.finances.control.loaders.IncomeCursorLoader;
 import com.github.andrei1993ak.finances.model.TableQueryGenerator;
 import com.github.andrei1993ak.finances.model.models.Income;
+import com.github.andrei1993ak.finances.util.Constants;
 
 public class IncomeActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor>, OnTaskCompleted {
 
-    private static final int CM_EDIT_ID = 1;
-    private static final int CM_DELETE_ID = 2;
-
-    private static final int ADD_INCOME_REQUEST = 1;
-    private static final int EDIT_INCOME_REQUEST = 2;
-
-    private static final int MAIN_LOADER_ID = 0;
-
     private IncomeCursorAdapter incomeCursorAdapter;
-    private RequestHolder<Income> requestHolder;
-    private ListView incomeListView;
+    private RequestAdapter<Income> requestAdapter;
+    private MenuInflater inflater;
     private long itemId = -1;
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle(R.string.incomes);
         setContentView(R.layout.standart_activity);
-        requestHolder = new RequestHolder<>();
+        setTitle(R.string.incomes);
+        initFields();
+        inflater = getMenuInflater();
+        requestAdapter = new RequestAdapter<>();
+        getSupportLoaderManager().restartLoader(Constants.MAIN_LOADER_ID, null, this);
+    }
+
+    private void initFields() {
         incomeCursorAdapter = new IncomeCursorAdapter(this, null);
-        incomeListView = (ListView) findViewById(R.id.standardListView);
+        final ListView incomeListView = (ListView) findViewById(R.id.standardListView);
         incomeListView.setAdapter(incomeCursorAdapter);
         incomeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -62,16 +62,15 @@ public class IncomeActivity extends BaseActivity implements LoaderManager.Loader
             @Override
             public void onClick(final View view) {
                 final Intent intent = new Intent(IncomeActivity.this, IncomeAddActivity.class);
-                startActivityForResult(intent, ADD_INCOME_REQUEST);
+                startActivityForResult(intent, Constants.ADD_REQUEST);
             }
         });
         registerForContextMenu(incomeListView);
-        getSupportLoaderManager().restartLoader(MAIN_LOADER_ID, null, this);
     }
 
     @Override
     public boolean onCreateOptionsMenu(final Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
+        inflater.inflate(R.menu.menu, menu);
         return true;
     }
 
@@ -82,10 +81,10 @@ public class IncomeActivity extends BaseActivity implements LoaderManager.Loader
             if (id == R.id.action_edit) {
                 final Intent intent = new Intent(this, IncomeEditActivity.class);
                 intent.putExtra(Income.ID, itemId);
-                startActivityForResult(intent, EDIT_INCOME_REQUEST);
+                startActivityForResult(intent, Constants.EDIT_REQUEST);
                 return true;
             } else {
-                new IncomeExecutor(this).execute(requestHolder.delete(itemId));
+                new IncomeExecutor(this).execute(requestAdapter.delete(itemId));
                 return true;
             }
         }
@@ -94,22 +93,21 @@ public class IncomeActivity extends BaseActivity implements LoaderManager.Loader
 
     @Override
     public void onCreateContextMenu(final ContextMenu menu, final View v, final ContextMenu.ContextMenuInfo menuInfo) {
+        inflater.inflate(R.menu.context_menu, menu);
         super.onCreateContextMenu(menu, v, menuInfo);
-        menu.add(0, CM_EDIT_ID, 0, R.string.edit);
-        menu.add(0, CM_DELETE_ID, 0, R.string.delete);
     }
 
     @Override
     public boolean onContextItemSelected(final MenuItem item) {
         final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
-            case CM_DELETE_ID:
-                new IncomeExecutor(this).execute(requestHolder.delete(info.id));
+            case Constants.CM_DELETE_ID:
+                new IncomeExecutor(this).execute(requestAdapter.delete(info.id));
                 break;
-            case CM_EDIT_ID:
+            case Constants.CM_EDIT_ID:
                 final Intent intent = new Intent(this, IncomeEditActivity.class);
                 intent.putExtra(Income.ID, info.id);
-                startActivityForResult(intent, EDIT_INCOME_REQUEST);
+                startActivityForResult(intent, Constants.EDIT_REQUEST);
                 break;
         }
         return super.onContextItemSelected(item);
@@ -119,13 +117,13 @@ public class IncomeActivity extends BaseActivity implements LoaderManager.Loader
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
-                case ADD_INCOME_REQUEST:
+                case Constants.ADD_REQUEST:
                     final Income newIncome = data.getParcelableExtra(TableQueryGenerator.getTableName(Income.class));
-                    new IncomeExecutor(this).execute(requestHolder.add(newIncome));
+                    new IncomeExecutor(this).execute(requestAdapter.add(newIncome));
                     break;
-                case EDIT_INCOME_REQUEST:
+                case Constants.EDIT_REQUEST:
                     final Income editIncome = data.getParcelableExtra(TableQueryGenerator.getTableName(Income.class));
-                    new IncomeExecutor(this).execute(requestHolder.edit(editIncome));
+                    new IncomeExecutor(this).execute(requestAdapter.edit(editIncome));
                     break;
                 default:
                     break;
@@ -152,8 +150,9 @@ public class IncomeActivity extends BaseActivity implements LoaderManager.Loader
     public void onTaskCompleted(final Result result) {
         final int id = result.getId();
         if (id == IncomeExecutor.KEY_RESULT_DELETE || id == IncomeExecutor.KEY_RESULT_ADD || id == IncomeExecutor.KEY_RESULT_EDIT) {
-            if (getSupportLoaderManager().getLoader(MAIN_LOADER_ID) != null) {
-                getSupportLoaderManager().getLoader(MAIN_LOADER_ID).forceLoad();
+            final Loader<Income> loader = getSupportLoaderManager().getLoader(Constants.MAIN_LOADER_ID);
+            if (loader != null) {
+                loader.forceLoad();
             }
         }
     }

@@ -9,6 +9,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.view.ContextMenu;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -20,27 +21,19 @@ import com.github.andrei1993ak.finances.app.addEditActivities.TransferAddActivit
 import com.github.andrei1993ak.finances.app.addEditActivities.TransferEditActivity;
 import com.github.andrei1993ak.finances.control.adapters.TransferCursorAdapter;
 import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
-import com.github.andrei1993ak.finances.control.base.RequestHolder;
+import com.github.andrei1993ak.finances.control.base.RequestAdapter;
 import com.github.andrei1993ak.finances.control.base.Result;
 import com.github.andrei1993ak.finances.control.executors.TransferExecutor;
 import com.github.andrei1993ak.finances.control.loaders.TransferCursorLoader;
 import com.github.andrei1993ak.finances.model.TableQueryGenerator;
 import com.github.andrei1993ak.finances.model.models.Transfer;
+import com.github.andrei1993ak.finances.util.Constants;
 
 public class TransferActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor>, OnTaskCompleted {
 
-    private static final int CM_EDIT_ID = 1;
-    private static final int CM_DELETE_ID = 2;
-
-    private static final int ADD_TRANSFER_REQUEST = 1;
-    private static final int EDIT_TRANSFER_REQUEST = 2;
-
-    private static final int MAIN_LOADER_ID = 0;
-
     private TransferCursorAdapter transferCursorAdapter;
-    //TODO move to adapter
-    private RequestHolder<Transfer> requestHolder;
-    private ListView transferListView;
+    private RequestAdapter<Transfer> requestAdapter;
+    private MenuInflater inflater;
     private long itemId = -1;
 
     @Override
@@ -48,9 +41,15 @@ public class TransferActivity extends BaseActivity implements LoaderManager.Load
         super.onCreate(savedInstanceState);
         setContentView(R.layout.standart_activity);
         setTitle(R.string.transfers);
+        initFields();
+        requestAdapter = new RequestAdapter<>();
+        inflater = getMenuInflater();
+        getSupportLoaderManager().restartLoader(Constants.MAIN_LOADER_ID, null, this);
+    }
+
+    private void initFields(){
         transferCursorAdapter = new TransferCursorAdapter(this, null);
-        requestHolder = new RequestHolder<>();
-        transferListView = (ListView) findViewById(R.id.standardListView);
+        final ListView transferListView = (ListView) findViewById(R.id.standardListView);
         transferListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
@@ -63,13 +62,11 @@ public class TransferActivity extends BaseActivity implements LoaderManager.Load
             @Override
             public void onClick(final View view) {
                 final Intent intent = new Intent(TransferActivity.this, TransferAddActivity.class);
-                startActivityForResult(intent, ADD_TRANSFER_REQUEST);
+                startActivityForResult(intent, Constants.ADD_REQUEST);
             }
         });
         registerForContextMenu(transferListView);
-        getSupportLoaderManager().restartLoader(MAIN_LOADER_ID, null, this);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(final Menu menu) {
@@ -84,10 +81,10 @@ public class TransferActivity extends BaseActivity implements LoaderManager.Load
             if (id == R.id.action_edit) {
                 final Intent intent = new Intent(this, TransferEditActivity.class);
                 intent.putExtra(Transfer.ID, itemId);
-                startActivityForResult(intent, EDIT_TRANSFER_REQUEST);
+                startActivityForResult(intent, Constants.EDIT_REQUEST);
                 return true;
             } else {
-                new TransferExecutor(this).execute(requestHolder.delete(itemId));
+                new TransferExecutor(this).execute(requestAdapter.delete(itemId));
                 return true;
             }
         }
@@ -96,23 +93,21 @@ public class TransferActivity extends BaseActivity implements LoaderManager.Load
 
     @Override
     public void onCreateContextMenu(final ContextMenu menu, final View view, final ContextMenu.ContextMenuInfo menuInfo) {
+        inflater.inflate(R.menu.context_menu,menu);
         super.onCreateContextMenu(menu, view, menuInfo);
-        //TODO move to xml
-        menu.add(0, CM_EDIT_ID, 0, R.string.edit);
-        menu.add(0, CM_DELETE_ID, 0, R.string.delete);
     }
 
     @Override
     public boolean onContextItemSelected(final MenuItem item) {
         final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
-            case CM_DELETE_ID:
-                new TransferExecutor(this).execute(requestHolder.delete(info.id));
+            case R.id.cm_delete:
+                new TransferExecutor(this).execute(requestAdapter.delete(info.id));
                 break;
-            case CM_EDIT_ID:
+            case R.id.cm_edit:
                 final Intent intent = new Intent(this, TransferEditActivity.class);
                 intent.putExtra(Transfer.ID, info.id);
-                startActivityForResult(intent, EDIT_TRANSFER_REQUEST);
+                startActivityForResult(intent, Constants.EDIT_REQUEST);
                 break;
         }
         return super.onContextItemSelected(item);
@@ -122,13 +117,13 @@ public class TransferActivity extends BaseActivity implements LoaderManager.Load
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
-                case ADD_TRANSFER_REQUEST:
+                case Constants.ADD_REQUEST:
                     final Transfer newTransfer = data.getParcelableExtra(TableQueryGenerator.getTableName(Transfer.class));
-                    new TransferExecutor(this).execute(requestHolder.add(newTransfer));
+                    new TransferExecutor(this).execute(requestAdapter.add(newTransfer));
                     break;
-                case EDIT_TRANSFER_REQUEST:
+                case Constants.EDIT_REQUEST:
                     final Transfer editTransfer = data.getParcelableExtra(TableQueryGenerator.getTableName(Transfer.class));
-                    new TransferExecutor(this).execute(requestHolder.edit(editTransfer));
+                    new TransferExecutor(this).execute(requestAdapter.edit(editTransfer));
                     break;
                 default:
                     break;
@@ -155,8 +150,9 @@ public class TransferActivity extends BaseActivity implements LoaderManager.Load
     public void onTaskCompleted(final Result result) {
         final int id = result.getId();
         if (id == TransferExecutor.KEY_RESULT_DELETE || id == TransferExecutor.KEY_RESULT_ADD || id == TransferExecutor.KEY_RESULT_EDIT) {
-            if (getSupportLoaderManager().getLoader(MAIN_LOADER_ID) != null) {
-                getSupportLoaderManager().getLoader(MAIN_LOADER_ID).forceLoad();
+            final Loader<Transfer> loader = getSupportLoaderManager().getLoader(Constants.MAIN_LOADER_ID);
+            if (loader != null) {
+                loader.forceLoad();
             }
         }
     }

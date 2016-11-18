@@ -1,5 +1,6 @@
 package com.github.andrei1993ak.finances.model.reportDbHelpers;
 
+import com.github.andrei1993ak.finances.App;
 import com.github.andrei1993ak.finances.model.dbHelpers.DBHelperCost;
 import com.github.andrei1993ak.finances.model.dbHelpers.DBHelperIncome;
 import com.github.andrei1993ak.finances.model.dbHelpers.DBHelperWallet;
@@ -28,7 +29,7 @@ public class BalanceChartHelper {
     public TimeSeries getSeries(final long walletId) {
         final List<Income> incomesList = DBHelperIncome.getInstance().getAllToListByWalletId(walletId);
         final List<Cost> costsList = DBHelperCost.getInstance().getAllToListByWalletId(walletId);
-        final List<Transfer> transferList = DBHelperTransfer.getInstance().getAllToListByWalletId(walletId);
+        final List<Transfer> transferList = ((DBHelperTransfer) App.getDbHelper(Transfer.class)).getAllToListByWalletId(walletId);
 
         final HashMap<Date, Double> operations = new HashMap<>();
 

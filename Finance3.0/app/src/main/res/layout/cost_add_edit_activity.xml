@@ -6,6 +6,14 @@
     android:fitsSystemWindows="true">
 
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_cost_add_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        app:srcCompat="@android:drawable/ic_menu_add" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -162,7 +170,7 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/button_ic_camera_black_32dp"
                         android:contentDescription="@null"
-                        android:onClick="addPhoto" />
+                        android:onClick="addEditPhoto" />
                 </LinearLayout>
 
                 <ImageView
@@ -174,12 +182,4 @@
             </TableLayout>
         </ScrollView>
     </LinearLayout>
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_cost_add_edit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_menu_add" />
 </android.support.design.widget.CoordinatorLayout>

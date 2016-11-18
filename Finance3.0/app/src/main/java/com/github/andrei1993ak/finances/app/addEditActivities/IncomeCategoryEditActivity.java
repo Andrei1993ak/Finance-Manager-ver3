@@ -13,7 +13,7 @@ import android.widget.EditText;
 import com.github.andrei1993ak.finances.R;
 import com.github.andrei1993ak.finances.app.BaseActivity;
 import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
-import com.github.andrei1993ak.finances.control.base.RequestHolder;
+import com.github.andrei1993ak.finances.control.base.RequestAdapter;
 import com.github.andrei1993ak.finances.control.base.Result;
 import com.github.andrei1993ak.finances.control.executors.IncomeCategoryExecutor;
 import com.github.andrei1993ak.finances.model.TableQueryGenerator;
@@ -33,9 +33,15 @@ public class IncomeCategoryEditActivity extends BaseActivity implements OnTaskCo
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.category_add_edit_activity);
-        findViewsById();
         setTitle(R.string.editing);
+        initFields();
         final long incomeCategoryId = getIntent().getLongExtra(IncomeCategory.ID, -1);
+        new IncomeCategoryExecutor(this).execute(new RequestAdapter<IncomeCategory>().get(incomeCategoryId));
+    }
+
+    private void initFields() {
+        editCategoryName = (EditText) findViewById(R.id.add_edit_category_name);
+        parentCategories = (AppCompatSpinner) findViewById(R.id.spinnerParentCategories);
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_cat_add);
         fab.setImageResource(android.R.drawable.ic_menu_edit);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -44,12 +50,6 @@ public class IncomeCategoryEditActivity extends BaseActivity implements OnTaskCo
                 editCategory();
             }
         });
-        new IncomeCategoryExecutor(this).execute(new RequestHolder<IncomeCategory>().get(incomeCategoryId));
-    }
-
-    private void findViewsById() {
-        editCategoryName = (EditText) findViewById(R.id.add_edit_category_name);
-        parentCategories = (AppCompatSpinner) findViewById(R.id.spinnerParentCategories);
     }
 
     public void editCategory() {
@@ -117,7 +117,7 @@ public class IncomeCategoryEditActivity extends BaseActivity implements OnTaskCo
                     parentCategories.setBackground(ContextCompat.getDrawable(this, R.drawable.shape_gray_field));
                     parentCategories.setEnabled(false);
                 } else {
-                    new IncomeCategoryExecutor(this).execute(new RequestHolder<IncomeCategory>().getAllToList(RequestHolder.SELECTION_PARENT_CATEGORIES));
+                    new IncomeCategoryExecutor(this).execute(new RequestAdapter<IncomeCategory>().getAllToList(RequestAdapter.SELECTION_PARENT_CATEGORIES));
                 }
                 break;
             default:

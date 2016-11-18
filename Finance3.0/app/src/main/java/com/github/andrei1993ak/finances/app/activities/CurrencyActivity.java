@@ -7,6 +7,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,36 +20,37 @@ import com.github.andrei1993ak.finances.app.BaseActivity;
 import com.github.andrei1993ak.finances.app.addEditActivities.CurrencyAddActivity;
 import com.github.andrei1993ak.finances.app.addEditActivities.CurrencyEditActivity;
 import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
-import com.github.andrei1993ak.finances.control.base.RequestHolder;
+import com.github.andrei1993ak.finances.control.base.RequestAdapter;
 import com.github.andrei1993ak.finances.control.base.Result;
 import com.github.andrei1993ak.finances.control.executors.CurrencyExecutor;
 import com.github.andrei1993ak.finances.control.loaders.CurrencyCursorLoader;
 import com.github.andrei1993ak.finances.model.TableQueryGenerator;
 import com.github.andrei1993ak.finances.model.models.Currency;
+import com.github.andrei1993ak.finances.util.Constants;
 
 public class CurrencyActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor>, OnTaskCompleted {
 
-    private static final int ADD_CURRENCY_REQUEST = 1;
-    private static final int EDIT_CURRENCY_REQUEST = 2;
-
-    public static final int MAIN_LOADER_ID = 0;
-
-    private long itemId = -1;
-
     private SimpleCursorAdapter simpleCursorAdapter;
-    private RequestHolder<Currency> requestHolder;
-    private ListView lvCurrencies;
+    private RequestAdapter<Currency> requestAdapter;
+    private MenuInflater inflater;
+    private long itemId = -1;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.standart_activity);
         setTitle(R.string.currencies);
+        initFields();
+        inflater = getMenuInflater();
+        requestAdapter = new RequestAdapter<>();
+        getSupportLoaderManager().restartLoader(Constants.MAIN_LOADER_ID, null, this);
+    }
+
+    private void initFields() {
         final String[] from = new String[]{Currency.NAME};
         final int[] to = new int[]{R.id.currencyName};
-        requestHolder = new RequestHolder<>();
         simpleCursorAdapter = new SimpleCursorAdapter(this, R.layout.currency_listitem, null, from, to, 0);
-        lvCurrencies = (ListView) findViewById(R.id.standardListView);
+        final ListView lvCurrencies = (ListView) findViewById(R.id.standardListView);
         lvCurrencies.setAdapter(simpleCursorAdapter);
         lvCurrencies.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -61,15 +63,14 @@ public class CurrencyActivity extends BaseActivity implements LoaderManager.Load
             @Override
             public void onClick(final View view) {
                 final Intent intent = new Intent(CurrencyActivity.this, CurrencyAddActivity.class);
-                startActivityForResult(intent, ADD_CURRENCY_REQUEST);
+                startActivityForResult(intent, Constants.ADD_REQUEST);
             }
         });
-        getSupportLoaderManager().restartLoader(MAIN_LOADER_ID, null, this);
     }
 
     @Override
     public boolean onCreateOptionsMenu(final Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
+        inflater.inflate(R.menu.menu, menu);
         return true;
     }
 
@@ -80,10 +81,10 @@ public class CurrencyActivity extends BaseActivity implements LoaderManager.Load
             if (id == R.id.action_edit) {
                 final Intent intent = new Intent(this, CurrencyEditActivity.class);
                 intent.putExtra(Currency.ID, itemId);
-                startActivityForResult(intent, EDIT_CURRENCY_REQUEST);
+                startActivityForResult(intent, Constants.EDIT_REQUEST);
                 return true;
             } else {
-                new CurrencyExecutor(this).execute(requestHolder.delete(itemId));
+                new CurrencyExecutor(this).execute(requestAdapter.delete(itemId));
                 return true;
             }
         }
@@ -94,13 +95,13 @@ public class CurrencyActivity extends BaseActivity implements LoaderManager.Load
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
-                case ADD_CURRENCY_REQUEST:
+                case Constants.ADD_REQUEST:
                     final Currency newCurrency = data.getParcelableExtra(TableQueryGenerator.getTableName(Currency.class));
-                    new CurrencyExecutor(this).execute(requestHolder.add(newCurrency));
+                    new CurrencyExecutor(this).execute(requestAdapter.add(newCurrency));
                     break;
-                case EDIT_CURRENCY_REQUEST:
+                case Constants.EDIT_REQUEST:
                     final Currency editCurrency = data.getParcelableExtra(TableQueryGenerator.getTableName(Currency.class));
-                    new CurrencyExecutor(this).execute(requestHolder.edit(editCurrency));
+                    new CurrencyExecutor(this).execute(requestAdapter.edit(editCurrency));
                     break;
                 default:
                     break;
@@ -127,23 +128,24 @@ public class CurrencyActivity extends BaseActivity implements LoaderManager.Load
     @Override
     public void onTaskCompleted(final Result result) {
         final int id = result.getId();
+        final Loader<Currency> loader = getSupportLoaderManager().getLoader(Constants.MAIN_LOADER_ID);
         switch (id) {
             case CurrencyExecutor.KEY_RESULT_ADD:
-                if (getSupportLoaderManager().getLoader(MAIN_LOADER_ID) != null) {
-                    getSupportLoaderManager().getLoader(MAIN_LOADER_ID).forceLoad();
+                if (loader != null) {
+                    loader.forceLoad();
                 }
                 break;
             case CurrencyExecutor.KEY_RESULT_EDIT:
-                if (getSupportLoaderManager().getLoader(MAIN_LOADER_ID) != null) {
-                    getSupportLoaderManager().getLoader(MAIN_LOADER_ID).forceLoad();
+                if (loader != null) {
+                    loader.forceLoad();
                 }
                 break;
             case CurrencyExecutor.KEY_RESULT_DELETE:
                 if ((Integer) result.getObject() == -1) {
                     Toast.makeText(this, R.string.unpossibleToDeleteCur, Toast.LENGTH_LONG).show();
                 } else {
-                    if (getSupportLoaderManager().getLoader(MAIN_LOADER_ID) != null) {
-                        getSupportLoaderManager().getLoader(MAIN_LOADER_ID).forceLoad();
+                    if (loader != null) {
+                        loader.forceLoad();
                     }
                 }
                 break;

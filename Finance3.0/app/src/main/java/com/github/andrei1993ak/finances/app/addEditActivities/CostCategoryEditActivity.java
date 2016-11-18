@@ -13,7 +13,7 @@ import android.widget.EditText;
 import com.github.andrei1993ak.finances.R;
 import com.github.andrei1993ak.finances.app.BaseActivity;
 import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
-import com.github.andrei1993ak.finances.control.base.RequestHolder;
+import com.github.andrei1993ak.finances.control.base.RequestAdapter;
 import com.github.andrei1993ak.finances.control.base.Result;
 import com.github.andrei1993ak.finances.control.executors.CostCategoryExecutor;
 import com.github.andrei1993ak.finances.model.TableQueryGenerator;
@@ -34,8 +34,14 @@ public class CostCategoryEditActivity extends BaseActivity implements OnTaskComp
         setTitle(R.string.editing);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.category_add_edit_activity);
-        findViewsById();
+        initFields();
         final long costCategoryId = getIntent().getLongExtra(CostCategory.ID, -1);
+        new CostCategoryExecutor(this).execute(new RequestAdapter<CostCategory>().get(costCategoryId));
+    }
+
+    private void initFields() {
+        editCategoryName = (EditText) findViewById(R.id.add_edit_category_name);
+        parentCategories = (AppCompatSpinner) findViewById(R.id.spinnerParentCategories);
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_cat_add);
         fab.setImageResource(android.R.drawable.ic_menu_edit);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -44,12 +50,6 @@ public class CostCategoryEditActivity extends BaseActivity implements OnTaskComp
                 editCategory();
             }
         });
-        new CostCategoryExecutor(this).execute(new RequestHolder<CostCategory>().get(costCategoryId));
-    }
-
-    private void findViewsById() {
-        editCategoryName = (EditText) findViewById(R.id.add_edit_category_name);
-        parentCategories = (AppCompatSpinner) findViewById(R.id.spinnerParentCategories);
     }
 
     public void editCategory() {
@@ -114,10 +114,10 @@ public class CostCategoryEditActivity extends BaseActivity implements OnTaskComp
                 costCategory = (CostCategory) result.getObject();
                 editCategoryName.setText(costCategory.getName());
                 if (costCategory.getParentId() == -1) {
-                    parentCategories.setBackground(getResources().getDrawable(R.drawable.shape_gray_field));
+                    parentCategories.setBackground(ContextCompat.getDrawable(this, R.drawable.shape_gray_field));
                     parentCategories.setEnabled(false);
                 } else {
-                    new CostCategoryExecutor(this).execute(new RequestHolder<CostCategory>().getAllToList(RequestHolder.SELECTION_PARENT_CATEGORIES));
+                    new CostCategoryExecutor(this).execute(new RequestAdapter<CostCategory>().getAllToList(RequestAdapter.SELECTION_PARENT_CATEGORIES));
                 }
                 break;
             default:

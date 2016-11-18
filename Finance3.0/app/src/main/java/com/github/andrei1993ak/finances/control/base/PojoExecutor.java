@@ -10,17 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class PojoExecutor<Model> extends AsyncTask<Request<Model>, Void, Result> {
-    //
-    private static final int KEY_ADD = 1;
-    private static final int KEY_EDIT = 2;
-    private static final int KEY_DELETE = 3;
-    private static final int KEY_GET = 4;
-    private static final int KEY_GET_ALL = 5;
-    private static final int KEY_DELETE_ALL = 6;
-    private static final int KEY_GET_ALL_TO_LIST = 7;
-    private static final int KEY_GET_ALL_TO_LIST_BY_CATEGORY_ID = 8;
-    private static final int KEY_GET_ALL_TO_LIST_BY_WALLET_ID = 9;
-    private static final int KEY_GET_ALL_TO_LIST_BY_DATES = 10;
 
     private final OnTaskCompleted listener;
     protected Context context;

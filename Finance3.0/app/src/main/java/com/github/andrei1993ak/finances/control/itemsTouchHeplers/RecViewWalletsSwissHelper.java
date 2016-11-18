@@ -8,7 +8,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import com.github.andrei1993ak.finances.control.executors.WalletExecutor;
 import com.github.andrei1993ak.finances.control.viewHolders.WalletsHolder;
 import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
-import com.github.andrei1993ak.finances.control.base.RequestHolder;
+import com.github.andrei1993ak.finances.control.base.RequestAdapter;
 import com.github.andrei1993ak.finances.control.base.Result;
 import com.github.andrei1993ak.finances.model.models.Wallet;
 
@@ -30,8 +30,8 @@ public class RecViewWalletsSwissHelper extends ItemTouchHelper.SimpleCallback im
     @Override
     public void onSwiped(final RecyclerView.ViewHolder viewHolder, final int direction) {
         final long id = ((WalletsHolder) viewHolder).getWalletId();
-        final RequestHolder<Wallet> requestHolder = new RequestHolder<>();
-        new WalletExecutor(this).execute(requestHolder.delete(id));
+        final RequestAdapter<Wallet> requestAdapter = new RequestAdapter<>();
+        new WalletExecutor(this).execute(requestAdapter.delete(id));
     }
 
     @Override

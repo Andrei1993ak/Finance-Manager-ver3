@@ -17,7 +17,7 @@ public class CategoryStartingActivity extends BaseActivity {
     }
 
 
-    public void selectCategory(final View view) {
+    public void onSelectedCategoryViewClick(final View view) {
         switch (view.getId()) {
             case R.id.tvIncome:
                 startActivity(new Intent(this, CategoryIncomeActivity.class));

@@ -8,6 +8,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -20,34 +21,35 @@ import com.github.andrei1993ak.finances.app.addEditActivities.WalletAddActivity;
 import com.github.andrei1993ak.finances.app.addEditActivities.WalletEditActivity;
 import com.github.andrei1993ak.finances.control.adapters.WalletCursorAdapter;
 import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
-import com.github.andrei1993ak.finances.control.base.RequestHolder;
+import com.github.andrei1993ak.finances.control.base.RequestAdapter;
 import com.github.andrei1993ak.finances.control.base.Result;
 import com.github.andrei1993ak.finances.control.executors.WalletExecutor;
 import com.github.andrei1993ak.finances.control.loaders.WalletCursorLoader;
 import com.github.andrei1993ak.finances.model.TableQueryGenerator;
 import com.github.andrei1993ak.finances.model.models.Wallet;
+import com.github.andrei1993ak.finances.util.Constants;
 
 public class WalletActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor>, OnTaskCompleted {
 
-
-    private static final int ADD_WALLET_REQUEST = 1;
-    private static final int EDIT_WALLET_REQUEST = 2;
-
-    public static final int MAIN_LOADER_ID = 0;
-
     private WalletCursorAdapter walletCursorAdapter;
-    private RequestHolder<Wallet> requestHolder;
-    private ListView lvWallets;
+    private RequestAdapter<Wallet> requestAdapter;
+    private MenuInflater inflater;
     private long itemId = -1;
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle(R.string.wallets);
         setContentView(R.layout.standart_activity);
-        requestHolder = new RequestHolder<>();
+        setTitle(R.string.wallets);
+        initFields();
+        inflater = getMenuInflater();
+        requestAdapter = new RequestAdapter<>();
+        getSupportLoaderManager().restartLoader(Constants.MAIN_LOADER_ID, null, this);
+    }
+
+    private void initFields() {
         walletCursorAdapter = new WalletCursorAdapter(this, null);
-        lvWallets = (ListView) findViewById(R.id.standardListView);
+        final ListView lvWallets = (ListView) findViewById(R.id.standardListView);
         lvWallets.setAdapter(walletCursorAdapter);
         lvWallets.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -60,15 +62,14 @@ public class WalletActivity extends BaseActivity implements LoaderManager.Loader
             @Override
             public void onClick(final View view) {
                 final Intent intent = new Intent(WalletActivity.this, WalletAddActivity.class);
-                startActivityForResult(intent, ADD_WALLET_REQUEST);
+                startActivityForResult(intent, Constants.ADD_REQUEST);
             }
         });
-        getSupportLoaderManager().restartLoader(MAIN_LOADER_ID, null, this);
     }
 
     @Override
     public boolean onCreateOptionsMenu(final Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
+        inflater.inflate(R.menu.menu, menu);
         return true;
     }
 
@@ -79,10 +80,10 @@ public class WalletActivity extends BaseActivity implements LoaderManager.Loader
             if (id == R.id.action_edit) {
                 final Intent intent = new Intent(this, WalletEditActivity.class);
                 intent.putExtra(Wallet.ID, itemId);
-                startActivityForResult(intent, EDIT_WALLET_REQUEST);
+                startActivityForResult(intent, Constants.EDIT_REQUEST);
                 return true;
             } else {
-                new WalletExecutor(this).execute(requestHolder.delete(itemId));
+                new WalletExecutor(this).execute(requestAdapter.delete(itemId));
                 return true;
             }
         }
@@ -93,13 +94,13 @@ public class WalletActivity extends BaseActivity implements LoaderManager.Loader
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
-                case ADD_WALLET_REQUEST:
+                case Constants.ADD_REQUEST:
                     final Wallet newWallet = data.getParcelableExtra(TableQueryGenerator.getTableName(Wallet.class));
-                    new WalletExecutor(this).execute(requestHolder.add(newWallet));
+                    new WalletExecutor(this).execute(requestAdapter.add(newWallet));
                     break;
-                case EDIT_WALLET_REQUEST:
+                case Constants.EDIT_REQUEST:
                     final Wallet editWallet = data.getParcelableExtra(TableQueryGenerator.getTableName(Wallet.class));
-                    new WalletExecutor(this).execute(requestHolder.edit(editWallet));
+                    new WalletExecutor(this).execute(requestAdapter.edit(editWallet));
                     break;
                 default:
                     break;
@@ -126,23 +127,24 @@ public class WalletActivity extends BaseActivity implements LoaderManager.Loader
     @Override
     public void onTaskCompleted(final Result result) {
         final int id = result.getId();
+        final Loader<Wallet> loader = getSupportLoaderManager().getLoader(Constants.MAIN_LOADER_ID);
         switch (id) {
             case WalletExecutor.KEY_RESULT_ADD:
-                if (getSupportLoaderManager().getLoader(MAIN_LOADER_ID) != null) {
-                    getSupportLoaderManager().getLoader(MAIN_LOADER_ID).forceLoad();
+                if (loader != null) {
+                    loader.forceLoad();
                 }
                 break;
             case WalletExecutor.KEY_RESULT_EDIT:
-                if (getSupportLoaderManager().getLoader(MAIN_LOADER_ID) != null) {
-                    getSupportLoaderManager().getLoader(MAIN_LOADER_ID).forceLoad();
+                if (loader != null) {
+                    loader.forceLoad();
                 }
                 break;
             case WalletExecutor.KEY_RESULT_DELETE:
                 if ((Integer) result.getObject() == -1) {
                     Toast.makeText(this, R.string.unpossibleToDeleteWallet, Toast.LENGTH_LONG).show();
                 } else {
-                    if (getSupportLoaderManager().getLoader(MAIN_LOADER_ID) != null) {
-                        getSupportLoaderManager().getLoader(MAIN_LOADER_ID).forceLoad();
+                    if (loader != null) {
+                        loader.forceLoad();
                     }
                 }
                 break;

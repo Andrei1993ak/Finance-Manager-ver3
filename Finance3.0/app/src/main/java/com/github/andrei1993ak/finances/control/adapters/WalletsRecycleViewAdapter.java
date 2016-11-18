@@ -16,18 +16,17 @@ import java.util.Locale;
 
 public class WalletsRecycleViewAdapter extends RecyclerView.Adapter<WalletsHolder> {
     private final Cursor cursor;
-    private final Context context;
+    private final LayoutInflater layoutInflater;
 
-    //TODO wallet
     public WalletsRecycleViewAdapter(final Cursor cursor, final Context context) {
         this.cursor = cursor;
-        this.context = context;
+        layoutInflater = LayoutInflater.from(context);
+
     }
 
     @Override
     public WalletsHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
-        //TODO move layoutInflater to member
-        final View view = LayoutInflater.from(context).inflate(R.layout.wallet_listitem, null);
+        final View view = layoutInflater.inflate(R.layout.wallet_listitem, null);
         return new WalletsHolder(view);
     }
 

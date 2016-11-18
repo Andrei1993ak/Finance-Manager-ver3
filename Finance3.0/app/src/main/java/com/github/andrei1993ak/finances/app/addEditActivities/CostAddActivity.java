@@ -25,7 +25,7 @@ import android.widget.TextView;
 import com.github.andrei1993ak.finances.R;
 import com.github.andrei1993ak.finances.app.BaseActivity;
 import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
-import com.github.andrei1993ak.finances.control.base.RequestHolder;
+import com.github.andrei1993ak.finances.control.base.RequestAdapter;
 import com.github.andrei1993ak.finances.control.base.Result;
 import com.github.andrei1993ak.finances.control.executors.CostCategoryExecutor;
 import com.github.andrei1993ak.finances.control.executors.WalletExecutor;
@@ -68,7 +68,22 @@ public class CostAddActivity extends BaseActivity implements OnTaskCompleted {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cost_add_edit_activity);
         setTitle(R.string.newCost);
-        findViewsBuId();
+        initFields();
+        new WalletExecutor(this).execute(new RequestAdapter<Wallet>().getAllToList(RequestAdapter.SELECTION_ALL));
+        new CostCategoryExecutor(this).execute(new RequestAdapter<CostCategory>().getAllToList(RequestAdapter.SELECTION_PARENT_CATEGORIES));
+    }
+
+    private void initFields() {
+        newCostName = (EditText) findViewById(R.id.cost_name);
+        newCostAmount = (EditText) findViewById(R.id.cost_amount);
+        newCostDate = (TextView) findViewById(R.id.cost_date);
+        newCostWallets = (AppCompatSpinner) findViewById(R.id.cost_wallet);
+        newCostCategory = (AppCompatSpinner) findViewById(R.id.cost_category);
+        newCostSubCategory = (AppCompatSpinner) findViewById(R.id.cost_subCategory);
+        final PackageManager pm = getApplicationContext().getPackageManager();
+        if (!pm.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
+            findViewById(R.id.add_edit_photo_button).setVisibility(View.INVISIBLE);
+        }
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_cost_add_edit);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,12 +91,10 @@ public class CostAddActivity extends BaseActivity implements OnTaskCompleted {
                 addNewCost();
             }
         });
-        new WalletExecutor(this).execute(new RequestHolder<Wallet>().getAllToList(RequestHolder.SELECTION_ALL));
-        new CostCategoryExecutor(this).execute(new RequestHolder<CostCategory>().getAllToList(RequestHolder.SELECTION_PARENT_CATEGORIES));
-        setDatePickerDialog();
+        initDatePickerDialog();
     }
 
-    private void setDatePickerDialog() {
+    private void initDatePickerDialog() {
         dateFormatter = new SimpleDateFormat(getResources().getString(R.string.dateFormat), Locale.US);
         final Calendar newCalendar = Calendar.getInstance();
         final DatePickerDialog dialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
@@ -99,19 +112,6 @@ public class CostAddActivity extends BaseActivity implements OnTaskCompleted {
                 dialog.show();
             }
         });
-    }
-
-    private void findViewsBuId() {
-        newCostName = (EditText) findViewById(R.id.cost_name);
-        newCostAmount = (EditText) findViewById(R.id.cost_amount);
-        newCostDate = (TextView) findViewById(R.id.cost_date);
-        newCostWallets = (AppCompatSpinner) findViewById(R.id.cost_wallet);
-        newCostCategory = (AppCompatSpinner) findViewById(R.id.cost_category);
-        newCostSubCategory = (AppCompatSpinner) findViewById(R.id.cost_subCategory);
-        final PackageManager pm = getApplicationContext().getPackageManager();
-        if (!pm.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
-            findViewById(R.id.add_edit_photo_button).setVisibility(View.INVISIBLE);
-        }
     }
 
     public void addNewCost() {
@@ -179,14 +179,14 @@ public class CostAddActivity extends BaseActivity implements OnTaskCompleted {
         }
     }
 
-    public void addPhoto(final View view) {
+    public void addEditPhoto(final View view) {
         final Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
         final Context context = this;
-        final File imagePath = new File(context.getFilesDir(), "public");
+        final File imagePath = new File(context.getFilesDir(), Constants.SHARE_FOLDER);
         if (!imagePath.exists()) {
             imagePath.mkdirs();
         }
-        final File file = new File(imagePath, "tmp.jpg");
+        final File file = new File(imagePath, Constants.TEMP_PHOTO_NAME);
         final Uri outputFileUri = FileProvider.getUriForFile(context, Constants.AUTHORITY, file);
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
         startActivityForResult(cameraIntent, CAMERA_REQUEST);
@@ -219,9 +219,9 @@ public class CostAddActivity extends BaseActivity implements OnTaskCompleted {
                 newCostCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(final AdapterView<?> parent, final View view, final int position, final long id) {
-                        final RequestHolder<CostCategory> categoryRequestHolder = new RequestHolder<>();
+                        final RequestAdapter<CostCategory> categoryRequestAdapter = new RequestAdapter<>();
                         new CostCategoryExecutor(CostAddActivity.this).execute(
-                                categoryRequestHolder.getAllToListByCategory(categoriesList.get(position).getId()));
+                                categoryRequestAdapter.getAllToListByCategory(categoriesList.get(position).getId()));
                     }
 
                     @Override
@@ -253,11 +253,11 @@ public class CostAddActivity extends BaseActivity implements OnTaskCompleted {
 
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
-            final File imagePath = new File(this.getFilesDir(), "public");
+            final File imagePath = new File(this.getFilesDir(), Constants.SHARE_FOLDER);
             if (!imagePath.exists()) {
                 imagePath.mkdirs();
             }
-            final File file = new File(imagePath, "tmp.jpg");
+            final File file = new File(imagePath, Constants.TEMP_PHOTO_NAME);
             photo = BitmapFactory.decodeFile(file.getPath());
             final ImageView view = (ImageView) findViewById(R.id.cost_photo);
             view.setImageBitmap(photo);

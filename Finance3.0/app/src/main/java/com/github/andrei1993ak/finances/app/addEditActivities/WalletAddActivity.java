@@ -13,7 +13,7 @@ import android.widget.EditText;
 import com.github.andrei1993ak.finances.R;
 import com.github.andrei1993ak.finances.app.BaseActivity;
 import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
-import com.github.andrei1993ak.finances.control.base.RequestHolder;
+import com.github.andrei1993ak.finances.control.base.RequestAdapter;
 import com.github.andrei1993ak.finances.control.base.Result;
 import com.github.andrei1993ak.finances.control.executors.CurrencyExecutor;
 import com.github.andrei1993ak.finances.model.TableQueryGenerator;
@@ -32,9 +32,16 @@ public class WalletAddActivity extends BaseActivity implements OnTaskCompleted {
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle(R.string.newWallet);
         setContentView(R.layout.wallet_add_activity);
-        findViewsById();
+        setTitle(R.string.newWallet);
+        initFields();
+        new CurrencyExecutor(this).execute(new RequestAdapter<Currency>().getAllToList(RequestAdapter.SELECTION_ALL));
+    }
+
+    private void initFields() {
+        spinnerCurrencies = (AppCompatSpinner) findViewById(R.id.spinnerCurrencies);
+        newWalletName = (EditText) findViewById(R.id.new_wallet_name);
+        newWalletAmount = (EditText) findViewById(R.id.new_wallet_amount);
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_pur_add);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -42,13 +49,6 @@ public class WalletAddActivity extends BaseActivity implements OnTaskCompleted {
                 addNewWallet();
             }
         });
-        new CurrencyExecutor(this).execute(new RequestHolder<Currency>().getAllToList(RequestHolder.SELECTION_ALL));
-    }
-
-    private void findViewsById() {
-        spinnerCurrencies = (AppCompatSpinner) findViewById(R.id.spinnerCurrencies);
-        newWalletName = (EditText) findViewById(R.id.new_wallet_name);
-        newWalletAmount = (EditText) findViewById(R.id.new_wallet_amount);
     }
 
     public void addNewWallet() {
