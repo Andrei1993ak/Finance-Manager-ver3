@@ -21,27 +21,27 @@ public class WalletExecutor extends PojoExecutor<Wallet> {
     public static final int KEY_RESULT_DELETE_ALL = 306;
     public static final int KEY_RESULT_GET_ALL_TO_LIST= 307;
 
-    public WalletExecutor(OnTaskCompleted listener) {
+    public WalletExecutor(final OnTaskCompleted listener) {
         super(listener);
     }
 
     @Override
-    public Result<Wallet> getPojo(long id) {
+    public Result<Wallet> getPojo(final long id) {
         return new Result<>(KEY_RESULT_GET, DBHelperWallet.getInstance().get(id));
     }
 
     @Override
-    public Result<Long> addPojo(Wallet wallet) {
+    public Result<Long> addPojo(final Wallet wallet) {
         return new Result<>(KEY_RESULT_ADD, DBHelperWallet.getInstance().add(wallet));
     }
 
     @Override
-    public Result<Integer> deletePojo(long id) {
+    public Result<Integer> deletePojo(final long id) {
         return new Result<>(KEY_RESULT_DELETE, DBHelperWallet.getInstance().delete(id));
     }
 
     @Override
-    public Result<Integer> updatePojo(Wallet wallet) {
+    public Result<Integer> updatePojo(final Wallet wallet) {
         return new Result<>(KEY_RESULT_EDIT, DBHelperWallet.getInstance().update(wallet));
     }
 
@@ -56,7 +56,7 @@ public class WalletExecutor extends PojoExecutor<Wallet> {
     }
 
     @Override
-    public Result<List<Wallet>> getAllToList(int selection) {
+    public Result<List<Wallet>> getAllToList(final int selection) {
         return new Result<>(KEY_RESULT_GET_ALL_TO_LIST, DBHelperWallet.getInstance().getAllToList());
     }
 }

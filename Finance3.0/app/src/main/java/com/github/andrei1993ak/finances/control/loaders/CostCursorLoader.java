@@ -8,9 +8,9 @@ import com.github.andrei1993ak.finances.model.dbHelpers.DBHelperCost;
 
 public class CostCursorLoader extends CursorLoader {
 
-    private DBHelperCost dbHelperCost;
+    private final DBHelperCost dbHelperCost;
 
-    public CostCursorLoader(Context context) {
+    public CostCursorLoader(final Context context) {
         super(context);
         this.dbHelperCost = DBHelperCost.getInstance();
     }

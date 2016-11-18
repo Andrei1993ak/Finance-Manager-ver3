@@ -8,10 +8,10 @@ import com.github.andrei1993ak.finances.model.dbHelpers.DBHelperCategoryCost;
 
 public class CostCategoryCursorLoader extends CursorLoader {
 
-    private DBHelperCategoryCost helper;
-    private long id;
+    private final DBHelperCategoryCost helper;
+    private final long id;
 
-    public CostCategoryCursorLoader(Context context, long id) {
+    public CostCategoryCursorLoader(final Context context, final long id) {
         super(context);
         helper = DBHelperCategoryCost.getInstance();
         this.id = id;

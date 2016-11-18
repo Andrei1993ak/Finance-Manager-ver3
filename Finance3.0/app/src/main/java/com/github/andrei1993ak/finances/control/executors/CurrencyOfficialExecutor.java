@@ -15,27 +15,27 @@ public class CurrencyOfficialExecutor extends PojoExecutor<CurrencyOfficial> {
 
     public static final int KEY_RESULT_GET = 204;
 
-    public CurrencyOfficialExecutor(OnTaskCompleted listener) {
+    public CurrencyOfficialExecutor(final OnTaskCompleted listener) {
         super(listener);
     }
 
     @Override
-    public Result<CurrencyOfficial> getPojo(long id) {
+    public Result<CurrencyOfficial> getPojo(final long id) {
         return new Result<>(KEY_RESULT_GET, DBHelperCurrencyOfficial.getInstance().get(id));
     }
 
     @Override
-    public Result<Long> addPojo(CurrencyOfficial currencyOfficial) {
+    public Result<Long> addPojo(final CurrencyOfficial currencyOfficial) {
         return null;
     }
 
     @Override
-    public Result<Integer> deletePojo(long id) {
+    public Result<Integer> deletePojo(final long id) {
         return null;
     }
 
     @Override
-    public Result<Integer> updatePojo(CurrencyOfficial currencyOfficial) {
+    public Result<Integer> updatePojo(final CurrencyOfficial currencyOfficial) {
         return null;
     }
 
@@ -50,7 +50,7 @@ public class CurrencyOfficialExecutor extends PojoExecutor<CurrencyOfficial> {
     }
 
     @Override
-    public Result<List<CurrencyOfficial>> getAllToList(int selection) {
+    public Result<List<CurrencyOfficial>> getAllToList(final int selection) {
         return null;
     }
 }

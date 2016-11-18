@@ -4,8 +4,10 @@ import android.database.Cursor;
 
 import com.github.andrei1993ak.finances.control.base.PojoExecutor;
 import com.github.andrei1993ak.finances.control.base.Result;
+import com.github.andrei1993ak.finances.model.DBHelper;
 import com.github.andrei1993ak.finances.model.dbHelpers.DBHelperCost;
 import com.github.andrei1993ak.finances.util.ContextHolder;
+import com.github.andrei1993ak.finances.util.universalLoader.ImageNameGenerator;
 import com.github.andrei1993ak.finances.util.universalLoader.loaders.BitmapLoader;
 import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
 import com.github.andrei1993ak.finances.model.models.Cost;
@@ -28,9 +30,6 @@ public class CostExecutor extends PojoExecutor<Cost> {
     public static final int KEY_RESULT_GET_ALL_TO_LIST_BY_WALLET_ID = 709;
     public static final int KEY_RESULT_GET_ALL_TO_LIST_BY_DATES = 710;
 
-
-    public static final String INTERNAL_PATH = "/data/data/com.gmail.a93ak.andrei19.finance30/files/images/";
-
     public CostExecutor(final OnTaskCompleted listener) {
         super(listener);
     }
@@ -49,12 +48,13 @@ public class CostExecutor extends PojoExecutor<Cost> {
     public Result<Integer> deletePojo(final long id) {
 
         final DBHelperCost costDbHelper = DBHelperCost.getInstance();
+        final String path = ImageNameGenerator.getImagePath(DBHelper.getInstance(ContextHolder.getInstance().getContext()).getNextId());
         if (costDbHelper.get(id).getPhoto() == 1) {
-            final File file = new File(INTERNAL_PATH + "/" + String.valueOf(id) + ".jpg");
+            final File file = new File(path);
             try {
                 BitmapLoader.getInstance(ContextHolder.getInstance().getContext()).clearCashes(file.toURI().toURL().toString());
                 file.delete();
-            } catch (MalformedURLException e) {
+            } catch (final MalformedURLException e) {
                 e.printStackTrace();
             }
         }
@@ -63,10 +63,10 @@ public class CostExecutor extends PojoExecutor<Cost> {
 
     @Override
     public Result<Integer> updatePojo(final Cost cost) {
-        try {
-            final File file = new File(INTERNAL_PATH + "/" + String.valueOf(cost.getId()) + ".jpg");
+        final String path = ImageNameGenerator.getImagePath(DBHelper.getInstance(ContextHolder.getInstance().getContext()).getNextId());        try {
+            final File file = new File(path);
             BitmapLoader.getInstance(ContextHolder.getInstance().getContext()).clearCashes(file.toURI().toURL().toString());
-        } catch (MalformedURLException e) {
+        } catch (final MalformedURLException e) {
             e.printStackTrace();
         }
         return new Result<>(KEY_RESULT_EDIT, DBHelperCost.getInstance().update(cost));
@@ -83,22 +83,22 @@ public class CostExecutor extends PojoExecutor<Cost> {
     }
 
     @Override
-    public Result<List<Cost>> getAllToList(int selection) {
+    public Result<List<Cost>> getAllToList(final int selection) {
         return new Result<>(KEY_RESULT_DELETE_ALL, DBHelperCost.getInstance().getAllToList());
     }
 
     @Override
-    protected Result<List<Cost>> getAllToListByDates(ArrayList<Long> dates) {
+    protected Result<List<Cost>> getAllToListByDates(final ArrayList<Long> dates) {
         return new Result<>(KEY_RESULT_GET_ALL_TO_LIST_BY_DATES, DBHelperCost.getInstance().getAllToListByDates(dates.get(0), dates.get(1)));
     }
 
     @Override
-    protected Result<List<Cost>> getAllToListByWalletId(Long walletId) {
+    protected Result<List<Cost>> getAllToListByWalletId(final Long walletId) {
         return new Result<>(KEY_RESULT_GET_ALL_TO_LIST_BY_WALLET_ID, DBHelperCost.getInstance().getAllToListByWalletId(walletId));
     }
 
     @Override
-    protected Result<List<Cost>> getAllToListByCategoryId(Long id) {
+    protected Result<List<Cost>> getAllToListByCategoryId(final Long id) {
         return new Result<>(KEY_RESULT_GET_ALL_TO_LIST_BY_CATEGORY_ID, DBHelperCost.getInstance().getAllToListByCategoryId(id));
     }
 }

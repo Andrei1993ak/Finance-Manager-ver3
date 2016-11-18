@@ -8,9 +8,9 @@ import com.github.andrei1993ak.finances.model.dbHelpers.DBHelperWallet;
 
 public class WalletCursorLoader extends CursorLoader{
 //
-    private DBHelperWallet dbHelperWallet;
+    private final DBHelperWallet dbHelperWallet;
 
-    public WalletCursorLoader(Context context) {
+    public WalletCursorLoader(final Context context) {
         super(context);
         this.dbHelperWallet = DBHelperWallet.getInstance();
     }

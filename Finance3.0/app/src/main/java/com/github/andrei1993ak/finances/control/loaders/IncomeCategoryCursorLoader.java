@@ -8,10 +8,10 @@ import com.github.andrei1993ak.finances.model.dbHelpers.DBHelperCategoryIncome;
 
 public class IncomeCategoryCursorLoader extends CursorLoader {
 
-    private DBHelperCategoryIncome helper;
-    private long id;
+    private final DBHelperCategoryIncome helper;
+    private final long id;
 
-    public IncomeCategoryCursorLoader(Context context, long id) {
+    public IncomeCategoryCursorLoader(final Context context, final long id) {
         super(context);
         helper = DBHelperCategoryIncome.getInstance();
         this.id = id;

@@ -8,9 +8,9 @@ import com.github.andrei1993ak.finances.model.dbHelpers.DBHelperIncome;
 
 public class IncomeCursorLoader extends CursorLoader {
 
-    private DBHelperIncome dbHelperIncome;
+    private final DBHelperIncome dbHelperIncome;
 
-    public IncomeCursorLoader(Context context) {
+    public IncomeCursorLoader(final Context context) {
         super(context);
         this.dbHelperIncome = DBHelperIncome.getInstance();
     }

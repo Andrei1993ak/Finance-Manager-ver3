@@ -24,27 +24,27 @@ public class IncomeExecutor extends PojoExecutor<Income> {
     public static final int KEY_RESULT_GET_ALL_TO_LIST_BY_WALLET_ID = 609;
     public static final int KEY_RESULT_GET_ALL_TO_LIST_BY_DATES = 610;
 
-    public IncomeExecutor(OnTaskCompleted listener) {
+    public IncomeExecutor(final OnTaskCompleted listener) {
         super(listener);
     }
 
     @Override
-    public Result<Income> getPojo(long id) {
+    public Result<Income> getPojo(final long id) {
         return new Result<>(KEY_RESULT_GET, DBHelperIncome.getInstance().get(id));
     }
 
     @Override
-    public Result<Long> addPojo(Income income) {
+    public Result<Long> addPojo(final Income income) {
         return new Result<>(KEY_RESULT_ADD, DBHelperIncome.getInstance().add(income));
     }
 
     @Override
-    public Result<Integer> deletePojo(long id) {
+    public Result<Integer> deletePojo(final long id) {
         return new Result<>(KEY_RESULT_DELETE, DBHelperIncome.getInstance().delete(id));
     }
 
     @Override
-    public Result<Integer> updatePojo(Income income) {
+    public Result<Integer> updatePojo(final Income income) {
         return new Result<>(KEY_RESULT_EDIT, DBHelperIncome.getInstance().update(income));
     }
 
@@ -59,22 +59,22 @@ public class IncomeExecutor extends PojoExecutor<Income> {
     }
 
     @Override
-    public Result<List<Income>> getAllToList(int selection) {
+    public Result<List<Income>> getAllToList(final int selection) {
         return new Result<>(KEY_RESULT_DELETE_ALL, DBHelperIncome.getInstance().getAllToList());
     }
 
     @Override
-    protected Result<List<Income>> getAllToListByDates(ArrayList<Long> dates) {
+    protected Result<List<Income>> getAllToListByDates(final ArrayList<Long> dates) {
         return new Result<>(KEY_RESULT_GET_ALL_TO_LIST_BY_DATES,DBHelperIncome.getInstance().getAllToListByDates(dates.get(0), dates.get(1)));
     }
 
     @Override
-    protected Result<List<Income>> getAllToListByWalletId(Long walletId) {
+    protected Result<List<Income>> getAllToListByWalletId(final Long walletId) {
         return new Result<>(KEY_RESULT_GET_ALL_TO_LIST_BY_WALLET_ID,DBHelperIncome.getInstance().getAllToListByWalletId(walletId));
     }
 
     @Override
-    protected Result<List<Income>> getAllToListByCategoryId(Long id) {
+    protected Result<List<Income>> getAllToListByCategoryId(final Long id) {
         return new Result<>(KEY_RESULT_GET_ALL_TO_LIST_BY_CATEGORY_ID,DBHelperIncome.getInstance().getAllToListByCategoryId(id));
     }
 }

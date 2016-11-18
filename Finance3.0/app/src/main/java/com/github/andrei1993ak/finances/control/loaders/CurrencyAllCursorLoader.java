@@ -8,9 +8,9 @@ import com.github.andrei1993ak.finances.model.dbHelpers.DBHelperCurrencyOfficial
 
 public class CurrencyAllCursorLoader extends CursorLoader {
 
-    private DBHelperCurrencyOfficial dbHelperCurrency;
+    private final DBHelperCurrencyOfficial dbHelperCurrency;
 
-    public CurrencyAllCursorLoader(Context context) {
+    public CurrencyAllCursorLoader(final Context context) {
         super(context);
         dbHelperCurrency = DBHelperCurrencyOfficial.getInstance();
     }

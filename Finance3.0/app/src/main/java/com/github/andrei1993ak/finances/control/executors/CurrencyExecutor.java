@@ -21,27 +21,27 @@ public class CurrencyExecutor extends PojoExecutor<Currency> {
     public static final int KEY_RESULT_DELETE_ALL = 106;
     public static final int KEY_RESULT_GET_ALL_TO_LIST = 107;
 
-    public CurrencyExecutor(OnTaskCompleted listener) {
+    public CurrencyExecutor(final OnTaskCompleted listener) {
         super(listener);
     }
 
     @Override
-    public Result<Currency> getPojo(long id) {
+    public Result<Currency> getPojo(final long id) {
         return new Result<>(KEY_RESULT_GET, DBHelperCurrency.getInstance().get(id));
     }
 
     @Override
-    public Result<Long> addPojo(Currency currency) {
+    public Result<Long> addPojo(final Currency currency) {
         return new Result<>(KEY_RESULT_ADD, DBHelperCurrency.getInstance().add(currency));
     }
 
     @Override
-    public Result<Integer> deletePojo(long id) {
+    public Result<Integer> deletePojo(final long id) {
         return new Result<>(KEY_RESULT_DELETE, DBHelperCurrency.getInstance().delete(id));
     }
 
     @Override
-    public Result<Integer> updatePojo(Currency currency) {
+    public Result<Integer> updatePojo(final Currency currency) {
         return new Result<>(KEY_RESULT_EDIT, DBHelperCurrency.getInstance().update(currency));
     }
 
@@ -56,7 +56,7 @@ public class CurrencyExecutor extends PojoExecutor<Currency> {
     }
 
     @Override
-    public Result<List<Currency>> getAllToList(int selection) {
+    public Result<List<Currency>> getAllToList(final int selection) {
         return new Result<>(KEY_RESULT_GET_ALL_TO_LIST, DBHelperCurrency.getInstance().getAllToList());
     }
 }

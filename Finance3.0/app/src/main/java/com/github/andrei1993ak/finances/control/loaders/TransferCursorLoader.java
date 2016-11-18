@@ -11,9 +11,9 @@ import com.github.andrei1993ak.finances.util.ContextHolder;
 
 public class TransferCursorLoader extends CursorLoader {
 
-    private DBHelperTransfer dbHelperTransfer;
+    private final DBHelperTransfer dbHelperTransfer;
 
-    public TransferCursorLoader(Context context) {
+    public TransferCursorLoader(final Context context) {
         super(context);
         this.dbHelperTransfer = ((DBHelperTransfer)((App) ContextHolder.getInstance().getContext()).getDbHelper(Transfer.class));
     }

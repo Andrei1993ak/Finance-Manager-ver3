@@ -22,29 +22,29 @@ public class IncomeCategoryExecutor extends PojoExecutor<IncomeCategory> {
     public static final int KEY_RESULT_GET_ALL_TO_LIST = 407;
     public static final int KEY_RESULT_GET_ALL_TO_LIST_BY_PARENT_ID = 408;
 
-    private DBHelperCategoryIncome dbHelper = DBHelperCategoryIncome.getInstance();
+    private final DBHelperCategoryIncome dbHelper = DBHelperCategoryIncome.getInstance();
 
-    public IncomeCategoryExecutor(OnTaskCompleted listener) {
+    public IncomeCategoryExecutor(final OnTaskCompleted listener) {
         super(listener);
     }
 
     @Override
-    public Result<IncomeCategory> getPojo(long id) {
+    public Result<IncomeCategory> getPojo(final long id) {
         return new Result<>(KEY_RESULT_GET, dbHelper.get(id));
     }
 
     @Override
-    public Result<Long> addPojo(IncomeCategory incomeCategory) {
+    public Result<Long> addPojo(final IncomeCategory incomeCategory) {
         return new Result<>(KEY_RESULT_ADD, dbHelper.add(incomeCategory));
     }
 
     @Override
-    public Result<Integer> deletePojo(long id) {
+    public Result<Integer> deletePojo(final long id) {
         return new Result<>(KEY_RESULT_DELETE, dbHelper.delete(id));
     }
 
     @Override
-    public Result<Integer> updatePojo(IncomeCategory incomeCategory) {
+    public Result<Integer> updatePojo(final IncomeCategory incomeCategory) {
         return new Result<>(KEY_RESULT_EDIT, dbHelper.update(incomeCategory));
     }
 
@@ -59,7 +59,7 @@ public class IncomeCategoryExecutor extends PojoExecutor<IncomeCategory> {
     }
 
     @Override
-    public Result<List<IncomeCategory>> getAllToList(int selection) {
+    public Result<List<IncomeCategory>> getAllToList(final int selection) {
         if (selection == 0) {
 //            all categories
             return new Result<>(KEY_RESULT_GET_ALL_TO_LIST, dbHelper.getAllToList());
@@ -71,7 +71,7 @@ public class IncomeCategoryExecutor extends PojoExecutor<IncomeCategory> {
     }
 
     @Override
-    protected Result<List<IncomeCategory>> getAllToListByCategoryId(Long id) {
+    protected Result<List<IncomeCategory>> getAllToListByCategoryId(final Long id) {
         return new Result<>(KEY_RESULT_GET_ALL_TO_LIST_BY_PARENT_ID,dbHelper.getAllToListByParentId(id));
     }
 }
