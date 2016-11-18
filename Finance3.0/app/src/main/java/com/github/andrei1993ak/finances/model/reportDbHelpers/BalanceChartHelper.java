@@ -8,6 +8,7 @@ import com.github.andrei1993ak.finances.model.dbHelpers.DBHelperTransfer;
 import com.github.andrei1993ak.finances.model.models.Cost;
 import com.github.andrei1993ak.finances.model.models.Income;
 import com.github.andrei1993ak.finances.model.models.Transfer;
+import com.github.andrei1993ak.finances.util.ContextHolder;
 
 import org.achartengine.model.TimeSeries;
 
@@ -29,7 +30,7 @@ public class BalanceChartHelper {
     public TimeSeries getSeries(final long walletId) {
         final List<Income> incomesList = DBHelperIncome.getInstance().getAllToListByWalletId(walletId);
         final List<Cost> costsList = DBHelperCost.getInstance().getAllToListByWalletId(walletId);
-        final List<Transfer> transferList = ((DBHelperTransfer) App.getDbHelper(Transfer.class)).getAllToListByWalletId(walletId);
+        final List<Transfer> transferList = ((DBHelperTransfer)((App) ContextHolder.getInstance().getContext()).getDbHelper(Transfer.class)).getAllToListByWalletId(walletId);
 
         final HashMap<Date, Double> operations = new HashMap<>();
 

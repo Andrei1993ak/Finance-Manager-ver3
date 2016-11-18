@@ -12,7 +12,7 @@ import com.github.andrei1993ak.finances.util.ContextHolder;
 
 public class App extends Application {
 
-    private static DBHelperTransfer dbHelperTransfer = null;
+    private  DBHelperTransfer dbHelperTransfer = null;
 
 
     @Override
@@ -22,7 +22,7 @@ public class App extends Application {
     }
 
     @Nullable
-    public static DBHelperForModel getDbHelper(final Class<? extends TableClass> clazz) {
+    public  DBHelperForModel getDbHelper(final Class<? extends TableClass> clazz) {
         if (clazz.getClass().isAssignableFrom(Transfer.class.getClass())) {
             if (dbHelperTransfer == null) {
                 dbHelperTransfer = new DBHelperTransfer();
