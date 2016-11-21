@@ -8,6 +8,7 @@
     <dimen name="table_indent">10dp</dimen>
     <dimen name="table_text_size">16sp</dimen>
     <dimen name="table_padding_left">12dp</dimen>
+    <dimen name="drawable_padding">8dp</dimen>
 
 </resources>
 

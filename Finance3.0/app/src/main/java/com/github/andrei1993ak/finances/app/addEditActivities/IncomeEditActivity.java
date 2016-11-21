@@ -26,6 +26,7 @@ import com.github.andrei1993ak.finances.model.TableQueryGenerator;
 import com.github.andrei1993ak.finances.model.models.Income;
 import com.github.andrei1993ak.finances.model.models.IncomeCategory;
 import com.github.andrei1993ak.finances.model.models.Wallet;
+import com.github.andrei1993ak.finances.util.Constants;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -55,17 +56,17 @@ public class IncomeEditActivity extends BaseActivity implements OnTaskCompleted 
         setContentView(R.layout.income_add_edit_activity);
         setTitle(R.string.editing);
         initFields();
-        incomeId = getIntent().getLongExtra(Income.ID, -1);
         new IncomeExecutor(this).execute(new RequestAdapter<Income>().get(incomeId));
     }
 
     private void initFields() {
-        editIncomeName = (EditText) findViewById(R.id.income_name);
-        editIncomeAmount = (EditText) findViewById(R.id.income_amount);
-        editIncomeDate = (TextView) findViewById(R.id.income_date);
-        editIncomeWallet = (AppCompatSpinner) findViewById(R.id.income_wallet);
-        editIncomeCategory = (AppCompatSpinner) findViewById(R.id.income_category);
-        editIncomeSubCategory = (AppCompatSpinner) findViewById(R.id.income_subCategory);
+        this.incomeId = getIntent().getLongExtra(Income.ID, -1);
+        this.editIncomeName = (EditText) findViewById(R.id.income_name);
+        this.editIncomeAmount = (EditText) findViewById(R.id.income_amount);
+        this.editIncomeDate = (TextView) findViewById(R.id.income_date);
+        this.editIncomeWallet = (AppCompatSpinner) findViewById(R.id.income_wallet);
+        this.editIncomeCategory = (AppCompatSpinner) findViewById(R.id.income_category);
+        this.editIncomeSubCategory = (AppCompatSpinner) findViewById(R.id.income_subCategory);
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_income_add_edit);
         fab.setImageResource(android.R.drawable.ic_menu_edit);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -78,7 +79,7 @@ public class IncomeEditActivity extends BaseActivity implements OnTaskCompleted 
     }
 
     private void setDatePickerDialog() {
-        dateFormatter = new SimpleDateFormat(getResources().getString(R.string.dateFormat), Locale.US);
+        this.dateFormatter = new SimpleDateFormat(Constants.MAIN_DATE_FORMAT, Locale.getDefault());
         final Calendar newCalendar = Calendar.getInstance();
         final DatePickerDialog dialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override

@@ -11,13 +11,13 @@ import com.github.andrei1993ak.finances.model.annotations.types.DBInteger;
 public class Cost extends TableClass implements Parcelable {
 
     @DBInteger
-    public static final String WALLET_ID = "purse_id";
+    public static final String WALLET_ID = "walletId";
 
     @DBDouble
     public static final String AMOUNT = "amount";
 
     @DBInteger
-    public static final String CATEGORY_ID = "category_id";
+    public static final String CATEGORY_ID = "categoryId";
 
     @DBInteger
     public static final String DATE = "date";

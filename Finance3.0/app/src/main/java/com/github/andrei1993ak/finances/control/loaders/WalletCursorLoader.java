@@ -4,7 +4,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.support.v4.content.CursorLoader;
 
+import com.github.andrei1993ak.finances.App;
 import com.github.andrei1993ak.finances.model.dbHelpers.DBHelperWallet;
+import com.github.andrei1993ak.finances.model.models.Wallet;
+import com.github.andrei1993ak.finances.util.ContextHolder;
 
 public class WalletCursorLoader extends CursorLoader{
 //
@@ -12,7 +15,7 @@ public class WalletCursorLoader extends CursorLoader{
 
     public WalletCursorLoader(final Context context) {
         super(context);
-        this.dbHelperWallet = DBHelperWallet.getInstance();
+        this.dbHelperWallet = ((DBHelperWallet) ((App) ContextHolder.getInstance().getContext()).getDbHelper(Wallet.class));
     }
 
     @Override

@@ -14,6 +14,7 @@ import com.github.andrei1993ak.finances.control.adapters.PieChartItemAdapter;
 import com.github.andrei1993ak.finances.control.loaders.PieReportLoader;
 import com.github.andrei1993ak.finances.model.models.Income;
 import com.github.andrei1993ak.finances.model.reportModels.PieChartItem;
+import com.github.andrei1993ak.finances.util.Constants;
 
 import org.achartengine.ChartFactory;
 import org.achartengine.GraphicalView;
@@ -32,7 +33,7 @@ public class PieChartActivityNext extends BaseActivity implements LoaderManager.
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.report_income_pie_next);
-        if (getIntent().getBooleanExtra(PieChartItem.TYPE, false)) {
+        if (getIntent().getBooleanExtra(Constants.PIE_CHART_TYPE, false)) {
             setTitle(R.string.incomesByCategories);
         } else {
             setTitle(R.string.costsByCategories);
@@ -40,20 +41,19 @@ public class PieChartActivityNext extends BaseActivity implements LoaderManager.
         final Bundle args = new Bundle();
         args.putLong(Income.WALLET_ID, getIntent().getLongExtra(Income.WALLET_ID, -1));
         args.putLong(Income.CATEGORY_ID, getIntent().getLongExtra(Income.CATEGORY_ID, -1));
-        args.putBoolean(PieChartItem.TYPE, getIntent().getBooleanExtra(PieChartItem.TYPE, false));
+        args.putBoolean(Constants.PIE_CHART_TYPE, getIntent().getBooleanExtra(Constants.PIE_CHART_TYPE, false));
         getSupportLoaderManager().restartLoader(MAIN_LOADER, args, this);
         getSupportLoaderManager().getLoader(MAIN_LOADER).forceLoad();
     }
 
     public GraphicalView buildView(final String[] bars, final Double[] values) {
-        final int[] colors = new int[]{0xFFA5EA8C, 0xFFEAA28C, 0xFF8CA5EA,
-                0xFFEAE18C, 0xFFEA8CA4};
+        final int[] colors = getBaseContext().getResources().getIntArray(R.array.pieChartColors);
         final CategorySeries series = new CategorySeries("Pie Chart");
         final DefaultRenderer dr = new DefaultRenderer();
         for (int v = 0; v < bars.length; v++) {
             series.add(bars[v], values[v]);
             final SimpleSeriesRenderer r = new SimpleSeriesRenderer();
-            r.setColor(colors[v % 6]);
+            r.setColor(colors[v % colors.length]);
             dr.addSeriesRenderer(r);
         }
         dr.setZoomButtonsVisible(false);

@@ -74,12 +74,12 @@ public class CostAddActivity extends BaseActivity implements OnTaskCompleted {
     }
 
     private void initFields() {
-        newCostName = (EditText) findViewById(R.id.cost_name);
-        newCostAmount = (EditText) findViewById(R.id.cost_amount);
-        newCostDate = (TextView) findViewById(R.id.cost_date);
-        newCostWallets = (AppCompatSpinner) findViewById(R.id.cost_wallet);
-        newCostCategory = (AppCompatSpinner) findViewById(R.id.cost_category);
-        newCostSubCategory = (AppCompatSpinner) findViewById(R.id.cost_subCategory);
+        this.newCostName = (EditText) findViewById(R.id.cost_name);
+        this.newCostAmount = (EditText) findViewById(R.id.cost_amount);
+        this.newCostDate = (TextView) findViewById(R.id.cost_date);
+        this.newCostWallets = (AppCompatSpinner) findViewById(R.id.cost_wallet);
+        this.newCostCategory = (AppCompatSpinner) findViewById(R.id.cost_category);
+        this.newCostSubCategory = (AppCompatSpinner) findViewById(R.id.cost_subCategory);
         final PackageManager pm = getApplicationContext().getPackageManager();
         if (!pm.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
             findViewById(R.id.add_edit_photo_button).setVisibility(View.INVISIBLE);
@@ -95,7 +95,7 @@ public class CostAddActivity extends BaseActivity implements OnTaskCompleted {
     }
 
     private void initDatePickerDialog() {
-        dateFormatter = new SimpleDateFormat(getResources().getString(R.string.dateFormat), Locale.US);
+        this.dateFormatter = new SimpleDateFormat(Constants.MAIN_DATE_FORMAT, Locale.getDefault());
         final Calendar newCalendar = Calendar.getInstance();
         final DatePickerDialog dialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -105,8 +105,8 @@ public class CostAddActivity extends BaseActivity implements OnTaskCompleted {
                 newCostDate.setText(dateFormatter.format(newDate.getTime()));
             }
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
-        newCostDate.setText(dateFormatter.format(newCalendar.getTime()));
-        newCostDate.setOnClickListener(new View.OnClickListener() {
+        this.newCostDate.setText(dateFormatter.format(newCalendar.getTime()));
+        this.newCostDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
                 dialog.show();
@@ -168,9 +168,9 @@ public class CostAddActivity extends BaseActivity implements OnTaskCompleted {
             }
         }
         if (photo == null) {
-            cost.setPhoto(0);
+            cost.setPhoto(Constants.COST_HAS_NOT_PHOTO);
         } else {
-            cost.setPhoto(1);
+            cost.setPhoto(Constants.COST_HAS_PHOTO);
         }
         if (!flag) {
             return null;
@@ -261,7 +261,7 @@ public class CostAddActivity extends BaseActivity implements OnTaskCompleted {
             photo = BitmapFactory.decodeFile(file.getPath());
             final ImageView view = (ImageView) findViewById(R.id.cost_photo);
             view.setImageBitmap(photo);
-            final String path = ImageNameGenerator.getImagePath(DBHelper.getInstance(this).getNextId());
+            final String path = ImageNameGenerator.getImagePath(DBHelper.getInstance(this).getNextCostId());
             final File toFile = new File(path);
             try {
                 Files.move(file, toFile);

@@ -4,6 +4,8 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.github.andrei1993ak.finances.App;
+import com.github.andrei1993ak.finances.model.models.Wallet;
 import com.github.andrei1993ak.finances.util.ContextHolder;
 import com.github.andrei1993ak.finances.model.DBHelper;
 import com.github.andrei1993ak.finances.model.TableQueryGenerator;
@@ -13,19 +15,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class DBHelperCost implements DBHelperForModel<Cost> {
+public class DBHelperCost implements IDBHelperForModel<Cost> {
 
     private final DBHelper dbHelper;
 
-    private static DBHelperCost instance;
-
-    public static DBHelperCost getInstance() {
-        if (instance == null)
-            instance = new DBHelperCost();
-        return instance;
-    }
-
-    private DBHelperCost() {
+    public DBHelperCost() {
 
         this.dbHelper = DBHelper.getInstance(ContextHolder.getInstance().getContext());
     }
@@ -43,7 +37,7 @@ public class DBHelperCost implements DBHelperForModel<Cost> {
         long id;
         try {
             db.beginTransaction();
-            final DBHelperWallet dbHelperWallet = DBHelperWallet.getInstance();
+            final DBHelperWallet dbHelperWallet = ((DBHelperWallet) ((App) ContextHolder.getInstance().getContext()).getDbHelper(Wallet.class));
             dbHelperWallet.takeAmount(cost.getWalletId(), cost.getAmount());
             id = db.insert(TableQueryGenerator.getTableName(Cost.class), null, values);
             db.setTransactionSuccessful();
@@ -54,15 +48,12 @@ public class DBHelperCost implements DBHelperForModel<Cost> {
     }
 
     @Override
-    //TODO public Cost get(final long id, Class<?> clazz) {
     public Cost get(final long id) {
-        //TODO getTable from clazz
         final String selectQuery = "SELECT * FROM " + TableQueryGenerator.getTableName(Cost.class) + " WHERE _id = " + id;
         final SQLiteDatabase db = dbHelper.getReadableDatabase();
         final Cursor cursor = db.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
             final Cost cost = new Cost();
-            //TODO generate fields from annotated members
             cost.setId(cursor.getLong(cursor.getColumnIndex(Cost.ID)));
             cost.setName(cursor.getString(cursor.getColumnIndex(Cost.NAME)));
             cost.setWalletId(cursor.getLong(cursor.getColumnIndex(Cost.WALLET_ID)));
@@ -101,7 +92,7 @@ public class DBHelperCost implements DBHelperForModel<Cost> {
             db.beginTransaction();
             count = db.update(TableQueryGenerator.getTableName(Cost.class), values, Cost.ID + "=?", new String[]{String.valueOf(cost.getId())});
             final Cost newCost = get(cost.getId());
-            final DBHelperWallet dbHelperWallet = DBHelperWallet.getInstance();
+            final DBHelperWallet dbHelperWallet = ((DBHelperWallet) ((App) ContextHolder.getInstance().getContext()).getDbHelper(Wallet.class));
             if (oldCost.getWalletId() != newCost.getWalletId()) {
                 dbHelperWallet.addAmount(oldCost.getWalletId(), oldCost.getAmount());
                 dbHelperWallet.takeAmount(newCost.getWalletId(), newCost.getAmount());
@@ -118,7 +109,7 @@ public class DBHelperCost implements DBHelperForModel<Cost> {
     @Override
     public int delete(final long id) {
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        final DBHelperWallet dbHelperWallet = DBHelperWallet.getInstance();
+        final DBHelperWallet dbHelperWallet = ((DBHelperWallet) ((App) ContextHolder.getInstance().getContext()).getDbHelper(Wallet.class));
         final Cost cost = get(id);
         int count;
         try {

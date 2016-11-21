@@ -10,7 +10,7 @@ import org.achartengine.model.TimeSeries;
 
 public class BalanceChartLoader extends Loader<TimeSeries> {
 
-    private long walletID;
+    private final long walletID;
     private GetTimeSeriesTask task;
 
     public BalanceChartLoader(final Context context, final long walletID) {
@@ -32,7 +32,7 @@ public class BalanceChartLoader extends Loader<TimeSeries> {
 
         @Override
         protected TimeSeries doInBackground(final Long... params) {
-            return BalanceChartHelper.getInstance().getSeries(params[0]);
+            return new BalanceChartHelper().getSeries(params[0]);
         }
 
         private void getResultFromTask(final TimeSeries result) {

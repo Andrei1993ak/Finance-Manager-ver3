@@ -15,22 +15,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class DBHelperCategoryCost implements DBHelperForModel<CostCategory> {
+public class DBHelperCategoryCost implements IDBHelperForModel<CostCategory> {
 
     public static final int usable = -1;
     public static final int hasChildrens = -2;
 
     private final DBHelper dbHelper;
 
-    private static DBHelperCategoryCost instance;
-
-    public static DBHelperCategoryCost getInstance() {
-        if (instance == null)
-            instance = new DBHelperCategoryCost();
-        return instance;
-    }
-
-    private DBHelperCategoryCost() {
+    public DBHelperCategoryCost() {
 
         this.dbHelper = DBHelper.getInstance(ContextHolder.getInstance().getContext());
     }

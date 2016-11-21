@@ -39,9 +39,9 @@ public class WalletAddActivity extends BaseActivity implements OnTaskCompleted {
     }
 
     private void initFields() {
-        spinnerCurrencies = (AppCompatSpinner) findViewById(R.id.spinnerCurrencies);
-        newWalletName = (EditText) findViewById(R.id.new_wallet_name);
-        newWalletAmount = (EditText) findViewById(R.id.new_wallet_amount);
+        this.spinnerCurrencies = (AppCompatSpinner) findViewById(R.id.spinnerCurrencies);
+        this.newWalletName = (EditText) findViewById(R.id.new_wallet_name);
+        this.newWalletAmount = (EditText) findViewById(R.id.new_wallet_amount);
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_pur_add);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.github.andrei1993ak.finances.R;
 import com.github.andrei1993ak.finances.model.reportModels.PieChartItem;
+import com.github.andrei1993ak.finances.util.Constants;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -21,7 +22,7 @@ public class PieChartItemAdapter extends BaseAdapter {
 
     public PieChartItemAdapter(final Context context, final ArrayList<PieChartItem> list) {
         this.list = list;
-        layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
@@ -48,7 +49,7 @@ public class PieChartItemAdapter extends BaseAdapter {
         final PieChartItem item = (PieChartItem) getItem(position);
         ((TextView) view.findViewById(R.id.pieChartItemName)).setText(item.getCategoryName());
         final Double amount = item.getAmount();
-        final String amountString = String.format(Locale.US, "%.2f", amount);
+        final String amountString = String.format(Locale.getDefault(), Constants.MAIN_DOUBLE_FORMAT, amount);
         ((TextView) view.findViewById(R.id.pieChartItemAmount)).setText(amountString);
         return view;
     }

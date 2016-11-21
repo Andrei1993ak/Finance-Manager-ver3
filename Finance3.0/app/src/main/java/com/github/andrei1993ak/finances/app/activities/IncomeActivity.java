@@ -34,7 +34,7 @@ public class IncomeActivity extends BaseActivity implements LoaderManager.Loader
     private IncomeCursorAdapter incomeCursorAdapter;
     private RequestAdapter<Income> requestAdapter;
     private MenuInflater inflater;
-    private long itemId = -1;
+    private long selectedItemId;
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
@@ -42,19 +42,20 @@ public class IncomeActivity extends BaseActivity implements LoaderManager.Loader
         setContentView(R.layout.standart_activity);
         setTitle(R.string.incomes);
         initFields();
-        inflater = getMenuInflater();
-        requestAdapter = new RequestAdapter<>();
         getSupportLoaderManager().restartLoader(Constants.MAIN_LOADER_ID, null, this);
     }
 
     private void initFields() {
-        incomeCursorAdapter = new IncomeCursorAdapter(this, null);
+        this.inflater = getMenuInflater();
+        this.requestAdapter = new RequestAdapter<>();
+        this.incomeCursorAdapter = new IncomeCursorAdapter(this, null);
+        this.selectedItemId = Constants.NOT_SELECTED;
         final ListView incomeListView = (ListView) findViewById(R.id.standardListView);
         incomeListView.setAdapter(incomeCursorAdapter);
         incomeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
-                itemId = id;
+                selectedItemId = id;
             }
         });
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -74,17 +75,18 @@ public class IncomeActivity extends BaseActivity implements LoaderManager.Loader
         return true;
     }
 
+    // TODO how to disable selection om LV?
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
         final int id = item.getItemId();
-        if (itemId != -1) {
+        if (selectedItemId != Constants.NOT_SELECTED) {
             if (id == R.id.action_edit) {
                 final Intent intent = new Intent(this, IncomeEditActivity.class);
-                intent.putExtra(Income.ID, itemId);
+                intent.putExtra(Income.ID, selectedItemId);
                 startActivityForResult(intent, Constants.EDIT_REQUEST);
                 return true;
             } else {
-                new IncomeExecutor(this).execute(requestAdapter.delete(itemId));
+                new IncomeExecutor(this).execute(requestAdapter.delete(selectedItemId));
                 return true;
             }
         }

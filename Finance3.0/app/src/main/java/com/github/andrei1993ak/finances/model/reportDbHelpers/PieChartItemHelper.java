@@ -1,6 +1,7 @@
 package com.github.andrei1993ak.finances.model.reportDbHelpers;
 
 
+import com.github.andrei1993ak.finances.App;
 import com.github.andrei1993ak.finances.model.dbHelpers.DBHelperCategoryCost;
 import com.github.andrei1993ak.finances.model.dbHelpers.DBHelperCost;
 import com.github.andrei1993ak.finances.model.dbHelpers.DBHelperIncome;
@@ -10,6 +11,7 @@ import com.github.andrei1993ak.finances.model.models.Income;
 import com.github.andrei1993ak.finances.model.dbHelpers.DBHelperCategoryIncome;
 import com.github.andrei1993ak.finances.model.models.IncomeCategory;
 import com.github.andrei1993ak.finances.model.reportModels.PieChartItem;
+import com.github.andrei1993ak.finances.util.ContextHolder;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,21 +22,26 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+// TODO hashMaps
 public class PieChartItemHelper {
 
-    private static PieChartItemHelper instance;
+    private final DBHelperCost dbHelperCost;
+    private final DBHelperIncome dbHelperIncome;
+    private final DBHelperCategoryIncome dbHelperCategoryIncome;
+    private final DBHelperCategoryCost dbHelperCategoryCost;
 
-    public static PieChartItemHelper getInstance() {
-        if (instance == null)
-            instance = new PieChartItemHelper();
-        return instance;
+    public PieChartItemHelper(){
+        dbHelperIncome = ((DBHelperIncome) ((App) ContextHolder.getInstance().getContext()).getDbHelper(Income.class));
+        dbHelperCost = ((DBHelperCost) ((App) ContextHolder.getInstance().getContext()).getDbHelper(Cost.class));
+        dbHelperCategoryCost = ((DBHelperCategoryCost) ((App) ContextHolder.getInstance().getContext()).getDbHelper(CostCategory.class));
+        dbHelperCategoryIncome = ((DBHelperCategoryIncome) ((App) ContextHolder.getInstance().getContext()).getDbHelper(IncomeCategory.class));
     }
 
     public ArrayList<PieChartItem> gRepInfoIncome(final long walletId, final long categoryId) {
         final ArrayList<PieChartItem> list = new ArrayList<>();
-        final List<IncomeCategory> allParents = DBHelperCategoryIncome.getInstance().getAllToListByParentId(categoryId);
+        final List<IncomeCategory> allParents = dbHelperCategoryIncome.getAllToListByParentId(categoryId);
         if (categoryId != -1) {
-            allParents.add(DBHelperCategoryIncome.getInstance().get(categoryId));
+            allParents.add(dbHelperCategoryIncome.get(categoryId));
         }
         HashMap<Long, Double> sums = new HashMap<>();
         final HashMap<Long, String> names = new HashMap<>();
@@ -42,17 +49,17 @@ public class PieChartItemHelper {
             sums.put(parent.getId(), 0.0);
             names.put(parent.getId(), parent.getName());
         }
-        final List<Income> allIncomes = DBHelperIncome.getInstance().getAllToListByWalletId(walletId);
+        final List<Income> allIncomes = dbHelperIncome.getAllToListByWalletId(walletId);
         for (final Income income : allIncomes) {
             if (sums.containsKey(income.getCategoryId())) {
                 sums.put(income.getCategoryId(), (sums.get(income.getCategoryId()) + income.getAmount()));
             } else if (categoryId == -1) {
-                final Long parentId = DBHelperCategoryIncome.getInstance().get(income.getCategoryId()).getParentId();
+                final Long parentId = dbHelperCategoryIncome.get(income.getCategoryId()).getParentId();
                 sums.put(parentId, (sums.get(parentId) + income.getAmount()));
             }
         }
         sums.values().removeAll(Collections.singleton(0.0));
-        sums = (HashMap) sortByValue(sums);
+        sums = sortByValue(sums);
         for (final Map.Entry<Long, Double> entry : sums.entrySet()) {
             list.add(new PieChartItem(entry.getKey(), names.get(entry.getKey()), entry.getValue()));
         }
@@ -61,9 +68,9 @@ public class PieChartItemHelper {
 
     public ArrayList<PieChartItem> gRepInfoCost(final long walletId, final long categoryId) {
         final ArrayList<PieChartItem> list = new ArrayList<>();
-        final List<CostCategory> allParents = DBHelperCategoryCost.getInstance().getAllToListByParentId(categoryId);
+        final List<CostCategory> allParents = dbHelperCategoryCost.getAllToListByParentId(categoryId);
         if (categoryId != -1) {
-            allParents.add(DBHelperCategoryCost.getInstance().get(categoryId));
+            allParents.add(dbHelperCategoryCost.get(categoryId));
         }
         HashMap<Long, Double> sums = new HashMap<>();
         final HashMap<Long, String> names = new HashMap<>();
@@ -71,24 +78,24 @@ public class PieChartItemHelper {
             sums.put(parent.getId(), 0.0);
             names.put(parent.getId(), parent.getName());
         }
-        final List<Cost> allCosts = DBHelperCost.getInstance().getAllToListByWalletId(walletId);
+        final List<Cost> allCosts =   dbHelperCost.getAllToListByWalletId(walletId);
         for (final Cost cost : allCosts) {
             if (sums.containsKey(cost.getCategoryId())) {
                 sums.put(cost.getCategoryId(), (sums.get(cost.getCategoryId()) + cost.getAmount()));
             } else if (categoryId == -1) {
-                final Long parentId = DBHelperCategoryCost.getInstance().get(cost.getCategoryId()).getParentId();
+                final Long parentId = dbHelperCategoryCost.get(cost.getCategoryId()).getParentId();
                 sums.put(parentId, (sums.get(parentId) + cost.getAmount()));
             }
         }
         sums.values().removeAll(Collections.singleton(0.0));
-        sums = (HashMap) sortByValue(sums);
+        sums = sortByValue(sums);
         for (final Map.Entry<Long, Double> entry : sums.entrySet()) {
             list.add(new PieChartItem(entry.getKey(), names.get(entry.getKey()), entry.getValue()));
         }
         return list;
     }
 
-    private static <K, V extends Comparable<? super V>> Map<K, V> sortByValue(final Map<K, V> map) {
+    private static <K, V extends Comparable<? super V>> HashMap<K, V> sortByValue(final Map<K, V> map) {
         final List<Map.Entry<K, V>> list = new LinkedList<>(map.entrySet());
         Collections.sort(list, new Comparator<Map.Entry<K, V>>() {
             @Override
@@ -96,7 +103,7 @@ public class PieChartItemHelper {
                 return -(o1.getValue().compareTo(o2.getValue()));
             }
         });
-        final Map<K, V> result = new LinkedHashMap<>();
+        final HashMap<K, V> result = new LinkedHashMap<>();
         for (final Map.Entry<K, V> kvEntry : list) {
             result.put(kvEntry.getKey(), kvEntry.getValue());
         }

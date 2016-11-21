@@ -16,7 +16,7 @@ import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
 import com.github.andrei1993ak.finances.control.base.RequestAdapter;
 import com.github.andrei1993ak.finances.control.base.Result;
 import com.github.andrei1993ak.finances.control.executors.CurrencyOfficialExecutor;
-import com.github.andrei1993ak.finances.control.loaders.CurrencyAllCursorLoader;
+import com.github.andrei1993ak.finances.control.loaders.CurrencyOfficialCursorLoader;
 import com.github.andrei1993ak.finances.model.TableQueryGenerator;
 import com.github.andrei1993ak.finances.model.models.Currency;
 import com.github.andrei1993ak.finances.model.models.CurrencyOfficial;
@@ -53,7 +53,7 @@ public class CurrencyAddActivity extends BaseActivity implements LoaderManager.L
 
     @Override
     public Loader<Cursor> onCreateLoader(final int id, final Bundle args) {
-        return new CurrencyAllCursorLoader(this);
+        return new CurrencyOfficialCursorLoader(this);
     }
 
     @Override

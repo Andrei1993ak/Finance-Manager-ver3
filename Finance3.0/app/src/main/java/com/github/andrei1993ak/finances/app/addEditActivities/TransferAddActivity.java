@@ -23,6 +23,7 @@ import com.github.andrei1993ak.finances.control.executors.WalletExecutor;
 import com.github.andrei1993ak.finances.model.TableQueryGenerator;
 import com.github.andrei1993ak.finances.model.models.Transfer;
 import com.github.andrei1993ak.finances.model.models.Wallet;
+import com.github.andrei1993ak.finances.util.Constants;
 import com.github.andrei1993ak.finances.util.transferRateParser.OnParseCompleted;
 import com.github.andrei1993ak.finances.util.transferRateParser.RateJsonParser;
 
@@ -54,13 +55,13 @@ public class TransferAddActivity extends BaseActivity implements OnTaskCompleted
     }
 
     private void initFields() {
-        newTransferName = (EditText) findViewById(R.id.transfer_name);
-        newTransferDate = (TextView) findViewById(R.id.transfer_date);
-        newTransferFromWallet = (AppCompatSpinner) findViewById(R.id.transfer_from_wallet);
-        newTransferToWallet = (AppCompatSpinner) findViewById(R.id.transfer_to_wallet);
-        newTransferFromAmount = (EditText) findViewById(R.id.transfer_from_amount);
-        newTransferToAmount = (EditText) findViewById(R.id.transfer_to_amount);
-        officialRate = (TextView) findViewById(R.id.official_rate);
+        this.newTransferName = (EditText) findViewById(R.id.transfer_name);
+        this.newTransferDate = (TextView) findViewById(R.id.transfer_date);
+        this.newTransferFromWallet = (AppCompatSpinner) findViewById(R.id.transfer_from_wallet);
+        this.newTransferToWallet = (AppCompatSpinner) findViewById(R.id.transfer_to_wallet);
+        this.newTransferFromAmount = (EditText) findViewById(R.id.transfer_from_amount);
+        this.newTransferToAmount = (EditText) findViewById(R.id.transfer_to_amount);
+        this.officialRate = (TextView) findViewById(R.id.official_rate);
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_transfer_add_edit);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,7 +73,7 @@ public class TransferAddActivity extends BaseActivity implements OnTaskCompleted
     }
 
     private void setDatePickerDialog() {
-        dateFormatter = new SimpleDateFormat(getResources().getString(R.string.dateFormat), Locale.US);
+        this.dateFormatter = new SimpleDateFormat(Constants.MAIN_DATE_FORMAT, Locale.getDefault());
         final Calendar today = Calendar.getInstance();
         final DatePickerDialog dialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override

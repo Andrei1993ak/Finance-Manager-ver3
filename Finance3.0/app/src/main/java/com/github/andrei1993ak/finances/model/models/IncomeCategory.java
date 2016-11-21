@@ -10,7 +10,7 @@ import com.github.andrei1993ak.finances.model.annotations.types.DBInteger;
 public class IncomeCategory extends TableClass implements Parcelable {
 
     @DBInteger
-    public static final String PARENT_ID = "parent_id";
+    public static final String PARENT_ID = "parentId";
 
     private long id;
     private String name;
@@ -66,7 +66,7 @@ public class IncomeCategory extends TableClass implements Parcelable {
         dest.writeLong(this.parentId);
     }
 
-    protected IncomeCategory(Parcel in) {
+    protected IncomeCategory(final Parcel in) {
         this.id = in.readLong();
         this.name = in.readString();
         this.parentId = in.readLong();

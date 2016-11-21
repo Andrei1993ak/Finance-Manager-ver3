@@ -33,8 +33,8 @@ public class WalletActivity extends BaseActivity implements LoaderManager.Loader
 
     private WalletCursorAdapter walletCursorAdapter;
     private RequestAdapter<Wallet> requestAdapter;
-    private MenuInflater inflater;
-    private long itemId = -1;
+    private MenuInflater menuInflater;
+    private long selectedItemId;
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
@@ -42,19 +42,20 @@ public class WalletActivity extends BaseActivity implements LoaderManager.Loader
         setContentView(R.layout.standart_activity);
         setTitle(R.string.wallets);
         initFields();
-        inflater = getMenuInflater();
-        requestAdapter = new RequestAdapter<>();
         getSupportLoaderManager().restartLoader(Constants.MAIN_LOADER_ID, null, this);
     }
 
     private void initFields() {
-        walletCursorAdapter = new WalletCursorAdapter(this, null);
+        this.selectedItemId = Constants.NOT_SELECTED;
+        this.menuInflater = getMenuInflater();
+        this.requestAdapter = new RequestAdapter<>();
+        this.walletCursorAdapter = new WalletCursorAdapter(this, null);
         final ListView lvWallets = (ListView) findViewById(R.id.standardListView);
         lvWallets.setAdapter(walletCursorAdapter);
         lvWallets.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
-                itemId = id;
+                selectedItemId = id;
             }
         });
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -69,21 +70,21 @@ public class WalletActivity extends BaseActivity implements LoaderManager.Loader
 
     @Override
     public boolean onCreateOptionsMenu(final Menu menu) {
-        inflater.inflate(R.menu.menu, menu);
+        menuInflater.inflate(R.menu.menu, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
         final int id = item.getItemId();
-        if (itemId != -1) {
+        if (selectedItemId != Constants.NOT_SELECTED) {
             if (id == R.id.action_edit) {
                 final Intent intent = new Intent(this, WalletEditActivity.class);
-                intent.putExtra(Wallet.ID, itemId);
+                intent.putExtra(Wallet.ID, selectedItemId);
                 startActivityForResult(intent, Constants.EDIT_REQUEST);
                 return true;
             } else {
-                new WalletExecutor(this).execute(requestAdapter.delete(itemId));
+                new WalletExecutor(this).execute(requestAdapter.delete(selectedItemId));
                 return true;
             }
         }

@@ -23,6 +23,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.github.andrei1993ak.finances.App;
 import com.github.andrei1993ak.finances.R;
 import com.github.andrei1993ak.finances.app.BaseActivity;
 import com.github.andrei1993ak.finances.app.addEditActivities.CostAddActivity;
@@ -37,6 +38,7 @@ import com.github.andrei1993ak.finances.model.TableQueryGenerator;
 import com.github.andrei1993ak.finances.model.dbHelpers.DBHelperCost;
 import com.github.andrei1993ak.finances.model.models.Cost;
 import com.github.andrei1993ak.finances.util.Constants;
+import com.github.andrei1993ak.finances.util.ContextHolder;
 import com.github.andrei1993ak.finances.util.universalLoader.ImageNameGenerator;
 import com.github.andrei1993ak.finances.util.universalLoader.loaders.BitmapLoader;
 
@@ -47,9 +49,9 @@ public class CostActivity extends BaseActivity implements LoaderManager.LoaderCa
 
     private CostCursorAdapter costCursorAdapter;
     private RequestAdapter<Cost> requestAdapter;
-    private MenuInflater inflater;
+    private MenuInflater menuInflater;
 
-    private long itemId = -1;
+    private long selectedItemId;
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
@@ -57,19 +59,20 @@ public class CostActivity extends BaseActivity implements LoaderManager.LoaderCa
         setContentView(R.layout.standart_activity);
         setTitle(R.string.costs);
         initFields();
-        inflater = getMenuInflater();
-        requestAdapter = new RequestAdapter<>();
         getSupportLoaderManager().restartLoader(Constants.MAIN_LOADER_ID, null, this);
     }
 
     private void initFields(){
-        costCursorAdapter = new CostCursorAdapter(this, null);
+        this.selectedItemId = Constants.NOT_SELECTED;
+        this.menuInflater = getMenuInflater();
+        this.requestAdapter = new RequestAdapter<>();
+        this.costCursorAdapter = new CostCursorAdapter(this, null);
         final ListView costListView = (ListView) findViewById(R.id.standardListView);
         costListView.setAdapter(costCursorAdapter);
         costListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
-                itemId = id;
+                selectedItemId = id;
             }
         });
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -85,21 +88,21 @@ public class CostActivity extends BaseActivity implements LoaderManager.LoaderCa
 
     @Override
     public boolean onCreateOptionsMenu(final Menu menu) {
-        inflater.inflate(R.menu.menu, menu);
+        menuInflater.inflate(R.menu.menu, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
         final int id = item.getItemId();
-        if (itemId != -1) {
+        if (selectedItemId != Constants.NOT_SELECTED) {
             if (id == R.id.action_edit) {
                 final Intent intent = new Intent(this, CostEditActivity.class);
-                intent.putExtra(Cost.ID, itemId);
+                intent.putExtra(Cost.ID, selectedItemId);
                 startActivityForResult(intent, Constants.EDIT_REQUEST);
                 return true;
             } else {
-                new CostExecutor(this).execute(requestAdapter.delete(itemId));
+                new CostExecutor(this).execute(requestAdapter.delete(selectedItemId));
                 return true;
             }
         }
@@ -108,7 +111,7 @@ public class CostActivity extends BaseActivity implements LoaderManager.LoaderCa
 
     @Override
     public void onCreateContextMenu(final ContextMenu menu, final View v, final ContextMenu.ContextMenuInfo menuInfo) {
-        inflater.inflate(R.menu.context_menu,menu);
+        menuInflater.inflate(R.menu.context_menu,menu);
         menu.add(0, Constants.CM_PHOTO_ID, 0, R.string.showPhoto);
         super.onCreateContextMenu(menu, v, menuInfo);
     }
@@ -126,10 +129,10 @@ public class CostActivity extends BaseActivity implements LoaderManager.LoaderCa
                 startActivityForResult(intent, Constants.EDIT_REQUEST);
                 break;
             case Constants.CM_PHOTO_ID:
-                final Cost cost = DBHelperCost.getInstance().get(info.id);
-                if (cost.getPhoto() == 0) {
+                final Cost cost = ((DBHelperCost) ((App) ContextHolder.getInstance().getContext()).getDbHelper(Cost.class)).get(info.id);
+                if (cost.getPhoto() == Constants.COST_HAS_NOT_PHOTO) {
                     Toast.makeText(this, R.string.noPhoto, Toast.LENGTH_LONG).show();
-                } else if (cost.getPhoto() == 1) {
+                } else if (cost.getPhoto() == Constants.COST_HAS_PHOTO) {
                     final String filePath = ImageNameGenerator.getImagePath(info.id);
                     final File file = new File(filePath);
                     final Dialog builder = new Dialog(this);

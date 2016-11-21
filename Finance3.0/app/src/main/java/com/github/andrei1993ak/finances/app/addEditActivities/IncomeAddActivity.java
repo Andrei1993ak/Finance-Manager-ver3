@@ -25,6 +25,7 @@ import com.github.andrei1993ak.finances.model.TableQueryGenerator;
 import com.github.andrei1993ak.finances.model.models.Income;
 import com.github.andrei1993ak.finances.model.models.IncomeCategory;
 import com.github.andrei1993ak.finances.model.models.Wallet;
+import com.github.andrei1993ak.finances.util.Constants;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -57,12 +58,12 @@ public class IncomeAddActivity extends BaseActivity implements OnTaskCompleted {
     }
 
     private void initFields() {
-        newIncomeName = (EditText) findViewById(R.id.income_name);
-        newIncomeAmount = (EditText) findViewById(R.id.income_amount);
-        newIncomeDate = (TextView) findViewById(R.id.income_date);
-        newIncomeWallet = (AppCompatSpinner) findViewById(R.id.income_wallet);
-        newIncomeCategory = (AppCompatSpinner) findViewById(R.id.income_category);
-        newIncomeSubCategory = (AppCompatSpinner) findViewById(R.id.income_subCategory);
+        this.newIncomeName = (EditText) findViewById(R.id.income_name);
+        this.newIncomeAmount = (EditText) findViewById(R.id.income_amount);
+        this.newIncomeDate = (TextView) findViewById(R.id.income_date);
+        this.newIncomeWallet = (AppCompatSpinner) findViewById(R.id.income_wallet);
+        this.newIncomeCategory = (AppCompatSpinner) findViewById(R.id.income_category);
+        this.newIncomeSubCategory = (AppCompatSpinner) findViewById(R.id.income_subCategory);
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_income_add_edit);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,7 +75,7 @@ public class IncomeAddActivity extends BaseActivity implements OnTaskCompleted {
     }
 
     private void setDatePickerDialog() {
-        dateFormatter = new SimpleDateFormat(getResources().getString(R.string.dateFormat), Locale.US);
+        this.dateFormatter = new SimpleDateFormat(Constants.MAIN_DATE_FORMAT, Locale.getDefault());
         final Calendar newCalendar = Calendar.getInstance();
         final DatePickerDialog dialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override

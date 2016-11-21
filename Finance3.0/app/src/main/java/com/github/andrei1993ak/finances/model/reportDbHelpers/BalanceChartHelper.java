@@ -3,11 +3,12 @@ package com.github.andrei1993ak.finances.model.reportDbHelpers;
 import com.github.andrei1993ak.finances.App;
 import com.github.andrei1993ak.finances.model.dbHelpers.DBHelperCost;
 import com.github.andrei1993ak.finances.model.dbHelpers.DBHelperIncome;
-import com.github.andrei1993ak.finances.model.dbHelpers.DBHelperWallet;
 import com.github.andrei1993ak.finances.model.dbHelpers.DBHelperTransfer;
+import com.github.andrei1993ak.finances.model.dbHelpers.DBHelperWallet;
 import com.github.andrei1993ak.finances.model.models.Cost;
 import com.github.andrei1993ak.finances.model.models.Income;
 import com.github.andrei1993ak.finances.model.models.Transfer;
+import com.github.andrei1993ak.finances.model.models.Wallet;
 import com.github.andrei1993ak.finances.util.ContextHolder;
 
 import org.achartengine.model.TimeSeries;
@@ -19,18 +20,24 @@ import java.util.List;
 
 public class BalanceChartHelper {
 
-    private static BalanceChartHelper instance;
+    private final DBHelperIncome dbHelperIncome;
+    private final DBHelperWallet dbHelperWallet;
+    private final DBHelperCost dbHelperCost;
+    private final DBHelperTransfer dbHelperTransfer;
 
-    public static BalanceChartHelper getInstance() {
-        if (instance == null)
-            instance = new BalanceChartHelper();
-        return instance;
+
+    public BalanceChartHelper() {
+        this.dbHelperCost = (DBHelperCost) ((App) ContextHolder.getInstance().getContext()).getDbHelper(Cost.class);
+        this.dbHelperIncome = (DBHelperIncome) ((App) ContextHolder.getInstance().getContext()).getDbHelper(Income.class);
+        this.dbHelperTransfer = (DBHelperTransfer) ((App) ContextHolder.getInstance().getContext()).getDbHelper(Transfer.class);
+        this.dbHelperWallet = (DBHelperWallet) ((App) ContextHolder.getInstance().getContext()).getDbHelper(Wallet.class);
     }
 
     public TimeSeries getSeries(final long walletId) {
-        final List<Income> incomesList = DBHelperIncome.getInstance().getAllToListByWalletId(walletId);
-        final List<Cost> costsList = DBHelperCost.getInstance().getAllToListByWalletId(walletId);
-        final List<Transfer> transferList = ((DBHelperTransfer)((App) ContextHolder.getInstance().getContext()).getDbHelper(Transfer.class)).getAllToListByWalletId(walletId);
+
+        final List<Income> incomesList = dbHelperIncome.getAllToListByWalletId(walletId);
+        final List<Cost> costsList = dbHelperCost.getAllToListByWalletId(walletId);
+        final List<Transfer> transferList = dbHelperTransfer.getAllToListByWalletId(walletId);
 
         final HashMap<Date, Double> operations = new HashMap<>();
 
@@ -74,7 +81,7 @@ public class BalanceChartHelper {
         calendar.set(Calendar.MILLISECOND, 0);
 
         final TimeSeries series = new TimeSeries("Balance");
-        Double amount = DBHelperWallet.getInstance().get(walletId).getAmount();
+        Double amount = dbHelperWallet.get(walletId).getAmount();
         int count = 0;
         for (final Date date = calendar.getTime(); count < operations.size(); date.setTime(date.getTime() - 86400000)) {
             if (operations.containsKey(date)) {

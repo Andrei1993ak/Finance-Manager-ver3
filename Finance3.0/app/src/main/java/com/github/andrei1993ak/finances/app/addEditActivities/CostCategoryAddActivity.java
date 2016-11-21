@@ -38,8 +38,8 @@ public class CostCategoryAddActivity extends BaseActivity implements OnTaskCompl
     }
 
     private void initFields() {
-        newCategoryName = (EditText) findViewById(R.id.add_edit_category_name);
-        parentCategories = (AppCompatSpinner) findViewById(R.id.spinnerParentCategories);
+        this.newCategoryName = (EditText) findViewById(R.id.add_edit_category_name);
+        this.parentCategories = (AppCompatSpinner) findViewById(R.id.spinnerParentCategories);
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_cat_add);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

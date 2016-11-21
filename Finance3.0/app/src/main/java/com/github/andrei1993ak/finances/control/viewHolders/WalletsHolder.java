@@ -15,9 +15,9 @@ public class WalletsHolder extends RecyclerView.ViewHolder{
 
     public WalletsHolder(final View itemView) {
         super(itemView);
-        walletName = (TextView)itemView.findViewById(R.id.walletName);
-        walletAmount = (TextView)itemView.findViewById(R.id.walletAmount);
-        walletCurrency = (TextView)itemView.findViewById(R.id.walletCurrency);
+        this.walletName = (TextView)itemView.findViewById(R.id.walletName);
+        this.walletAmount = (TextView)itemView.findViewById(R.id.walletAmount);
+        this.walletCurrency = (TextView)itemView.findViewById(R.id.walletCurrency);
     }
 
     public long getWalletId() {

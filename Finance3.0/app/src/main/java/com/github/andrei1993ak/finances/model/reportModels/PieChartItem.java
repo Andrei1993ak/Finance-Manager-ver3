@@ -6,8 +6,6 @@ public class PieChartItem {
     private String categoryName;
     private double amount;
 
-    public static final String TYPE = "type";
-
     public PieChartItem(final long categoryId, final String categoryName, final double amount) {
         this.categoryId = categoryId;
         this.categoryName = categoryName;

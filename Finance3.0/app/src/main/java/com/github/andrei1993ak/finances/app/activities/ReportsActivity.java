@@ -10,6 +10,7 @@ import com.github.andrei1993ak.finances.app.BaseActivity;
 import com.github.andrei1993ak.finances.app.reportsActivities.BalanceChartActivity;
 import com.github.andrei1993ak.finances.app.reportsActivities.PieChartActivity;
 import com.github.andrei1993ak.finances.model.reportModels.PieChartItem;
+import com.github.andrei1993ak.finances.util.Constants;
 
 public class ReportsActivity extends BaseActivity {
 
@@ -24,12 +25,12 @@ public class ReportsActivity extends BaseActivity {
         switch (view.getId()) {
             case R.id.reportIncomesPie:
                 Intent intent = new Intent(this, PieChartActivity.class);
-                intent.putExtra(PieChartItem.TYPE,true);
+                intent.putExtra(Constants.PIE_CHART_TYPE,true);
                 startActivity(intent);
                 break;
             case R.id.reportCostPie:
                 intent = new Intent(this, PieChartActivity.class);
-                intent.putExtra(PieChartItem.TYPE,false);
+                intent.putExtra(Constants.PIE_CHART_TYPE,false);
                 startActivity(intent);
                 break;
             case R.id.balanceChart:

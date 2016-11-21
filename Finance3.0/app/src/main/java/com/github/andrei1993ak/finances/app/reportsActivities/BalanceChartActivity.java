@@ -44,11 +44,11 @@ public class BalanceChartActivity extends BaseActivity implements OnTaskComplete
         setContentView(R.layout.report_balance_activity);
         setTitle(R.string.balanceCHart);
         if (savedInstanceState == null) {
-            position = 0;
+            this.position = 0;
         } else {
-            position = savedInstanceState.getInt(POSITION);
+            this.position = savedInstanceState.getInt(POSITION);
         }
-        spinner = (AppCompatSpinner) findViewById(R.id.walletsNamesBalanceChart);
+        this.spinner = (AppCompatSpinner) findViewById(R.id.walletsNamesBalanceChart);
         new WalletExecutor(this).execute(new RequestAdapter<Wallet>().getAllToList(RequestAdapter.SELECTION_ALL));
     }
 

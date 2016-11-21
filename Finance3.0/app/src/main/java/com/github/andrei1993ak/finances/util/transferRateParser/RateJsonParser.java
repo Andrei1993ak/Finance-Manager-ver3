@@ -2,7 +2,10 @@ package com.github.andrei1993ak.finances.util.transferRateParser;
 
 import android.os.AsyncTask;
 
+import com.github.andrei1993ak.finances.App;
 import com.github.andrei1993ak.finances.model.dbHelpers.DBHelperCurrency;
+import com.github.andrei1993ak.finances.model.models.Currency;
+import com.github.andrei1993ak.finances.util.ContextHolder;
 import com.github.andrei1993ak.finances.util.MyHttpClient;
 
 import org.json.JSONObject;
@@ -14,9 +17,11 @@ public class RateJsonParser extends AsyncTask<Long, Void, Double> {
     private static final String JSON = ".json";
 
     private final OnParseCompleted listener;
+    private final DBHelperCurrency dbHelperCurrency;
 
     public RateJsonParser(final OnParseCompleted view) {
         listener = view;
+        dbHelperCurrency = ((DBHelperCurrency) ((App) ContextHolder.getInstance().getContext()).getDbHelper(Currency.class));
     }
 
     @Override
@@ -24,8 +29,8 @@ public class RateJsonParser extends AsyncTask<Long, Void, Double> {
         if (params[0].equals(params[1])) {
             return 1.0;
         } else {
-            final String codeFrom = DBHelperCurrency.getInstance().get(params[0]).getCode();
-            final String codeTo = DBHelperCurrency.getInstance().get(params[1]).getCode();
+            final String codeFrom = dbHelperCurrency.get(params[0]).getCode();
+            final String codeTo = dbHelperCurrency.get(params[1]).getCode();
             try {
                 final String jsonString = new MyHttpClient().get(URL + codeFrom + JSON);
                 final JSONObject root = new JSONObject(jsonString);

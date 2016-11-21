@@ -6,4 +6,12 @@
     <color name="colorRedText">#d4ec4832</color>
     <color name="colorSeparator">@android:color/darker_gray</color>
 
+    <array name="pieChartColors">
+        <item>0xFFA5EA8C</item>
+        <item>0xFFEAA28C</item>
+        <item>0xFF8CA5EA</item>
+        <item>0xFFEAE18C</item>
+        <item>0xFFEA8CA4</item>
+        <item>0xFF80ede2</item>
+    </array>
 </resources>

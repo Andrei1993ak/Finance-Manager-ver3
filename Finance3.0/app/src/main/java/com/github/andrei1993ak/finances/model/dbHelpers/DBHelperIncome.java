@@ -4,7 +4,9 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.github.andrei1993ak.finances.App;
 import com.github.andrei1993ak.finances.model.models.Income;
+import com.github.andrei1993ak.finances.model.models.Wallet;
 import com.github.andrei1993ak.finances.util.ContextHolder;
 import com.github.andrei1993ak.finances.model.DBHelper;
 import com.github.andrei1993ak.finances.model.TableQueryGenerator;
@@ -13,19 +15,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class DBHelperIncome implements DBHelperForModel<Income> {
+public class DBHelperIncome implements IDBHelperForModel<Income> {
 
     private final DBHelper dbHelper;
 
-    private static DBHelperIncome instance;
-
-    public static DBHelperIncome getInstance() {
-        if (instance == null)
-            instance = new DBHelperIncome();
-        return instance;
-    }
-
-    private DBHelperIncome() {
+    public DBHelperIncome() {
 
         this.dbHelper = DBHelper.getInstance(ContextHolder.getInstance().getContext());
     }
@@ -42,7 +36,7 @@ public class DBHelperIncome implements DBHelperForModel<Income> {
         long id;
         try {
             db.beginTransaction();
-            final DBHelperWallet helperdbHelperWallet = DBHelperWallet.getInstance();
+            final DBHelperWallet helperdbHelperWallet = ((DBHelperWallet) ((App) ContextHolder.getInstance().getContext()).getDbHelper(Wallet.class));
             helperdbHelperWallet.addAmount(income.getWalletId(), income.getAmount());
             id = db.insert(TableQueryGenerator.getTableName(Income.class), null, values);
             db.setTransactionSuccessful();
@@ -95,7 +89,7 @@ public class DBHelperIncome implements DBHelperForModel<Income> {
             db.beginTransaction();
             count = db.update(TableQueryGenerator.getTableName(Income.class), values, Income.ID + "=?", new String[]{String.valueOf(income.getId())});
             final Income newIncome = get(income.getId());
-            final DBHelperWallet dbHelperWallet = DBHelperWallet.getInstance();
+            final DBHelperWallet dbHelperWallet = ((DBHelperWallet) ((App) ContextHolder.getInstance().getContext()).getDbHelper(Wallet.class));
             if (oldIncome.getWalletId() != newIncome.getWalletId()) {
                 dbHelperWallet.takeAmount(oldIncome.getWalletId(), oldIncome.getAmount());
                 dbHelperWallet.addAmount(newIncome.getWalletId(), newIncome.getAmount());
@@ -112,7 +106,7 @@ public class DBHelperIncome implements DBHelperForModel<Income> {
     @Override
     public int delete(final long id) {
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        final DBHelperWallet dbHelperWallet = DBHelperWallet.getInstance();
+        final DBHelperWallet dbHelperWallet = ((DBHelperWallet) ((App) ContextHolder.getInstance().getContext()).getDbHelper(Wallet.class));
         final Income income = get(id);
         int count;
         try {

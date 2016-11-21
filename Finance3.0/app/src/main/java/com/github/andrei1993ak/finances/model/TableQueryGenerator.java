@@ -21,7 +21,7 @@ public class TableQueryGenerator {
     private static final String SQL_TABLE_DELETE_TEMPLATE = "DROP TABLE IF EXISTS %s";
     private static final String SQL_TABLE_CREATE_FIELD_TEMPLATE = "%s %s";
 
-//    Package local
+    //    Package local
     @Nullable
     static String getTableCreateQuery(final Class<? extends TableClass> clazz) {
 
@@ -69,11 +69,11 @@ public class TableQueryGenerator {
                         builder.append(", ");
                     }
 
-                    builder.append(String.format(Locale.US, SQL_TABLE_CREATE_FIELD_TEMPLATE, value, type));
+                    builder.append(String.format(Locale.getDefault(), SQL_TABLE_CREATE_FIELD_TEMPLATE, value, type));
 
                 }
 
-                return String.format(Locale.US, SQL_TABLE_CREATE_TEMPLATE, name, builder);
+                return String.format(Locale.getDefault(), SQL_TABLE_CREATE_TEMPLATE, name, builder);
             } catch (final Exception e) {
                 return null;
             }
@@ -81,14 +81,15 @@ public class TableQueryGenerator {
             return null;
         }
     }
-//    Package local
+
+    //    Package local
     @Nullable
     static String getTableDeleteQuery(final Class<? extends TableClass> clazz) {
 
         final Table table = clazz.getAnnotation(Table.class);
 
         if (table != null) {
-            return String.format(Locale.US, SQL_TABLE_DELETE_TEMPLATE, table.name());
+            return String.format(Locale.getDefault(), SQL_TABLE_DELETE_TEMPLATE, table.name());
         } else {
             return null;
         }

@@ -14,10 +14,10 @@ public final class Transfer extends TableClass implements Parcelable {
     public static String DATE = "date";
 
     @DBInteger
-    public static String FROM_WALLET_ID = "fromPurseId";
+    public static String FROM_WALLET_ID = "fromWalletId";
 
     @DBInteger
-    public static String TO_WALLET_ID = "toPurseId";
+    public static String TO_WALLET_ID = "toWalletId";
 
     @DBDouble
     public static String FROM_AMOUNT = "fromAmount";

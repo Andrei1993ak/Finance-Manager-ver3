@@ -24,6 +24,7 @@ import com.github.andrei1993ak.finances.control.executors.WalletExecutor;
 import com.github.andrei1993ak.finances.model.TableQueryGenerator;
 import com.github.andrei1993ak.finances.model.models.Transfer;
 import com.github.andrei1993ak.finances.model.models.Wallet;
+import com.github.andrei1993ak.finances.util.Constants;
 import com.github.andrei1993ak.finances.util.transferRateParser.OnParseCompleted;
 import com.github.andrei1993ak.finances.util.transferRateParser.RateJsonParser;
 
@@ -57,13 +58,13 @@ public class TransferEditActivity extends BaseActivity implements OnTaskComplete
     }
 
     private void initFields() {
-        editTransferName = (EditText) findViewById(R.id.transfer_name);
-        editTransferDate = (TextView) findViewById(R.id.transfer_date);
-        editTransferFromWallet = (AppCompatSpinner) findViewById(R.id.transfer_from_wallet);
-        editTransferToWallet = (AppCompatSpinner) findViewById(R.id.transfer_to_wallet);
-        editTransferFromAmount = (EditText) findViewById(R.id.transfer_from_amount);
-        editTransferToAmount = (EditText) findViewById(R.id.transfer_to_amount);
-        officialRate = (TextView) findViewById(R.id.official_rate);
+        this.editTransferName = (EditText) findViewById(R.id.transfer_name);
+        this.editTransferDate = (TextView) findViewById(R.id.transfer_date);
+        this.editTransferFromWallet = (AppCompatSpinner) findViewById(R.id.transfer_from_wallet);
+        this.editTransferToWallet = (AppCompatSpinner) findViewById(R.id.transfer_to_wallet);
+        this.editTransferFromAmount = (EditText) findViewById(R.id.transfer_from_amount);
+        this.editTransferToAmount = (EditText) findViewById(R.id.transfer_to_amount);
+        this.officialRate = (TextView) findViewById(R.id.official_rate);
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_transfer_add_edit);
         fab.setImageResource(android.R.drawable.ic_menu_edit);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -76,7 +77,7 @@ public class TransferEditActivity extends BaseActivity implements OnTaskComplete
     }
 
     private void setDatePickerDialog() {
-        dateFormatter = new SimpleDateFormat(getResources().getString(R.string.dateFormat), Locale.US);
+        this.dateFormatter = new SimpleDateFormat(Constants.MAIN_DATE_FORMAT, Locale.getDefault());
         final Calendar today = Calendar.getInstance();
         final DatePickerDialog dialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -86,8 +87,8 @@ public class TransferEditActivity extends BaseActivity implements OnTaskComplete
                 editTransferDate.setText(dateFormatter.format(newDate.getTime()));
             }
         }, today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH));
-        editTransferDate.setText(dateFormatter.format(today.getTime()));
-        editTransferDate.setOnClickListener(new View.OnClickListener() {
+        this.editTransferDate.setText(dateFormatter.format(today.getTime()));
+        this.editTransferDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
                 dialog.show();
@@ -209,7 +210,7 @@ public class TransferEditActivity extends BaseActivity implements OnTaskComplete
             officialRate.setText(R.string.checkInternet);
 
         } else {
-            officialRate.setText(String.format(Locale.US, "%.4f", result));
+            officialRate.setText(String.format(Locale.getDefault(), "%.4f", result));
         }
     }
 

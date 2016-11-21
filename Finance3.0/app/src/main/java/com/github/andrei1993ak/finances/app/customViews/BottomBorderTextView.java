@@ -16,7 +16,7 @@ public class BottomBorderTextView extends TextView {
     int color;
     public BottomBorderTextView(final Context context, final AttributeSet attrs) {
         super(context, attrs);
-        paint = new Paint();
+        this.paint = new Paint();
         final TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.BottomBorderTextView, 0, 0);
         try {
             color = ta.getColor(R.styleable.BottomBorderTextView_mBorderColor, Color.TRANSPARENT);

@@ -13,19 +13,11 @@ import com.github.andrei1993ak.finances.util.ContextHolder;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DBHelperCurrency implements DBHelperForModel<Currency> {
+public class DBHelperCurrency implements IDBHelperForModel<Currency> {
 
     private final DBHelper dbHelper;
 
-    private static DBHelperCurrency instance;
-
-    public static DBHelperCurrency getInstance() {
-        if (instance == null)
-            instance = new DBHelperCurrency();
-        return instance;
-    }
-
-    private DBHelperCurrency() {
+    public DBHelperCurrency() {
 
         this.dbHelper = DBHelper.getInstance(ContextHolder.getInstance().getContext());
     }

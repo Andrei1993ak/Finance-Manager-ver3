@@ -64,6 +64,7 @@
         <activity android:name="com.github.andrei1993ak.finances.app.reportsActivities.PieChartActivityNext" />
         <activity android:name="com.github.andrei1993ak.finances.app.reportsActivities.BalanceChartActivity" />
         <activity android:name="com.github.andrei1993ak.finances.app.activities.SettingsActivity" />
+        <activity android:name=".model.UniversalDBHelper.TestActivity"/>
 
         <provider
             android:name="android.support.v4.content.FileProvider"

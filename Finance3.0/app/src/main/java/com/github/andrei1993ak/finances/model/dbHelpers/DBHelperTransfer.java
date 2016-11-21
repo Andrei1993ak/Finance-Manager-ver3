@@ -4,6 +4,8 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.github.andrei1993ak.finances.App;
+import com.github.andrei1993ak.finances.model.models.Wallet;
 import com.github.andrei1993ak.finances.util.ContextHolder;
 import com.github.andrei1993ak.finances.model.DBHelper;
 import com.github.andrei1993ak.finances.model.TableQueryGenerator;
@@ -12,23 +14,14 @@ import com.github.andrei1993ak.finances.model.models.Transfer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DBHelperTransfer implements DBHelperForModel<Transfer> {
+public class DBHelperTransfer implements IDBHelperForModel<Transfer> {
 
     private final DBHelper dbHelper;
-
-    //TODO bbeeee static
-    //TODO move to App
-//    private static DBHelperTransfer instance;
-//
-//    public static DBHelperTransfer getInstance() {
-//        //TODO {}
-//        if (instance == null)
-//            instance = new DBHelperTransfer();
-//        return instance;
-//    }
+    private final DBHelperWallet dbHelperWallet;
 
     public DBHelperTransfer() {
         this.dbHelper = DBHelper.getInstance(ContextHolder.getInstance().getContext());
+        this.dbHelperWallet = ((DBHelperWallet) ((App) ContextHolder.getInstance().getContext()).getDbHelper(Wallet.class));
     }
 
     @Override
@@ -45,7 +38,6 @@ public class DBHelperTransfer implements DBHelperForModel<Transfer> {
         long id = -1;
         try {
             db.beginTransaction();
-            final DBHelperWallet dbHelperWallet = DBHelperWallet.getInstance();
             dbHelperWallet.takeAmount(transfer.getFromWalletId(), transfer.getFromAmount());
             dbHelperWallet.addAmount(transfer.getToWalletId(), transfer.getToAmount());
             id = db.insert(TableQueryGenerator.getTableName(Transfer.class), null, values);
@@ -71,7 +63,6 @@ public class DBHelperTransfer implements DBHelperForModel<Transfer> {
             transfer.setToWalletId(cursor.getLong(cursor.getColumnIndex(Transfer.TO_WALLET_ID)));
             transfer.setFromAmount(cursor.getDouble(cursor.getColumnIndex(Transfer.FROM_AMOUNT)));
             transfer.setToAmount(cursor.getDouble(cursor.getColumnIndex(Transfer.TO_AMOUNT)));
-            //TODO final block
             cursor.close();
             return transfer;
         } else {
@@ -126,7 +117,6 @@ public class DBHelperTransfer implements DBHelperForModel<Transfer> {
         values.put(Transfer.TO_AMOUNT, transfer.getToAmount());
         final int id = db.update(TableQueryGenerator.getTableName(Transfer.class), values, Transfer.ID + "=?", new String[]{String.valueOf(transfer.getId())});
         final Transfer newTransfer = get(transfer.getId());
-        final DBHelperWallet dbHelperWallet = DBHelperWallet.getInstance();
         if (oldTransfer.getFromWalletId() != newTransfer.getFromWalletId()) {
             dbHelperWallet.addAmount(oldTransfer.getFromWalletId(), oldTransfer.getFromAmount());
             dbHelperWallet.takeAmount(newTransfer.getFromWalletId(), newTransfer.getFromAmount());
@@ -145,7 +135,6 @@ public class DBHelperTransfer implements DBHelperForModel<Transfer> {
     @Override
     public int delete(final long id) {
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        final DBHelperWallet dbHelperWallet = DBHelperWallet.getInstance();
         final Transfer transfer = get(id);
         dbHelperWallet.addAmount(transfer.getFromWalletId(), transfer.getFromAmount());
         dbHelperWallet.takeAmount(transfer.getToWalletId(), transfer.getToAmount());

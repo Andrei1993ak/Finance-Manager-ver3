@@ -33,7 +33,7 @@ public class CurrencyActivity extends BaseActivity implements LoaderManager.Load
     private SimpleCursorAdapter simpleCursorAdapter;
     private RequestAdapter<Currency> requestAdapter;
     private MenuInflater inflater;
-    private long itemId = -1;
+    private long selectedItemId;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -41,21 +41,22 @@ public class CurrencyActivity extends BaseActivity implements LoaderManager.Load
         setContentView(R.layout.standart_activity);
         setTitle(R.string.currencies);
         initFields();
-        inflater = getMenuInflater();
-        requestAdapter = new RequestAdapter<>();
         getSupportLoaderManager().restartLoader(Constants.MAIN_LOADER_ID, null, this);
     }
 
     private void initFields() {
+        this.inflater = getMenuInflater();
+        this.requestAdapter = new RequestAdapter<>();
+        this.selectedItemId = Constants.NOT_SELECTED;
         final String[] from = new String[]{Currency.NAME};
         final int[] to = new int[]{R.id.currencyName};
-        simpleCursorAdapter = new SimpleCursorAdapter(this, R.layout.currency_listitem, null, from, to, 0);
+        this.simpleCursorAdapter = new SimpleCursorAdapter(this, R.layout.currency_listitem, null, from, to, 0);
         final ListView lvCurrencies = (ListView) findViewById(R.id.standardListView);
         lvCurrencies.setAdapter(simpleCursorAdapter);
         lvCurrencies.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
-                itemId = id;
+                selectedItemId = id;
             }
         });
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -77,14 +78,14 @@ public class CurrencyActivity extends BaseActivity implements LoaderManager.Load
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
         final int id = item.getItemId();
-        if (itemId != -1) {
+        if (selectedItemId != Constants.NOT_SELECTED) {
             if (id == R.id.action_edit) {
                 final Intent intent = new Intent(this, CurrencyEditActivity.class);
-                intent.putExtra(Currency.ID, itemId);
+                intent.putExtra(Currency.ID, selectedItemId);
                 startActivityForResult(intent, Constants.EDIT_REQUEST);
                 return true;
             } else {
-                new CurrencyExecutor(this).execute(requestAdapter.delete(itemId));
+                new CurrencyExecutor(this).execute(requestAdapter.delete(selectedItemId));
                 return true;
             }
         }

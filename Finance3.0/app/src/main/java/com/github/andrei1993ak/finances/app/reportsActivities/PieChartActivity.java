@@ -46,16 +46,16 @@ public class PieChartActivity extends BaseActivity implements OnTaskCompleted, L
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.report_income_pie);
-        if (getIntent().getBooleanExtra(PieChartItem.TYPE, false)){
+        if (getIntent().getBooleanExtra(Constants.PIE_CHART_TYPE, false)){
             setTitle(R.string.incomesByCategories);
         } else {
             setTitle(R.string.costsByCategories);
         }
-        spinner = (AppCompatSpinner) findViewById(R.id.walletsNames);
+        this.spinner = (AppCompatSpinner) findViewById(R.id.walletsNames);
         if (savedInstanceState == null) {
-            position = 0;
+            this.position = 0;
         } else {
-            position = savedInstanceState.getInt(POSITION);
+            this.position = savedInstanceState.getInt(POSITION);
         }
         new WalletExecutor(this).execute(new RequestAdapter<Wallet>().getAllToList(RequestAdapter.SELECTION_ALL));
     }
@@ -68,14 +68,13 @@ public class PieChartActivity extends BaseActivity implements OnTaskCompleted, L
     }
 
     public GraphicalView buildView(final String[] bars, final Double[] values) {
-        final int[] colors = new int[]{0xFFA5EA8C, 0xFFEAA28C, 0xFF8CA5EA,
-                0xFFEAE18C, 0xFFEA8CA4, 0xFF80ede2};
+        final int[] colors = getBaseContext().getResources().getIntArray(R.array.pieChartColors);
         final CategorySeries series = new CategorySeries("Pie Chart");
         final DefaultRenderer dr = new DefaultRenderer();
         for (int v = 0; v < bars.length; v++) {
             series.add(bars[v], values[v]);
             final SimpleSeriesRenderer r = new SimpleSeriesRenderer();
-            r.setColor(colors[v % 6]);
+            r.setColor(colors[v % colors.length]);
             dr.addSeriesRenderer(r);
         }
         dr.setZoomButtonsVisible(false);
@@ -106,7 +105,7 @@ public class PieChartActivity extends BaseActivity implements OnTaskCompleted, L
                     final long walletId = (wallets.get(position).getId());
                     final Bundle args = new Bundle();
                     args.putLong(Income.WALLET_ID, walletId);
-                    args.putBoolean(PieChartItem.TYPE, getIntent().getBooleanExtra(PieChartItem.TYPE, false));
+                    args.putBoolean(Constants.PIE_CHART_TYPE, getIntent().getBooleanExtra(Constants.PIE_CHART_TYPE, false));
                     args.putLong(Income.CATEGORY_ID, -1L);
                     getSupportLoaderManager().restartLoader(Constants.MAIN_LOADER_ID, args, PieChartActivity.this);
                     final Loader<Object> loader = PieChartActivity.this.getSupportLoaderManager().getLoader(Constants.MAIN_LOADER_ID);
@@ -138,7 +137,7 @@ public class PieChartActivity extends BaseActivity implements OnTaskCompleted, L
                 final long mId = ((PieChartItem) parent.getItemAtPosition(position)).getCategoryId();
                 final Intent intent = new Intent(PieChartActivity.this, PieChartActivityNext.class);
                 intent.putExtra(Income.CATEGORY_ID, mId);
-                intent.putExtra(PieChartItem.TYPE, getIntent().getBooleanExtra(PieChartItem.TYPE, false));
+                intent.putExtra(Constants.PIE_CHART_TYPE, getIntent().getBooleanExtra(Constants.PIE_CHART_TYPE, false));
                 intent.putExtra(Income.WALLET_ID, wallets.get(spinner.getSelectedItemPosition()).getId());
                 startActivity(intent);
             }

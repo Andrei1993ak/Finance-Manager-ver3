@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.github.andrei1993ak.finances.model.dbHelpers.DBHelperWallet;
 import com.github.andrei1993ak.finances.model.models.Wallet;
 import com.github.andrei1993ak.finances.R;
+import com.github.andrei1993ak.finances.util.Constants;
 
 import java.util.Locale;
 
@@ -37,7 +38,7 @@ public class WalletCursorAdapter extends CursorAdapter {
 
         final TextView tvAmount = (TextView) view.findViewById(R.id.walletAmount);
         final Double amount = cursor.getDouble(cursor.getColumnIndex(Wallet.AMOUNT));
-        final String amountString = String.format(Locale.US, "%.2f", amount);
+        final String amountString = String.format(Locale.getDefault(), Constants.MAIN_DOUBLE_FORMAT, amount);
         tvAmount.setText(amountString);
 
         final TextView tvCurrencyCode = (TextView) view.findViewById(R.id.walletCurrency);

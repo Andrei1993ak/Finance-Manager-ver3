@@ -32,10 +32,10 @@ import com.github.andrei1993ak.finances.util.Constants;
 public class CategoryCostActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor>, OnTaskCompleted {
 
     private ExpandableListView costCategoryExpListView;
-    private ExpListAdapter adapter;
-    private MenuInflater inflater;
+    private ExpListAdapter expListAdapter;
+    private MenuInflater menuInflater;
 
-    private int deleteGroupId = -1;
+    private int deleteGroupId;
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
@@ -43,20 +43,21 @@ public class CategoryCostActivity extends BaseActivity implements LoaderManager.
         setContentView(R.layout.category_activity);
         setTitle(R.string.costCategories);
         initFields();
-        inflater = getMenuInflater();
         registerForContextMenu(costCategoryExpListView);
         getSupportLoaderManager().restartLoader(Constants.EXP_LIST_ROOT_LOADER_ID, null, this);
     }
 
     private void initFields() {
-        costCategoryExpListView = (ExpandableListView) findViewById(R.id.CategoryExpListView);
+        this.costCategoryExpListView = (ExpandableListView) findViewById(R.id.CategoryExpListView);
+        this.deleteGroupId = -1;
+        this.menuInflater = getMenuInflater();
         final String[] parentsFrom = {CostCategory.NAME};
         final int[] parentsTo = {android.R.id.text1};
         final String[] childFrom = {CostCategory.NAME};
         final int[] childTo = {android.R.id.text1};
-        adapter = new ExpListAdapter(this, null, android.R.layout.simple_expandable_list_item_1, parentsFrom, parentsTo,
+        expListAdapter = new ExpListAdapter(this, null, android.R.layout.simple_expandable_list_item_1, parentsFrom, parentsTo,
                 android.R.layout.simple_expandable_list_item_1, childFrom, childTo);
-        costCategoryExpListView.setAdapter(adapter);
+        costCategoryExpListView.setAdapter(expListAdapter);
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_add_cat);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,7 +69,7 @@ public class CategoryCostActivity extends BaseActivity implements LoaderManager.
 
     @Override
     protected void onStop() {
-        for (int i = 0; i < adapter.getGroupCount(); i++)
+        for (int i = 0; i < expListAdapter.getGroupCount(); i++)
             costCategoryExpListView.collapseGroup(i);
         super.onStop();
     }
@@ -80,7 +81,7 @@ public class CategoryCostActivity extends BaseActivity implements LoaderManager.
 
     @Override
     public void onCreateContextMenu(final ContextMenu menu, final View v, final ContextMenu.ContextMenuInfo menuInfo) {
-        inflater.inflate(R.menu.context_menu, menu);
+        menuInflater.inflate(R.menu.context_menu, menu);
         super.onCreateContextMenu(menu, v, menuInfo);
     }
 
@@ -92,7 +93,7 @@ public class CategoryCostActivity extends BaseActivity implements LoaderManager.
         switch (item.getItemId()) {
             case R.id.cm_delete:
                 if (type == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
-                    deleteGroupId = adapter.getIdToPos().get(groupPosition);
+                    deleteGroupId = expListAdapter.getIdToPos().get(groupPosition);
                 }
                 new CostCategoryExecutor(this).execute(new RequestAdapter().delete(info.id));
                 return true;
@@ -115,22 +116,15 @@ public class CategoryCostActivity extends BaseActivity implements LoaderManager.
     public void onLoadFinished(final Loader<Cursor> loader, final Cursor data) {
         final int id = loader.getId();
         if (id != Constants.EXP_LIST_ROOT_LOADER_ID) {
-            final int groupPos = adapter.getPosToId().get(id);
-            adapter.setChildrenCursor(groupPos, data);
+            final int groupPos = expListAdapter.getPosToId().get(id);
+            expListAdapter.setChildrenCursor(groupPos, data);
         } else {
-            adapter.setGroupCursor(data);
+            expListAdapter.setGroupCursor(data);
         }
     }
 
     @Override
     public void onLoaderReset(final Loader<Cursor> loader) {
-//        int id = loader.getId();
-//        if (id != -1) {
-//            int groupPos = adapter.getPosToId().get(id);
-//            adapter.setChildrenCursor(groupPos, null);
-//        } else {
-//            adapter.setGroupCursor(null);
-//        }
     }
 
     @Override

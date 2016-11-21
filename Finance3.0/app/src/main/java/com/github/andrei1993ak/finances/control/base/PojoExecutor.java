@@ -20,7 +20,7 @@ public abstract class PojoExecutor<Model> extends AsyncTask<Request<Model>, Void
     }
 
     @Override
-    protected Result doInBackground(final Request<Model>... requests) {
+    protected final Result doInBackground(final Request<Model>... requests) {
         Result result = null;
         switch (requests[0].getId()) {
             case KEY_ADD:

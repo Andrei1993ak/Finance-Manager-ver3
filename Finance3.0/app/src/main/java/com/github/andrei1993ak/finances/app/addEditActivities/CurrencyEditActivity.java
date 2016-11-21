@@ -35,8 +35,8 @@ public class CurrencyEditActivity extends BaseActivity implements OnTaskComplete
     }
 
     private void initFields(){
-        editCurrencyCode = (TextView) findViewById(R.id.edit_currency_code);
-        editCurrencyName = (EditText) findViewById(R.id.edit_currency_name);
+        this.editCurrencyCode = (TextView) findViewById(R.id.edit_currency_code);
+        this.editCurrencyName = (EditText) findViewById(R.id.edit_currency_name);
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_cur_edit);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

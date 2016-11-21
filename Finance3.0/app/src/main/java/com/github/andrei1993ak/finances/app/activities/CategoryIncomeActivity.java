@@ -34,7 +34,7 @@ public class CategoryIncomeActivity extends BaseActivity implements LoaderManage
     private ExpandableListView incomeCategoryExpListView;
     private ExpListAdapter adapter;
     private MenuInflater inflater;
-    private int deleteGroupId = -1;
+    private int deleteGroupId;
 
 
     @Override
@@ -43,13 +43,14 @@ public class CategoryIncomeActivity extends BaseActivity implements LoaderManage
         setContentView(R.layout.category_activity);
         setTitle(R.string.incomeCategories);
         initFields();
-        inflater = getMenuInflater();
         registerForContextMenu(incomeCategoryExpListView);
         getSupportLoaderManager().restartLoader(Constants.EXP_LIST_ROOT_LOADER_ID, null, this);
     }
 
     private void initFields() {
-        incomeCategoryExpListView = (ExpandableListView) findViewById(R.id.CategoryExpListView);
+        this.incomeCategoryExpListView = (ExpandableListView) findViewById(R.id.CategoryExpListView);
+        this.inflater = getMenuInflater();
+        this.deleteGroupId = -1;
         final String[] parentsFrom = {IncomeCategory.NAME};
         final int[] parentsTo = {android.R.id.text1};
         final String[] childFrom = {IncomeCategory.NAME};
@@ -124,13 +125,6 @@ public class CategoryIncomeActivity extends BaseActivity implements LoaderManage
 
     @Override
     public void onLoaderReset(final Loader<Cursor> loader) {
-//        int id = loader.getId();
-//        if (id != -1) {
-//            int groupPos = adapter.getPosToId().get(id);
-//            adapter.setChildrenCursor(groupPos, null);
-//        } else {
-//            adapter.setGroupCursor(null);
-//        }
     }
 
     @Override

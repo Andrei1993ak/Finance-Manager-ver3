@@ -10,7 +10,7 @@ import com.github.andrei1993ak.finances.model.annotations.types.DBInteger;
 public class CostCategory extends TableClass implements Parcelable {
 
     @DBInteger
-    public static final String PARENT_ID = "parent_id";
+    public static final String PARENT_ID = "parentId";
 
     private long id;
     private String name;

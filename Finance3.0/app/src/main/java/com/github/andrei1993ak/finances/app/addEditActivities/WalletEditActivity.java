@@ -38,9 +38,9 @@ public class WalletEditActivity extends BaseActivity implements OnTaskCompleted 
     }
 
     private void initFields() {
-        editWalletName = (EditText) findViewById(R.id.edit_wallet_name);
-        editWalletAmount = (TextView) findViewById(R.id.edit_wallet_amount);
-        editWalletCurrency = (TextView) findViewById(R.id.edit_wallet_currency);
+        this.editWalletName = (EditText) findViewById(R.id.edit_wallet_name);
+        this.editWalletAmount = (TextView) findViewById(R.id.edit_wallet_amount);
+        this.editWalletCurrency = (TextView) findViewById(R.id.edit_wallet_currency);
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_pur_edit);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

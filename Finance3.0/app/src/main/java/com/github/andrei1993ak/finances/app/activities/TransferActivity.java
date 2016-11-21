@@ -33,8 +33,8 @@ public class TransferActivity extends BaseActivity implements LoaderManager.Load
 
     private TransferCursorAdapter transferCursorAdapter;
     private RequestAdapter<Transfer> requestAdapter;
-    private MenuInflater inflater;
-    private long itemId = -1;
+    private MenuInflater menuInflater;
+    private long selectedItemId;
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
@@ -42,18 +42,19 @@ public class TransferActivity extends BaseActivity implements LoaderManager.Load
         setContentView(R.layout.standart_activity);
         setTitle(R.string.transfers);
         initFields();
-        requestAdapter = new RequestAdapter<>();
-        inflater = getMenuInflater();
         getSupportLoaderManager().restartLoader(Constants.MAIN_LOADER_ID, null, this);
     }
 
     private void initFields(){
-        transferCursorAdapter = new TransferCursorAdapter(this, null);
+        this.selectedItemId = Constants.NOT_SELECTED;
+        this.requestAdapter = new RequestAdapter<>();
+        this.menuInflater = getMenuInflater();
+        this.transferCursorAdapter = new TransferCursorAdapter(this, null);
         final ListView transferListView = (ListView) findViewById(R.id.standardListView);
         transferListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
-                itemId = id;
+                selectedItemId = id;
             }
         });
         transferListView.setAdapter(transferCursorAdapter);
@@ -77,14 +78,14 @@ public class TransferActivity extends BaseActivity implements LoaderManager.Load
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
         final int id = item.getItemId();
-        if (itemId != -1) {
+        if (selectedItemId != Constants.NOT_SELECTED) {
             if (id == R.id.action_edit) {
                 final Intent intent = new Intent(this, TransferEditActivity.class);
-                intent.putExtra(Transfer.ID, itemId);
+                intent.putExtra(Transfer.ID, selectedItemId);
                 startActivityForResult(intent, Constants.EDIT_REQUEST);
                 return true;
             } else {
-                new TransferExecutor(this).execute(requestAdapter.delete(itemId));
+                new TransferExecutor(this).execute(requestAdapter.delete(selectedItemId));
                 return true;
             }
         }
@@ -93,7 +94,7 @@ public class TransferActivity extends BaseActivity implements LoaderManager.Load
 
     @Override
     public void onCreateContextMenu(final ContextMenu menu, final View view, final ContextMenu.ContextMenuInfo menuInfo) {
-        inflater.inflate(R.menu.context_menu,menu);
+        menuInflater.inflate(R.menu.context_menu,menu);
         super.onCreateContextMenu(menu, view, menuInfo);
     }
 

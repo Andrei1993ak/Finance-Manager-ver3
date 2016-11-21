@@ -17,21 +17,13 @@ import com.github.andrei1993ak.finances.model.models.Transfer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DBHelperWallet implements DBHelperForModel<Wallet> {
+public class DBHelperWallet implements IDBHelperForModel<Wallet> {
 
     public static final String CURRENCY_NAME = "currency";
 
     private final DBHelper dbHelper;
 
-    private static DBHelperWallet instance;
-
-    public static DBHelperWallet getInstance() {
-        if (instance == null)
-            instance = new DBHelperWallet();
-        return instance;
-    }
-
-    private DBHelperWallet() {
+    public DBHelperWallet() {
 
         this.dbHelper = DBHelper.getInstance(ContextHolder.getInstance().getContext());
     }

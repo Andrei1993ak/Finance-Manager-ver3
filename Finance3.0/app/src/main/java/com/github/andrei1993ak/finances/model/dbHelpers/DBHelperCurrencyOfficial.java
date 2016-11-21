@@ -12,19 +12,11 @@ import com.github.andrei1993ak.finances.model.TableQueryGenerator;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DBHelperCurrencyOfficial implements DBHelperForModel<CurrencyOfficial> {
+public class DBHelperCurrencyOfficial implements IDBHelperForModel<CurrencyOfficial> {
 
     private final DBHelper dbHelper;
 
-    private static DBHelperCurrencyOfficial instance;
-
-    public static DBHelperCurrencyOfficial getInstance() {
-        if (instance == null)
-            instance = new DBHelperCurrencyOfficial();
-        return instance;
-    }
-
-    private DBHelperCurrencyOfficial() {
+    public DBHelperCurrencyOfficial() {
 
         this.dbHelper = DBHelper.getInstance(ContextHolder.getInstance().getContext());
     }

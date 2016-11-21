@@ -11,7 +11,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "financePm";
 
-    private static final int DATABASE_VERSION = 17;
+    private static final int DATABASE_VERSION = 20;
 
     private static DBHelper instance;
 
@@ -41,19 +41,26 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(final SQLiteDatabase sqLiteDatabase, final int oldVersion, final int newVersion) {
-        onCreate(sqLiteDatabase);
+//        sqLiteDatabase.execSQL(TableQueryGenerator.getTableDeleteQuery(Cost.class));
+//        sqLiteDatabase.execSQL(TableQueryGenerator.getTableDeleteQuery(Income.class));
+//        sqLiteDatabase.execSQL(TableQueryGenerator.getTableDeleteQuery(Transfer.class));
+//        sqLiteDatabase.execSQL(TableQueryGenerator.getTableDeleteQuery(IncomeCategory.class));
+//        sqLiteDatabase.execSQL(TableQueryGenerator.getTableDeleteQuery(CostCategory.class));
+//        sqLiteDatabase.execSQL(TableQueryGenerator.getTableDeleteQuery(Wallet.class));
+//        onCreate(sqLiteDatabase);
     }
 
-    public int getNextId() {
+    public int getNextCostId() {
         final Cursor cursor = getReadableDatabase().rawQuery("SELECT SEQ FROM SQLITE_SEQUENCE WHERE NAME = '" +
                 TableQueryGenerator.getTableName(Cost.class) + "'", null);
-        if (cursor.moveToFirst()) {
-            final int nextId = cursor.getInt(0) + 1;
+        try {
+            if (cursor.moveToFirst()) {
+                return cursor.getInt(0) + 1;
+            } else {
+                return -1;
+            }
+        } finally {
             cursor.close();
-            return nextId;
-        } else {
-            cursor.close();
-            return -1;
         }
     }
 

@@ -8,6 +8,7 @@ import android.support.v4.content.Loader;
 import com.github.andrei1993ak.finances.model.models.Income;
 import com.github.andrei1993ak.finances.model.reportDbHelpers.PieChartItemHelper;
 import com.github.andrei1993ak.finances.model.reportModels.PieChartItem;
+import com.github.andrei1993ak.finances.util.Constants;
 
 import java.util.ArrayList;
 
@@ -22,7 +23,7 @@ public class PieReportLoader extends Loader<ArrayList<PieChartItem>> {
 
         super(context);
         walletId = args.getLong(Income.WALLET_ID);
-        type = args.getBoolean(PieChartItem.TYPE);
+        type = args.getBoolean(Constants.PIE_CHART_TYPE);
         categoryId = args.getLong(Income.CATEGORY_ID);
     }
 
@@ -45,9 +46,9 @@ public class PieReportLoader extends Loader<ArrayList<PieChartItem>> {
         @Override
         protected ArrayList<PieChartItem> doInBackground(final Long... params) {
             if (type) {
-                return PieChartItemHelper.getInstance().gRepInfoIncome(params[0], params[1]);
+                return new PieChartItemHelper().gRepInfoIncome(params[0], params[1]);
             } else {
-                return PieChartItemHelper.getInstance().gRepInfoCost(params[0], params[1]);
+                return new PieChartItemHelper().gRepInfoCost(params[0], params[1]);
             }
         }
 

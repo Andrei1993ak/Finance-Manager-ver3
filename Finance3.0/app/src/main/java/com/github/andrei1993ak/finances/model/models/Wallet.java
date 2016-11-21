@@ -14,7 +14,7 @@ public class Wallet extends TableClass implements Parcelable {
     public static String AMOUNT = "amount";
 
     @DBInteger
-    public static String CURRENCY_ID = "currency_id";
+    public static String CURRENCY_ID = "currencyId";
 
     private long id;
     private String name;
@@ -84,8 +84,8 @@ public class Wallet extends TableClass implements Parcelable {
         return currencyId;
     }
 
-    public void setCurrencyId(final long currency_id) {
-        this.currencyId = currency_id;
+    public void setCurrencyId(final long currencyId) {
+        this.currencyId = currencyId;
     }
 
     public double getAmount() {

@@ -13,22 +13,14 @@ import com.github.andrei1993ak.finances.model.models.IncomeCategory;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DBHelperCategoryIncome implements DBHelperForModel<IncomeCategory> {
+public class DBHelperCategoryIncome implements IDBHelperForModel<IncomeCategory> {
 
     public static final int usable = -1;
     public static final int hasChildrens = -2;
 
     private final DBHelper dbHelper;
 
-    private static DBHelperCategoryIncome instance;
-
-    public static DBHelperCategoryIncome getInstance() {
-        if (instance == null)
-            instance = new DBHelperCategoryIncome();
-        return instance;
-    }
-
-    private DBHelperCategoryIncome() {
+    public DBHelperCategoryIncome() {
 
         this.dbHelper = DBHelper.getInstance(ContextHolder.getInstance().getContext());
     }

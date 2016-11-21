@@ -63,7 +63,7 @@ public class CostEditActivity extends BaseActivity implements OnTaskCompleted {
     private ImageView imageView;
     private SimpleDateFormat dateFormatter;
     private long parentId;
-    private long id;
+    private long editCostId;
     private Bitmap photo;
     public static final int CAMERA_REQUEST = 1;
 
@@ -73,19 +73,19 @@ public class CostEditActivity extends BaseActivity implements OnTaskCompleted {
         setContentView(R.layout.cost_add_edit_activity);
         setTitle(R.string.editing);
         findViewsBuId();
-        id = getIntent().getLongExtra(Cost.ID, -1);
-        new CostExecutor(this).execute(new RequestAdapter<Cost>().get(id));
+        editCostId = getIntent().getLongExtra(Cost.ID, -1);
+        new CostExecutor(this).execute(new RequestAdapter<Cost>().get(editCostId));
         setDatePickerDialog();
     }
 
     private void findViewsBuId() {
-        editCostName = (EditText) findViewById(R.id.cost_name);
-        editCostAmount = (EditText) findViewById(R.id.cost_amount);
-        editCostDate = (TextView) findViewById(R.id.cost_date);
-        editCostWallet = (AppCompatSpinner) findViewById(R.id.cost_wallet);
-        editCostCategory = (AppCompatSpinner) findViewById(R.id.cost_category);
-        editCostSubCategory = (AppCompatSpinner) findViewById(R.id.cost_subCategory);
-        imageView = (ImageView) findViewById(R.id.cost_photo);
+        this.editCostName = (EditText) findViewById(R.id.cost_name);
+        this.editCostAmount = (EditText) findViewById(R.id.cost_amount);
+        this.editCostDate = (TextView) findViewById(R.id.cost_date);
+        this.editCostWallet = (AppCompatSpinner) findViewById(R.id.cost_wallet);
+        this.editCostCategory = (AppCompatSpinner) findViewById(R.id.cost_category);
+        this.editCostSubCategory = (AppCompatSpinner) findViewById(R.id.cost_subCategory);
+        this.imageView = (ImageView) findViewById(R.id.cost_photo);
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_cost_add_edit);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,7 +101,7 @@ public class CostEditActivity extends BaseActivity implements OnTaskCompleted {
     }
 
     private void setDatePickerDialog() {
-        dateFormatter = new SimpleDateFormat(getResources().getString(R.string.dateFormat), Locale.US);
+        this.dateFormatter = new SimpleDateFormat(Constants.MAIN_DATE_FORMAT, Locale.getDefault());
         final Calendar newCalendar = Calendar.getInstance();
         final DatePickerDialog dialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -123,7 +123,7 @@ public class CostEditActivity extends BaseActivity implements OnTaskCompleted {
     public void editCost() {
         final Cost cost = checkFields();
         if (cost != null) {
-            cost.setId(id);
+            cost.setId(editCostId);
             final Intent intent = new Intent();
             intent.putExtra(TableQueryGenerator.getTableName(Cost.class), cost);
             setResult(RESULT_OK, intent);
@@ -203,14 +203,15 @@ public class CostEditActivity extends BaseActivity implements OnTaskCompleted {
                 editCostName.setText(cost.getName());
                 editCostAmount.setText(String.valueOf(cost.getAmount()));
                 editCostDate.setText(dateFormatter.format(cost.getDate()));
-                if (cost.getPhoto() == 1) {
-                    final String filePath = ImageNameGenerator.getImagePath(id);
+                if (cost.getPhoto() == Constants.COST_HAS_PHOTO) {
+                    final String filePath = ImageNameGenerator.getImagePath(editCostId);
                     final File file = new File(filePath);
                     final BitmapLoader bitmapLoader = BitmapLoader.getInstance(this);
                     try {
                         bitmapLoader.load(file.toURI().toURL().toString(), imageView);
                     } catch (final MalformedURLException e) {
                         e.printStackTrace();
+                        //TODO exeption
                     }
                 }
                 final RequestAdapter<Wallet> walletRequestAdapter = new RequestAdapter<>();
@@ -307,7 +308,7 @@ public class CostEditActivity extends BaseActivity implements OnTaskCompleted {
             }
             final File file = new File(imagePath, Constants.TEMP_PHOTO_NAME);
             final ImageView view = (ImageView) findViewById(R.id.cost_photo);
-            final String path = ImageNameGenerator.getImagePath(id);
+            final String path = ImageNameGenerator.getImagePath(editCostId);
             final File toFile = new File(path);
             try {
                 Files.move(file, toFile);

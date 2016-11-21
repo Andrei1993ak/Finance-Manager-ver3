@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
+import android.util.SparseIntArray;
 import android.widget.SimpleCursorTreeAdapter;
 
 import com.github.andrei1993ak.finances.model.models.IncomeCategory;
@@ -14,8 +15,8 @@ import java.util.HashMap;
 public class ExpListAdapter extends SimpleCursorTreeAdapter {
 
     private final Context context;
-    private final HashMap<Integer, Integer> idToPos;
-    private final HashMap<Integer, Integer> posToId;
+    private final SparseIntArray idToPos;
+    private final SparseIntArray posToId;
 
 
     public ExpListAdapter(final Context context, final Cursor c, final int parentsLayout,
@@ -23,8 +24,8 @@ public class ExpListAdapter extends SimpleCursorTreeAdapter {
                           final String[] childFrom, final int[] childTo) {
         super(context, c, parentsLayout, parentsFrom, parentsTo, childLayout, childFrom, childTo);
         this.context = context;
-        posToId = new HashMap<>();
-        idToPos = new HashMap<>();
+        this.posToId = new SparseIntArray();
+        this.idToPos = new SparseIntArray();
 
     }
 
@@ -44,11 +45,11 @@ public class ExpListAdapter extends SimpleCursorTreeAdapter {
         return null;
     }
 
-    public HashMap<Integer, Integer> getIdToPos() {
+    public SparseIntArray getIdToPos() {
         return idToPos;
     }
 
-    public HashMap<Integer, Integer> getPosToId() {
+    public SparseIntArray getPosToId() {
         return posToId;
     }
 }

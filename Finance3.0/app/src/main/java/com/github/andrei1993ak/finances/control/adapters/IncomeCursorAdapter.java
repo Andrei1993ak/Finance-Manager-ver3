@@ -8,13 +8,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.github.andrei1993ak.finances.App;
 import com.github.andrei1993ak.finances.model.models.Income;
 import com.github.andrei1993ak.finances.R;
 import com.github.andrei1993ak.finances.model.dbHelpers.DBHelperCategoryIncome;
 import com.github.andrei1993ak.finances.model.dbHelpers.DBHelperCurrency;
 import com.github.andrei1993ak.finances.model.dbHelpers.DBHelperWallet;
 import com.github.andrei1993ak.finances.model.models.Currency;
+import com.github.andrei1993ak.finances.model.models.IncomeCategory;
 import com.github.andrei1993ak.finances.model.models.Wallet;
+import com.github.andrei1993ak.finances.util.Constants;
+import com.github.andrei1993ak.finances.util.ContextHolder;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -28,10 +32,10 @@ public class IncomeCursorAdapter extends CursorAdapter {
 
     public IncomeCursorAdapter(final Context context, final Cursor cursor) {
         super(context, cursor, 0);
-        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        dbHelperWallet = DBHelperWallet.getInstance();
-        helperCurrency = DBHelperCurrency.getInstance();
-        helperIncomeCategory = DBHelperCategoryIncome.getInstance();
+        this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.dbHelperWallet = ((DBHelperWallet) ((App) ContextHolder.getInstance().getContext()).getDbHelper(Wallet.class));
+        this.helperCurrency = ((DBHelperCurrency) ((App) ContextHolder.getInstance().getContext()).getDbHelper(Currency.class));
+        this.helperIncomeCategory = ((DBHelperCategoryIncome) ((App) ContextHolder.getInstance().getContext()).getDbHelper(IncomeCategory.class));
     }
 
     @Override
@@ -46,7 +50,7 @@ public class IncomeCursorAdapter extends CursorAdapter {
         textViewName.setText(name);
 
         final TextView textViewDate = (TextView) view.findViewById(R.id.LIIncomeDate);
-        final SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+        final SimpleDateFormat dateFormatter = new SimpleDateFormat(Constants.MAIN_DATE_FORMAT, Locale.getDefault());
         final Long time = Long.parseLong(cursor.getString(cursor.getColumnIndex(Income.DATE)));
         final String date = dateFormatter.format(time);
         textViewDate.setText(date);
@@ -55,7 +59,7 @@ public class IncomeCursorAdapter extends CursorAdapter {
         final Wallet wallet = dbHelperWallet.get(cursor.getLong(cursor.getColumnIndex(Income.WALLET_ID)));
         final Currency currency = helperCurrency.get(wallet.getCurrencyId());
         final Double amount = cursor.getDouble(cursor.getColumnIndex(Income.AMOUNT));
-        String amountString = String.format(Locale.US, "%.2f", amount);
+        String amountString = String.format(Locale.US, Constants.MAIN_DOUBLE_FORMAT, amount);
         amountString += " ";
         amountString += currency.getCode();
         tvAmount.setText(amountString);
