@@ -4,11 +4,14 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 
 import com.github.andrei1993ak.finances.R;
 import com.github.andrei1993ak.finances.app.BaseActivity;
+import com.github.andrei1993ak.finances.backupUtil.DBBackupUtils;
 import com.github.andrei1993ak.finances.util.Constants;
 
 public class SettingsActivity extends BaseActivity {
@@ -39,6 +42,22 @@ public class SettingsActivity extends BaseActivity {
                     editor.apply();
                     recreate();
                 }
+            }
+        });
+
+        final Button button = (Button) findViewById(R.id.button_backup);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                new DBBackupUtils().backupDB();
+            }
+        });
+
+        final Button buttonRestore = (Button) findViewById(R.id.button_restore);
+        buttonRestore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                new DBBackupUtils().restoreDB();
             }
         });
     }

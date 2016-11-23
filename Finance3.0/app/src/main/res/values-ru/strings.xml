@@ -51,4 +51,6 @@
     <string name="allCurrencies">Все валюты</string>
     <string name="dateFormat">dd-MM-yyyy</string>
     <string name="type">type</string>
+    <string name="backup">Сделать копию бд</string>
+    <string name="restore">Восстановить</string>
 </resources>

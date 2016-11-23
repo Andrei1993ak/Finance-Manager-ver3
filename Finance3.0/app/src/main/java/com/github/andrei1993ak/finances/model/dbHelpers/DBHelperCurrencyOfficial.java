@@ -4,10 +4,10 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.github.andrei1993ak.finances.model.models.CurrencyOfficial;
-import com.github.andrei1993ak.finances.util.ContextHolder;
 import com.github.andrei1993ak.finances.model.DBHelper;
 import com.github.andrei1993ak.finances.model.TableQueryGenerator;
+import com.github.andrei1993ak.finances.model.models.CurrencyOfficial;
+import com.github.andrei1993ak.finances.util.ContextHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,10 +24,8 @@ public class DBHelperCurrencyOfficial implements IDBHelperForModel<CurrencyOffic
     @Override
     public long add(final CurrencyOfficial currency) {
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        final ContentValues values = new ContentValues();
-        values.put(CurrencyOfficial.CODE, currency.getCode());
-        values.put(CurrencyOfficial.NAME, currency.getName());
-        final long id;
+        final ContentValues values = currency.convertToContentValues();
+        long id;
         try {
             db.beginTransaction();
             id = db.insert(TableQueryGenerator.getTableName(CurrencyOfficial.class), null, values);
@@ -42,17 +40,18 @@ public class DBHelperCurrencyOfficial implements IDBHelperForModel<CurrencyOffic
     public CurrencyOfficial get(final long id) {
         final String selectQuery = "SELECT * FROM " + TableQueryGenerator.getTableName(CurrencyOfficial.class) + " WHERE _id = " + id;
         final SQLiteDatabase db = dbHelper.getReadableDatabase();
-        final Cursor cursor = db.rawQuery(selectQuery, null);
-        if (cursor.moveToFirst()) {
-            final CurrencyOfficial currency = new CurrencyOfficial();
-            currency.setId(cursor.getLong(cursor.getColumnIndex(CurrencyOfficial.ID)));
-            currency.setCode(cursor.getString(cursor.getColumnIndex(CurrencyOfficial.CODE)));
-            currency.setName(cursor.getString(cursor.getColumnIndex(CurrencyOfficial.NAME)));
-            cursor.close();
-            return currency;
-        } else {
-            cursor.close();
-            return null;
+        Cursor cursor = null;
+        try {
+            cursor = db.rawQuery(selectQuery, null);
+            if (cursor.moveToFirst()) {
+                return new CurrencyOfficial().convertFromCursor(cursor);
+            } else {
+                return null;
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
         }
     }
 
@@ -66,28 +65,29 @@ public class DBHelperCurrencyOfficial implements IDBHelperForModel<CurrencyOffic
     @Override
     public List<CurrencyOfficial> getAllToList() {
         final List<CurrencyOfficial> currenciesList = new ArrayList<>();
-        final String selectQuery = "SELECT * FROM " + TableQueryGenerator.getTableName(CurrencyOfficial.class) + " ORDER BY " + CurrencyOfficial.NAME;
-        final SQLiteDatabase db = dbHelper.getReadableDatabase();
-        final Cursor cursor = db.rawQuery(selectQuery, null);
-        if (cursor.moveToFirst()) {
-            do {
-                final CurrencyOfficial currency = new CurrencyOfficial();
-                currency.setId(cursor.getLong(cursor.getColumnIndex(CurrencyOfficial.ID)));
-                currency.setCode(cursor.getString(cursor.getColumnIndex(CurrencyOfficial.CODE)));
-                currency.setName(cursor.getString(cursor.getColumnIndex(CurrencyOfficial.NAME)));
-                currenciesList.add(currency);
-            } while (cursor.moveToNext());
+        Cursor cursor = null;
+        try{
+            final String selectQuery = "SELECT * FROM " + TableQueryGenerator.getTableName(CurrencyOfficial.class) + " ORDER BY " + CurrencyOfficial.NAME;
+            final SQLiteDatabase db = dbHelper.getReadableDatabase();
+            cursor = db.rawQuery(selectQuery, null);
+            if (cursor.moveToFirst()) {
+                do {
+                    final CurrencyOfficial currency = new CurrencyOfficial().convertFromCursor(cursor);
+                    currenciesList.add(currency);
+                } while (cursor.moveToNext());
+            }
+        }finally {
+            if (cursor != null) {
+                cursor.close();
+            }
         }
-        cursor.close();
         return currenciesList;
     }
 
     @Override
     public int update(final CurrencyOfficial currency) {
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        final ContentValues values = new ContentValues();
-        values.put(CurrencyOfficial.CODE, currency.getCode());
-        values.put(CurrencyOfficial.NAME, currency.getName());
+        final ContentValues values = currency.convertToContentValues();
         final int count;
         try {
             db.beginTransaction();

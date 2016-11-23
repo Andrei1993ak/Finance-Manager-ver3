@@ -152,15 +152,15 @@ public class CategoryCostActivity extends BaseActivity implements LoaderManager.
         switch (id) {
             case CostCategoryExecutor.KEY_RESULT_DELETE:
                 if (deleteGroupId == -1 && loader != null) {
-                    if ((Integer) result.getObject() == DBHelperCategoryCost.hasChildrens) {
+                    if ((Integer) result.getObject() == Constants.CATEGORY_HAS_CHILDS) {
                         Toast.makeText(this, R.string.hasChilds, Toast.LENGTH_LONG).show();
-                    } else if ((Integer) result.getObject() == DBHelperCategoryCost.usable) {
+                    } else if ((Integer) result.getObject() == Constants.CATEGORY_USABLE) {
                         Toast.makeText(this, R.string.categoryUsable, Toast.LENGTH_LONG).show();
                     } else {
                         loader.forceLoad();
                     }
                 } else if (loader != null && getSupportLoaderManager().getLoader(deleteGroupId) != null) {
-                    if ((Integer) result.getObject() == DBHelperCategoryCost.usable) {
+                    if ((Integer) result.getObject() == Constants.CATEGORY_USABLE) {
                         Toast.makeText(this, R.string.categoryUsable, Toast.LENGTH_LONG).show();
                     } else {
                         getSupportLoaderManager().getLoader(deleteGroupId).forceLoad();

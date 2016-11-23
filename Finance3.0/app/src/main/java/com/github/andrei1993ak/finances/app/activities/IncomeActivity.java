@@ -75,7 +75,7 @@ public class IncomeActivity extends BaseActivity implements LoaderManager.Loader
         return true;
     }
 
-    // TODO how to disable selection om LV?
+    //TODO disable selection of ListView
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
         final int id = item.getItemId();

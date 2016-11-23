@@ -50,4 +50,6 @@
     <string name="balanceCHart">Balance chart</string>
     <string name="theme">Set dark style</string>
     <string name="allCurrencies">All currencies</string>
+    <string name="backup">Backup</string>
+    <string name="restore">Restore</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.github.andrei1993ak.finances.model.UniversalDBHelper;
+package com.github.andrei1993ak.finances.model.newModel;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,9 +18,9 @@ public class TestActivity extends AppCompatActivity {
     }
 
     private void testUniversalDbHelper() {
-        final UniversalDBHelper<Wallet> helper = new UniversalDBHelper<>();
-        final Wallet wallet = helper.get(1,Wallet.class);
-        final List<Wallet> wallets =  helper.getAllToList(Wallet.class);
+        final UniversalDBHelper<Wallet> helper = new UniversalDBHelper<>(Wallet.class);
+        final Wallet wallet = helper.get(1);
+        final List<Wallet> wallets =  helper.getAllToList();
 //        final long addCount = helper.add(new Wallet("КТо молодец",1,23.45));
         final int count = wallets.size();
 //        final boolean eq = wallet.getName().equals(wallets.get(0).getName());

@@ -1,11 +1,14 @@
 package com.github.andrei1993ak.finances.model.models;
 
+import android.content.ContentValues;
+import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.github.andrei1993ak.finances.model.annotations.types.DBDouble;
 import com.github.andrei1993ak.finances.model.annotations.Table;
+import com.github.andrei1993ak.finances.model.annotations.types.DBDouble;
 import com.github.andrei1993ak.finances.model.annotations.types.DBInteger;
+import com.github.andrei1993ak.finances.util.CursorUtils;
 
 @Table(name = "purses")
 public class Wallet extends TableClass implements Parcelable {
@@ -107,6 +110,25 @@ public class Wallet extends TableClass implements Parcelable {
         dest.writeString(name);
         dest.writeLong(currencyId);
         dest.writeDouble(amount);
+    }
+
+    @Override
+    public Wallet convertFromCursor(final Cursor cursor) {
+        final CursorUtils cursorUtils = new CursorUtils();
+        this.id = cursorUtils.getLong(cursor, ID);
+        this.name = cursorUtils.getString(cursor, NAME);
+        this.currencyId = cursorUtils.getLong(cursor, CURRENCY_ID);
+        this.amount = cursorUtils.getDouble(cursor, AMOUNT);
+        return this;
+    }
+
+    @Override
+    public ContentValues convertToContentValues() {
+        final ContentValues contentValues = new ContentValues();
+        contentValues.put(NAME, this.name);
+        contentValues.put(CURRENCY_ID, this.currencyId);
+        contentValues.put(AMOUNT, this.amount);
+        return contentValues;
     }
 }
 

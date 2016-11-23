@@ -1,11 +1,14 @@
 package com.github.andrei1993ak.finances.model.models;
 
+import android.content.ContentValues;
+import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.github.andrei1993ak.finances.model.annotations.Table;
 import com.github.andrei1993ak.finances.model.annotations.types.DBDouble;
 import com.github.andrei1993ak.finances.model.annotations.types.DBInteger;
+import com.github.andrei1993ak.finances.util.CursorUtils;
 
 @Table(name = "incomes")
 public class Income extends TableClass implements Parcelable {
@@ -115,4 +118,27 @@ public class Income extends TableClass implements Parcelable {
             return new Income[size];
         }
     };
+
+    @Override
+    public Income convertFromCursor(final Cursor cursor) {
+        final CursorUtils cursorUtils = new CursorUtils();
+        this._id = cursorUtils.getLong(cursor, ID);
+        this.name = cursorUtils.getString(cursor, NAME);
+        this.amount = cursorUtils.getDouble(cursor, AMOUNT);
+        this.walletId = cursorUtils.getLong(cursor,WALLET_ID);
+        this.categoryId = cursorUtils.getLong(cursor, CATEGORY_ID);
+        this.date = cursorUtils.getLong(cursor, DATE);
+        return this;
+    }
+
+    @Override
+    public ContentValues convertToContentValues() {
+        final ContentValues contentValues = new ContentValues();
+        contentValues.put(NAME, this.name);
+        contentValues.put(WALLET_ID, this.walletId);
+        contentValues.put(AMOUNT, this.amount);
+        contentValues.put(CATEGORY_ID, this.categoryId);
+        contentValues.put(DATE, this.date);
+        return contentValues;
+    }
 }

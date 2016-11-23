@@ -4,22 +4,20 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-
-import com.github.andrei1993ak.finances.model.models.Cost;
-import com.github.andrei1993ak.finances.model.models.Income;
-import com.github.andrei1993ak.finances.model.models.Wallet;
-import com.github.andrei1993ak.finances.util.ContextHolder;
 import com.github.andrei1993ak.finances.model.DBHelper;
 import com.github.andrei1993ak.finances.model.TableQueryGenerator;
+import com.github.andrei1993ak.finances.model.models.Cost;
 import com.github.andrei1993ak.finances.model.models.Currency;
+import com.github.andrei1993ak.finances.model.models.Income;
 import com.github.andrei1993ak.finances.model.models.Transfer;
+import com.github.andrei1993ak.finances.model.models.Wallet;
+import com.github.andrei1993ak.finances.util.Constants;
+import com.github.andrei1993ak.finances.util.ContextHolder;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class DBHelperWallet implements IDBHelperForModel<Wallet> {
-
-    public static final String CURRENCY_NAME = "currency";
 
     private final DBHelper dbHelper;
 
@@ -31,11 +29,7 @@ public class DBHelperWallet implements IDBHelperForModel<Wallet> {
     @Override
     public long add(final Wallet wallet) {
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        final ContentValues values = new ContentValues();
-        values.put(Wallet.NAME, wallet.getName());
-        values.put(Wallet.CURRENCY_ID, wallet.getCurrencyId());
-        values.put(Wallet.AMOUNT, wallet.getAmount());
-
+        final ContentValues values = wallet.convertToContentValues();
         final long id;
         try {
             db.beginTransaction();
@@ -51,18 +45,18 @@ public class DBHelperWallet implements IDBHelperForModel<Wallet> {
     public Wallet get(final long id) {
         final String selectQuery = "SELECT * FROM " + TableQueryGenerator.getTableName(Wallet.class) + " WHERE _id = " + id;
         final SQLiteDatabase db = dbHelper.getReadableDatabase();
-        final Cursor cursor = db.rawQuery(selectQuery, null);
-        if (cursor.moveToFirst()) {
-            final Wallet wallet = new Wallet();
-            wallet.setId(cursor.getLong(cursor.getColumnIndex(Wallet.ID)));
-            wallet.setName(cursor.getString(cursor.getColumnIndex(Wallet.NAME)));
-            wallet.setCurrencyId(cursor.getLong(cursor.getColumnIndex(Wallet.CURRENCY_ID)));
-            wallet.setAmount(cursor.getDouble(cursor.getColumnIndex(Wallet.AMOUNT)));
-            cursor.close();
-            return wallet;
-        } else {
-            cursor.close();
-            return null;
+        Cursor cursor = null;
+        try {
+            cursor = db.rawQuery(selectQuery, null);
+            if (cursor.moveToFirst()) {
+                return new Wallet().convertFromCursor(cursor);
+            } else {
+                return null;
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
         }
     }
 
@@ -72,7 +66,7 @@ public class DBHelperWallet implements IDBHelperForModel<Wallet> {
                 "PU." + Wallet.ID + " as " + Wallet.ID + ", " +
                 "PU." + Wallet.NAME + " as " + Wallet.NAME + ", " +
                 "PU." + Wallet.AMOUNT + " as " + Wallet.AMOUNT + ", " +
-                "CU." + Currency.CODE + " as " + CURRENCY_NAME + " " +
+                "CU." + Currency.CODE + " as " + Constants.CURRENCY + " " +
                 "from " + TableQueryGenerator.getTableName(Wallet.class)
                 + " as PU inner join " + TableQueryGenerator.getTableName(Currency.class) + " as CU "
                 + "on PU." + Wallet.CURRENCY_ID + " = CU." + Currency.ID;
@@ -83,10 +77,7 @@ public class DBHelperWallet implements IDBHelperForModel<Wallet> {
     @Override
     public int update(final Wallet wallet) {
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        final ContentValues values = new ContentValues();
-        values.put(Wallet.NAME, wallet.getName());
-        values.put(Wallet.CURRENCY_ID, wallet.getCurrencyId());
-        values.put(Wallet.AMOUNT, wallet.getAmount());
+        final ContentValues values = wallet.convertToContentValues();
         final int count;
         try {
             db.beginTransaction();
@@ -107,12 +98,17 @@ public class DBHelperWallet implements IDBHelperForModel<Wallet> {
                 "SELECT * FROM " + TableQueryGenerator.getTableName(Income.class) + " WHERE " + Income.WALLET_ID + " = " + id + " LIMIT 1",
                 "SELECT * FROM " + TableQueryGenerator.getTableName(Transfer.class) + " WHERE " + Transfer.FROM_WALLET_ID + " = " + id +
                         " or " + Transfer.TO_WALLET_ID + " = " + id + " LIMIT 1"};
-        for (final String query : querys) {
-            final Cursor cursor = db.rawQuery(query, null);
-            if (cursor.moveToFirst()) {
-                cursor.close();
-                return -1;
-            } else {
+        Cursor cursor = null;
+        try {
+            for (final String query : querys) {
+                cursor = db.rawQuery(query, null);
+                if (cursor.moveToFirst()) {
+                    cursor.close();
+                    return -1;
+                }
+            }
+        } finally {
+            if (cursor != null) {
                 cursor.close();
             }
         }
@@ -153,22 +149,25 @@ public class DBHelperWallet implements IDBHelperForModel<Wallet> {
         update(wallet);
     }
 
+    @Override
     public List<Wallet> getAllToList() {
         final List<Wallet> wallets = new ArrayList<>();
-        final String selectQuery = "SELECT * FROM " + TableQueryGenerator.getTableName(Wallet.class);
-        final SQLiteDatabase db = dbHelper.getReadableDatabase();
-        final Cursor cursor = db.rawQuery(selectQuery, null);
-        if (cursor.moveToFirst()) {
-            do {
-                final Wallet wallet = new Wallet();
-                wallet.setId(cursor.getLong(cursor.getColumnIndex(Wallet.ID)));
-                wallet.setName(cursor.getString(cursor.getColumnIndex(Wallet.NAME)));
-                wallet.setCurrencyId(cursor.getLong(cursor.getColumnIndex(Wallet.CURRENCY_ID)));
-                wallet.setAmount(cursor.getDouble(cursor.getColumnIndex(Wallet.AMOUNT)));
-                wallets.add(wallet);
-            } while (cursor.moveToNext());
+        Cursor cursor = null;
+        try {
+            final SQLiteDatabase db = dbHelper.getReadableDatabase();
+            final String selectQuery = "SELECT * FROM " + TableQueryGenerator.getTableName(Wallet.class);
+            cursor = db.rawQuery(selectQuery, null);
+            if (cursor.moveToFirst()) {
+                do {
+                    final Wallet wallet = new Wallet().convertFromCursor(cursor);
+                    wallets.add(wallet);
+                } while (cursor.moveToNext());
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
         }
-        cursor.close();
         return wallets;
     }
 }

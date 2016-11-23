@@ -25,9 +25,7 @@ public class DBHelperCurrency implements IDBHelperForModel<Currency> {
     @Override
     public long add(final Currency currency) {
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        final ContentValues values = new ContentValues();
-        values.put(Currency.CODE, currency.getCode());
-        values.put(Currency.NAME, currency.getName());
+        final ContentValues values = currency.convertToContentValues();
         long id;
         try {
             db.beginTransaction();
@@ -43,17 +41,18 @@ public class DBHelperCurrency implements IDBHelperForModel<Currency> {
     public Currency get(final long id) {
         final String selectQuery = "SELECT * FROM " + TableQueryGenerator.getTableName(Currency.class) + " WHERE _id = " + id;
         final SQLiteDatabase db = dbHelper.getReadableDatabase();
-        final Cursor cursor = db.rawQuery(selectQuery, null);
-        if (cursor.moveToFirst()) {
-            final Currency currency = new Currency();
-            currency.setId(cursor.getLong(cursor.getColumnIndex(Currency.ID)));
-            currency.setCode(cursor.getString(cursor.getColumnIndex(Currency.CODE)));
-            currency.setName(cursor.getString(cursor.getColumnIndex(Currency.NAME)));
-            cursor.close();
-            return currency;
-        } else {
-            cursor.close();
-            return null;
+        Cursor cursor = null;
+        try {
+            cursor = db.rawQuery(selectQuery, null);
+            if (cursor.moveToFirst()) {
+                return new Currency().convertFromCursor(cursor);
+            } else {
+                return null;
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
         }
     }
 
@@ -64,59 +63,66 @@ public class DBHelperCurrency implements IDBHelperForModel<Currency> {
         return db.rawQuery(selectQuery, null);
     }
 
+    @Override
     public List<Currency> getAllToList() {
         final List<Currency> currenciesList = new ArrayList<>();
-        final String selectQuery = "SELECT * FROM " + TableQueryGenerator.getTableName(Currency.class);
-        final SQLiteDatabase db = dbHelper.getReadableDatabase();
-        final Cursor cursor = db.rawQuery(selectQuery, null);
-        if (cursor.moveToFirst()) {
-            do {
-                final Currency currency = new Currency();
-                currency.setId(cursor.getLong(cursor.getColumnIndex(Currency.ID)));
-                currency.setCode(cursor.getString(cursor.getColumnIndex(Currency.CODE)));
-                currency.setName(cursor.getString(cursor.getColumnIndex(Currency.NAME)));
-                currenciesList.add(currency);
-            } while (cursor.moveToNext());
+        Cursor cursor = null;
+        try {
+            final String selectQuery = "SELECT * FROM " + TableQueryGenerator.getTableName(Currency.class);
+            final SQLiteDatabase db = dbHelper.getReadableDatabase();
+            cursor = db.rawQuery(selectQuery, null);
+            if (cursor.moveToFirst()) {
+                do {
+                    final Currency currency = new Currency().convertFromCursor(cursor);
+                    currenciesList.add(currency);
+                } while (cursor.moveToNext());
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
         }
-        cursor.close();
         return currenciesList;
     }
 
     @Override
     public int update(final Currency currency) {
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        final ContentValues values = new ContentValues();
-        values.put(Currency.CODE, currency.getCode());
-        values.put(Currency.NAME, currency.getName());
+        final ContentValues values = currency.convertToContentValues();
         final int count;
         try {
             db.beginTransaction();
-            count = db.update(TableQueryGenerator.getTableName(Currency.class), values, Currency.ID + "=?", new String[]{String.valueOf(currency.getId())});
+            count = db.update(TableQueryGenerator.getTableName(Currency.class), values,
+                    Currency.ID + "=?", new String[]{String.valueOf(currency.getId())});
             db.setTransactionSuccessful();
         } finally {
             db.endTransaction();
         }
         return count;
-
     }
 
     @Override
     public int delete(final long id) {
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         final String selectQuery = "SELECT * FROM " + TableQueryGenerator.getTableName(Wallet.class) + " WHERE " + Wallet.CURRENCY_ID + " = " + id + " LIMIT 1";
-        final Cursor cursor = db.rawQuery(selectQuery, null);
-        int count = -1;
-        if (!cursor.moveToFirst()) {
-            cursor.close();
-            try {
-                db.beginTransaction();
-                count = db.delete(TableQueryGenerator.getTableName(Currency.class), Currency.ID + " = " + id, null);
-                db.setTransactionSuccessful();
-            } finally {
-                db.endTransaction();
+        Cursor cursor = null;
+        try {
+            cursor = db.rawQuery(selectQuery, null);
+            if (cursor.moveToFirst()) {
+                return -1;
             }
-        } else {
-            cursor.close();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        int count = -1;
+        try {
+            db.beginTransaction();
+            count = db.delete(TableQueryGenerator.getTableName(Currency.class), Currency.ID + " = " + id, null);
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
         }
         return count;
     }
@@ -134,5 +140,4 @@ public class DBHelperCurrency implements IDBHelperForModel<Currency> {
         }
         return count;
     }
-
 }

@@ -1,10 +1,13 @@
 package com.github.andrei1993ak.finances.model.models;
 
+import android.content.ContentValues;
+import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.github.andrei1993ak.finances.model.annotations.Table;
 import com.github.andrei1993ak.finances.model.annotations.types.DBString;
+import com.github.andrei1993ak.finances.util.CursorUtils;
 
 @Table(name = "currencies_from_web")
 public class CurrencyOfficial extends TableClass implements Parcelable {
@@ -76,5 +79,22 @@ public class CurrencyOfficial extends TableClass implements Parcelable {
         dest.writeLong(id);
         dest.writeString(code);
         dest.writeString(name);
+    }
+
+    @Override
+    public CurrencyOfficial convertFromCursor(Cursor cursor) {
+        final CursorUtils cursorUtils = new CursorUtils();
+        this.id = cursorUtils.getLong(cursor, ID);
+        this.name = cursorUtils.getString(cursor, NAME);
+        this.code = cursorUtils.getString(cursor, CODE);
+        return this;
+    }
+
+    @Override
+    public ContentValues convertToContentValues() {
+        final ContentValues contentValues = new ContentValues();
+        contentValues.put(NAME, this.name);
+        contentValues.put(CODE, this.code);
+        return contentValues;
     }
 }

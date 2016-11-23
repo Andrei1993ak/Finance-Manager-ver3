@@ -42,7 +42,7 @@ public class WalletsRecycleViewAdapter extends RecyclerView.Adapter<WalletsHolde
         final Double amount = cursorUtils.getDouble(cursor, Wallet.AMOUNT);
         holder.walletAmount.setText(String.format(Locale.getDefault(), Constants.MAIN_DOUBLE_FORMAT, amount));
         holder.walletName.setText(cursorUtils.getString(cursor, Wallet.NAME));
-        holder.walletCurrency.setText(cursorUtils.getString(cursor, DBHelperWallet.CURRENCY_NAME));
+        holder.walletCurrency.setText(cursorUtils.getString(cursor, Constants.CURRENCY));
         holder.setWalletId(cursor.getLong(cursor.getColumnIndex(Wallet.ID)));
     }
 

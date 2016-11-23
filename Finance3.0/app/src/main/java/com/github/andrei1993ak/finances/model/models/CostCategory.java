@@ -1,10 +1,13 @@
 package com.github.andrei1993ak.finances.model.models;
 
+import android.content.ContentValues;
+import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.github.andrei1993ak.finances.model.annotations.Table;
 import com.github.andrei1993ak.finances.model.annotations.types.DBInteger;
+import com.github.andrei1993ak.finances.util.CursorUtils;
 
 @Table(name = "costCategories")
 public class CostCategory extends TableClass implements Parcelable {
@@ -83,4 +86,21 @@ public class CostCategory extends TableClass implements Parcelable {
             return new CostCategory[size];
         }
     };
+
+    @Override
+    public CostCategory convertFromCursor(final Cursor cursor) {
+        final CursorUtils cursorUtils = new CursorUtils();
+        this.id = cursorUtils.getLong(cursor, ID);
+        this.name = cursorUtils.getString(cursor, NAME);
+        this.parentId = cursorUtils.getLong(cursor, PARENT_ID);
+        return this;
+    }
+
+    @Override
+    public ContentValues convertToContentValues() {
+        final ContentValues contentValues = new ContentValues();
+        contentValues.put(NAME, this.name);
+        contentValues.put(PARENT_ID, this.parentId);
+        return contentValues;
+    }
 }

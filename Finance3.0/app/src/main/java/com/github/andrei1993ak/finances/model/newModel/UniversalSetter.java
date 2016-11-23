@@ -1,4 +1,4 @@
-package com.github.andrei1993ak.finances.model.UniversalDBHelper;
+package com.github.andrei1993ak.finances.model.newModel;
 
 import java.lang.reflect.Method;
 

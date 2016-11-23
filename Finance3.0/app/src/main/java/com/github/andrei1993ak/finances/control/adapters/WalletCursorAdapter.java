@@ -8,9 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.github.andrei1993ak.finances.model.dbHelpers.DBHelperWallet;
-import com.github.andrei1993ak.finances.model.models.Wallet;
 import com.github.andrei1993ak.finances.R;
+import com.github.andrei1993ak.finances.model.models.Wallet;
 import com.github.andrei1993ak.finances.util.Constants;
 
 import java.util.Locale;
@@ -42,7 +41,7 @@ public class WalletCursorAdapter extends CursorAdapter {
         tvAmount.setText(amountString);
 
         final TextView tvCurrencyCode = (TextView) view.findViewById(R.id.walletCurrency);
-        final String code = cursor.getString(cursor.getColumnIndex(DBHelperWallet.CURRENCY_NAME));
+        final String code = cursor.getString(cursor.getColumnIndex(Constants.CURRENCY));
         tvCurrencyCode.setText(code);
 
     }

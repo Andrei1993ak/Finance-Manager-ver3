@@ -1,4 +1,4 @@
-package com.github.andrei1993ak.finances.model.UniversalDBHelper;
+package com.github.andrei1993ak.finances.model.newModel;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -7,32 +7,31 @@ import android.database.sqlite.SQLiteDatabase;
 import com.github.andrei1993ak.finances.model.DBHelper;
 import com.github.andrei1993ak.finances.model.TableQueryGenerator;
 import com.github.andrei1993ak.finances.model.models.TableClass;
-import com.github.andrei1993ak.finances.model.models.Wallet;
 import com.github.andrei1993ak.finances.util.ContextHolder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class UniversalDBHelper<Model extends TableClass> implements IUniversalDBHelper<Model> {
 
-    private final DBHelper dbHelper;
-    private final ModelsFromCursorGenerator<Model> cursorGenerator;
-    private final ContentValuesFromModelGenerator<Model> cvGenerator;
+    protected final DBHelper dbHelper;
 
-    public UniversalDBHelper() {
+    private final Class<Model> clazz;
+
+    public UniversalDBHelper(final Class<Model> clazz) {
         this.dbHelper = DBHelper.getInstance(ContextHolder.getInstance().getContext());
-        this.cursorGenerator = new ModelsFromCursorGenerator<>();
-        this.cvGenerator = new ContentValuesFromModelGenerator<>();
+        this.clazz = clazz;
     }
 
     @Override
     public long add(final Model model) {
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        final ContentValues values = cvGenerator.generateCVFromModel(model);
+        final ContentValues values = model.convertToContentValues();
         if (values != null) {
             final long id;
             try {
                 db.beginTransaction();
-                id = db.insert(TableQueryGenerator.getTableName(Wallet.class), null, values);
+                id = db.insert(TableQueryGenerator.getTableName(model.getClass()), null, model.convertToContentValues());
                 db.setTransactionSuccessful();
             } finally {
                 db.endTransaction();
@@ -44,14 +43,14 @@ public class UniversalDBHelper<Model extends TableClass> implements IUniversalDB
     }
 
     @Override
-    public Model get(final long id, final Class<Model> clazz) {
+    public Model get(final long id) {
         Cursor cursor = null;
         try {
             final String selectQuery = "SELECT * FROM " + TableQueryGenerator.getTableName(clazz) + " WHERE _id = " + id;
             final SQLiteDatabase db = dbHelper.getReadableDatabase();
             cursor = db.rawQuery(selectQuery, null);
             if (cursor.moveToFirst()) {
-                return cursorGenerator.generateModelFromCursor(cursor, clazz);
+                return ((Model) clazz.newInstance().convertFromCursor(cursor));
             } else {
                 return null;
             }
@@ -65,20 +64,26 @@ public class UniversalDBHelper<Model extends TableClass> implements IUniversalDB
     }
 
     @Override
-    public Cursor getAll(final Class<Model> clazz) {
+    public Cursor getAll() {
         final String selectQuery = "SELECT * FROM " + TableQueryGenerator.getTableName(clazz);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         return db.rawQuery(selectQuery, null);
     }
 
     @Override
-    public List<Model> getAllToList(final Class<Model> clazz) {
+    public List<Model> getAllToList() {
         Cursor cursor = null;
         try {
+            final List<Model> list = new ArrayList<>();
             final String selectQuery = "SELECT * FROM " + TableQueryGenerator.getTableName(clazz);
             final SQLiteDatabase db = dbHelper.getReadableDatabase();
             cursor = db.rawQuery(selectQuery, null);
-            return cursorGenerator.generateListOfModelsFromCursor(cursor, clazz);
+            if (cursor.moveToFirst()) {
+                do {
+                    list.add((Model) clazz.newInstance().convertFromCursor(cursor));
+                } while (cursor.moveToNext());
+            }
+            return list;
         } catch (final Exception e) {
             return null;
         } finally {
@@ -91,7 +96,7 @@ public class UniversalDBHelper<Model extends TableClass> implements IUniversalDB
     @Override
     public int update(final Model model, final long id) {
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        final ContentValues values = cvGenerator.generateCVFromModel(model);
+        final ContentValues values = model.convertToContentValues();
         if (values != null) {
             final int count;
             try {
@@ -108,7 +113,7 @@ public class UniversalDBHelper<Model extends TableClass> implements IUniversalDB
     }
 
     @Override
-    public int delete(final long id, final Class<Model> clazz) {
+    public int delete(final long id) {
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         final int count;
         try {
@@ -122,8 +127,16 @@ public class UniversalDBHelper<Model extends TableClass> implements IUniversalDB
     }
 
     @Override
-    public int deleteAll(final Class<Model> clazz) {
+    public int deleteAll() {
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        return db.delete(TableQueryGenerator.getTableName(clazz), null, null);
+        final int count;
+        try {
+            db.beginTransaction();
+            count = db.delete(TableQueryGenerator.getTableName(clazz), null, null);
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+        }
+        return count;
     }
 }

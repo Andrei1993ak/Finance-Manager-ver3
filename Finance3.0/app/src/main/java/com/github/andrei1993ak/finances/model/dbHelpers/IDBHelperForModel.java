@@ -4,7 +4,6 @@ import android.database.Cursor;
 
 import java.util.List;
 
-//TODO do all DBHelpers extends of UniversalDBHelper
 public interface IDBHelperForModel<Model> {
 
     long add(Model model);

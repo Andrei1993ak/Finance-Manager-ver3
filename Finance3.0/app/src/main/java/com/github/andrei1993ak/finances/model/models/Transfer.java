@@ -1,11 +1,14 @@
 package com.github.andrei1993ak.finances.model.models;
 
+import android.content.ContentValues;
+import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.github.andrei1993ak.finances.model.annotations.Table;
 import com.github.andrei1993ak.finances.model.annotations.types.DBDouble;
 import com.github.andrei1993ak.finances.model.annotations.types.DBInteger;
+import com.github.andrei1993ak.finances.util.CursorUtils;
 
 @Table(name = "transfers")
 public final class Transfer extends TableClass implements Parcelable {
@@ -140,4 +143,29 @@ public final class Transfer extends TableClass implements Parcelable {
             return new Transfer[size];
         }
     };
+
+    @Override
+    public Transfer convertFromCursor(final Cursor cursor) {
+        final CursorUtils cursorUtils = new CursorUtils();
+        this._id = cursorUtils.getLong(cursor, ID);
+        this.name = cursorUtils.getString(cursor, NAME);
+        this.fromWalletId = cursorUtils.getLong(cursor, FROM_WALLET_ID);
+        this.toWalletId = cursorUtils.getLong(cursor, TO_WALLET_ID);
+        this.fromAmount = cursorUtils.getDouble(cursor, FROM_AMOUNT);
+        this.toAmount = cursorUtils.getDouble(cursor, TO_AMOUNT);
+        this.date = cursorUtils.getLong(cursor, DATE);
+        return this;
+    }
+
+    @Override
+    public ContentValues convertToContentValues() {
+        final ContentValues contentValues = new ContentValues();
+        contentValues.put(NAME, this.name);
+        contentValues.put(DATE, this.date);
+        contentValues.put(FROM_WALLET_ID, this.fromWalletId);
+        contentValues.put(TO_WALLET_ID, this.toWalletId);
+        contentValues.put(FROM_AMOUNT, this.fromAmount);
+        contentValues.put(TO_AMOUNT, this.toAmount);
+        return contentValues;
+    }
 }

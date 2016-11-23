@@ -25,7 +25,6 @@ import com.github.andrei1993ak.finances.control.base.Result;
 import com.github.andrei1993ak.finances.control.executors.IncomeCategoryExecutor;
 import com.github.andrei1993ak.finances.control.loaders.IncomeCategoryCursorLoader;
 import com.github.andrei1993ak.finances.model.TableQueryGenerator;
-import com.github.andrei1993ak.finances.model.dbHelpers.DBHelperCategoryIncome;
 import com.github.andrei1993ak.finances.model.models.IncomeCategory;
 import com.github.andrei1993ak.finances.util.Constants;
 
@@ -81,7 +80,7 @@ public class CategoryIncomeActivity extends BaseActivity implements LoaderManage
 
     @Override
     public void onCreateContextMenu(final ContextMenu menu, final View v, final ContextMenu.ContextMenuInfo menuInfo) {
-        inflater.inflate(R.menu.context_menu,menu);
+        inflater.inflate(R.menu.context_menu, menu);
         super.onCreateContextMenu(menu, v, menuInfo);
     }
 
@@ -152,9 +151,9 @@ public class CategoryIncomeActivity extends BaseActivity implements LoaderManage
         switch (id) {
             case IncomeCategoryExecutor.KEY_RESULT_DELETE:
                 if (deleteGroupId == -1 && loader != null) {
-                    if ((Integer) result.getObject() == DBHelperCategoryIncome.hasChildrens) {
+                    if ((Integer) result.getObject() == Constants.CATEGORY_HAS_CHILDS) {
                         Toast.makeText(this, R.string.hasChilds, Toast.LENGTH_LONG).show();
-                    } else if ((Integer) result.getObject() == DBHelperCategoryIncome.usable) {
+                    } else if ((Integer) result.getObject() == Constants.CATEGORY_USABLE) {
                         Toast.makeText(this, R.string.categoryUsable, Toast.LENGTH_LONG).show();
                     } else {
                         loader.forceLoad();
@@ -163,7 +162,7 @@ public class CategoryIncomeActivity extends BaseActivity implements LoaderManage
                     final Loader<Object> innerLoader = getSupportLoaderManager().getLoader(deleteGroupId);
                     if (loader != null
                             && innerLoader != null) {
-                        if ((Integer) result.getObject() == DBHelperCategoryIncome.usable) {
+                        if ((Integer) result.getObject() == Constants.CATEGORY_HAS_CHILDS) {
                             Toast.makeText(this, R.string.categoryUsable, Toast.LENGTH_LONG).show();
                         } else {
                             innerLoader.forceLoad();
