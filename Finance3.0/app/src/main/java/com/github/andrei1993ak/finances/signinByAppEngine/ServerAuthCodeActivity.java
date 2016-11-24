@@ -2,6 +2,7 @@ package com.github.andrei1993ak.finances.signinByAppEngine;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -47,8 +48,6 @@ public class ServerAuthCodeActivity extends AppCompatActivity implements
         findViewById(R.id.sign_out_button).setOnClickListener(this);
         findViewById(R.id.disconnect_button).setOnClickListener(this);
 
-        // For sample only: make sure there is a valid server client ID.
-        validateServerClientID();
 
         // [START configure_signin]
         // Configure sign-in to request offline access to the user's ID, basic
@@ -123,6 +122,7 @@ public class ServerAuthCodeActivity extends AppCompatActivity implements
                 updateUI(true);
 
                 // TODO(user): send code to server and exchange for access/refresh/ID tokens.
+                final String idToken = acct.getIdToken();
                 // [END get_auth_code]
             } else {
                 // Show signed-out UI.
@@ -132,7 +132,7 @@ public class ServerAuthCodeActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onConnectionFailed(final ConnectionResult connectionResult) {
+    public void onConnectionFailed(@NonNull final ConnectionResult connectionResult) {
         // An unresolvable error has occurred and Google APIs (including Sign-In) will not
         // be available.
         Log.d(TAG, "onConnectionFailed:" + connectionResult);
@@ -150,21 +150,6 @@ public class ServerAuthCodeActivity extends AppCompatActivity implements
 
             findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
             findViewById(R.id.sign_out_and_disconnect).setVisibility(View.GONE);
-        }
-    }
-
-    /**
-     * Validates that there is a reasonable server client ID in strings.xml, this is only needed
-     * to make sure users of this sample follow the README.
-     */
-    private void validateServerClientID() {
-        final String serverClientId = getString(R.string.server_client_id);
-        final String suffix = ".apps.googleusercontent.com";
-        if (!serverClientId.trim().endsWith(suffix)) {
-            final String message = "Invalid server client ID in strings.xml, must end with " + suffix;
-
-            Log.w(TAG, message);
-            Toast.makeText(this, message, Toast.LENGTH_LONG).show();
         }
     }
 

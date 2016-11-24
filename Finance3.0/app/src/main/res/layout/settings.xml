@@ -30,10 +30,22 @@
             android:text="@string/restore"/>
 
         <Button
-            android:id="@+id/button_login"
+            android:id="@+id/button_sign_in"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/login"/>
+
+        <Button
+            android:id="@+id/button_token_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/token"/>
+
+        <Button
+            android:id="@+id/button_server_auth_code"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/serveAuthCode"/>
     </LinearLayout>
 
 

@@ -6,7 +6,7 @@
     android:background="@color/blue_grey_700"
     android:orientation="vertical"
     android:weightSum="4"
-    tools:context=".util.SignInActivity">
+    tools:context=".signinByAppEngine.SignInActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -96,16 +96,14 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/sign_out"
-                android:theme="@style/ThemeOverlay.MyDarkButton" />
+                android:text="@string/sign_out" />
 
             <Button
                 android:id="@+id/disconnect_button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/disconnect"
-                android:theme="@style/ThemeOverlay.MyDarkButton" />
+                android:text="@string/disconnect" />
         </LinearLayout>
 
     </RelativeLayout>
