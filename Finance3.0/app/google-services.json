@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "898023153636",
+    "project_id": "financepmver3"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:898023153636:android:3ed5472fda5b6612",
+        "android_client_info": {
+          "package_name": "com.github.andrei1993ak.finances"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "898023153636-j2dr93l044htqlhb8dllqtu5b99t82sf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.github.andrei1993ak.finances",
+            "certificate_hash": "A4697B704DCAF34B6476B7BAD0047AC36D51F00E"
+          }
+        },
+        {
+          "client_id": "898023153636-ahufd4bo18ssqe1o6jfs5gonmralqggh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAh0moAn8TaqbWgNePW96Ku3LdwflNB0KE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
