@@ -22,6 +22,8 @@ public class Constants {
     public static final int COST_HAS_NOT_PHOTO = 0;
     public static final String OAUTH2_ID = "898023153636-ahufd4bo18ssqe1o6jfs5gonmralqggh.apps.googleusercontent.com";
     public static final String CURRENCY = "currency";
+    public static final String HAS_PIN = "hasPin";
+    public static final String PIN = "pin";
 
     public static final int CATEGORY_HAS_CHILDS = -2;
 

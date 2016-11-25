@@ -53,4 +53,8 @@
     <string name="type">type</string>
     <string name="backup">Сделать копию бд</string>
     <string name="restore">Восстановить</string>
+    <string name="setPin">Защитить пин-кодом</string>
+    <string name="confirmPassword">Подтвердите ПИН</string>
+    <string name="wrong_pin">Неверный ПИН</string>
+    <string name="enter_pin">Введите ПИН</string>
 </resources>

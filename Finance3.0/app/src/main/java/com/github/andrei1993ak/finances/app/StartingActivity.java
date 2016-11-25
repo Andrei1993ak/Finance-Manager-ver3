@@ -10,17 +10,17 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.github.andrei1993ak.finances.R;
-import com.github.andrei1993ak.finances.app.activities.SettingsActivity;
-import com.github.andrei1993ak.finances.control.adapters.WalletsRecycleViewAdapter;
-import com.github.andrei1993ak.finances.control.loaders.WalletCursorLoader;
-import com.github.andrei1993ak.finances.util.Constants;
 import com.github.andrei1993ak.finances.app.activities.CategoryStartingActivity;
 import com.github.andrei1993ak.finances.app.activities.CostActivity;
 import com.github.andrei1993ak.finances.app.activities.CurrencyActivity;
 import com.github.andrei1993ak.finances.app.activities.IncomeActivity;
-import com.github.andrei1993ak.finances.app.activities.WalletActivity;
 import com.github.andrei1993ak.finances.app.activities.ReportsActivity;
+import com.github.andrei1993ak.finances.app.activities.SettingsActivity;
 import com.github.andrei1993ak.finances.app.activities.TransferActivity;
+import com.github.andrei1993ak.finances.app.activities.WalletActivity;
+import com.github.andrei1993ak.finances.control.adapters.WalletsRecycleViewAdapter;
+import com.github.andrei1993ak.finances.control.loaders.WalletCursorLoader;
+import com.github.andrei1993ak.finances.util.Constants;
 
 public class StartingActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -70,7 +70,6 @@ public class StartingActivity extends BaseActivity implements LoaderManager.Load
                 startActivity(new Intent(this, ReportsActivity.class));
                 break;
             case R.id.tvSettings:
-//                startActivityForResult(new Intent(this, TestActivity.class), REQUEST_CODE_SETTING);
                 startActivityForResult(new Intent(this, SettingsActivity.class), REQUEST_CODE_SETTING);
                 break;
         }

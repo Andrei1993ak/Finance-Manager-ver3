@@ -22,7 +22,7 @@
         android:label="@string/app_name"
         android:supportsRtl="false"
         android:theme="@style/Light">
-        <activity android:name="com.github.andrei1993ak.finances.app.StartingActivity">
+        <activity android:name="com.github.andrei1993ak.finances.app.ZeroActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -39,6 +39,7 @@
                     android:scheme="http" />
             </intent-filter>
         </activity>
+        <activity android:name=".app.StartingActivity"/>
         <activity android:name="com.github.andrei1993ak.finances.app.activities.CurrencyActivity" />
         <activity android:name="com.github.andrei1993ak.finances.app.addEditActivities.CurrencyAddActivity" />
         <activity android:name="com.github.andrei1993ak.finances.app.addEditActivities.CurrencyEditActivity" />
@@ -70,6 +71,8 @@
         <activity android:name=".signinByAppEngine.SignInActivity" />
         <activity android:name=".signinByAppEngine.IdTokenActivity" />
         <activity android:name=".signinByAppEngine.ServerAuthCodeActivity" />
+        <activity android:name=".app.PinEntryActivity"/>
+        <activity android:name=".app.SetPinActivity"/>
 
         <provider
             android:name="android.support.v4.content.FileProvider"

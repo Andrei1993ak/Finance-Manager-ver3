@@ -1,4 +1,4 @@
-package com.github.andrei1993ak.finances.backupUtil;
+package com.github.andrei1993ak.finances.model.backupUtil;
 
 import android.content.Context;
 import android.os.Environment;
