@@ -1,5 +1,7 @@
 package com.github.andrei1993ak.finances.app;
 
+import android.app.ActivityManager;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -7,6 +9,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 
 import com.github.andrei1993ak.finances.R;
@@ -22,6 +25,8 @@ import com.github.andrei1993ak.finances.control.adapters.WalletsRecycleViewAdapt
 import com.github.andrei1993ak.finances.control.loaders.WalletCursorLoader;
 import com.github.andrei1993ak.finances.util.Constants;
 
+import java.util.List;
+
 public class StartingActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final int REQUEST_CODE_SETTING = 0;
@@ -31,16 +36,21 @@ public class StartingActivity extends BaseActivity implements LoaderManager.Load
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.drawer_layout);
+        getSupportActionBar().hide();
+
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
         getSupportLoaderManager().restartLoader(Constants.MAIN_LOADER_ID, null, this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+
         final Loader<Cursor> loader = getSupportLoaderManager().getLoader(Constants.MAIN_LOADER_ID);
+
         if (loader != null) {
             loader.forceLoad();
         }
@@ -50,34 +60,44 @@ public class StartingActivity extends BaseActivity implements LoaderManager.Load
         switch (view.getId()) {
             case R.id.tvCurrency:
                 startActivity(new Intent(this, CurrencyActivity.class));
+
                 break;
             case R.id.tvWallet:
                 startActivity(new Intent(this, WalletActivity.class));
+
                 break;
             case R.id.tvCategories:
                 startActivity(new Intent(this, CategoryStartingActivity.class));
+
                 break;
             case R.id.tvIncomes:
                 startActivity(new Intent(this, IncomeActivity.class));
+
                 break;
             case R.id.tvCosts:
                 startActivity(new Intent(this, CostActivity.class));
+
                 break;
             case R.id.tvTransfers:
                 startActivity(new Intent(this, TransferActivity.class));
+
                 break;
             case R.id.tvReports:
                 startActivity(new Intent(this, ReportsActivity.class));
+
                 break;
             case R.id.tvSettings:
                 startActivityForResult(new Intent(this, SettingsActivity.class), REQUEST_CODE_SETTING);
+
                 break;
         }
     }
 
     @Override
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
-        if (requestCode == REQUEST_CODE_SETTING) {
+        Log.d("test", "onActivityResult");
+
+        if (requestCode == REQUEST_CODE_SETTING ) {
             recreate();
         }
     }
@@ -96,6 +116,12 @@ public class StartingActivity extends BaseActivity implements LoaderManager.Load
     @Override
     public void onLoaderReset(final Loader<Cursor> loader) {
         recyclerView.swapAdapter(null, true);
+    }
+
+    @Override
+    public void recreate() {
+        finish();
+        startActivity(new Intent(StartingActivity.this, StartingActivity.class));
     }
 
 }

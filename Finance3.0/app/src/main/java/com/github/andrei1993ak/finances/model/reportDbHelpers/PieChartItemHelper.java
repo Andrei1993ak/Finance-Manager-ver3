@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 
+// TODO: rename g* methods to usual getters
 public class PieChartItemHelper {
 
     private final DBHelperCost dbHelperCost;
@@ -40,16 +41,21 @@ public class PieChartItemHelper {
     public ArrayList<PieChartItem> gRepInfoIncome(final long walletId, final long categoryId) {
         final ArrayList<PieChartItem> list = new ArrayList<>();
         final List<IncomeCategory> allParents = dbHelperCategoryIncome.getAllToListByParentId(categoryId);
+
         if (categoryId != -1) {
             allParents.add(dbHelperCategoryIncome.get(categoryId));
         }
+
         HashMap<Long, Double> sums = new HashMap<>();
         final HashMap<Long, String> names = new HashMap<>();
+
         for (final IncomeCategory parent : allParents) {
             sums.put(parent.getId(), 0.0);
             names.put(parent.getId(), parent.getName());
         }
+
         final List<Income> allIncomes = dbHelperIncome.getAllToListByWalletId(walletId);
+
         for (final Income income : allIncomes) {
             if (sums.containsKey(income.getCategoryId())) {
                 sums.put(income.getCategoryId(), (sums.get(income.getCategoryId()) + income.getAmount()));
@@ -60,25 +66,33 @@ public class PieChartItemHelper {
         }
         sums.values().removeAll(Collections.singleton(0.0));
         sums = sortByValue(sums);
+
         for (final Map.Entry<Long, Double> entry : sums.entrySet()) {
             list.add(new PieChartItem(entry.getKey(), names.get(entry.getKey()), entry.getValue()));
         }
+
         return list;
     }
 
     public ArrayList<PieChartItem> gRepInfoCost(final long walletId, final long categoryId) {
         final ArrayList<PieChartItem> list = new ArrayList<>();
         final List<CostCategory> allParents = dbHelperCategoryCost.getAllToListByParentId(categoryId);
+
         if (categoryId != -1) {
             allParents.add(dbHelperCategoryCost.get(categoryId));
         }
+
         HashMap<Long, Double> sums = new HashMap<>();
+
         final HashMap<Long, String> names = new HashMap<>();
+
         for (final CostCategory parent : allParents) {
             sums.put(parent.getId(), 0.0);
             names.put(parent.getId(), parent.getName());
         }
+
         final List<Cost> allCosts =   dbHelperCost.getAllToListByWalletId(walletId);
+
         for (final Cost cost : allCosts) {
             if (sums.containsKey(cost.getCategoryId())) {
                 sums.put(cost.getCategoryId(), (sums.get(cost.getCategoryId()) + cost.getAmount()));
@@ -87,11 +101,14 @@ public class PieChartItemHelper {
                 sums.put(parentId, (sums.get(parentId) + cost.getAmount()));
             }
         }
+
         sums.values().removeAll(Collections.singleton(0.0));
         sums = sortByValue(sums);
+
         for (final Map.Entry<Long, Double> entry : sums.entrySet()) {
             list.add(new PieChartItem(entry.getKey(), names.get(entry.getKey()), entry.getValue()));
         }
+
         return list;
     }
 
@@ -103,10 +120,13 @@ public class PieChartItemHelper {
                 return -(o1.getValue().compareTo(o2.getValue()));
             }
         });
+
         final HashMap<K, V> result = new LinkedHashMap<>();
+
         for (final Map.Entry<K, V> kvEntry : list) {
             result.put(kvEntry.getKey(), kvEntry.getValue());
         }
+
         return result;
     }
 }

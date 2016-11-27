@@ -15,6 +15,7 @@ public class ApiManager {
         if (instance == null) {
             instance = new ApiManager();
         }
+
         return instance;
     }
 
@@ -28,6 +29,7 @@ public class ApiManager {
                     .setRootUrl(APP_ENGINE_BASE_URL);
             myApi = builder.build();
         }
+
         return myApi;
     }
 

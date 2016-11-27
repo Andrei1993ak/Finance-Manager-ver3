@@ -40,7 +40,7 @@ public class CostCursorAdapter extends CursorAdapter {
 
     @Override
     public View newView(final Context context, final Cursor cursor, final ViewGroup parent) {
-        return inflater.inflate(R.layout.cost_listitem, parent, false);
+        return inflater.inflate(R.layout.adapter_cost_tem, parent, false);
     }
 
     @Override

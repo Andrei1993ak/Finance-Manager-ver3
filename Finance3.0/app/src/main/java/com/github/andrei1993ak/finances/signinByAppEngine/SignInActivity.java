@@ -35,6 +35,7 @@ public class SignInActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_signin);
 
         mStatusTextView = (TextView) findViewById(R.id.status);
@@ -47,16 +48,13 @@ public class SignInActivity extends AppCompatActivity implements
                 .requestEmail()
                 .build();
 
-
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 
-
         final SignInButton signInButton = (SignInButton) findViewById(R.id.sign_in_button);
         signInButton.setSize(SignInButton.SIZE_STANDARD);
-
     }
 
     @Override

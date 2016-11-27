@@ -6,11 +6,11 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.util.SparseIntArray;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.SimpleCursorTreeAdapter;
 
 import com.github.andrei1993ak.finances.model.models.IncomeCategory;
-
-import java.util.HashMap;
 
 public class ExpListAdapter extends SimpleCursorTreeAdapter {
 
@@ -27,6 +27,13 @@ public class ExpListAdapter extends SimpleCursorTreeAdapter {
         this.posToId = new SparseIntArray();
         this.idToPos = new SparseIntArray();
 
+    }
+
+    @Override
+    public View getChildView(final int groupPosition, final int childPosition, final boolean isLastChild, final View convertView, final ViewGroup parent) {
+        final View childView = super.getChildView(groupPosition, childPosition, isLastChild, convertView, parent);
+        childView.setPadding(240, 0, 0, 0);
+        return childView;
     }
 
     @Override

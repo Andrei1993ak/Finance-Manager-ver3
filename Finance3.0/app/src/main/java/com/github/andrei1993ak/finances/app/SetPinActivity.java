@@ -2,7 +2,6 @@ package com.github.andrei1993ak.finances.app;
 
 import android.app.WallpaperManager;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -27,7 +26,7 @@ public class SetPinActivity extends BaseActivity {
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.pin_layout);
+        setContentView(R.layout.activity_pin);
         final RelativeLayout layout = (RelativeLayout) findViewById(R.id.pinLayout);
         final Drawable wallpaperDrawable = WallpaperManager.getInstance(this).getDrawable();
         layout.setBackground(wallpaperDrawable);

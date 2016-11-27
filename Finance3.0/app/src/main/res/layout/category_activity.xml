@@ -14,9 +14,12 @@
         <ExpandableListView
             android:id="@+id/CategoryExpListView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:divider="?attr/colorControlNormal"
+            android:childDivider="?attr/colorControlNormal"
+            android:dividerHeight="6.0sp"
             android:layout_marginTop="@dimen/background_margin"
-            android:background="@drawable/shape" />
+            android:background="?attr/colorBackgroundFloating" />
 
     </FrameLayout>
 

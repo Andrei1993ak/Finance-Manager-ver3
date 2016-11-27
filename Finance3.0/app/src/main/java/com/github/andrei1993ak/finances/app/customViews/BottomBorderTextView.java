@@ -25,7 +25,6 @@ public class BottomBorderTextView extends TextView {
         }
     }
 
-
     @Override
     protected void onDraw(final Canvas canvas) {
         super.onDraw(canvas);

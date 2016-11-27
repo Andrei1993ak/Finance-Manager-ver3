@@ -1,6 +1,7 @@
 package com.github.andrei1993ak.finances.util;
 
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,6 +18,7 @@ public class MyHttpClient {
     public String get(final String url) {
         final String response;
         InputStream inputStream = null;
+
         try {
             final URL reqUrl = new URL(url);
             final HttpURLConnection connection = (HttpURLConnection) reqUrl.openConnection();
@@ -25,20 +27,24 @@ public class MyHttpClient {
             final BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
             final StringBuilder builder = new StringBuilder();
             String line;
+
             while ((line = reader.readLine()) != null) {
                 builder.append(line);
             }
+
             response = builder.toString();
+
             return response;
         } catch (final IOException e) {
             return null;
         } finally {
-            try {
-                assert inputStream != null;
-                inputStream.close();
-            } catch (final IOException e) {
-                e.printStackTrace();
-            }
+                if (inputStream != null) {
+                    try {
+                        inputStream.close();
+                    } catch (final IOException e) {
+                        e.printStackTrace();
+                    }
+                }
         }
     }
 

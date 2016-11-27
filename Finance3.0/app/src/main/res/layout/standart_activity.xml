@@ -14,9 +14,11 @@
         <ListView
             android:id="@+id/standardListView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/shape"
+            android:layout_height="wrap_content"
+            android:divider="?attr/colorControlNormal"
+            android:dividerHeight="6.0sp"
             android:choiceMode="singleChoice"
+            android:background="?attr/colorBackgroundFloating"
             android:listSelector="#aeadad"/>
 
     </FrameLayout>

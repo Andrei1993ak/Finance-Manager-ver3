@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
@@ -25,7 +26,8 @@ public class PinEntryActivity extends BaseActivity {
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.pin_layout);
+        getSupportActionBar().hide();
+        setContentView(R.layout.activity_pin);
         final RelativeLayout layout = (RelativeLayout) findViewById(R.id.pinLayout);
         final Drawable wallpaperDrawable = WallpaperManager.getInstance(this).getDrawable();
         layout.setBackground(wallpaperDrawable);
@@ -65,28 +67,24 @@ public class PinEntryActivity extends BaseActivity {
 
         final Button buttonDelete = (Button) findViewById(R.id.buttonDeleteBack);
         buttonDelete.setOnClickListener(new View.OnClickListener() {
-                                            public void onClick(final View v) {
+            @Override
+            public void onClick(final View view) {
+                if (keyPadLockedFlag) {
+                    return;
+                }
 
-                                                if (keyPadLockedFlag) {
-                                                    return;
-                                                }
-
-                                                if (userEntered.length() > 0) {
-                                                    userEntered = "";
-                                                    passwordInput.setText("");
-                                                }
-
-
-                                            }
-
-                                        }
-        );
+                if (userEntered.length() > 0) {
+                    userEntered = "";
+                    passwordInput.setText("");
+                }
+            }
+        });
 
     }
 
     final View.OnClickListener pinButtonHandler = new View.OnClickListener() {
+        @Override
         public void onClick(final View v) {
-
             if (keyPadLockedFlag) {
                 return;
             }
@@ -95,17 +93,21 @@ public class PinEntryActivity extends BaseActivity {
 
             final int PIN_LENGTH = 4;
             userEntered = userEntered + pressedButton.getText();
-            passwordInput.setText(passwordInput.getText().toString() + "*");
+            passwordInput.setText(passwordInput.getText().toString() + Constants.COMMA);
+
             if (userEntered.length() == PIN_LENGTH) {
                 final String userPin = getSharedPreferences(Constants.PREFS, Context.MODE_PRIVATE).getString(Constants.PIN, null);
+
                 if (userEntered.equals(userPin)) {
                     statusView.setTextColor(Color.GREEN);
+
                     finish();
                     startActivity(new Intent(PinEntryActivity.this, StartingActivity.class));
                 } else {
                     statusView.setTextColor(Color.RED);
                     statusView.setText(R.string.wrong_pin);
                     keyPadLockedFlag = true;
+
                     new LockKeyPadOperation().execute();
                 }
             }
@@ -117,10 +119,11 @@ public class PinEntryActivity extends BaseActivity {
         @Override
         protected Void doInBackground(final Void... params) {
             try {
-                Thread.sleep(2000);
+                Thread.sleep(DateUtils.SECOND_IN_MILLIS * 2);
             } catch (final InterruptedException e) {
                 return null;
             }
+
             return null;
         }
 
@@ -132,12 +135,5 @@ public class PinEntryActivity extends BaseActivity {
             keyPadLockedFlag = false;
         }
 
-        @Override
-        protected void onPreExecute() {
-        }
-
-        @Override
-        protected void onProgressUpdate(final Void... values) {
-        }
     }
 }

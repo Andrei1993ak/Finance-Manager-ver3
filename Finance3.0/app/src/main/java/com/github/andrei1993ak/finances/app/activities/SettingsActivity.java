@@ -47,10 +47,12 @@ public class SettingsActivity extends BaseActivity {
                     editor.putBoolean(Constants.THEME, true);
                     editor.apply();
                     recreate();
+                    setResult(RESULT_OK);
                 } else {
                     editor.putBoolean(Constants.THEME, false);
                     editor.apply();
                     recreate();
+                    setResult(RESULT_OK);
                 }
             }
         });
@@ -130,5 +132,12 @@ public class SettingsActivity extends BaseActivity {
             editor.putBoolean(Constants.HAS_PIN, false);
             editor.apply();
         }
+    }
+
+    @Override
+    public void recreate() {
+        finish();
+        startActivity(new Intent(SettingsActivity.this, SettingsActivity.class));
+
     }
 }

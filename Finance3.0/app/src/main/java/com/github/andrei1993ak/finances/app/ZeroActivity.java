@@ -13,6 +13,7 @@ public class ZeroActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         redirect();
     }
 
@@ -22,6 +23,7 @@ public class ZeroActivity extends AppCompatActivity {
         } else {
             startActivity(new Intent(this, StartingActivity.class));
         }
+
         finish();
     }
 
