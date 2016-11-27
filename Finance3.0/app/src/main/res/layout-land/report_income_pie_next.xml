@@ -18,11 +18,13 @@
     <ListView
         android:id="@+id/pieListView_next"
         android:layout_width="1dp"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/background_margin"
         android:layout_marginRight="@dimen/background_margin"
         android:layout_marginTop="@dimen/background_margin"
         android:layout_weight="6"
-        android:background="@drawable/shape" />
+        android:background="?attr/colorBackgroundFloating"
+        android:divider="?attr/colorControlNormal"
+        android:dividerHeight="6.0sp" />
 
 </LinearLayout>

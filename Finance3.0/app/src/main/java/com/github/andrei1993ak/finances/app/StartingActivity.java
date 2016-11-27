@@ -4,9 +4,11 @@ import android.app.ActivityManager;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -40,6 +42,9 @@ public class StartingActivity extends BaseActivity implements LoaderManager.Load
         getSupportActionBar().hide();
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        final DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
+                DividerItemDecoration.VERTICAL);
+        recyclerView.addItemDecoration(dividerItemDecoration);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         getSupportLoaderManager().restartLoader(Constants.MAIN_LOADER_ID, null, this);
@@ -123,6 +128,21 @@ public class StartingActivity extends BaseActivity implements LoaderManager.Load
     public void recreate() {
         finish();
         startActivity(new Intent(StartingActivity.this, StartingActivity.class));
+    }
+
+    public class VerticalSpaceItemDecoration extends RecyclerView.ItemDecoration {
+
+        private final int verticalSpaceHeight;
+
+        public VerticalSpaceItemDecoration(int verticalSpaceHeight) {
+            this.verticalSpaceHeight = verticalSpaceHeight;
+        }
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent,
+                                   RecyclerView.State state) {
+            outRect.bottom = verticalSpaceHeight;
+        }
     }
 
 }
