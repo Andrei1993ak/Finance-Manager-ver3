@@ -97,6 +97,7 @@ public class StartingActivity extends BaseActivity implements LoaderManager.Load
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         Log.d("test", "onActivityResult");
 
+        // TODO wrong recreate usage
         if (requestCode == REQUEST_CODE_SETTING ) {
             recreate();
         }
