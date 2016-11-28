@@ -8,10 +8,15 @@ import android.os.Parcelable;
 import com.github.andrei1993ak.finances.model.annotations.Table;
 import com.github.andrei1993ak.finances.model.annotations.types.DBDouble;
 import com.github.andrei1993ak.finances.model.annotations.types.DBInteger;
+import com.github.andrei1993ak.finances.model.annotations.types.DBIntegerAutoIncrement;
+import com.github.andrei1993ak.finances.model.annotations.types.DBIntegerPrimaryKey;
 import com.github.andrei1993ak.finances.util.CursorUtils;
 
 @Table(name = "costs")
 public class Cost extends TableClass implements Parcelable {
+
+    @DBIntegerAutoIncrement
+    public static final String ID = "_id";
 
     @DBInteger
     public static final String WALLET_ID = "walletId";

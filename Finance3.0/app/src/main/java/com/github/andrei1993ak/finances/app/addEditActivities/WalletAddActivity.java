@@ -12,7 +12,7 @@ import android.widget.EditText;
 
 import com.github.andrei1993ak.finances.R;
 import com.github.andrei1993ak.finances.app.BaseActivity;
-import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
+import com.github.andrei1993ak.finances.control.base.IOnTaskCompleted;
 import com.github.andrei1993ak.finances.control.base.RequestAdapter;
 import com.github.andrei1993ak.finances.control.base.Result;
 import com.github.andrei1993ak.finances.control.executors.CurrencyExecutor;
@@ -22,7 +22,7 @@ import com.github.andrei1993ak.finances.model.models.Wallet;
 
 import java.util.List;
 
-public class WalletAddActivity extends BaseActivity implements OnTaskCompleted {
+public class WalletAddActivity extends BaseActivity implements IOnTaskCompleted {
 
     private AppCompatSpinner spinnerCurrencies;
     private List<Currency> currencies;
@@ -34,7 +34,9 @@ public class WalletAddActivity extends BaseActivity implements OnTaskCompleted {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.wallet_add_activity);
         setTitle(R.string.newWallet);
+
         initFields();
+
         new CurrencyExecutor(this).execute(new RequestAdapter<Currency>().getAllToList(RequestAdapter.SELECTION_ALL));
     }
 
@@ -42,6 +44,7 @@ public class WalletAddActivity extends BaseActivity implements OnTaskCompleted {
         this.spinnerCurrencies = (AppCompatSpinner) findViewById(R.id.spinnerCurrencies);
         this.newWalletName = (EditText) findViewById(R.id.new_wallet_name);
         this.newWalletAmount = (EditText) findViewById(R.id.new_wallet_amount);
+
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_pur_add);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

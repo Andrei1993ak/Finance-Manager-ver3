@@ -3,7 +3,7 @@ package com.github.andrei1993ak.finances.control.executors;
 import android.database.Cursor;
 
 import com.github.andrei1993ak.finances.App;
-import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
+import com.github.andrei1993ak.finances.control.base.IOnTaskCompleted;
 import com.github.andrei1993ak.finances.control.base.PojoExecutor;
 import com.github.andrei1993ak.finances.control.base.Result;
 import com.github.andrei1993ak.finances.model.dbHelpers.DBHelperIncome;
@@ -28,7 +28,7 @@ public class IncomeExecutor extends PojoExecutor<Income> {
     public static final int KEY_RESULT_GET_ALL_TO_LIST_BY_WALLET_ID = 609;
     public static final int KEY_RESULT_GET_ALL_TO_LIST_BY_DATES = 610;
 
-    public IncomeExecutor(final OnTaskCompleted listener) {
+    public IncomeExecutor(final IOnTaskCompleted listener) {
         super(listener);
 
     }

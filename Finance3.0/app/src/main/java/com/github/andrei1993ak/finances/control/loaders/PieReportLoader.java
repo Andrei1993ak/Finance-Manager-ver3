@@ -48,7 +48,7 @@ public class PieReportLoader extends Loader<ArrayList<PieChartItem>> {
             if (type) {
                 return new PieChartItemHelper().gRepInfoIncome(params[0], params[1]);
             } else {
-                return new PieChartItemHelper().gRepInfoCost(params[0], params[1]);
+                return new PieChartItemHelper().getRepInfoCost(params[0], params[1]);
             }
         }
 

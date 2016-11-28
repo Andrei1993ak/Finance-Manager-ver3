@@ -19,6 +19,7 @@ import com.github.andrei1993ak.finances.model.models.Currency;
 import com.github.andrei1993ak.finances.model.models.Wallet;
 import com.github.andrei1993ak.finances.util.Constants;
 import com.github.andrei1993ak.finances.util.ContextHolder;
+import com.github.andrei1993ak.finances.util.CursorUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -46,25 +47,30 @@ public class CostCursorAdapter extends CursorAdapter {
     @Override
     public void bindView(final View view, final Context context, final Cursor cursor) {
         final TextView textViewName = (TextView) view.findViewById(R.id.LICostName);
-        final String name = cursor.getString(cursor.getColumnIndex(Cost.NAME));
+        final String name = CursorUtils.getString(cursor,Cost.NAME);
         textViewName.setText(name);
+        if (CursorUtils.getInteger(cursor,Cost.PHOTO) == Constants.COST_HAS_PHOTO) {
+            textViewName.setCompoundDrawablesWithIntrinsicBounds(R.drawable.button_ic_camera_24dp, 0, 0, 0);
+        } else {
+            textViewName.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+        }
 
         final TextView textViewDate = (TextView) view.findViewById(R.id.LICostDate);
         final SimpleDateFormat dateFormatter = new SimpleDateFormat(Constants.MAIN_DATE_FORMAT, Locale.getDefault());
-        final String date = dateFormatter.format(cursor.getLong(cursor.getColumnIndex(Cost.DATE)));
+        final String date = dateFormatter.format(CursorUtils.getLong(cursor,Cost.DATE));
         textViewDate.setText(date);
 
         final TextView tvAmount = (TextView) view.findViewById(R.id.LICostWalletAmount);
-        final Wallet wallet = dbHelperWallet.get(cursor.getLong(cursor.getColumnIndex(Cost.WALLET_ID)));
+        final Wallet wallet = dbHelperWallet.get(CursorUtils.getLong(cursor,Cost.WALLET_ID));
         final Currency currency = helperCurrency.get(wallet.getCurrencyId());
-        final Double amount = cursor.getDouble(cursor.getColumnIndex(Cost.AMOUNT));
+        final Double amount = CursorUtils.getDouble(cursor,Cost.AMOUNT);
         String amountString = String.format(Locale.US, Constants.MAIN_DOUBLE_FORMAT, amount);
         amountString += " ";
         amountString += currency.getCode();
         tvAmount.setText(amountString);
 
         final TextView category = (TextView) view.findViewById(R.id.LiCostCategory);
-        final long CategoryId = cursor.getLong(cursor.getColumnIndex(Cost.CATEGORY_ID));
+        final long CategoryId = CursorUtils.getLong(cursor,Cost.CATEGORY_ID);
         category.setText(dbHelperCategoryCost.get(CategoryId).getName());
 
     }

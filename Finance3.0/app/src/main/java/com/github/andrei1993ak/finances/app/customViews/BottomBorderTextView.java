@@ -11,9 +11,10 @@ import android.widget.TextView;
 import com.github.andrei1993ak.finances.R;
 
 public class BottomBorderTextView extends TextView {
-    private final Paint paint;
 
-    int color;
+    private final Paint paint;
+    private final int color;
+
     public BottomBorderTextView(final Context context, final AttributeSet attrs) {
         super(context, attrs);
         this.paint = new Paint();

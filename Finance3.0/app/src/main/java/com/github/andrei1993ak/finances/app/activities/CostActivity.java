@@ -29,7 +29,7 @@ import com.github.andrei1993ak.finances.app.BaseActivity;
 import com.github.andrei1993ak.finances.app.addEditActivities.CostAddActivity;
 import com.github.andrei1993ak.finances.app.addEditActivities.CostEditActivity;
 import com.github.andrei1993ak.finances.control.adapters.CostCursorAdapter;
-import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
+import com.github.andrei1993ak.finances.control.base.IOnTaskCompleted;
 import com.github.andrei1993ak.finances.control.base.RequestAdapter;
 import com.github.andrei1993ak.finances.control.base.Result;
 import com.github.andrei1993ak.finances.control.executors.CostExecutor;
@@ -45,7 +45,7 @@ import com.github.andrei1993ak.finances.util.universalLoader.loaders.BitmapLoade
 import java.io.File;
 import java.net.MalformedURLException;
 
-public class CostActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor>, OnTaskCompleted {
+public class CostActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor>, IOnTaskCompleted {
 
     private CostCursorAdapter costCursorAdapter;
     private RequestAdapter<Cost> requestAdapter;
@@ -56,17 +56,20 @@ public class CostActivity extends BaseActivity implements LoaderManager.LoaderCa
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.standart_activity);
+        setContentView(R.layout.base_activity);
         setTitle(R.string.costs);
+
         initFields();
+
         getSupportLoaderManager().restartLoader(Constants.MAIN_LOADER_ID, null, this);
     }
 
-    private void initFields(){
+    private void initFields() {
         this.selectedItemId = Constants.NOT_SELECTED;
         this.menuInflater = getMenuInflater();
         this.requestAdapter = new RequestAdapter<>();
         this.costCursorAdapter = new CostCursorAdapter(this, null);
+
         final ListView costListView = (ListView) findViewById(R.id.standardListView);
         costListView.setAdapter(costCursorAdapter);
         costListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -75,6 +78,7 @@ public class CostActivity extends BaseActivity implements LoaderManager.LoaderCa
                 selectedItemId = id;
             }
         });
+
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,12 +87,13 @@ public class CostActivity extends BaseActivity implements LoaderManager.LoaderCa
                 startActivityForResult(intent, Constants.ADD_REQUEST);
             }
         });
+
         registerForContextMenu(costListView);
     }
 
     @Override
     public boolean onCreateOptionsMenu(final Menu menu) {
-        menuInflater.inflate(R.menu.menu, menu);
+        menuInflater.inflate(R.menu.menu_cost, menu);
         return true;
     }
 
@@ -96,13 +101,17 @@ public class CostActivity extends BaseActivity implements LoaderManager.LoaderCa
     public boolean onOptionsItemSelected(final MenuItem item) {
         final int id = item.getItemId();
         if (selectedItemId != Constants.NOT_SELECTED) {
-            if (id == R.id.action_edit) {
+            if (id == R.id.cost_action_edit) {
                 final Intent intent = new Intent(this, CostEditActivity.class);
                 intent.putExtra(Cost.ID, selectedItemId);
                 startActivityForResult(intent, Constants.EDIT_REQUEST);
                 return true;
-            } else {
+            } else if (id == R.id.cost_action_delete) {
                 new CostExecutor(this).execute(requestAdapter.delete(selectedItemId));
+                selectedItemId = Constants.NOT_SELECTED;
+                return true;
+            } else {
+                showPhoto(selectedItemId);
                 return true;
             }
         }
@@ -111,8 +120,9 @@ public class CostActivity extends BaseActivity implements LoaderManager.LoaderCa
 
     @Override
     public void onCreateContextMenu(final ContextMenu menu, final View v, final ContextMenu.ContextMenuInfo menuInfo) {
-        menuInflater.inflate(R.menu.context_menu,menu);
+        menuInflater.inflate(R.menu.context_menu, menu);
         menu.add(0, Constants.CM_PHOTO_ID, 0, R.string.showPhoto);
+
         super.onCreateContextMenu(menu, v, menuInfo);
     }
 
@@ -122,37 +132,44 @@ public class CostActivity extends BaseActivity implements LoaderManager.LoaderCa
         switch (item.getItemId()) {
             case R.id.cm_delete:
                 new CostExecutor(this).execute(requestAdapter.delete(info.id));
+
                 break;
             case R.id.cm_edit:
                 final Intent intent = new Intent(this, CostEditActivity.class);
                 intent.putExtra(Cost.ID, info.id);
                 startActivityForResult(intent, Constants.EDIT_REQUEST);
+
                 break;
             case Constants.CM_PHOTO_ID:
-                final Cost cost = ((DBHelperCost) ((App) ContextHolder.getInstance().getContext()).getDbHelper(Cost.class)).get(info.id);
-                if (cost.getPhoto() == Constants.COST_HAS_NOT_PHOTO) {
-                    Toast.makeText(this, R.string.noPhoto, Toast.LENGTH_LONG).show();
-                } else if (cost.getPhoto() == Constants.COST_HAS_PHOTO) {
-                    final String filePath = ImageNameGenerator.getImagePath(info.id);
-                    final File file = new File(filePath);
-                    final Dialog builder = new Dialog(this);
-                    builder.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                    builder.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                    final ImageView imageView = new ImageView(this);
-                    final BitmapLoader bitmapLoader = BitmapLoader.getInstance(this);
-                    try {
-                        bitmapLoader.load(file.toURI().toURL().toString(), imageView);
-                    } catch (final MalformedURLException e) {
-                        e.printStackTrace();
-                    }
-                    builder.addContentView(imageView, new RelativeLayout.LayoutParams(
-                            ViewGroup.LayoutParams.MATCH_PARENT,
-                            ViewGroup.LayoutParams.MATCH_PARENT));
-                    builder.show();
-                }
+                showPhoto(info.id);
                 break;
         }
         return super.onContextItemSelected(item);
+    }
+
+    private void showPhoto(final long id) {
+        final Cost cost = ((DBHelperCost) ((App) ContextHolder.getInstance().getContext()).getDbHelper(Cost.class)).get(id);
+        if (cost.getPhoto() == Constants.COST_HAS_NOT_PHOTO) {
+            Toast.makeText(this, R.string.noPhoto, Toast.LENGTH_LONG).show();
+        } else if (cost.getPhoto() == Constants.COST_HAS_PHOTO) {
+            final String filePath = ImageNameGenerator.getImagePath(id);
+            final File file = new File(filePath);
+            final Dialog builder = new Dialog(this);
+            builder.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            builder.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            final ImageView imageView = new ImageView(this);
+            final BitmapLoader bitmapLoader = BitmapLoader.getInstance(this);
+            try {
+                bitmapLoader.load(file.toURI().toURL().toString(), imageView);
+            } catch (final MalformedURLException e) {
+                e.printStackTrace();
+                //TODO exeption
+            }
+            builder.addContentView(imageView, new RelativeLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT));
+            builder.show();
+        }
     }
 
     @Override

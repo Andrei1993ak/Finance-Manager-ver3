@@ -10,6 +10,7 @@ import com.github.andrei1993ak.finances.model.annotations.types.DBDouble;
 import com.github.andrei1993ak.finances.model.annotations.types.DBInteger;
 import com.github.andrei1993ak.finances.util.CursorUtils;
 
+
 @Table(name = "purses")
 public class Wallet extends TableClass implements Parcelable {
 
@@ -114,11 +115,10 @@ public class Wallet extends TableClass implements Parcelable {
 
     @Override
     public Wallet convertFromCursor(final Cursor cursor) {
-        final CursorUtils cursorUtils = new CursorUtils();
-        this.id = cursorUtils.getLong(cursor, ID);
-        this.name = cursorUtils.getString(cursor, NAME);
-        this.currencyId = cursorUtils.getLong(cursor, CURRENCY_ID);
-        this.amount = cursorUtils.getDouble(cursor, AMOUNT);
+        this.id = CursorUtils.getLong(cursor, ID);
+        this.name = CursorUtils.getString(cursor, NAME);
+        this.currencyId = CursorUtils.getLong(cursor, CURRENCY_ID);
+        this.amount = CursorUtils.getDouble(cursor, AMOUNT);
         return this;
     }
 

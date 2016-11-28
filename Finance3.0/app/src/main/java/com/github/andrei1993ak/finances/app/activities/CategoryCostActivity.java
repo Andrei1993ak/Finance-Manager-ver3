@@ -19,17 +19,16 @@ import com.github.andrei1993ak.finances.app.BaseActivity;
 import com.github.andrei1993ak.finances.app.addEditActivities.CostCategoryAddActivity;
 import com.github.andrei1993ak.finances.app.addEditActivities.CostCategoryEditActivity;
 import com.github.andrei1993ak.finances.control.adapters.ExpListAdapter;
-import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
+import com.github.andrei1993ak.finances.control.base.IOnTaskCompleted;
 import com.github.andrei1993ak.finances.control.base.RequestAdapter;
 import com.github.andrei1993ak.finances.control.base.Result;
 import com.github.andrei1993ak.finances.control.executors.CostCategoryExecutor;
 import com.github.andrei1993ak.finances.control.loaders.CostCategoryCursorLoader;
 import com.github.andrei1993ak.finances.model.TableQueryGenerator;
-import com.github.andrei1993ak.finances.model.dbHelpers.DBHelperCategoryCost;
 import com.github.andrei1993ak.finances.model.models.CostCategory;
 import com.github.andrei1993ak.finances.util.Constants;
 
-public class CategoryCostActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor>, OnTaskCompleted {
+public class CategoryCostActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor>, IOnTaskCompleted {
 
     private ExpandableListView costCategoryExpListView;
     private ExpListAdapter expListAdapter;
@@ -42,8 +41,11 @@ public class CategoryCostActivity extends BaseActivity implements LoaderManager.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.category_activity);
         setTitle(R.string.costCategories);
+
         initFields();
+
         registerForContextMenu(costCategoryExpListView);
+
         getSupportLoaderManager().restartLoader(Constants.EXP_LIST_ROOT_LOADER_ID, null, this);
     }
 
@@ -51,6 +53,7 @@ public class CategoryCostActivity extends BaseActivity implements LoaderManager.
         this.costCategoryExpListView = (ExpandableListView) findViewById(R.id.CategoryExpListView);
         this.deleteGroupId = -1;
         this.menuInflater = getMenuInflater();
+
         final String[] parentsFrom = {CostCategory.NAME};
         final int[] parentsTo = {android.R.id.text1};
         final String[] childFrom = {CostCategory.NAME};
@@ -58,6 +61,7 @@ public class CategoryCostActivity extends BaseActivity implements LoaderManager.
         expListAdapter = new ExpListAdapter(this, null, android.R.layout.simple_expandable_list_item_1, parentsFrom, parentsTo,
                 android.R.layout.simple_expandable_list_item_1, childFrom, childTo);
         costCategoryExpListView.setAdapter(expListAdapter);
+
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_add_cat);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,8 +73,9 @@ public class CategoryCostActivity extends BaseActivity implements LoaderManager.
 
     @Override
     protected void onStop() {
-        for (int i = 0; i < expListAdapter.getGroupCount(); i++)
+        for (int i = 0; i < expListAdapter.getGroupCount(); i++) {
             costCategoryExpListView.collapseGroup(i);
+        }
         super.onStop();
     }
 

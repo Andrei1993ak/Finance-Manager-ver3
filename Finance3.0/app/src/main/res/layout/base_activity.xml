@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:divider="?attr/colorControlNormal"
-            android:dividerHeight="6.0sp"
+            android:dividerHeight="@dimen/divider"
             android:choiceMode="singleChoice"
             android:background="?attr/colorBackgroundFloating"
             android:listSelector="#aeadad"/>

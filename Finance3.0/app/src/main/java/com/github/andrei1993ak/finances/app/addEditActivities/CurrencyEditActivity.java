@@ -10,14 +10,14 @@ import android.widget.TextView;
 
 import com.github.andrei1993ak.finances.R;
 import com.github.andrei1993ak.finances.app.BaseActivity;
-import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
+import com.github.andrei1993ak.finances.control.base.IOnTaskCompleted;
 import com.github.andrei1993ak.finances.control.base.RequestAdapter;
 import com.github.andrei1993ak.finances.control.base.Result;
 import com.github.andrei1993ak.finances.control.executors.CurrencyExecutor;
 import com.github.andrei1993ak.finances.model.TableQueryGenerator;
 import com.github.andrei1993ak.finances.model.models.Currency;
 
-public class CurrencyEditActivity extends BaseActivity implements OnTaskCompleted {
+public class CurrencyEditActivity extends BaseActivity implements IOnTaskCompleted {
 
 
     private TextView editCurrencyCode;
@@ -29,7 +29,9 @@ public class CurrencyEditActivity extends BaseActivity implements OnTaskComplete
         super.onCreate(savedInstanceState);
         setContentView(R.layout.currency_edit_activity);
         setTitle(R.string.editing);
+
         initFields();
+
         final long id = getIntent().getLongExtra(Currency.ID, -1);
         new CurrencyExecutor(this).execute(new RequestAdapter<Currency>().get(id));
     }
@@ -37,6 +39,7 @@ public class CurrencyEditActivity extends BaseActivity implements OnTaskComplete
     private void initFields(){
         this.editCurrencyCode = (TextView) findViewById(R.id.edit_currency_code);
         this.editCurrencyName = (EditText) findViewById(R.id.edit_currency_name);
+
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_cur_edit);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

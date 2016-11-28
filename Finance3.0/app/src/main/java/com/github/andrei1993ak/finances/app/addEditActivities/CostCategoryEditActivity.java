@@ -12,7 +12,7 @@ import android.widget.EditText;
 
 import com.github.andrei1993ak.finances.R;
 import com.github.andrei1993ak.finances.app.BaseActivity;
-import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
+import com.github.andrei1993ak.finances.control.base.IOnTaskCompleted;
 import com.github.andrei1993ak.finances.control.base.RequestAdapter;
 import com.github.andrei1993ak.finances.control.base.Result;
 import com.github.andrei1993ak.finances.control.executors.CostCategoryExecutor;
@@ -21,7 +21,7 @@ import com.github.andrei1993ak.finances.model.models.CostCategory;
 
 import java.util.List;
 
-public class CostCategoryEditActivity extends BaseActivity implements OnTaskCompleted {
+public class CostCategoryEditActivity extends BaseActivity implements IOnTaskCompleted {
 
     private EditText editCategoryName;
     private AppCompatSpinner parentCategories;
@@ -31,10 +31,12 @@ public class CostCategoryEditActivity extends BaseActivity implements OnTaskComp
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
-        setTitle(R.string.editing);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.category_add_edit_activity);
+        setTitle(R.string.editing);
+
         initFields();
+
         final long costCategoryId = getIntent().getLongExtra(CostCategory.ID, -1);
         new CostCategoryExecutor(this).execute(new RequestAdapter<CostCategory>().get(costCategoryId));
     }
@@ -42,6 +44,7 @@ public class CostCategoryEditActivity extends BaseActivity implements OnTaskComp
     private void initFields() {
         this.editCategoryName = (EditText) findViewById(R.id.add_edit_category_name);
         this.parentCategories = (AppCompatSpinner) findViewById(R.id.spinnerParentCategories);
+
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_cat_add);
         fab.setImageResource(android.R.drawable.ic_menu_edit);
         fab.setOnClickListener(new View.OnClickListener() {

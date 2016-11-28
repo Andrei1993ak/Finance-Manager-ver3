@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         android:layout_margin="@dimen/background_margin"
         android:divider="?attr/colorControlNormal"
-        android:dividerHeight="6.0sp"
+        android:dividerHeight="@dimen/divider"
         android:background="?attr/colorBackgroundFloating"/>
 
 </LinearLayout>

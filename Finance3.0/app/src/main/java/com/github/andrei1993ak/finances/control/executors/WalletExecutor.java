@@ -7,7 +7,7 @@ import com.github.andrei1993ak.finances.control.base.PojoExecutor;
 import com.github.andrei1993ak.finances.control.base.Result;
 import com.github.andrei1993ak.finances.model.dbHelpers.DBHelperWallet;
 import com.github.andrei1993ak.finances.model.models.Wallet;
-import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
+import com.github.andrei1993ak.finances.control.base.IOnTaskCompleted;
 import com.github.andrei1993ak.finances.util.ContextHolder;
 
 
@@ -25,7 +25,7 @@ public class WalletExecutor extends PojoExecutor<Wallet> {
     public static final int KEY_RESULT_DELETE_ALL = 306;
     public static final int KEY_RESULT_GET_ALL_TO_LIST= 307;
 
-    public WalletExecutor(final OnTaskCompleted listener) {
+    public WalletExecutor(final IOnTaskCompleted listener) {
         super(listener);
     }
 

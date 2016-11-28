@@ -3,14 +3,12 @@ package com.github.andrei1993ak.finances.model.newModel;
 
 import android.database.Cursor;
 
-import com.github.andrei1993ak.finances.App;
 import com.github.andrei1993ak.finances.model.annotations.types.DBDouble;
 import com.github.andrei1993ak.finances.model.annotations.types.DBInteger;
 import com.github.andrei1993ak.finances.model.annotations.types.DBIntegerAutoIncrement;
 import com.github.andrei1993ak.finances.model.annotations.types.DBIntegerPrimaryKey;
 import com.github.andrei1993ak.finances.model.annotations.types.DBString;
 import com.github.andrei1993ak.finances.model.models.TableClass;
-import com.github.andrei1993ak.finances.util.ContextHolder;
 import com.github.andrei1993ak.finances.util.CursorUtils;
 
 import java.lang.annotation.Annotation;
@@ -21,12 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ModelsFromCursorGenerator<Model extends TableClass> {
-
-    private final CursorUtils cursorUtils;
-
-    public ModelsFromCursorGenerator() {
-        cursorUtils = ((App) ContextHolder.getInstance().getContext()).getCursorUtils();
-    }
 
     public Model generateModelFromCursor(final Cursor cursor, final Class<Model> clazz) {
         try {
@@ -124,11 +116,11 @@ public class ModelsFromCursorGenerator<Model extends TableClass> {
                     final Model model = clazz.newInstance();
                     for (final UniversalSetter setter : list) {
                         if (setter.getType().isAssignableFrom(Double.class)) {
-                            setter.getSetter().invoke(model, cursorUtils.getDouble(cursor, setter.getTableColumnName()));
+                            setter.getSetter().invoke(model, CursorUtils.getDouble(cursor, setter.getTableColumnName()));
                         } else if (setter.getType().isAssignableFrom(Long.class)) {
-                            setter.getSetter().invoke(model, cursorUtils.getLong(cursor, setter.getTableColumnName()));
+                            setter.getSetter().invoke(model, CursorUtils.getLong(cursor, setter.getTableColumnName()));
                         } else {
-                            setter.getSetter().invoke(model, cursorUtils.getString(cursor,setter.getTableColumnName()));
+                            setter.getSetter().invoke(model, CursorUtils.getString(cursor,setter.getTableColumnName()));
                         }
                     }
                     models.add(model);

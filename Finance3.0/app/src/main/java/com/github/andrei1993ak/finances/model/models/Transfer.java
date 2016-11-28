@@ -146,14 +146,13 @@ public final class Transfer extends TableClass implements Parcelable {
 
     @Override
     public Transfer convertFromCursor(final Cursor cursor) {
-        final CursorUtils cursorUtils = new CursorUtils();
-        this._id = cursorUtils.getLong(cursor, ID);
-        this.name = cursorUtils.getString(cursor, NAME);
-        this.fromWalletId = cursorUtils.getLong(cursor, FROM_WALLET_ID);
-        this.toWalletId = cursorUtils.getLong(cursor, TO_WALLET_ID);
-        this.fromAmount = cursorUtils.getDouble(cursor, FROM_AMOUNT);
-        this.toAmount = cursorUtils.getDouble(cursor, TO_AMOUNT);
-        this.date = cursorUtils.getLong(cursor, DATE);
+        this._id = CursorUtils.getLong(cursor, ID);
+        this.name = CursorUtils.getString(cursor, NAME);
+        this.fromWalletId = CursorUtils.getLong(cursor, FROM_WALLET_ID);
+        this.toWalletId = CursorUtils.getLong(cursor, TO_WALLET_ID);
+        this.fromAmount = CursorUtils.getDouble(cursor, FROM_AMOUNT);
+        this.toAmount = CursorUtils.getDouble(cursor, TO_AMOUNT);
+        this.date = CursorUtils.getLong(cursor, DATE);
         return this;
     }
 

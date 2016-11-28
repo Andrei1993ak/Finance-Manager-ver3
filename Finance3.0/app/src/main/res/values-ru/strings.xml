@@ -57,4 +57,5 @@
     <string name="confirmPassword">Подтвердите ПИН</string>
     <string name="wrong_pin">Неверный ПИН</string>
     <string name="enter_pin">Введите ПИН</string>
+    <string name="share">Посоветовать другу</string>
 </resources>

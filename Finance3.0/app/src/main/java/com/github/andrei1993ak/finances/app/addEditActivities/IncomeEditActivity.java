@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import com.github.andrei1993ak.finances.R;
 import com.github.andrei1993ak.finances.app.BaseActivity;
-import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
+import com.github.andrei1993ak.finances.control.base.IOnTaskCompleted;
 import com.github.andrei1993ak.finances.control.base.RequestAdapter;
 import com.github.andrei1993ak.finances.control.base.Result;
 import com.github.andrei1993ak.finances.control.executors.IncomeCategoryExecutor;
@@ -34,7 +34,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class IncomeEditActivity extends BaseActivity implements OnTaskCompleted {
+public class IncomeEditActivity extends BaseActivity implements IOnTaskCompleted {
 
     private Income income;
     private EditText editIncomeName;
@@ -55,7 +55,9 @@ public class IncomeEditActivity extends BaseActivity implements OnTaskCompleted 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.income_add_edit_activity);
         setTitle(R.string.editing);
+
         initFields();
+
         new IncomeExecutor(this).execute(new RequestAdapter<Income>().get(incomeId));
     }
 
@@ -67,6 +69,7 @@ public class IncomeEditActivity extends BaseActivity implements OnTaskCompleted 
         this.editIncomeWallet = (AppCompatSpinner) findViewById(R.id.income_wallet);
         this.editIncomeCategory = (AppCompatSpinner) findViewById(R.id.income_category);
         this.editIncomeSubCategory = (AppCompatSpinner) findViewById(R.id.income_subCategory);
+
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_income_add_edit);
         fab.setImageResource(android.R.drawable.ic_menu_edit);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -75,6 +78,7 @@ public class IncomeEditActivity extends BaseActivity implements OnTaskCompleted 
                 editIncome();
             }
         });
+
         setDatePickerDialog();
     }
 

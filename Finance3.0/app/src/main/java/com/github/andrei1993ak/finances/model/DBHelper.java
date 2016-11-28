@@ -11,7 +11,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "financePm";
 
-    private static final int DATABASE_VERSION = 20;
+    private static final int DATABASE_VERSION = 23;
 
     private static DBHelper instance;
 
@@ -36,7 +36,7 @@ public class DBHelper extends SQLiteOpenHelper {
 //        sqLiteDatabase.execSQL(TableQueryGenerator.getTableCreateQuery(Wallet.class));
 //        sqLiteDatabase.execSQL(TableQueryGenerator.getTableCreateQuery(Income.class));
 //        sqLiteDatabase.execSQL(TableQueryGenerator.getTableCreateQuery(Transfer.class));
-//        sqLiteDatabase.execSQL(TableQueryGenerator.getTableCreateQuery(Cost.class));
+//        sqLiteDatabase.execSQL(query);
     }
 
     @Override
@@ -47,12 +47,13 @@ public class DBHelper extends SQLiteOpenHelper {
 //        sqLiteDatabase.execSQL(TableQueryGenerator.getTableDeleteQuery(IncomeCategory.class));
 //        sqLiteDatabase.execSQL(TableQueryGenerator.getTableDeleteQuery(CostCategory.class));
 //        sqLiteDatabase.execSQL(TableQueryGenerator.getTableDeleteQuery(Wallet.class));
-//        onCreate(sqLiteDatabase);
+        onCreate(sqLiteDatabase);
     }
 
     public int getNextCostId() {
-        final Cursor cursor = getReadableDatabase().rawQuery("SELECT SEQ FROM SQLITE_SEQUENCE WHERE NAME = '" +
-                TableQueryGenerator.getTableName(Cost.class) + "'", null);
+        final String query = "SELECT SEQ FROM SQLITE_SEQUENCE WHERE NAME = '" +
+                TableQueryGenerator.getTableName(Cost.class) + "'";
+        final Cursor cursor = getReadableDatabase().rawQuery(query, null);
         try {
             if (cursor.moveToFirst()) {
                 return cursor.getInt(0) + 1;

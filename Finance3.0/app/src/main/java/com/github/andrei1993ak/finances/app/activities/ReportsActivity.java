@@ -27,11 +27,13 @@ public class ReportsActivity extends BaseActivity {
                 Intent intent = new Intent(this, PieChartActivity.class);
                 intent.putExtra(Constants.PIE_CHART_TYPE,true);
                 startActivity(intent);
+
                 break;
             case R.id.reportCostPie:
                 intent = new Intent(this, PieChartActivity.class);
                 intent.putExtra(Constants.PIE_CHART_TYPE,false);
                 startActivity(intent);
+
                 break;
             case R.id.balanceChart:
                 startActivity(new Intent(this, BalanceChartActivity.class));

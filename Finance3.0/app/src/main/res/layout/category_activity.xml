@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:divider="?attr/colorControlNormal"
             android:childDivider="?attr/colorControlNormal"
-            android:dividerHeight="6.0sp"
+            android:dividerHeight="@dimen/divider"
             android:layout_marginTop="@dimen/background_margin"
             android:background="?attr/colorBackgroundFloating" />
 

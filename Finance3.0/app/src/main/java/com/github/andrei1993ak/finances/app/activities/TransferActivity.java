@@ -20,7 +20,7 @@ import com.github.andrei1993ak.finances.app.BaseActivity;
 import com.github.andrei1993ak.finances.app.addEditActivities.TransferAddActivity;
 import com.github.andrei1993ak.finances.app.addEditActivities.TransferEditActivity;
 import com.github.andrei1993ak.finances.control.adapters.TransferCursorAdapter;
-import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
+import com.github.andrei1993ak.finances.control.base.IOnTaskCompleted;
 import com.github.andrei1993ak.finances.control.base.RequestAdapter;
 import com.github.andrei1993ak.finances.control.base.Result;
 import com.github.andrei1993ak.finances.control.executors.TransferExecutor;
@@ -29,7 +29,7 @@ import com.github.andrei1993ak.finances.model.TableQueryGenerator;
 import com.github.andrei1993ak.finances.model.models.Transfer;
 import com.github.andrei1993ak.finances.util.Constants;
 
-public class TransferActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor>, OnTaskCompleted {
+public class TransferActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor>, IOnTaskCompleted {
 
     private TransferCursorAdapter transferCursorAdapter;
     private RequestAdapter<Transfer> requestAdapter;
@@ -39,9 +39,11 @@ public class TransferActivity extends BaseActivity implements LoaderManager.Load
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.standart_activity);
+        setContentView(R.layout.base_activity);
         setTitle(R.string.transfers);
+
         initFields();
+
         getSupportLoaderManager().restartLoader(Constants.MAIN_LOADER_ID, null, this);
     }
 
@@ -50,6 +52,7 @@ public class TransferActivity extends BaseActivity implements LoaderManager.Load
         this.requestAdapter = new RequestAdapter<>();
         this.menuInflater = getMenuInflater();
         this.transferCursorAdapter = new TransferCursorAdapter(this, null);
+
         final ListView transferListView = (ListView) findViewById(R.id.standardListView);
         transferListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -58,6 +61,7 @@ public class TransferActivity extends BaseActivity implements LoaderManager.Load
             }
         });
         transferListView.setAdapter(transferCursorAdapter);
+
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,6 +70,7 @@ public class TransferActivity extends BaseActivity implements LoaderManager.Load
                 startActivityForResult(intent, Constants.ADD_REQUEST);
             }
         });
+
         registerForContextMenu(transferListView);
     }
 
@@ -86,6 +91,7 @@ public class TransferActivity extends BaseActivity implements LoaderManager.Load
                 return true;
             } else {
                 new TransferExecutor(this).execute(requestAdapter.delete(selectedItemId));
+                selectedItemId = Constants.NOT_SELECTED;
                 return true;
             }
         }
@@ -104,6 +110,7 @@ public class TransferActivity extends BaseActivity implements LoaderManager.Load
         switch (item.getItemId()) {
             case R.id.cm_delete:
                 new TransferExecutor(this).execute(requestAdapter.delete(info.id));
+
                 break;
             case R.id.cm_edit:
                 final Intent intent = new Intent(this, TransferEditActivity.class);
@@ -121,10 +128,12 @@ public class TransferActivity extends BaseActivity implements LoaderManager.Load
                 case Constants.ADD_REQUEST:
                     final Transfer newTransfer = data.getParcelableExtra(TableQueryGenerator.getTableName(Transfer.class));
                     new TransferExecutor(this).execute(requestAdapter.add(newTransfer));
+
                     break;
                 case Constants.EDIT_REQUEST:
                     final Transfer editTransfer = data.getParcelableExtra(TableQueryGenerator.getTableName(Transfer.class));
                     new TransferExecutor(this).execute(requestAdapter.edit(editTransfer));
+
                     break;
                 default:
                     break;

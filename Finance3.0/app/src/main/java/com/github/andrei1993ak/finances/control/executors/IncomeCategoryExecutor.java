@@ -5,7 +5,7 @@ import android.database.Cursor;
 import com.github.andrei1993ak.finances.App;
 import com.github.andrei1993ak.finances.control.base.PojoExecutor;
 import com.github.andrei1993ak.finances.control.base.Result;
-import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
+import com.github.andrei1993ak.finances.control.base.IOnTaskCompleted;
 import com.github.andrei1993ak.finances.model.dbHelpers.DBHelperCategoryIncome;
 import com.github.andrei1993ak.finances.model.models.IncomeCategory;
 import com.github.andrei1993ak.finances.util.ContextHolder;
@@ -26,7 +26,7 @@ public class IncomeCategoryExecutor extends PojoExecutor<IncomeCategory> {
 
     private final DBHelperCategoryIncome helperCategoryIncome = ((DBHelperCategoryIncome) ((App) ContextHolder.getInstance().getContext()).getDbHelper(IncomeCategory.class));
 
-    public IncomeCategoryExecutor(final OnTaskCompleted listener) {
+    public IncomeCategoryExecutor(final IOnTaskCompleted listener) {
         super(listener);
     }
 

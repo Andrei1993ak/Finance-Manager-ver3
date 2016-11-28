@@ -20,7 +20,7 @@ import com.github.andrei1993ak.finances.app.BaseActivity;
 import com.github.andrei1993ak.finances.app.addEditActivities.IncomeAddActivity;
 import com.github.andrei1993ak.finances.app.addEditActivities.IncomeEditActivity;
 import com.github.andrei1993ak.finances.control.adapters.IncomeCursorAdapter;
-import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
+import com.github.andrei1993ak.finances.control.base.IOnTaskCompleted;
 import com.github.andrei1993ak.finances.control.base.RequestAdapter;
 import com.github.andrei1993ak.finances.control.base.Result;
 import com.github.andrei1993ak.finances.control.executors.IncomeExecutor;
@@ -29,7 +29,7 @@ import com.github.andrei1993ak.finances.model.TableQueryGenerator;
 import com.github.andrei1993ak.finances.model.models.Income;
 import com.github.andrei1993ak.finances.util.Constants;
 
-public class IncomeActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor>, OnTaskCompleted {
+public class IncomeActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor>, IOnTaskCompleted {
 
     private IncomeCursorAdapter incomeCursorAdapter;
     private RequestAdapter<Income> requestAdapter;
@@ -39,9 +39,11 @@ public class IncomeActivity extends BaseActivity implements LoaderManager.Loader
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.standart_activity);
+        setContentView(R.layout.base_activity);
         setTitle(R.string.incomes);
+
         initFields();
+
         getSupportLoaderManager().restartLoader(Constants.MAIN_LOADER_ID, null, this);
     }
 
@@ -50,6 +52,7 @@ public class IncomeActivity extends BaseActivity implements LoaderManager.Loader
         this.requestAdapter = new RequestAdapter<>();
         this.incomeCursorAdapter = new IncomeCursorAdapter(this, null);
         this.selectedItemId = Constants.NOT_SELECTED;
+
         final ListView incomeListView = (ListView) findViewById(R.id.standardListView);
         incomeListView.setAdapter(incomeCursorAdapter);
         incomeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -58,6 +61,7 @@ public class IncomeActivity extends BaseActivity implements LoaderManager.Loader
                 selectedItemId = id;
             }
         });
+
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,6 +70,7 @@ public class IncomeActivity extends BaseActivity implements LoaderManager.Loader
                 startActivityForResult(intent, Constants.ADD_REQUEST);
             }
         });
+
         registerForContextMenu(incomeListView);
     }
 
@@ -75,7 +80,6 @@ public class IncomeActivity extends BaseActivity implements LoaderManager.Loader
         return true;
     }
 
-    //TODO disable selection of ListView
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
         final int id = item.getItemId();
@@ -87,6 +91,7 @@ public class IncomeActivity extends BaseActivity implements LoaderManager.Loader
                 return true;
             } else {
                 new IncomeExecutor(this).execute(requestAdapter.delete(selectedItemId));
+                selectedItemId = Constants.NOT_SELECTED;
                 return true;
             }
         }
@@ -105,6 +110,7 @@ public class IncomeActivity extends BaseActivity implements LoaderManager.Loader
         switch (item.getItemId()) {
             case Constants.CM_DELETE_ID:
                 new IncomeExecutor(this).execute(requestAdapter.delete(info.id));
+
                 break;
             case Constants.CM_EDIT_ID:
                 final Intent intent = new Intent(this, IncomeEditActivity.class);
@@ -122,10 +128,12 @@ public class IncomeActivity extends BaseActivity implements LoaderManager.Loader
                 case Constants.ADD_REQUEST:
                     final Income newIncome = data.getParcelableExtra(TableQueryGenerator.getTableName(Income.class));
                     new IncomeExecutor(this).execute(requestAdapter.add(newIncome));
+
                     break;
                 case Constants.EDIT_REQUEST:
                     final Income editIncome = data.getParcelableExtra(TableQueryGenerator.getTableName(Income.class));
                     new IncomeExecutor(this).execute(requestAdapter.edit(editIncome));
+
                     break;
                 default:
                     break;

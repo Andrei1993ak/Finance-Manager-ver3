@@ -24,7 +24,7 @@ import android.widget.TextView;
 
 import com.github.andrei1993ak.finances.R;
 import com.github.andrei1993ak.finances.app.BaseActivity;
-import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
+import com.github.andrei1993ak.finances.control.base.IOnTaskCompleted;
 import com.github.andrei1993ak.finances.control.base.RequestAdapter;
 import com.github.andrei1993ak.finances.control.base.Result;
 import com.github.andrei1993ak.finances.control.executors.CostCategoryExecutor;
@@ -46,7 +46,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class CostAddActivity extends BaseActivity implements OnTaskCompleted {
+public class CostAddActivity extends BaseActivity implements IOnTaskCompleted {
 
     private static final int CAMERA_REQUEST = 1;
 
@@ -68,7 +68,9 @@ public class CostAddActivity extends BaseActivity implements OnTaskCompleted {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cost_add_edit_activity);
         setTitle(R.string.newCost);
+
         initFields();
+
         new WalletExecutor(this).execute(new RequestAdapter<Wallet>().getAllToList(RequestAdapter.SELECTION_ALL));
         new CostCategoryExecutor(this).execute(new RequestAdapter<CostCategory>().getAllToList(RequestAdapter.SELECTION_PARENT_CATEGORIES));
     }
@@ -80,10 +82,12 @@ public class CostAddActivity extends BaseActivity implements OnTaskCompleted {
         this.newCostWallets = (AppCompatSpinner) findViewById(R.id.cost_wallet);
         this.newCostCategory = (AppCompatSpinner) findViewById(R.id.cost_category);
         this.newCostSubCategory = (AppCompatSpinner) findViewById(R.id.cost_subCategory);
+
         final PackageManager pm = getApplicationContext().getPackageManager();
         if (!pm.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
             findViewById(R.id.add_edit_photo_button).setVisibility(View.INVISIBLE);
         }
+
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_cost_add_edit);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -261,8 +265,12 @@ public class CostAddActivity extends BaseActivity implements OnTaskCompleted {
             photo = BitmapFactory.decodeFile(file.getPath());
             final ImageView view = (ImageView) findViewById(R.id.cost_photo);
             view.setImageBitmap(photo);
-            final String path = ImageNameGenerator.getImagePath(DBHelper.getInstance(this).getNextCostId());
+            final long nextId = DBHelper.getInstance(this).getNextCostId();
+            final String path = ImageNameGenerator.getImagePath(nextId);
             final File toFile = new File(path);
+            if (toFile.exists()) {
+                toFile.delete();
+            }
             try {
                 Files.move(file, toFile);
             } catch (final IOException e) {

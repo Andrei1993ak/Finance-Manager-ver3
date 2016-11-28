@@ -21,6 +21,7 @@ public class CategoryStartingActivity extends BaseActivity {
         switch (view.getId()) {
             case R.id.tvIncome:
                 startActivity(new Intent(this, CategoryIncomeActivity.class));
+
                 break;
             case R.id.tvCosts:
                 startActivity(new Intent(this, CategoryCostActivity.class));

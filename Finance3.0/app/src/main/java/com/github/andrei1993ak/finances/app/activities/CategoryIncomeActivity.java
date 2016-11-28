@@ -19,7 +19,7 @@ import com.github.andrei1993ak.finances.app.BaseActivity;
 import com.github.andrei1993ak.finances.app.addEditActivities.IncomeCategoryAddActivity;
 import com.github.andrei1993ak.finances.app.addEditActivities.IncomeCategoryEditActivity;
 import com.github.andrei1993ak.finances.control.adapters.ExpListAdapter;
-import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
+import com.github.andrei1993ak.finances.control.base.IOnTaskCompleted;
 import com.github.andrei1993ak.finances.control.base.RequestAdapter;
 import com.github.andrei1993ak.finances.control.base.Result;
 import com.github.andrei1993ak.finances.control.executors.IncomeCategoryExecutor;
@@ -28,7 +28,7 @@ import com.github.andrei1993ak.finances.model.TableQueryGenerator;
 import com.github.andrei1993ak.finances.model.models.IncomeCategory;
 import com.github.andrei1993ak.finances.util.Constants;
 
-public class CategoryIncomeActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor>, OnTaskCompleted {
+public class CategoryIncomeActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor>, IOnTaskCompleted {
 
     private ExpandableListView incomeCategoryExpListView;
     private ExpListAdapter adapter;
@@ -41,8 +41,11 @@ public class CategoryIncomeActivity extends BaseActivity implements LoaderManage
         super.onCreate(savedInstanceState);
         setContentView(R.layout.category_activity);
         setTitle(R.string.incomeCategories);
+
         initFields();
+
         registerForContextMenu(incomeCategoryExpListView);
+
         getSupportLoaderManager().restartLoader(Constants.EXP_LIST_ROOT_LOADER_ID, null, this);
     }
 
@@ -50,6 +53,7 @@ public class CategoryIncomeActivity extends BaseActivity implements LoaderManage
         this.incomeCategoryExpListView = (ExpandableListView) findViewById(R.id.CategoryExpListView);
         this.inflater = getMenuInflater();
         this.deleteGroupId = -1;
+
         final String[] parentsFrom = {IncomeCategory.NAME};
         final int[] parentsTo = {android.R.id.text1};
         final String[] childFrom = {IncomeCategory.NAME};
@@ -57,6 +61,7 @@ public class CategoryIncomeActivity extends BaseActivity implements LoaderManage
         adapter = new ExpListAdapter(this, null, android.R.layout.simple_expandable_list_item_1, parentsFrom, parentsTo,
                 android.R.layout.simple_expandable_list_item_1, childFrom, childTo);
         incomeCategoryExpListView.setAdapter(adapter);
+
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_add_cat);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,8 +73,10 @@ public class CategoryIncomeActivity extends BaseActivity implements LoaderManage
 
     @Override
     protected void onStop() {
-        for (int i = 0; i < adapter.getGroupCount(); i++)
+        for (int i = 0; i < adapter.getGroupCount(); i++) {
             incomeCategoryExpListView.collapseGroup(i);
+        }
+
         super.onStop();
     }
 

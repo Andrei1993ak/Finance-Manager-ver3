@@ -130,22 +130,6 @@
             android:textSize="@dimen/main_activity_text_size"
             customNs:mBorderColor="@color/colorSeparator" />
 
-        <com.github.andrei1993ak.finances.app.customViews.BottomBorderTextView
-            android:id="@+id/tvSettings"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_settings_32dp"
-            android:drawablePadding="@dimen/drawable_padding"
-            android:duplicateParentState="true"
-            android:onClick="onSelectedCategoryViewClick"
-            android:background="?attr/colorBackgroundFloating"
-            android:layout_marginBottom="@dimen/main_list_margin_bottom"
-            android:paddingBottom="@dimen/main_list_padding_bootom"
-            android:paddingLeft="@dimen/main_list_paddint_lef"
-            android:paddingTop="@dimen/main_list_padding_top"
-            android:text="@string/settings"
-            android:textSize="@dimen/main_activity_text_size" />
-
     </LinearLayout>
 </ScrollView>
 

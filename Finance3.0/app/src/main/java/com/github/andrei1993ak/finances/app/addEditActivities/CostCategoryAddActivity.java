@@ -12,7 +12,7 @@ import android.widget.EditText;
 
 import com.github.andrei1993ak.finances.R;
 import com.github.andrei1993ak.finances.app.BaseActivity;
-import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
+import com.github.andrei1993ak.finances.control.base.IOnTaskCompleted;
 import com.github.andrei1993ak.finances.control.base.RequestAdapter;
 import com.github.andrei1993ak.finances.control.base.Result;
 import com.github.andrei1993ak.finances.control.executors.CostCategoryExecutor;
@@ -21,7 +21,7 @@ import com.github.andrei1993ak.finances.model.models.CostCategory;
 
 import java.util.List;
 
-public class CostCategoryAddActivity extends BaseActivity implements OnTaskCompleted {
+public class CostCategoryAddActivity extends BaseActivity implements IOnTaskCompleted {
 
     private EditText newCategoryName;
     private AppCompatSpinner parentCategories;
@@ -33,13 +33,16 @@ public class CostCategoryAddActivity extends BaseActivity implements OnTaskCompl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.category_add_edit_activity);
         setTitle(R.string.newCategory);
+
         initFields();
+
         new CostCategoryExecutor(this).execute(new RequestAdapter<CostCategory>().getAllToList(RequestAdapter.SELECTION_PARENT_CATEGORIES));
     }
 
     private void initFields() {
         this.newCategoryName = (EditText) findViewById(R.id.add_edit_category_name);
         this.parentCategories = (AppCompatSpinner) findViewById(R.id.spinnerParentCategories);
+
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_cat_add);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -12,7 +12,7 @@ import android.widget.EditText;
 
 import com.github.andrei1993ak.finances.R;
 import com.github.andrei1993ak.finances.app.BaseActivity;
-import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
+import com.github.andrei1993ak.finances.control.base.IOnTaskCompleted;
 import com.github.andrei1993ak.finances.control.base.RequestAdapter;
 import com.github.andrei1993ak.finances.control.base.Result;
 import com.github.andrei1993ak.finances.control.executors.IncomeCategoryExecutor;
@@ -21,7 +21,7 @@ import com.github.andrei1993ak.finances.model.models.IncomeCategory;
 
 import java.util.List;
 
-public class IncomeCategoryEditActivity extends BaseActivity implements OnTaskCompleted {
+public class IncomeCategoryEditActivity extends BaseActivity implements IOnTaskCompleted {
 
     private EditText editCategoryName;
     private AppCompatSpinner parentCategories;
@@ -34,7 +34,9 @@ public class IncomeCategoryEditActivity extends BaseActivity implements OnTaskCo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.category_add_edit_activity);
         setTitle(R.string.editing);
+
         initFields();
+
         final long incomeCategoryId = getIntent().getLongExtra(IncomeCategory.ID, -1);
         new IncomeCategoryExecutor(this).execute(new RequestAdapter<IncomeCategory>().get(incomeCategoryId));
     }
@@ -42,6 +44,7 @@ public class IncomeCategoryEditActivity extends BaseActivity implements OnTaskCo
     private void initFields() {
         this.editCategoryName = (EditText) findViewById(R.id.add_edit_category_name);
         this.parentCategories = (AppCompatSpinner) findViewById(R.id.spinnerParentCategories);
+
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_cat_add);
         fab.setImageResource(android.R.drawable.ic_menu_edit);
         fab.setOnClickListener(new View.OnClickListener() {

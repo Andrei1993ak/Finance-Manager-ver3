@@ -103,4 +103,5 @@
     <string name="setPin">Set pin code</string>
     <string name="confirmPassword">Confirm PIN</string>
     <string name="enter_pin">Enter PIN</string>
+    <string name="share">Share</string>
 </resources>

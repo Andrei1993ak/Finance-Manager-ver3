@@ -36,7 +36,7 @@
             android:layout_marginRight="@dimen/background_margin"
             android:background="?attr/colorBackgroundFloating"
             android:divider="?attr/colorControlNormal"
-            android:dividerHeight="6.0sp" />
+            android:dividerHeight="@dimen/divider" />
     </LinearLayout>
 
 

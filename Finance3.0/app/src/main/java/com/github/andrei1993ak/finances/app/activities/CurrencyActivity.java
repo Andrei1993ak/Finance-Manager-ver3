@@ -19,7 +19,7 @@ import com.github.andrei1993ak.finances.R;
 import com.github.andrei1993ak.finances.app.BaseActivity;
 import com.github.andrei1993ak.finances.app.addEditActivities.CurrencyAddActivity;
 import com.github.andrei1993ak.finances.app.addEditActivities.CurrencyEditActivity;
-import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
+import com.github.andrei1993ak.finances.control.base.IOnTaskCompleted;
 import com.github.andrei1993ak.finances.control.base.RequestAdapter;
 import com.github.andrei1993ak.finances.control.base.Result;
 import com.github.andrei1993ak.finances.control.executors.CurrencyExecutor;
@@ -28,7 +28,7 @@ import com.github.andrei1993ak.finances.model.TableQueryGenerator;
 import com.github.andrei1993ak.finances.model.models.Currency;
 import com.github.andrei1993ak.finances.util.Constants;
 
-public class CurrencyActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor>, OnTaskCompleted {
+public class CurrencyActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor>, IOnTaskCompleted {
 
     private SimpleCursorAdapter simpleCursorAdapter;
     private RequestAdapter<Currency> requestAdapter;
@@ -38,9 +38,11 @@ public class CurrencyActivity extends BaseActivity implements LoaderManager.Load
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.standart_activity);
+        setContentView(R.layout.base_activity);
         setTitle(R.string.currencies);
+
         initFields();
+
         getSupportLoaderManager().restartLoader(Constants.MAIN_LOADER_ID, null, this);
     }
 
@@ -48,9 +50,10 @@ public class CurrencyActivity extends BaseActivity implements LoaderManager.Load
         this.inflater = getMenuInflater();
         this.requestAdapter = new RequestAdapter<>();
         this.selectedItemId = Constants.NOT_SELECTED;
+
         final String[] from = new String[]{Currency.NAME};
         final int[] to = new int[]{R.id.currencyName};
-        this.simpleCursorAdapter = new SimpleCursorAdapter(this, R.layout.currency_listitem, null, from, to, 0);
+        this.simpleCursorAdapter = new SimpleCursorAdapter(this, R.layout.adapter_currency_item, null, from, to, 0);
         final ListView lvCurrencies = (ListView) findViewById(R.id.standardListView);
         lvCurrencies.setAdapter(simpleCursorAdapter);
         lvCurrencies.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -59,6 +62,7 @@ public class CurrencyActivity extends BaseActivity implements LoaderManager.Load
                 selectedItemId = id;
             }
         });
+
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,6 +90,7 @@ public class CurrencyActivity extends BaseActivity implements LoaderManager.Load
                 return true;
             } else {
                 new CurrencyExecutor(this).execute(requestAdapter.delete(selectedItemId));
+                selectedItemId = Constants.NOT_SELECTED;
                 return true;
             }
         }
@@ -99,10 +104,12 @@ public class CurrencyActivity extends BaseActivity implements LoaderManager.Load
                 case Constants.ADD_REQUEST:
                     final Currency newCurrency = data.getParcelableExtra(TableQueryGenerator.getTableName(Currency.class));
                     new CurrencyExecutor(this).execute(requestAdapter.add(newCurrency));
+
                     break;
                 case Constants.EDIT_REQUEST:
                     final Currency editCurrency = data.getParcelableExtra(TableQueryGenerator.getTableName(Currency.class));
                     new CurrencyExecutor(this).execute(requestAdapter.edit(editCurrency));
+
                     break;
                 default:
                     break;

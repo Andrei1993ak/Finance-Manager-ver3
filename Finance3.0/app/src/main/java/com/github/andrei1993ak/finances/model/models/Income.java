@@ -121,13 +121,12 @@ public class Income extends TableClass implements Parcelable {
 
     @Override
     public Income convertFromCursor(final Cursor cursor) {
-        final CursorUtils cursorUtils = new CursorUtils();
-        this._id = cursorUtils.getLong(cursor, ID);
-        this.name = cursorUtils.getString(cursor, NAME);
-        this.amount = cursorUtils.getDouble(cursor, AMOUNT);
-        this.walletId = cursorUtils.getLong(cursor,WALLET_ID);
-        this.categoryId = cursorUtils.getLong(cursor, CATEGORY_ID);
-        this.date = cursorUtils.getLong(cursor, DATE);
+        this._id = CursorUtils.getLong(cursor, ID);
+        this.name = CursorUtils.getString(cursor, NAME);
+        this.amount = CursorUtils.getDouble(cursor, AMOUNT);
+        this.walletId = CursorUtils.getLong(cursor,WALLET_ID);
+        this.categoryId = CursorUtils.getLong(cursor, CATEGORY_ID);
+        this.date = CursorUtils.getLong(cursor, DATE);
         return this;
     }
 

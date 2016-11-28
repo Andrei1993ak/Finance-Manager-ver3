@@ -3,7 +3,7 @@ package com.github.andrei1993ak.finances.control.executors;
 import android.database.Cursor;
 
 import com.github.andrei1993ak.finances.App;
-import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
+import com.github.andrei1993ak.finances.control.base.IOnTaskCompleted;
 import com.github.andrei1993ak.finances.control.base.PojoExecutor;
 import com.github.andrei1993ak.finances.control.base.Result;
 import com.github.andrei1993ak.finances.model.dbHelpers.DBHelperTransfer;
@@ -27,7 +27,7 @@ public class TransferExecutor extends PojoExecutor<Transfer> {
     public static final int KEY_RESULT_GET_ALL_TO_LIST_BY_WALLET_ID = 809;
     public static final int KEY_RESULT_GET_ALL_TO_LIST_BY_DATES = 810;
 
-    public TransferExecutor(final OnTaskCompleted listener) {
+    public TransferExecutor(final IOnTaskCompleted listener) {
         super(listener);
     }
 

@@ -1,17 +1,16 @@
 package com.github.andrei1993ak.finances.app;
 
-import android.app.ActivityManager;
-import android.content.ComponentName;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Rect;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.github.andrei1993ak.finances.R;
@@ -27,9 +26,7 @@ import com.github.andrei1993ak.finances.control.adapters.WalletsRecycleViewAdapt
 import com.github.andrei1993ak.finances.control.loaders.WalletCursorLoader;
 import com.github.andrei1993ak.finances.util.Constants;
 
-import java.util.List;
-
-public class StartingActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class StartingActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor>{
 
     public static final int REQUEST_CODE_SETTING = 0;
 
@@ -47,8 +44,16 @@ public class StartingActivity extends BaseActivity implements LoaderManager.Load
         recyclerView.addItemDecoration(dividerItemDecoration);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        final NavigationView navigationView = (NavigationView)findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull final MenuItem item) {
+                return onNavigationMenuSelected(item.getItemId());
+            }
+        });
         getSupportLoaderManager().restartLoader(Constants.MAIN_LOADER_ID, null, this);
     }
+
 
     @Override
     protected void onResume() {
@@ -91,17 +96,11 @@ public class StartingActivity extends BaseActivity implements LoaderManager.Load
                 startActivity(new Intent(this, ReportsActivity.class));
 
                 break;
-            case R.id.tvSettings:
-                startActivityForResult(new Intent(this, SettingsActivity.class), REQUEST_CODE_SETTING);
-
-                break;
         }
     }
 
     @Override
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
-        Log.d("test", "onActivityResult");
-
         // TODO wrong recreate usage
         if (requestCode == REQUEST_CODE_SETTING ) {
             recreate();
@@ -130,19 +129,23 @@ public class StartingActivity extends BaseActivity implements LoaderManager.Load
         startActivity(new Intent(StartingActivity.this, StartingActivity.class));
     }
 
-    public class VerticalSpaceItemDecoration extends RecyclerView.ItemDecoration {
+    private boolean onNavigationMenuSelected(final int itemId) {
+        switch (itemId){
+            case R.id.nav_manage:
+                startActivityForResult(new Intent(this, SettingsActivity.class), REQUEST_CODE_SETTING);
 
-        private final int verticalSpaceHeight;
+                break;
+            case R.id.nav_share:
+                final Intent shareIntent = new Intent();
+                shareIntent.setAction(Intent.ACTION_SEND);
+                shareIntent.putExtra(Intent.EXTRA_TEXT,"Link to download");
+                shareIntent.setType("text/plain");
+                startActivity(shareIntent);
 
-        public VerticalSpaceItemDecoration(int verticalSpaceHeight) {
-            this.verticalSpaceHeight = verticalSpaceHeight;
+                break;
+
         }
-
-        @Override
-        public void getItemOffsets(Rect outRect, View view, RecyclerView parent,
-                                   RecyclerView.State state) {
-            outRect.bottom = verticalSpaceHeight;
-        }
+        return true;
     }
 
 }

@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import com.github.andrei1993ak.finances.R;
 import com.github.andrei1993ak.finances.app.BaseActivity;
-import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
+import com.github.andrei1993ak.finances.control.base.IOnTaskCompleted;
 import com.github.andrei1993ak.finances.control.base.RequestAdapter;
 import com.github.andrei1993ak.finances.control.base.Result;
 import com.github.andrei1993ak.finances.control.executors.TransferExecutor;
@@ -34,7 +34,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class TransferEditActivity extends BaseActivity implements OnTaskCompleted, OnParseCompleted {
+public class TransferEditActivity extends BaseActivity implements IOnTaskCompleted, OnParseCompleted {
 
     private EditText editTransferName;
     private TextView editTransferDate;
@@ -52,7 +52,9 @@ public class TransferEditActivity extends BaseActivity implements OnTaskComplete
         super.onCreate(savedInstanceState);
         setContentView(R.layout.transfer_add_edit_activity);
         setTitle(R.string.editing);
+
         initFields();
+
         final long transferId = getIntent().getLongExtra(Transfer.ID, -1);
         new TransferExecutor(this).execute(new RequestAdapter<Transfer>().get(transferId));
     }
@@ -65,6 +67,7 @@ public class TransferEditActivity extends BaseActivity implements OnTaskComplete
         this.editTransferFromAmount = (EditText) findViewById(R.id.transfer_from_amount);
         this.editTransferToAmount = (EditText) findViewById(R.id.transfer_to_amount);
         this.officialRate = (TextView) findViewById(R.id.official_rate);
+
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_transfer_add_edit);
         fab.setImageResource(android.R.drawable.ic_menu_edit);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -73,6 +76,7 @@ public class TransferEditActivity extends BaseActivity implements OnTaskComplete
                 editTransfer();
             }
         });
+
         setDatePickerDialog();
     }
 

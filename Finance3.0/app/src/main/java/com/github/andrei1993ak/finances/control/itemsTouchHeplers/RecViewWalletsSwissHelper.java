@@ -7,12 +7,12 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 
 import com.github.andrei1993ak.finances.control.executors.WalletExecutor;
 import com.github.andrei1993ak.finances.control.viewHolders.WalletsHolder;
-import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
+import com.github.andrei1993ak.finances.control.base.IOnTaskCompleted;
 import com.github.andrei1993ak.finances.control.base.RequestAdapter;
 import com.github.andrei1993ak.finances.control.base.Result;
 import com.github.andrei1993ak.finances.model.models.Wallet;
 
-public class RecViewWalletsSwissHelper extends ItemTouchHelper.SimpleCallback implements OnTaskCompleted {
+public class RecViewWalletsSwissHelper extends ItemTouchHelper.SimpleCallback implements IOnTaskCompleted {
     private final int loaderId;
     private final AppCompatActivity targetActivity;
 

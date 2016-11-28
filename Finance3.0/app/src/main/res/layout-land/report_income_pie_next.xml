@@ -25,6 +25,6 @@
         android:layout_weight="6"
         android:background="?attr/colorBackgroundFloating"
         android:divider="?attr/colorControlNormal"
-        android:dividerHeight="6.0sp" />
+        android:dividerHeight="@dimen/divider" />
 
 </LinearLayout>

@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.SimpleCursorTreeAdapter;
 
 import com.github.andrei1993ak.finances.model.models.IncomeCategory;
+import com.github.andrei1993ak.finances.util.CursorUtils;
 
 public class ExpListAdapter extends SimpleCursorTreeAdapter {
 
@@ -39,7 +40,7 @@ public class ExpListAdapter extends SimpleCursorTreeAdapter {
     @Override
     protected Cursor getChildrenCursor(final Cursor parentCursor) {
         final int groupPos = parentCursor.getPosition();
-        final int groupId = parentCursor.getInt(parentCursor.getColumnIndex(IncomeCategory.ID));
+        final int groupId = CursorUtils.getInteger(parentCursor, IncomeCategory.ID);
         final LoaderManager supportLoaderManager = ((AppCompatActivity) context).getSupportLoaderManager();
         final Loader loader = supportLoaderManager.getLoader(groupId);
         posToId.put(groupId, groupPos);

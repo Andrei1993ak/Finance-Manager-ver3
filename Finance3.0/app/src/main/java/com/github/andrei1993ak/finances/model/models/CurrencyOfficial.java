@@ -83,10 +83,9 @@ public class CurrencyOfficial extends TableClass implements Parcelable {
 
     @Override
     public CurrencyOfficial convertFromCursor(Cursor cursor) {
-        final CursorUtils cursorUtils = new CursorUtils();
-        this.id = cursorUtils.getLong(cursor, ID);
-        this.name = cursorUtils.getString(cursor, NAME);
-        this.code = cursorUtils.getString(cursor, CODE);
+        this.id = CursorUtils.getLong(cursor, ID);
+        this.name = CursorUtils.getString(cursor, NAME);
+        this.code = CursorUtils.getString(cursor, CODE);
         return this;
     }
 

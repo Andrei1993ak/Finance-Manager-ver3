@@ -20,7 +20,7 @@ import com.github.andrei1993ak.finances.app.BaseActivity;
 import com.github.andrei1993ak.finances.app.addEditActivities.WalletAddActivity;
 import com.github.andrei1993ak.finances.app.addEditActivities.WalletEditActivity;
 import com.github.andrei1993ak.finances.control.adapters.WalletCursorAdapter;
-import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
+import com.github.andrei1993ak.finances.control.base.IOnTaskCompleted;
 import com.github.andrei1993ak.finances.control.base.RequestAdapter;
 import com.github.andrei1993ak.finances.control.base.Result;
 import com.github.andrei1993ak.finances.control.executors.WalletExecutor;
@@ -29,7 +29,7 @@ import com.github.andrei1993ak.finances.model.TableQueryGenerator;
 import com.github.andrei1993ak.finances.model.models.Wallet;
 import com.github.andrei1993ak.finances.util.Constants;
 
-public class WalletActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor>, OnTaskCompleted {
+public class WalletActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor>, IOnTaskCompleted {
 
     private WalletCursorAdapter walletCursorAdapter;
     private RequestAdapter<Wallet> requestAdapter;
@@ -39,9 +39,11 @@ public class WalletActivity extends BaseActivity implements LoaderManager.Loader
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.standart_activity);
+        setContentView(R.layout.base_activity);
         setTitle(R.string.wallets);
+
         initFields();
+
         getSupportLoaderManager().restartLoader(Constants.MAIN_LOADER_ID, null, this);
     }
 
@@ -50,6 +52,7 @@ public class WalletActivity extends BaseActivity implements LoaderManager.Loader
         this.menuInflater = getMenuInflater();
         this.requestAdapter = new RequestAdapter<>();
         this.walletCursorAdapter = new WalletCursorAdapter(this, null);
+
         final ListView lvWallets = (ListView) findViewById(R.id.standardListView);
         lvWallets.setAdapter(walletCursorAdapter);
         lvWallets.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -58,6 +61,7 @@ public class WalletActivity extends BaseActivity implements LoaderManager.Loader
                 selectedItemId = id;
             }
         });
+
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,6 +89,7 @@ public class WalletActivity extends BaseActivity implements LoaderManager.Loader
                 return true;
             } else {
                 new WalletExecutor(this).execute(requestAdapter.delete(selectedItemId));
+                selectedItemId = Constants.NOT_SELECTED;
                 return true;
             }
         }
@@ -98,10 +103,12 @@ public class WalletActivity extends BaseActivity implements LoaderManager.Loader
                 case Constants.ADD_REQUEST:
                     final Wallet newWallet = data.getParcelableExtra(TableQueryGenerator.getTableName(Wallet.class));
                     new WalletExecutor(this).execute(requestAdapter.add(newWallet));
+
                     break;
                 case Constants.EDIT_REQUEST:
                     final Wallet editWallet = data.getParcelableExtra(TableQueryGenerator.getTableName(Wallet.class));
                     new WalletExecutor(this).execute(requestAdapter.edit(editWallet));
+
                     break;
                 default:
                     break;
@@ -134,11 +141,13 @@ public class WalletActivity extends BaseActivity implements LoaderManager.Loader
                 if (loader != null) {
                     loader.forceLoad();
                 }
+
                 break;
             case WalletExecutor.KEY_RESULT_EDIT:
                 if (loader != null) {
                     loader.forceLoad();
                 }
+
                 break;
             case WalletExecutor.KEY_RESULT_DELETE:
                 if ((Integer) result.getObject() == -1) {

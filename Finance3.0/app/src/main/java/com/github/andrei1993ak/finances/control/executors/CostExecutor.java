@@ -10,7 +10,7 @@ import com.github.andrei1993ak.finances.model.dbHelpers.DBHelperCost;
 import com.github.andrei1993ak.finances.util.ContextHolder;
 import com.github.andrei1993ak.finances.util.universalLoader.ImageNameGenerator;
 import com.github.andrei1993ak.finances.util.universalLoader.loaders.BitmapLoader;
-import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
+import com.github.andrei1993ak.finances.control.base.IOnTaskCompleted;
 import com.github.andrei1993ak.finances.model.models.Cost;
 
 import java.io.File;
@@ -32,7 +32,7 @@ public class CostExecutor extends PojoExecutor<Cost> {
     public static final int KEY_RESULT_GET_ALL_TO_LIST_BY_WALLET_ID = 709;
     public static final int KEY_RESULT_GET_ALL_TO_LIST_BY_DATES = 710;
 
-    public CostExecutor(final OnTaskCompleted listener) {
+    public CostExecutor(final IOnTaskCompleted listener) {
         super(listener);
     }
 

@@ -22,8 +22,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-
-// TODO: rename g* methods to usual getters
 public class PieChartItemHelper {
 
     private final DBHelperCost dbHelperCost;
@@ -74,7 +72,7 @@ public class PieChartItemHelper {
         return list;
     }
 
-    public ArrayList<PieChartItem> gRepInfoCost(final long walletId, final long categoryId) {
+    public ArrayList<PieChartItem> getRepInfoCost(final long walletId, final long categoryId) {
         final ArrayList<PieChartItem> list = new ArrayList<>();
         final List<CostCategory> allParents = dbHelperCategoryCost.getAllToListByParentId(categoryId);
 

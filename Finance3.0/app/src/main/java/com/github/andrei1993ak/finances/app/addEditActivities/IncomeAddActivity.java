@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import com.github.andrei1993ak.finances.R;
 import com.github.andrei1993ak.finances.app.BaseActivity;
-import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
+import com.github.andrei1993ak.finances.control.base.IOnTaskCompleted;
 import com.github.andrei1993ak.finances.control.base.RequestAdapter;
 import com.github.andrei1993ak.finances.control.base.Result;
 import com.github.andrei1993ak.finances.control.executors.IncomeCategoryExecutor;
@@ -33,7 +33,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class IncomeAddActivity extends BaseActivity implements OnTaskCompleted {
+public class IncomeAddActivity extends BaseActivity implements IOnTaskCompleted {
 
     private EditText newIncomeName;
     private EditText newIncomeAmount;
@@ -52,7 +52,9 @@ public class IncomeAddActivity extends BaseActivity implements OnTaskCompleted {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.income_add_edit_activity);
         setTitle(R.string.newIncome);
+
         initFields();
+
         new WalletExecutor(this).execute(new RequestAdapter<Wallet>().getAllToList(RequestAdapter.SELECTION_ALL));
         new IncomeCategoryExecutor(this).execute(new RequestAdapter<IncomeCategory>().getAllToList(RequestAdapter.SELECTION_PARENT_CATEGORIES));
     }
@@ -64,6 +66,7 @@ public class IncomeAddActivity extends BaseActivity implements OnTaskCompleted {
         this.newIncomeWallet = (AppCompatSpinner) findViewById(R.id.income_wallet);
         this.newIncomeCategory = (AppCompatSpinner) findViewById(R.id.income_category);
         this.newIncomeSubCategory = (AppCompatSpinner) findViewById(R.id.income_subCategory);
+
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_income_add_edit);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,6 +74,7 @@ public class IncomeAddActivity extends BaseActivity implements OnTaskCompleted {
                 addNewIncome();
             }
         });
+
         setDatePickerDialog();
     }
 

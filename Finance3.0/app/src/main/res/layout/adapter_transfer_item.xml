@@ -28,19 +28,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
-            android:paddingRight="5dp"
+            android:paddingRight="4dp"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@android:color/holo_red_light" />
 
     </TableRow>
 
-    <TableRow android:paddingBottom="5dp">
+    <TableRow android:paddingBottom="4dp">
 
         <TextView
             android:id="@+id/LiTransferDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="5dp"
+            android:paddingLeft="4dp"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
@@ -56,7 +56,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
-            android:paddingRight="5dp"
+            android:paddingRight="4dp"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@android:color/holo_green_light" />
     </TableRow>

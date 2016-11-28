@@ -18,7 +18,7 @@ import com.github.andrei1993ak.finances.control.base.Result;
 import com.github.andrei1993ak.finances.model.models.Income;
 import com.github.andrei1993ak.finances.model.models.Wallet;
 import com.github.andrei1993ak.finances.R;
-import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
+import com.github.andrei1993ak.finances.control.base.IOnTaskCompleted;
 import com.github.andrei1993ak.finances.control.base.RequestAdapter;
 import com.github.andrei1993ak.finances.control.executors.WalletExecutor;
 import com.github.andrei1993ak.finances.control.loaders.PieReportLoader;
@@ -34,7 +34,7 @@ import org.achartengine.renderer.SimpleSeriesRenderer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PieChartActivity extends BaseActivity implements OnTaskCompleted, LoaderManager.LoaderCallbacks<ArrayList<PieChartItem>> {
+public class PieChartActivity extends BaseActivity implements IOnTaskCompleted, LoaderManager.LoaderCallbacks<ArrayList<PieChartItem>> {
 
     public static final String POSITION = "position";
     private GraphicalView chartView;

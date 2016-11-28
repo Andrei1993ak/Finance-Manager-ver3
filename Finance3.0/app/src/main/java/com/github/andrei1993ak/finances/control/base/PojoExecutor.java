@@ -11,10 +11,10 @@ import java.util.List;
 
 public abstract class PojoExecutor<Model> extends AsyncTask<Request<Model>, Void, Result> {
 
-    private final OnTaskCompleted listener;
+    private final IOnTaskCompleted listener;
     protected Context context;
 
-    public PojoExecutor(final OnTaskCompleted listener) {
+    public PojoExecutor(final IOnTaskCompleted listener) {
         this.listener = listener;
         context = ContextHolder.getInstance().getContext();
     }

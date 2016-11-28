@@ -32,7 +32,6 @@ public class TransferView extends TableLayout {
 
     private DBHelperWallet dbHelperWallet;
     private DBHelperCurrency helperCurrency;
-    private CursorUtils cursorUtils;
 
     public TransferView(final Context context) {
         super(context);
@@ -45,8 +44,7 @@ public class TransferView extends TableLayout {
     }
 
     private void init(final Context context) {
-        final View rootView = inflate(context, R.layout.transfer_listitem, this);
-        this.cursorUtils = ((App) ContextHolder.getInstance().getContext()).getCursorUtils();
+        final View rootView = inflate(context, R.layout.adapter_transfer_item, this);
         this.transferName = (TextView) rootView.findViewById(R.id.LITransferName);
         this.fromWallet = (TextView) rootView.findViewById(R.id.LITransferFromWallet);
         this.fromWalletAmount = (TextView) rootView.findViewById(R.id.LITransferFromWalletAmount);
@@ -59,22 +57,22 @@ public class TransferView extends TableLayout {
 
     public void setFields(final Cursor cursor) {
 
-        final String name = cursorUtils.getString(cursor, Transfer.NAME);
+        final String name = CursorUtils.getString(cursor, Transfer.NAME);
         transferName.setText(name);
 
         final SimpleDateFormat dateFormatter = new SimpleDateFormat(Constants.MAIN_DATE_FORMAT, Locale.getDefault());
-        final Long time = cursorUtils.getLong(cursor, Transfer.DATE);
+        final Long time = CursorUtils.getLong(cursor, Transfer.DATE);
         final String date = dateFormatter.format(time);
         transferDate.setText(date);
 
-        final Wallet from = dbHelperWallet.get(cursorUtils.getLong(cursor, Transfer.FROM_WALLET_ID));
+        final Wallet from = dbHelperWallet.get(CursorUtils.getLong(cursor, Transfer.FROM_WALLET_ID));
         fromWallet.setText(from.getName());
 
-        final Wallet to = dbHelperWallet.get(cursorUtils.getLong(cursor, Transfer.TO_WALLET_ID));
+        final Wallet to = dbHelperWallet.get(CursorUtils.getLong(cursor, Transfer.TO_WALLET_ID));
         toWallet.setText(to.getName());
 
         final Currency currencyFrom = helperCurrency.get(from.getCurrencyId());
-        final Double fromAmountDouble = cursorUtils.getDouble(cursor, Transfer.FROM_AMOUNT);
+        final Double fromAmountDouble = CursorUtils.getDouble(cursor, Transfer.FROM_AMOUNT);
         final StringBuilder builder = new StringBuilder();
         builder.append("-");
         builder.append(String.format(Locale.getDefault(), Constants.MAIN_DOUBLE_FORMAT, fromAmountDouble));
@@ -84,7 +82,7 @@ public class TransferView extends TableLayout {
         builder.setLength(0);
 
         final Currency currencyTo = helperCurrency.get(to.getCurrencyId());
-        final Double toAmountDouble = cursorUtils.getDouble(cursor, Transfer.TO_AMOUNT);
+        final Double toAmountDouble = CursorUtils.getDouble(cursor, Transfer.TO_AMOUNT);
         builder.append("+");
         builder.append(String.format(Locale.getDefault(), Constants.MAIN_DOUBLE_FORMAT, toAmountDouble));
         builder.append(" ");

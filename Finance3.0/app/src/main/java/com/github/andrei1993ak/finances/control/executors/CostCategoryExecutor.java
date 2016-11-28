@@ -3,7 +3,7 @@ package com.github.andrei1993ak.finances.control.executors;
 import android.database.Cursor;
 
 import com.github.andrei1993ak.finances.App;
-import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
+import com.github.andrei1993ak.finances.control.base.IOnTaskCompleted;
 import com.github.andrei1993ak.finances.control.base.PojoExecutor;
 import com.github.andrei1993ak.finances.control.base.Result;
 import com.github.andrei1993ak.finances.model.dbHelpers.DBHelperCategoryCost;
@@ -26,7 +26,7 @@ public class CostCategoryExecutor extends PojoExecutor<CostCategory> {
 
     private final DBHelperCategoryCost dbHelperCategoryCost = ((DBHelperCategoryCost) ((App) ContextHolder.getInstance().getContext()).getDbHelper(CostCategory.class));
 
-    public CostCategoryExecutor(final OnTaskCompleted listener) {
+    public CostCategoryExecutor(final IOnTaskCompleted listener) {
         super(listener);
     }
 

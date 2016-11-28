@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import com.github.andrei1993ak.finances.R;
 import com.github.andrei1993ak.finances.app.BaseActivity;
-import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
+import com.github.andrei1993ak.finances.control.base.IOnTaskCompleted;
 import com.github.andrei1993ak.finances.control.base.RequestAdapter;
 import com.github.andrei1993ak.finances.control.base.Result;
 import com.github.andrei1993ak.finances.control.executors.WalletExecutor;
@@ -33,7 +33,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class TransferAddActivity extends BaseActivity implements OnTaskCompleted, OnParseCompleted {
+public class TransferAddActivity extends BaseActivity implements IOnTaskCompleted, OnParseCompleted {
 
     private EditText newTransferName;
     private TextView newTransferDate;
@@ -50,7 +50,9 @@ public class TransferAddActivity extends BaseActivity implements OnTaskCompleted
         super.onCreate(savedInstanceState);
         setContentView(R.layout.transfer_add_edit_activity);
         setTitle(R.string.newTransfer);
+
         initFields();
+
         new WalletExecutor(this).execute(new RequestAdapter<Wallet>().getAllToList(RequestAdapter.SELECTION_ALL));
     }
 
@@ -62,6 +64,7 @@ public class TransferAddActivity extends BaseActivity implements OnTaskCompleted
         this.newTransferFromAmount = (EditText) findViewById(R.id.transfer_from_amount);
         this.newTransferToAmount = (EditText) findViewById(R.id.transfer_to_amount);
         this.officialRate = (TextView) findViewById(R.id.official_rate);
+
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_transfer_add_edit);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,6 +72,7 @@ public class TransferAddActivity extends BaseActivity implements OnTaskCompleted
                 addTransfer();
             }
         });
+
         setDatePickerDialog();
     }
 

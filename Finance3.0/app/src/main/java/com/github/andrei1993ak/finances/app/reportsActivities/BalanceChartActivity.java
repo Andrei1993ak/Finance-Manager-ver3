@@ -15,7 +15,7 @@ import com.github.andrei1993ak.finances.app.BaseActivity;
 import com.github.andrei1993ak.finances.control.base.Result;
 import com.github.andrei1993ak.finances.control.loaders.BalanceChartLoader;
 import com.github.andrei1993ak.finances.R;
-import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
+import com.github.andrei1993ak.finances.control.base.IOnTaskCompleted;
 import com.github.andrei1993ak.finances.control.base.RequestAdapter;
 import com.github.andrei1993ak.finances.control.executors.WalletExecutor;
 import com.github.andrei1993ak.finances.model.models.Wallet;
@@ -31,7 +31,7 @@ import org.achartengine.renderer.XYSeriesRenderer;
 
 import java.util.List;
 
-public class BalanceChartActivity extends BaseActivity implements OnTaskCompleted, LoaderManager.LoaderCallbacks<TimeSeries> {
+public class BalanceChartActivity extends BaseActivity implements IOnTaskCompleted, LoaderManager.LoaderCallbacks<TimeSeries> {
 
     public static final String POSITION = "position";
     private int position;

@@ -24,7 +24,7 @@ import android.widget.TextView;
 
 import com.github.andrei1993ak.finances.R;
 import com.github.andrei1993ak.finances.app.BaseActivity;
-import com.github.andrei1993ak.finances.control.base.OnTaskCompleted;
+import com.github.andrei1993ak.finances.control.base.IOnTaskCompleted;
 import com.github.andrei1993ak.finances.control.base.RequestAdapter;
 import com.github.andrei1993ak.finances.control.base.Result;
 import com.github.andrei1993ak.finances.control.executors.CostCategoryExecutor;
@@ -48,7 +48,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class CostEditActivity extends BaseActivity implements OnTaskCompleted {
+public class CostEditActivity extends BaseActivity implements IOnTaskCompleted {
 
     private Cost cost;
     private EditText editCostName;
@@ -72,13 +72,14 @@ public class CostEditActivity extends BaseActivity implements OnTaskCompleted {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cost_add_edit_activity);
         setTitle(R.string.editing);
-        findViewsBuId();
+
+        initFields();
+
         editCostId = getIntent().getLongExtra(Cost.ID, -1);
         new CostExecutor(this).execute(new RequestAdapter<Cost>().get(editCostId));
-        setDatePickerDialog();
     }
 
-    private void findViewsBuId() {
+    private void initFields() {
         this.editCostName = (EditText) findViewById(R.id.cost_name);
         this.editCostAmount = (EditText) findViewById(R.id.cost_amount);
         this.editCostDate = (TextView) findViewById(R.id.cost_date);
@@ -86,6 +87,7 @@ public class CostEditActivity extends BaseActivity implements OnTaskCompleted {
         this.editCostCategory = (AppCompatSpinner) findViewById(R.id.cost_category);
         this.editCostSubCategory = (AppCompatSpinner) findViewById(R.id.cost_subCategory);
         this.imageView = (ImageView) findViewById(R.id.cost_photo);
+
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_cost_add_edit);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,10 +96,13 @@ public class CostEditActivity extends BaseActivity implements OnTaskCompleted {
             }
         });
         fab.setImageResource(android.R.drawable.ic_menu_edit);
+
         final PackageManager pm = getApplicationContext().getPackageManager();
         if (!pm.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
             findViewById(R.id.add_edit_photo_button).setVisibility(View.INVISIBLE);
         }
+
+        setDatePickerDialog();
     }
 
     private void setDatePickerDialog() {
@@ -211,7 +216,7 @@ public class CostEditActivity extends BaseActivity implements OnTaskCompleted {
                         bitmapLoader.load(file.toURI().toURL().toString(), imageView);
                     } catch (final MalformedURLException e) {
                         e.printStackTrace();
-                        //TODO exeption
+                        //TODO demo image
                     }
                 }
                 final RequestAdapter<Wallet> walletRequestAdapter = new RequestAdapter<>();

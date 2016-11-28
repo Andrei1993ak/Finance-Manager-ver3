@@ -30,11 +30,13 @@ public class SettingsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings);
         setTitle(R.string.settings);
+
         initFields();
     }
 
     private void initFields() {
         layoutInflater = this.getLayoutInflater();
+
         final Switch themeSwitch = (Switch) findViewById(R.id.themeSwitch);
         if (getSharedPreferences(Constants.PREFS, Context.MODE_PRIVATE).getBoolean(Constants.THEME, false)) {
             themeSwitch.setChecked(true);
@@ -56,7 +58,6 @@ public class SettingsActivity extends BaseActivity {
                 }
             }
         });
-
 
         pinSwitch = (Switch) findViewById(R.id.pinSwitch);
         if (getSharedPreferences(Constants.PREFS, Context.MODE_PRIVATE).getBoolean(Constants.HAS_PIN, false)) {
@@ -134,10 +135,9 @@ public class SettingsActivity extends BaseActivity {
         }
     }
 
-    @Override
-    public void recreate() {
-        finish();
-        startActivity(new Intent(SettingsActivity.this, SettingsActivity.class));
-
-    }
+//    @Override
+//    public void recreate() {
+//        finish();
+//        startActivity(new Intent(SettingsActivity.this, SettingsActivity.class));
+//    }
 }

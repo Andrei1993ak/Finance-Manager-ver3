@@ -89,10 +89,9 @@ public class IncomeCategory extends TableClass implements Parcelable {
 
     @Override
     public IncomeCategory convertFromCursor(final Cursor cursor) {
-        final CursorUtils cursorUtils = new CursorUtils();
-        this.id = cursorUtils.getLong(cursor, ID);
-        this.name = cursorUtils.getString(cursor, NAME);
-        this.parentId = cursorUtils.getLong(cursor, PARENT_ID);
+        this.id = CursorUtils.getLong(cursor, ID);
+        this.name = CursorUtils.getString(cursor, NAME);
+        this.parentId = CursorUtils.getLong(cursor, PARENT_ID);
         return this;
     }
 
