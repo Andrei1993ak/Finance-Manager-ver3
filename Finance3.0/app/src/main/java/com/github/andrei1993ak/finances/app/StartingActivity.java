@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.github.andrei1993ak.finances.R;
+import com.github.andrei1993ak.finances.api.HelloEndpoint;
 import com.github.andrei1993ak.finances.app.activities.CategoryStartingActivity;
 import com.github.andrei1993ak.finances.app.activities.CostActivity;
 import com.github.andrei1993ak.finances.app.activities.CurrencyActivity;
@@ -37,7 +38,7 @@ public class StartingActivity extends BaseActivity implements LoaderManager.Load
         super.onCreate(savedInstanceState);
         setContentView(R.layout.drawer_layout);
         getSupportActionBar().hide();
-
+        new HelloEndpoint().execute(this);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         final DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
                 DividerItemDecoration.VERTICAL);
