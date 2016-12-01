@@ -55,6 +55,24 @@ public class DBHelperCurrencyOfficial implements IDBHelperForModel<CurrencyOffic
         }
     }
 
+    public CurrencyOfficial getByCode(final String code) {
+        final String selectQuery = "SELECT * FROM " + TableQueryGenerator.getTableName(CurrencyOfficial.class) + " WHERE " + CurrencyOfficial.CODE + " = " + "\"" + code + "\"";
+        final SQLiteDatabase db = dbHelper.getReadableDatabase();
+        Cursor cursor = null;
+        try {
+            cursor = db.rawQuery(selectQuery, null);
+            if (cursor.moveToFirst()) {
+                return new CurrencyOfficial().convertFromCursor(cursor);
+            } else {
+                return null;
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+    }
+
     @Override
     public Cursor getAll() {
         final String selectQuery = "SELECT * FROM " + TableQueryGenerator.getTableName(CurrencyOfficial.class) + " ORDER BY " + CurrencyOfficial.NAME;

@@ -14,7 +14,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.github.andrei1993ak.finances.R;
-import com.github.andrei1993ak.finances.api.HelloEndpoint;
 import com.github.andrei1993ak.finances.app.activities.CategoryStartingActivity;
 import com.github.andrei1993ak.finances.app.activities.CostActivity;
 import com.github.andrei1993ak.finances.app.activities.CurrencyActivity;
@@ -27,7 +26,7 @@ import com.github.andrei1993ak.finances.control.adapters.WalletsRecycleViewAdapt
 import com.github.andrei1993ak.finances.control.loaders.WalletCursorLoader;
 import com.github.andrei1993ak.finances.util.Constants;
 
-public class StartingActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor>{
+public class StartingActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final int REQUEST_CODE_SETTING = 0;
 
@@ -38,14 +37,13 @@ public class StartingActivity extends BaseActivity implements LoaderManager.Load
         super.onCreate(savedInstanceState);
         setContentView(R.layout.drawer_layout);
         getSupportActionBar().hide();
-        new HelloEndpoint().execute(this);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         final DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
                 DividerItemDecoration.VERTICAL);
         recyclerView.addItemDecoration(dividerItemDecoration);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        final NavigationView navigationView = (NavigationView)findViewById(R.id.nav_view);
+        final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull final MenuItem item) {
@@ -103,7 +101,7 @@ public class StartingActivity extends BaseActivity implements LoaderManager.Load
     @Override
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         // TODO wrong recreate usage
-        if (requestCode == REQUEST_CODE_SETTING ) {
+        if (requestCode == REQUEST_CODE_SETTING) {
             recreate();
         }
     }
@@ -131,7 +129,7 @@ public class StartingActivity extends BaseActivity implements LoaderManager.Load
     }
 
     private boolean onNavigationMenuSelected(final int itemId) {
-        switch (itemId){
+        switch (itemId) {
             case R.id.nav_manage:
                 startActivityForResult(new Intent(this, SettingsActivity.class), REQUEST_CODE_SETTING);
 
@@ -139,7 +137,7 @@ public class StartingActivity extends BaseActivity implements LoaderManager.Load
             case R.id.nav_share:
                 final Intent shareIntent = new Intent();
                 shareIntent.setAction(Intent.ACTION_SEND);
-                shareIntent.putExtra(Intent.EXTRA_TEXT,"Link to download");
+                shareIntent.putExtra(Intent.EXTRA_TEXT, "Link to download");
                 shareIntent.setType("text/plain");
                 startActivity(shareIntent);
 

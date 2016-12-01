@@ -28,7 +28,8 @@ public interface Constants {
     String PIN = "pin";
 
     int CATEGORY_HAS_CHILDS = -2;
-
+    long ONE_DAY_IN_MILLIS = 86400000;
     int CATEGORY_USABLE = -1;
 
+    String LAST_TIME_UPDATE = "lastTimeUpdate";
 }

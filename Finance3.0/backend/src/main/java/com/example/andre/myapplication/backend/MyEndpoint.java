@@ -34,8 +34,8 @@ public class MyEndpoint {
     private static final int READ_TIMEOUT_MILLIS = 10000;
     private static final int CONNECTION_TIMEOUT_MILLIS = 15000;
 
-    @ApiMethod(name = "sayHi")
-    public MyBean sayHi(@Named("name") final String name) {
+    @ApiMethod(name = "getCurrencies")
+    public MyBean getCurrencies() {
         final MyBean response = new MyBean();
         final HttpURLConnection conn;
         InputStream inputStream = null;
