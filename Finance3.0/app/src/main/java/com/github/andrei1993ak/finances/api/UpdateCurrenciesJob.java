@@ -8,18 +8,18 @@ import com.example.andre.myapplication.backend.myApi.MyApi;
 
 import java.io.IOException;
 
-public class HelloEndpoint extends AsyncTask<Context, Void, String> {
+public class UpdateCurrenciesJob extends AsyncTask<Context, Void, String> {
 
     private Context context;
 
     @Override
     protected String doInBackground(final Context... params) {
-        final MyApi.SayHi sayHi;
+        final MyApi.GetCurrencies getCurrenciesJob;
         String response;
         context = params[0];
         try {
-            sayHi = ApiManager.get().myApi().sayHi("Andrei");
-            response = sayHi.execute().getData();
+            getCurrenciesJob = ApiManager.get().myApi().getCurrencies();
+            response = getCurrenciesJob.execute().getData();
         } catch (final IOException e) {
             response = null;
         }
