@@ -6,6 +6,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.github.andrei1993ak.finances.model.models.Cost;
+import com.github.andrei1993ak.finances.model.models.CostCategory;
+import com.github.andrei1993ak.finances.model.models.Currency;
+import com.github.andrei1993ak.finances.model.models.CurrencyOfficial;
+import com.github.andrei1993ak.finances.model.models.Income;
+import com.github.andrei1993ak.finances.model.models.IncomeCategory;
+import com.github.andrei1993ak.finances.model.models.Transfer;
+import com.github.andrei1993ak.finances.model.models.Wallet;
 
 public class DBHelper extends SQLiteOpenHelper {
 
@@ -29,14 +36,15 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(final SQLiteDatabase sqLiteDatabase) {
-//        sqLiteDatabase.execSQL(TableQueryGenerator.getTableCreateQuery(CurrencyOfficial.class));
-//        sqLiteDatabase.execSQL(TableQueryGenerator.getTableCreateQuery(Currency.class));
-//        sqLiteDatabase.execSQL(TableQueryGenerator.getTableCreateQuery(CostCategory.class));
-//        sqLiteDatabase.execSQL(TableQueryGenerator.getTableCreateQuery(IncomeCategory.class));
-//        sqLiteDatabase.execSQL(TableQueryGenerator.getTableCreateQuery(Wallet.class));
-//        sqLiteDatabase.execSQL(TableQueryGenerator.getTableCreateQuery(Income.class));
-//        sqLiteDatabase.execSQL(TableQueryGenerator.getTableCreateQuery(Transfer.class));
-//        sqLiteDatabase.execSQL(query);
+        sqLiteDatabase.execSQL(TableQueryGenerator.getTableCreateQuery(CurrencyOfficial.class));
+        sqLiteDatabase.execSQL(TableQueryGenerator.getTableCreateQuery(Currency.class));
+        sqLiteDatabase.execSQL(TableQueryGenerator.getTableCreateQuery(CostCategory.class));
+        sqLiteDatabase.execSQL(TableQueryGenerator.getTableCreateQuery(IncomeCategory.class));
+        sqLiteDatabase.execSQL(TableQueryGenerator.getTableCreateQuery(Wallet.class));
+        sqLiteDatabase.execSQL(TableQueryGenerator.getTableCreateQuery(Income.class));
+        sqLiteDatabase.execSQL(TableQueryGenerator.getTableCreateQuery(Transfer.class));
+        String query = "CREATE TABLE IF NOT EXISTS costs (amount REAL, categoryId INTEGER, date INTEGER, _id INTEGER PRIMARY KEY AUTOINCREMENT, photo INTEGER, walletId INTEGER, name TEXT)";
+        sqLiteDatabase.execSQL(query);
     }
 
     @Override

@@ -162,8 +162,7 @@ public class CostActivity extends BaseActivity implements LoaderManager.LoaderCa
             try {
                 bitmapLoader.load(file.toURI().toURL().toString(), imageView);
             } catch (final MalformedURLException e) {
-                e.printStackTrace();
-                //TODO exeption
+                Toast.makeText(this, R.string.noPhoto, Toast.LENGTH_LONG).show();
             }
             builder.addContentView(imageView, new RelativeLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,

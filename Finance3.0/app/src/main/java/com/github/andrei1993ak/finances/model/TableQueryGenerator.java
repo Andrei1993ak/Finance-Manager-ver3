@@ -23,7 +23,7 @@ public class TableQueryGenerator {
 
     //    Package local
     @Nullable
-    static String getTableCreateQuery(final Class<? extends TableClass> clazz) {
+    public static String getTableCreateQuery(final Class<? extends TableClass> clazz) {
 
         final Table table = clazz.getAnnotation(Table.class);
 

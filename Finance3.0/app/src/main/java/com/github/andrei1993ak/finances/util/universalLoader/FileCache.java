@@ -38,7 +38,7 @@ class FileCache {
         return new File(cacheDir, filename);
     }
 
-    void clear() {
+    private void clear() {
         final File[] files = cacheDir.listFiles();
         if (files == null)
             return;

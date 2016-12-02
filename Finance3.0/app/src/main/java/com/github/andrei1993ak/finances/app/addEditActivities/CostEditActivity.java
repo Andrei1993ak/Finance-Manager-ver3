@@ -215,8 +215,7 @@ public class CostEditActivity extends BaseActivity implements IOnTaskCompleted {
                     try {
                         bitmapLoader.load(file.toURI().toURL().toString(), imageView);
                     } catch (final MalformedURLException e) {
-                        e.printStackTrace();
-                        //TODO demo image
+                        imageView.setImageResource(R.drawable.demo);
                     }
                 }
                 final RequestAdapter<Wallet> walletRequestAdapter = new RequestAdapter<>();

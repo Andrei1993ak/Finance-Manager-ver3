@@ -25,7 +25,7 @@ import com.github.andrei1993ak.finances.model.TableQueryGenerator;
 import com.github.andrei1993ak.finances.model.models.Transfer;
 import com.github.andrei1993ak.finances.model.models.Wallet;
 import com.github.andrei1993ak.finances.util.Constants;
-import com.github.andrei1993ak.finances.util.transferRateParser.OnParseCompleted;
+import com.github.andrei1993ak.finances.util.transferRateParser.IOnParseCompleted;
 import com.github.andrei1993ak.finances.util.transferRateParser.RateJsonParser;
 
 import java.text.ParseException;
@@ -34,7 +34,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class TransferEditActivity extends BaseActivity implements IOnTaskCompleted, OnParseCompleted {
+public class TransferEditActivity extends BaseActivity implements IOnTaskCompleted, IOnParseCompleted {
 
     private EditText editTransferName;
     private TextView editTransferDate;

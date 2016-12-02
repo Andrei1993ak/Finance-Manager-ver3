@@ -93,16 +93,15 @@ public class StartingActivity extends BaseActivity implements LoaderManager.Load
                 break;
             case R.id.tvReports:
                 startActivity(new Intent(this, ReportsActivity.class));
-
                 break;
         }
     }
 
     @Override
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
-        // TODO wrong recreate usage
-        if (requestCode == REQUEST_CODE_SETTING) {
-            recreate();
+        if (requestCode == REQUEST_CODE_SETTING && resultCode == RESULT_OK) {
+            finish();
+            startActivity(new Intent(StartingActivity.this, StartingActivity.class));
         }
     }
 
@@ -124,23 +123,20 @@ public class StartingActivity extends BaseActivity implements LoaderManager.Load
 
     @Override
     public void recreate() {
-        finish();
-        startActivity(new Intent(StartingActivity.this, StartingActivity.class));
+
     }
 
     private boolean onNavigationMenuSelected(final int itemId) {
         switch (itemId) {
             case R.id.nav_manage:
                 startActivityForResult(new Intent(this, SettingsActivity.class), REQUEST_CODE_SETTING);
-
                 break;
             case R.id.nav_share:
                 final Intent shareIntent = new Intent();
                 shareIntent.setAction(Intent.ACTION_SEND);
-                shareIntent.putExtra(Intent.EXTRA_TEXT, "Link to download");
+                shareIntent.putExtra(Intent.EXTRA_TEXT, Constants.LINK_TO_DONLOAD);
                 shareIntent.setType("text/plain");
                 startActivity(shareIntent);
-
                 break;
 
         }

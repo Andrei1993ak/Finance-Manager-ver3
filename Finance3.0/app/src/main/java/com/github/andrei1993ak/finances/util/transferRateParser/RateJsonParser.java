@@ -16,10 +16,10 @@ public class RateJsonParser extends AsyncTask<Long, Void, Double> {
     private static final String RATE = "rate";
     private static final String JSON = ".json";
 
-    private final OnParseCompleted listener;
+    private final IOnParseCompleted listener;
     private final DBHelperCurrency dbHelperCurrency;
 
-    public RateJsonParser(final OnParseCompleted view) {
+    public RateJsonParser(final IOnParseCompleted view) {
         listener = view;
         dbHelperCurrency = ((DBHelperCurrency) ((App) ContextHolder.getInstance().getContext()).getDbHelper(Currency.class));
     }

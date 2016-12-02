@@ -16,8 +16,9 @@ abstract class MemoryCache<MyObj> {
 
     MyObj getFromMemoryCache(final String id) {
         try {
-            if (!cache.containsKey(id))
+            if (!cache.containsKey(id)) {
                 return null;
+            }
             return cache.get(id);
         } catch (final NullPointerException ex) {
             return null;
@@ -40,8 +41,9 @@ abstract class MemoryCache<MyObj> {
                 final Entry<String, MyObj> entry = iterator.next();
                 size -= getSizeInBytes(entry.getValue());
                 iterator.remove();
-                if (size <= limit)
+                if (size <= limit) {
                     break;
+                }
             }
         }
     }
@@ -58,8 +60,9 @@ abstract class MemoryCache<MyObj> {
     }
 
     private long getSizeInBytes(final MyObj myObj) {
-        if (myObj == null)
+        if (myObj == null) {
             return 0;
+        }
         return getSize(myObj);
     }
 }

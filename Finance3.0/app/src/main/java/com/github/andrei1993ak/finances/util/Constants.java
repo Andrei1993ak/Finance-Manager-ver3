@@ -32,4 +32,7 @@ public interface Constants {
     int CATEGORY_USABLE = -1;
 
     String LAST_TIME_UPDATE = "lastTimeUpdate";
+
+    String LINK_TO_DONLOAD = "github.andrei19.93ak.finances";
+    String LOG_TAG = "FamilyFinances";
 }

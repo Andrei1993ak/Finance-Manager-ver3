@@ -20,6 +20,12 @@ import java.util.Iterator;
 
 public class UpdateCurrenciesJob extends AsyncTask<Void, Void, Void> {
 
+    private final DBHelperCurrencyOfficial dbHelper;
+
+    public UpdateCurrenciesJob() {
+        dbHelper = (DBHelperCurrencyOfficial) ((App) ContextHolder.getInstance().getContext()).getDbHelper(CurrencyOfficial.class);
+    }
+
     @Override
     protected Void doInBackground(final Void... params) {
         final MyApi.GetCurrencies getCurrenciesJob;
@@ -34,10 +40,9 @@ public class UpdateCurrenciesJob extends AsyncTask<Void, Void, Void> {
             try {
                 final JSONObject root = new JSONObject(response);
                 final Iterator<String> keys = root.keys();
-                final DBHelperCurrencyOfficial dbHelper = (DBHelperCurrencyOfficial) ((App) ContextHolder.getInstance().getContext()).getDbHelper(CurrencyOfficial.class);
                 while (keys.hasNext()) {
                     final JSONObject inner = root.getJSONObject(keys.next());
-                    final CurrencyOfficial fromWeb = new CurrencyOfficial(inner.getString("code"), inner.getString("name"));
+                    final CurrencyOfficial fromWeb = new CurrencyOfficial(inner.getString(CurrencyOfficial.CODE), inner.getString(CurrencyOfficial.NAME));
                     final CurrencyOfficial fromDB = dbHelper.getByCode(fromWeb.getCode());
                     if (fromDB == null) {
                         dbHelper.add(fromWeb);
@@ -53,7 +58,7 @@ public class UpdateCurrenciesJob extends AsyncTask<Void, Void, Void> {
                 editor.putLong(Constants.LAST_TIME_UPDATE, System.currentTimeMillis());
                 editor.apply();
             } catch (final JSONException e) {
-                Log.e("FamilyFinances", "error parsing new currencies");
+                Log.e(Constants.LOG_TAG, "Error on parsing new currencies");
             }
         }
         return null;

@@ -16,6 +16,7 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
         dbHelpersManager = new DBHelpersManager();
         ContextHolder.getInstance().setContext(this);
     }

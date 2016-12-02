@@ -17,18 +17,11 @@ import java.util.WeakHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-//TODO create base interface first, then extends to abstract class
-public abstract class UniversalLoader<MyObj, Destination> {
+public abstract class UniversalLoader<MyObj, Destination> implements IUniversalLoader<MyObj,Destination> {
 
     private static final int CONNECTION_TIMEOUT = 3000;
     private static final int READ_TIMEOUT = 3000;
     private static final int PRE_SIZE = 400;
-
-    public abstract int getSizeObj(MyObj myObj);
-
-    public abstract MyObj decodeFromFile(File file, int PreSize);
-
-    public abstract void set(MyObj myObj, Destination destination);
 
     private final int connectTimeout;
     private final int readTimeout;

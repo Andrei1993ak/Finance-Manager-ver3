@@ -1,6 +1,6 @@
 package com.github.andrei1993ak.finances.util.transferRateParser;
 
 
-public interface OnParseCompleted {
+public interface IOnParseCompleted {
     void onParseCompleted(Double result);
 }
