@@ -26,7 +26,7 @@ public class DBBackupUtils {
         try {
             sd = Environment.getExternalStorageDirectory();
             db = context.getDatabasePath(DBHelper.getInstance(context).getDatabaseName());
-            if (sd.canWrite()) {
+            if (sd!= null && sd.canWrite()) {
                 backUp = new File(sd,DBHelper.getInstance(context).getDatabaseName()+".db");
                 if (backUp.exists()){
                     backUp.createNewFile();

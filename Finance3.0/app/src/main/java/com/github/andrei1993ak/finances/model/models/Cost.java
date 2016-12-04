@@ -9,7 +9,6 @@ import com.github.andrei1993ak.finances.model.annotations.Table;
 import com.github.andrei1993ak.finances.model.annotations.types.DBDouble;
 import com.github.andrei1993ak.finances.model.annotations.types.DBInteger;
 import com.github.andrei1993ak.finances.model.annotations.types.DBIntegerAutoIncrement;
-import com.github.andrei1993ak.finances.model.annotations.types.DBIntegerPrimaryKey;
 import com.github.andrei1993ak.finances.util.CursorUtils;
 
 @Table(name = "costs")
@@ -150,26 +149,25 @@ public class Cost extends TableClass implements Parcelable {
 
     @Override
     public Cost convertFromCursor(final Cursor cursor) {
-        final CursorUtils cursorUtils = new CursorUtils();
-        this._id = cursorUtils.getLong(cursor,ID);
-        this.name = cursorUtils.getString(cursor,NAME);
-        this.amount = cursorUtils.getDouble(cursor,AMOUNT);
-        this.walletId = cursorUtils.getLong(cursor,WALLET_ID);
-        this.categoryId = cursorUtils.getLong(cursor,CATEGORY_ID);
-        this.date = cursorUtils.getLong(cursor,DATE);
-        this.photo = cursorUtils.getLong(cursor, PHOTO).intValue();
+        this._id = CursorUtils.getLong(cursor, ID);
+        this.name = CursorUtils.getString(cursor, NAME);
+        this.amount = CursorUtils.getDouble(cursor, AMOUNT);
+        this.walletId = CursorUtils.getLong(cursor, WALLET_ID);
+        this.categoryId = CursorUtils.getLong(cursor, CATEGORY_ID);
+        this.date = CursorUtils.getLong(cursor, DATE);
+        this.photo = CursorUtils.getLong(cursor, PHOTO).intValue();
         return this;
     }
 
     @Override
     public ContentValues convertToContentValues() {
         final ContentValues contentValues = new ContentValues();
-        contentValues.put(NAME,this.name);
-        contentValues.put(WALLET_ID,this.walletId);
-        contentValues.put(AMOUNT,this.amount);
-        contentValues.put(CATEGORY_ID,this.categoryId);
-        contentValues.put(DATE,this.date);
-        contentValues.put(PHOTO,this.photo);
+        contentValues.put(NAME, this.name);
+        contentValues.put(WALLET_ID, this.walletId);
+        contentValues.put(AMOUNT, this.amount);
+        contentValues.put(CATEGORY_ID, this.categoryId);
+        contentValues.put(DATE, this.date);
+        contentValues.put(PHOTO, this.photo);
         return contentValues;
     }
 }
