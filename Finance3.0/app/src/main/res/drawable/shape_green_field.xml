@@ -19,4 +19,7 @@
         android:radius="4dp"   >
     </corners>
 
+    <solid android:color="@android:color/transparent" />
+
+
 </shape>
