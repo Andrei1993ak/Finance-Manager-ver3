@@ -25,14 +25,15 @@ public interface Constants {
     String OAUTH2_ID = "898023153636-ahufd4bo18ssqe1o6jfs5gonmralqggh.apps.googleusercontent.com";
     String CURRENCY = "currency";
     String HAS_PIN = "hasPin";
-    String PIN = "pin";
+    String NOTIFICATION = "notification";
 
+    String PIN = "pin";
     int CATEGORY_HAS_CHILDS = -2;
     long ONE_DAY_IN_MILLIS = 86400000;
+
     int CATEGORY_USABLE = -1;
 
     String LAST_TIME_UPDATE = "lastTimeUpdate";
-
     String LINK_TO_DONLOAD = "github.andrei19.93ak.finances";
     String LOG_TAG = "FamilyFinances";
 }

@@ -104,4 +104,7 @@
     <string name="confirmPassword">Confirm PIN</string>
     <string name="enter_pin">Enter PIN</string>
     <string name="share">Share</string>
+    <string name="notification">Notification</string>
+    <string name="alarm_label">Finances</string>
+    <string name="notification_content">Dont forget about finances</string>
 </resources>

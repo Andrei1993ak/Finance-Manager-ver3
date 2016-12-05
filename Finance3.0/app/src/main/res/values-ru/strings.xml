@@ -58,4 +58,6 @@
     <string name="wrong_pin">Неверный ПИН</string>
     <string name="enter_pin">Введите ПИН</string>
     <string name="share">Посоветовать другу</string>
+    <string name="notification">Уведомления</string>
+    <string name="notification_text">Не забудьте внести денежнвые операции</string>
 </resources>

@@ -110,7 +110,7 @@ public class CostActivity extends BaseActivity implements LoaderManager.LoaderCa
                 new CostExecutor(this).execute(requestAdapter.delete(selectedItemId));
                 selectedItemId = Constants.NOT_SELECTED;
                 return true;
-            } else {
+            } else if (id == R.id.cost_action_photo) {
                 showPhoto(selectedItemId);
                 return true;
             }
