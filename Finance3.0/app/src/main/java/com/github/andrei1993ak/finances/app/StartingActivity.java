@@ -1,5 +1,6 @@
 package com.github.andrei1993ak.finances.app;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -29,7 +31,7 @@ import com.github.andrei1993ak.finances.control.adapters.WalletsRecycleViewAdapt
 import com.github.andrei1993ak.finances.control.loaders.WalletCursorLoader;
 import com.github.andrei1993ak.finances.util.Constants;
 
-public class StartingActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class StartingActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final int REQUEST_CODE_SETTING = 0;
 
@@ -37,15 +39,15 @@ public class StartingActivity extends BaseActivity implements LoaderManager.Load
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
+        setStyle();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.drawer_layout);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
 
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+        final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        final ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
@@ -64,6 +66,14 @@ public class StartingActivity extends BaseActivity implements LoaderManager.Load
             }
         });
         getSupportLoaderManager().restartLoader(Constants.MAIN_LOADER_ID, null, this);
+    }
+
+    private void setStyle() {
+        if (getSharedPreferences(Constants.PREFS, Context.MODE_PRIVATE).getBoolean(Constants.THEME, false)) {
+            setTheme(R.style.DarkNoActionBar);
+        } else {
+            setTheme(R.style.LightNoActionBar);
+        }
     }
 
 
@@ -112,7 +122,7 @@ public class StartingActivity extends BaseActivity implements LoaderManager.Load
 
     @Override
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
-        if (requestCode == REQUEST_CODE_SETTING && resultCode == RESULT_OK) {
+        if (requestCode == REQUEST_CODE_SETTING) {
             finish();
             startActivity(new Intent(StartingActivity.this, StartingActivity.class));
         }
@@ -132,11 +142,6 @@ public class StartingActivity extends BaseActivity implements LoaderManager.Load
     @Override
     public void onLoaderReset(final Loader<Cursor> loader) {
         recyclerView.swapAdapter(null, true);
-    }
-
-    @Override
-    public void recreate() {
-
     }
 
     private boolean onNavigationMenuSelected(final int itemId) {
