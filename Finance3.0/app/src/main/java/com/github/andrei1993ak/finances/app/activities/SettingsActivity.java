@@ -49,7 +49,7 @@ public class SettingsActivity extends BaseActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
-                new DBBackupUtils().backupDB();
+                new DBBackupUtils().backupDB(true);
             }
         });
 
@@ -57,7 +57,7 @@ public class SettingsActivity extends BaseActivity {
         buttonRestore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
-                new DBBackupUtils().restoreDB();
+                new DBBackupUtils().restoreDB(true);
             }
         });
 
@@ -111,7 +111,6 @@ public class SettingsActivity extends BaseActivity {
                 final SharedPreferences prefs = getSharedPreferences(Constants.PREFS, Context.MODE_PRIVATE);
                 final SharedPreferences.Editor editor = prefs.edit();
                 final Intent intent = new Intent(context, AlarmReceiver.class);
-//                final PendingIntent alarmSender = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
                 final PendingIntent alarmSender = PendingIntent.getBroadcast(context, 0, intent, 0);
                 final AlarmManager alarmManager = (AlarmManager) SettingsActivity.this.getSystemService(ALARM_SERVICE);
                 if (!isChecked) {
@@ -129,7 +128,6 @@ public class SettingsActivity extends BaseActivity {
                                 c.set(Calendar.MINUTE, minutes);
                                 c.set(Calendar.SECOND, 0);
                                 final long firsTime = c.getTimeInMillis();
-//                                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, firsTime, 24L * 60L * 60L * 1000L, alarmSender);
                                 alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, firsTime, 60L * 60L * 1000L, alarmSender);
                                 editor.putBoolean(Constants.NOTIFICATION, true);
                                 editor.apply();

@@ -107,4 +107,8 @@
     <string name="notification">Notification</string>
     <string name="alarm_label">Finances</string>
     <string name="notification_content">Dont forget about finances</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
 </resources>

@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.0"
+    buildToolsVersion "25.0.1"
     defaultConfig {
         applicationId "com.github.andrei1993ak.finances"
         minSdkVersion 16
@@ -31,6 +31,11 @@ ext.versions = [
         jUnit              : '4.12'
 ]
 
+repositories {
+    maven {
+        url "http://dl.bintray.com/lukaville/maven"
+    }
+}
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile("com.android.support.test.espresso:espresso-core:$versions.espresso", {
@@ -42,8 +47,8 @@ dependencies {
     compile "com.android.support:percent:$versions.percent"
     compile "com.google.code.findbugs:jsr305:$versions.findBags"
     compile group: 'org.achartengine', name: 'achartengine', version: "$versions.aChartEngine"
-    compile 'com.google.android.gms:play-services-auth:10.0.0'
-
+    compile 'com.google.android.gms:play-services-auth:10.0.1'
+    compile 'com.nbsp:library:1.1'
     testCompile "junit:junit:$versions.jUnit"
     compile project(path: ':backend', configuration: 'android-endpoints')
 }
