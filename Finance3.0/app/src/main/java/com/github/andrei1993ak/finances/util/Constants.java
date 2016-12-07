@@ -36,4 +36,8 @@ public interface Constants {
     String LAST_TIME_UPDATE = "lastTimeUpdate";
     String LINK_TO_DONLOAD = "github.andrei19.93ak.finances";
     String LOG_TAG = "FamilyFinances";
+
+    String IS_LOGIN = "isLogin";
+    String GOOGLE_ACC_NAME = "googleAccName";
+    String USER_PHOTO_URI = "userPhotoUri";
 }

@@ -44,7 +44,7 @@
     <string name="hasChilds">First delete all childs!</string>
     <string name="categoryUsable">This category are used!</string>
     <string name="report3">report3</string>
-    <string name="costsByCategories">Costs by Categories</string>
+    <string name="costsByCategories" translatable="false">Costs by Categories</string>
     <string name="incomesByCategories">Incomes by categories</string>
     <string name="type">type</string>
     <string name="balanceCHart">Balance chart</string>
@@ -56,7 +56,7 @@
 
 
     <!-- Sign-in status messages -->
-    <string name="title_text">Google Sign-In\nQuickstart</string>
+    <string name="title_text">Google Sign-In</string>
     <string name="signed_in_fmt">Signed in as: %s</string>
     <string name="signed_in">Signed in</string>
     <string name="signing_in">Signing in…</string>
@@ -110,5 +110,9 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="user_accaunt">User Account</string>
+    <string name="rate">Rate</string>
+    <string name="Communicate">Communicate</string>
+    <string name="google_auth">google auth</string>
 
 </resources>

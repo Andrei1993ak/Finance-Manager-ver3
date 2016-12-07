@@ -11,13 +11,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 
-import com.github.andrei1993ak.finances.app.BaseActivity;
-import com.github.andrei1993ak.finances.control.base.Result;
-import com.github.andrei1993ak.finances.control.loaders.BalanceChartLoader;
 import com.github.andrei1993ak.finances.R;
+import com.github.andrei1993ak.finances.app.BaseActivity;
 import com.github.andrei1993ak.finances.control.base.IOnTaskCompleted;
 import com.github.andrei1993ak.finances.control.base.RequestAdapter;
+import com.github.andrei1993ak.finances.control.base.Result;
 import com.github.andrei1993ak.finances.control.executors.WalletExecutor;
+import com.github.andrei1993ak.finances.control.loaders.BalanceChartLoader;
 import com.github.andrei1993ak.finances.model.models.Wallet;
 import com.github.andrei1993ak.finances.util.Constants;
 
@@ -54,6 +54,9 @@ public class BalanceChartActivity extends BaseActivity implements IOnTaskComplet
 
     private GraphicalView buildView(final TimeSeries series) {
 
+        if (series.getItemCount() == 0) {
+            return null;
+        }
         final XYMultipleSeriesDataset dataSet = new XYMultipleSeriesDataset();
         dataSet.addSeries(series);
         final XYSeriesRenderer renderer = new XYSeriesRenderer();
@@ -126,8 +129,10 @@ public class BalanceChartActivity extends BaseActivity implements IOnTaskComplet
         final LinearLayout layout = (LinearLayout) findViewById(R.id.chartBalance);
         layout.removeAllViews();
         final GraphicalView balanceChartView = buildView(data);
-        layout.addView(balanceChartView, new LinearLayout.LayoutParams
-                (LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        if (balanceChartView != null) {
+            layout.addView(balanceChartView, new LinearLayout.LayoutParams
+                    (LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        }
     }
 
     @Override

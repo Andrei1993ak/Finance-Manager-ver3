@@ -2,6 +2,7 @@ package com.github.andrei1993ak.finances.app;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -17,6 +18,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.github.andrei1993ak.finances.R;
 import com.github.andrei1993ak.finances.app.activities.CategoryStartingActivity;
@@ -29,11 +31,15 @@ import com.github.andrei1993ak.finances.app.activities.TransferActivity;
 import com.github.andrei1993ak.finances.app.activities.WalletActivity;
 import com.github.andrei1993ak.finances.control.adapters.WalletsRecycleViewAdapter;
 import com.github.andrei1993ak.finances.control.loaders.WalletCursorLoader;
+import com.github.andrei1993ak.finances.signinByAppEngine.SignInActivity;
 import com.github.andrei1993ak.finances.util.Constants;
+import com.github.andrei1993ak.finances.util.RoundedImageView;
+import com.github.andrei1993ak.finances.util.universalLoader.loaders.BitmapLoader;
 
 public class StartingActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final int REQUEST_CODE_SETTING = 0;
+    public static final int REQUEST_CODE_AUTH = 1;
 
     private RecyclerView recyclerView;
 
@@ -65,8 +71,10 @@ public class StartingActivity extends AppCompatActivity implements LoaderManager
                 return onNavigationMenuSelected(item.getItemId());
             }
         });
+        checkForAuthorisation();
         getSupportLoaderManager().restartLoader(Constants.MAIN_LOADER_ID, null, this);
     }
+
 
     private void setStyle() {
         if (getSharedPreferences(Constants.PREFS, Context.MODE_PRIVATE).getBoolean(Constants.THEME, false)) {
@@ -125,6 +133,8 @@ public class StartingActivity extends AppCompatActivity implements LoaderManager
         if (requestCode == REQUEST_CODE_SETTING) {
             finish();
             startActivity(new Intent(StartingActivity.this, StartingActivity.class));
+        } else if (requestCode == REQUEST_CODE_AUTH && resultCode == RESULT_OK) {
+            checkForAuthorisation();
         }
     }
 
@@ -156,9 +166,25 @@ public class StartingActivity extends AppCompatActivity implements LoaderManager
                 shareIntent.setType("text/plain");
                 startActivity(shareIntent);
                 break;
-
+            case R.id.nav_login:
+                startActivityForResult(new Intent(this, SignInActivity.class), REQUEST_CODE_AUTH);
+                break;
         }
         return true;
     }
 
+    private void checkForAuthorisation() {
+        final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        final View headerView = navigationView.getHeaderView(0);
+        final RoundedImageView photo = (RoundedImageView) headerView.findViewById(R.id.google_acc_photo);
+        final SharedPreferences sharedPreferences = getSharedPreferences(Constants.PREFS, MODE_PRIVATE);
+        if (sharedPreferences.getBoolean(Constants.IS_LOGIN, false)) {
+            ((TextView) headerView.findViewById(R.id.google_acc_name)).setText(sharedPreferences.getString(Constants.GOOGLE_ACC_NAME, ""));
+            final String photoUri = sharedPreferences.getString(Constants.USER_PHOTO_URI, "null");
+            if (!photoUri.equals("null")) {
+                final BitmapLoader bitmapLoader = BitmapLoader.getInstance(this);
+                bitmapLoader.load(photoUri, photo);
+            }
+        }
+    }
 }

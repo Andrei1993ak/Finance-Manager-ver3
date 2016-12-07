@@ -60,4 +60,9 @@
     <string name="share">Посоветовать другу</string>
     <string name="notification">Уведомления</string>
     <string name="notification_text">Не забудьте внести денежнвые операции</string>
+    <string name="user_accaunt">Учетная запись</string>
+    <string name="login">Зайти с google</string>
+    <string name="rate">Оценить</string>
+    <string name="Communicate">Общение</string>
+    <string name="google_auth">Авторизация google</string>
 </resources>

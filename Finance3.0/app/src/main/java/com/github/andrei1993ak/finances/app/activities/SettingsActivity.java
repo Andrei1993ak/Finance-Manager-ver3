@@ -61,14 +61,6 @@ public class SettingsActivity extends BaseActivity {
             }
         });
 
-        final Button buttonSignin = (Button) findViewById(R.id.button_sign_in);
-        buttonSignin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View view) {
-                startActivity(new Intent(SettingsActivity.this, SignInActivity.class));
-            }
-        });
-
         final Button buttonToken = (Button) findViewById(R.id.button_token_id);
         buttonToken.setOnClickListener(new View.OnClickListener() {
             @Override

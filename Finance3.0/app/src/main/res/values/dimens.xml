@@ -21,6 +21,7 @@
     <dimen name="main_list_paddint_lef">12dp</dimen>
     <dimen name="main_list_padding_top">10dp</dimen>
     <dimen name="main_list_margin_bottom">6dp</dimen>
+    <dimen name="drawer_left">16dp</dimen>
 
     <item name="divider" type="dimen">6dp</item>
 </resources>

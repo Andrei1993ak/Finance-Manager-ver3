@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorControlNormal">
+    android:background="?attr/colorControlNormal"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -10,56 +11,62 @@
         android:layout_margin="@dimen/background_margin"
         android:background="?attr/colorBackgroundFloating"
         android:orientation="vertical">
-        <Switch
-            android:layout_margin="@dimen/background_margin"
-            android:text="@string/theme"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/themeSwitch" />
 
         <Switch
-            android:layout_margin="@dimen/background_margin"
-            android:text="@string/setPin"
+            android:id="@+id/themeSwitch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/pinSwitch" />
+            android:layout_margin="@dimen/background_margin"
+            android:text="@string/theme" />
 
-        <Button
-            android:id="@+id/button_backup"
-            android:layout_width="wrap_content"
+        <Switch
+            android:id="@+id/pinSwitch"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/backup"/>
+            android:layout_margin="@dimen/background_margin"
+            android:text="@string/setPin" />
 
-        <Button
-            android:id="@+id/button_restore"
-            android:layout_width="wrap_content"
+        <Switch
+            android:id="@+id/notificationSwitch"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/restore"/>
+            android:layout_margin="@dimen/background_margin"
+            android:text="@string/notification" />
 
-        <Button
-            android:id="@+id/button_sign_in"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/login"/>
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/button_backup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:text="@string/backup" />
+
+            <Button
+                android:id="@+id/button_restore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:text="@string/restore" />
+        </LinearLayout>
+
 
         <Button
             android:id="@+id/button_token_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/token"/>
+            android:text="@string/token" />
 
         <Button
             android:id="@+id/button_server_auth_code"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/serveAuthCode"/>
+            android:text="@string/serveAuthCode" />
 
-        <Switch
-            android:layout_margin="@dimen/background_margin"
-            android:text="@string/notification"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/notificationSwitch" />
+
     </LinearLayout>
 
 

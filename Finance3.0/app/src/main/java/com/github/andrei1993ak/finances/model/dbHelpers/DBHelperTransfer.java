@@ -173,7 +173,7 @@ public class DBHelperTransfer implements IDBHelperForModel<Transfer> {
                     transfers.add(transfer);
                 } while (cursor.moveToNext());
             } else {
-                return null;
+                return transfers;
             }
         } finally {
             if (cursor != null) {

@@ -2,27 +2,26 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/nav_header_height"
-    android:background="@drawable/side_nav_bar"
+    android:background="@drawable/fin"
     android:gravity="bottom"
     android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/imageView"
+    <com.github.andrei1993ak.finances.util.RoundedImageView
+        android:id="@+id/google_acc_photo"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_marginLeft="@dimen/drawer_left"
+        android:layout_marginTop="32dp" />
+
+    <TextView
+        android:id="@+id/google_acc_name"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/fin" />
-
-    <!--<TextView-->
-        <!--android:id="@+id/textView"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="android.studio@android.com" />-->
-
-    <!--<TextView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:paddingTop="@dimen/nav_header_vertical_spacing"-->
-        <!--android:text="Android Studio"-->
-        <!--android:textAppearance="@style/TextAppearance.AppCompat.Body1" />-->
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="24dp"
+        android:layout_marginLeft="@dimen/drawer_left"
+        android:textColor="@android:color/black"
+        android:paddingTop="@dimen/nav_header_vertical_spacing"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
 </FrameLayout>
