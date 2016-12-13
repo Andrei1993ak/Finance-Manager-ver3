@@ -65,4 +65,6 @@
     <string name="rate">Оценить</string>
     <string name="Communicate">Общение</string>
     <string name="google_auth">Авторизация google</string>
+    <string name="cloud_backup">Копию бд в облако</string>
+    <string name="cloud_restore">Восстановить из облака</string>
 </resources>

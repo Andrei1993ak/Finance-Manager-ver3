@@ -22,6 +22,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.github.andrei1993ak.finances.App;
 import com.github.andrei1993ak.finances.R;
 import com.github.andrei1993ak.finances.app.BaseActivity;
 import com.github.andrei1993ak.finances.control.base.IOnTaskCompleted;
@@ -35,8 +36,8 @@ import com.github.andrei1993ak.finances.model.models.Cost;
 import com.github.andrei1993ak.finances.model.models.CostCategory;
 import com.github.andrei1993ak.finances.model.models.Wallet;
 import com.github.andrei1993ak.finances.util.Constants;
+import com.github.andrei1993ak.finances.util.universalLoader.IUniversalLoader;
 import com.github.andrei1993ak.finances.util.universalLoader.ImageNameGenerator;
-import com.github.andrei1993ak.finances.util.universalLoader.loaders.BitmapLoader;
 import com.google.common.io.Files;
 
 import java.io.File;
@@ -62,6 +63,7 @@ public class CostEditActivity extends BaseActivity implements IOnTaskCompleted {
     private List<CostCategory> subCategoriesList;
     private ImageView imageView;
     private SimpleDateFormat dateFormatter;
+    private IUniversalLoader<Bitmap, ImageView> bitmapLoader;
     private long parentId;
     private long editCostId;
     private Bitmap photo;
@@ -75,6 +77,7 @@ public class CostEditActivity extends BaseActivity implements IOnTaskCompleted {
 
         initFields();
 
+        bitmapLoader = ((App) getApplicationContext()).getImageLoader();
         editCostId = getIntent().getLongExtra(Cost.ID, -1);
         new CostExecutor(this).execute(new RequestAdapter<Cost>().get(editCostId));
     }
@@ -211,7 +214,6 @@ public class CostEditActivity extends BaseActivity implements IOnTaskCompleted {
                 if (cost.getPhoto() == Constants.COST_HAS_PHOTO) {
                     final String filePath = ImageNameGenerator.getImagePath(editCostId);
                     final File file = new File(filePath);
-                    final BitmapLoader bitmapLoader = BitmapLoader.getInstance(this);
                     try {
                         bitmapLoader.load(file.toURI().toURL().toString(), imageView);
                     } catch (final MalformedURLException e) {
@@ -317,7 +319,9 @@ public class CostEditActivity extends BaseActivity implements IOnTaskCompleted {
             try {
                 Files.move(file, toFile);
                 photo = BitmapFactory.decodeFile(toFile.getPath());
-                BitmapLoader.getInstance(this).clearCashes(toFile.toURI().toURL().toString());
+                final IUniversalLoader<Bitmap, ImageView> bitmapLoader = ((App) getApplicationContext()).getImageLoader();
+
+                bitmapLoader.clearCashes(toFile.toURI().toURL().toString());
                 view.setImageBitmap(photo);
             } catch (final IOException e) {
                 photo = null;

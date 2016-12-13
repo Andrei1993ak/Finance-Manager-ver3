@@ -20,7 +20,6 @@ public class ZeroActivity extends AppCompatActivity {
         if (System.currentTimeMillis() - lastTimeUpdate > Constants.ONE_DAY_IN_MILLIS) {
             new UpdateCurrenciesJob().execute();
         }
-        String query = TableQueryGenerator.getTableCreateQuery(Cost.class);
         redirect();
     }
 

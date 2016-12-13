@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.github.andrei1993ak.finances.App;
 import com.github.andrei1993ak.finances.R;
 import com.github.andrei1993ak.finances.app.activities.CategoryStartingActivity;
 import com.github.andrei1993ak.finances.app.activities.CostActivity;
@@ -34,7 +36,6 @@ import com.github.andrei1993ak.finances.control.loaders.WalletCursorLoader;
 import com.github.andrei1993ak.finances.signinByAppEngine.SignInActivity;
 import com.github.andrei1993ak.finances.util.Constants;
 import com.github.andrei1993ak.finances.util.RoundedImageView;
-import com.github.andrei1993ak.finances.util.universalLoader.loaders.BitmapLoader;
 
 public class StartingActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -56,6 +57,7 @@ public class StartingActivity extends AppCompatActivity implements LoaderManager
         final ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
+        toggle.setDrawerIndicatorEnabled(true);
         toggle.syncState();
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
@@ -82,6 +84,16 @@ public class StartingActivity extends AppCompatActivity implements LoaderManager
         } else {
             setTheme(R.style.LightNoActionBar);
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                ((DrawerLayout) findViewById(R.id.drawer_layout)).openDrawer(GravityCompat.START);  // OPEN DRAWER
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 
@@ -182,8 +194,7 @@ public class StartingActivity extends AppCompatActivity implements LoaderManager
             ((TextView) headerView.findViewById(R.id.google_acc_name)).setText(sharedPreferences.getString(Constants.GOOGLE_ACC_NAME, ""));
             final String photoUri = sharedPreferences.getString(Constants.USER_PHOTO_URI, "null");
             if (!photoUri.equals("null")) {
-                final BitmapLoader bitmapLoader = BitmapLoader.getInstance(this);
-                bitmapLoader.load(photoUri, photo);
+                ((App) getApplicationContext()).getImageLoader().load(photoUri, photo);
             }
         }
     }

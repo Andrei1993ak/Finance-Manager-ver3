@@ -10,7 +10,6 @@
         android:layout_marginLeft="@dimen/background_margin"
         android:layout_marginRight="@dimen/background_margin"
         android:layout_marginBottom="@dimen/background_margin"
-        android:layout_marginTop="?attr/actionBarSize"
         android:orientation="vertical">
 
 

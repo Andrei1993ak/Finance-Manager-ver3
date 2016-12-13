@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.Button;
@@ -26,7 +27,12 @@ public class PinEntryActivity extends BaseActivity {
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().hide();
+
+        final ActionBar supportActionBar = getSupportActionBar();
+        if (supportActionBar != null) {
+            supportActionBar.hide();
+        }
+
         setContentView(R.layout.activity_pin);
         final RelativeLayout layout = (RelativeLayout) findViewById(R.id.pinLayout);
         final Drawable wallpaperDrawable = WallpaperManager.getInstance(this).getDrawable();
@@ -93,7 +99,8 @@ public class PinEntryActivity extends BaseActivity {
 
             final int PIN_LENGTH = 4;
             userEntered = userEntered + pressedButton.getText();
-            passwordInput.setText(passwordInput.getText().toString() + Constants.COMMA);
+            final String passInputText = passwordInput.getText().toString() + Constants.COMMA;
+            passwordInput.setText(passInputText);
 
             if (userEntered.length() == PIN_LENGTH) {
                 final String userPin = getSharedPreferences(Constants.PREFS, Context.MODE_PRIVATE).getString(Constants.PIN, null);

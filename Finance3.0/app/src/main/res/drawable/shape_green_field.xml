@@ -5,7 +5,8 @@
 
     <stroke
         android:width="2dp"
-        android:color="@color/colorGreenText" >
+        android:color="#d0aaea8c" >
+        <!--android:color="@color/colorGreenText" >-->
     </stroke>
 
     <padding

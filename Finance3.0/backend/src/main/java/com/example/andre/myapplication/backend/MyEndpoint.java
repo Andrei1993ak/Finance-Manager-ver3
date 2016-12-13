@@ -66,6 +66,7 @@ public class MyEndpoint {
         }
     }
 
+
     private static String convertStreamToString(final java.io.InputStream is) {
         final java.util.Scanner scanner = new java.util.Scanner(is).useDelimiter("\\A");
         return scanner.hasNext() ? scanner.next() : "";

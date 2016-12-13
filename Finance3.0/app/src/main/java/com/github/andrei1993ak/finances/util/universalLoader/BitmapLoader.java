@@ -1,4 +1,4 @@
-package com.github.andrei1993ak.finances.util.universalLoader.loaders;
+package com.github.andrei1993ak.finances.util.universalLoader;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -15,15 +15,7 @@ import java.io.FileNotFoundException;
 public class BitmapLoader extends UniversalLoader<Bitmap, ImageView> {
 
 
-    private static BitmapLoader instance;
-
-    public static BitmapLoader getInstance(final Context context) {
-        if (instance == null)
-            instance = new BitmapLoader(context);
-        return instance;
-    }
-
-    private BitmapLoader(final Context context) {
+    BitmapLoader(final Context context) {
         super(context);
     }
 

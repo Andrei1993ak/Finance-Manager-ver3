@@ -39,6 +39,26 @@
             android:orientation="horizontal">
 
             <Button
+                android:id="@+id/button_online_backup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:text="@string/cloud_backup" />
+
+            <Button
+                android:id="@+id/button_online_restore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:text="@string/cloud_restore" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
                 android:id="@+id/button_backup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

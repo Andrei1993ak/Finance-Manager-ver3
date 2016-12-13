@@ -13,20 +13,21 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.github.andrei1993ak.finances.R;
 import com.github.andrei1993ak.finances.app.BaseActivity;
 import com.github.andrei1993ak.finances.app.SetPinActivity;
 import com.github.andrei1993ak.finances.model.backupUtil.DBBackupUtils;
+import com.github.andrei1993ak.finances.model.backupUtil.OnBackupOperationCompleted;
 import com.github.andrei1993ak.finances.notification.AlarmReceiver;
 import com.github.andrei1993ak.finances.signinByAppEngine.IdTokenActivity;
 import com.github.andrei1993ak.finances.signinByAppEngine.ServerAuthCodeActivity;
-import com.github.andrei1993ak.finances.signinByAppEngine.SignInActivity;
 import com.github.andrei1993ak.finances.util.Constants;
 
 import java.util.Calendar;
 
-public class SettingsActivity extends BaseActivity {
+public class SettingsActivity extends BaseActivity implements OnBackupOperationCompleted {
 
     private Switch pinSwitch;
 
@@ -45,11 +46,29 @@ public class SettingsActivity extends BaseActivity {
         initNotification(this);
         initPin();
 
-        final Button button = (Button) findViewById(R.id.button_backup);
-        button.setOnClickListener(new View.OnClickListener() {
+        final Button buttonOnlineBackup = (Button) findViewById(R.id.button_online_backup);
+        buttonOnlineBackup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
-                new DBBackupUtils().backupDB(true);
+                new DBBackupUtils().backupToCloud(SettingsActivity.this);
+
+            }
+        });
+
+        final Button buttonOnlineRestore = (Button) findViewById(R.id.button_online_restore);
+        buttonOnlineRestore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                new DBBackupUtils().restoreFromCloud(SettingsActivity.this);
+            }
+        });
+
+        final Button buttonBackup = (Button) findViewById(R.id.button_backup);
+        buttonBackup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                new DBBackupUtils().backupDB();
+
             }
         });
 
@@ -57,7 +76,7 @@ public class SettingsActivity extends BaseActivity {
         buttonRestore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
-                new DBBackupUtils().restoreDB(true);
+                new DBBackupUtils().restoreDB();
             }
         });
 
@@ -178,4 +197,12 @@ public class SettingsActivity extends BaseActivity {
         });
     }
 
+    @Override
+    public void onBackupCompleted(final Boolean b) {
+        if (b) {
+            Toast.makeText(this, "ok", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(this, "false", Toast.LENGTH_LONG).show();
+        }
+    }
 }

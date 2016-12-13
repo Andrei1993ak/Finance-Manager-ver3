@@ -9,7 +9,7 @@ import com.github.andrei1993ak.finances.model.DBHelper;
 import com.github.andrei1993ak.finances.model.dbHelpers.DBHelperCost;
 import com.github.andrei1993ak.finances.util.ContextHolder;
 import com.github.andrei1993ak.finances.util.universalLoader.ImageNameGenerator;
-import com.github.andrei1993ak.finances.util.universalLoader.loaders.BitmapLoader;
+import com.github.andrei1993ak.finances.util.universalLoader.BitmapLoader;
 import com.github.andrei1993ak.finances.control.base.IOnTaskCompleted;
 import com.github.andrei1993ak.finances.model.models.Cost;
 
@@ -53,7 +53,7 @@ public class CostExecutor extends PojoExecutor<Cost> {
         if (dbHelperCost.get(id).getPhoto() == 1) {
             final File file = new File(path);
             try {
-                BitmapLoader.getInstance(ContextHolder.getInstance().getContext()).clearCashes(file.toURI().toURL().toString());
+                ((App) ContextHolder.getInstance().getContext()).getImageLoader().clearCashes(file.toURI().toURL().toString());
                 file.delete();
             } catch (final MalformedURLException e) {
                 e.printStackTrace();
@@ -66,7 +66,7 @@ public class CostExecutor extends PojoExecutor<Cost> {
     public Result<Integer> updatePojo(final Cost cost) {
         final String path = ImageNameGenerator.getImagePath(DBHelper.getInstance(ContextHolder.getInstance().getContext()).getNextCostId());        try {
             final File file = new File(path);
-            BitmapLoader.getInstance(ContextHolder.getInstance().getContext()).clearCashes(file.toURI().toURL().toString());
+            ((App) ContextHolder.getInstance().getContext()).getImageLoader().clearCashes(file.toURI().toURL().toString());
         } catch (final MalformedURLException e) {
             e.printStackTrace();
         }

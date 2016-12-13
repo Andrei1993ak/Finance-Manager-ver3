@@ -10,9 +10,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
+import com.github.andrei1993ak.finances.App;
 import com.github.andrei1993ak.finances.R;
 import com.github.andrei1993ak.finances.util.Constants;
-import com.github.andrei1993ak.finances.util.universalLoader.loaders.BitmapLoader;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -100,10 +100,11 @@ public class SignInActivity extends AppCompatActivity implements
             final SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putBoolean(Constants.IS_LOGIN, true);
             editor.putString(Constants.GOOGLE_ACC_NAME, acct.getDisplayName());
+            editor.putString(Constants.GOOGLE_ACC_EMAIL, acct.getEmail());
             final Uri photoUri = acct.getPhotoUrl();
             if (photoUri != null) {
                 editor.putString(Constants.USER_PHOTO_URI, photoUri.toString());
-                BitmapLoader.getInstance(this).clearCashes(photoUri.toString());
+                ((App) getApplicationContext()).getImageLoader().clearCashes(photoUri.toString());
             }
             editor.apply();
             setResult(RESULT_OK);
@@ -174,6 +175,7 @@ public class SignInActivity extends AppCompatActivity implements
             final SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putBoolean(Constants.IS_LOGIN, false);
             editor.remove(Constants.GOOGLE_ACC_NAME);
+            editor.remove(Constants.GOOGLE_ACC_EMAIL);
             editor.apply();
             setResult(RESULT_OK);
             findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);

@@ -44,6 +44,8 @@ public class WalletActivity extends BaseActivity implements LoaderManager.Loader
 
         initFields();
 
+
+
         getSupportLoaderManager().restartLoader(Constants.MAIN_LOADER_ID, null, this);
     }
 

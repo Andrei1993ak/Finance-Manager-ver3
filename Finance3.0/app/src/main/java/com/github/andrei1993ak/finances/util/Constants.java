@@ -28,9 +28,10 @@ public interface Constants {
     String NOTIFICATION = "notification";
 
     String PIN = "pin";
-    int CATEGORY_HAS_CHILDS = -2;
-    long ONE_DAY_IN_MILLIS = 86400000;
+//    long ONE_DAY_IN_MILLIS = 86400000;
+    long ONE_DAY_IN_MILLIS = 24L*60L*60L*1000L;
 
+    int CATEGORY_HAS_CHILDS = -2;
     int CATEGORY_USABLE = -1;
 
     String LAST_TIME_UPDATE = "lastTimeUpdate";
@@ -40,4 +41,5 @@ public interface Constants {
     String IS_LOGIN = "isLogin";
     String GOOGLE_ACC_NAME = "googleAccName";
     String USER_PHOTO_URI = "userPhotoUri";
+    String GOOGLE_ACC_EMAIL = "googleAccName";
 }

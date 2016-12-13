@@ -2,8 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.github.andrei1993ak.finances">
 
-    <!--for db backup and restore-->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <uses-feature
@@ -40,33 +38,33 @@
             </intent-filter>
         </activity>
         <activity android:name=".app.StartingActivity"/>
-        <activity android:name="com.github.andrei1993ak.finances.app.activities.CurrencyActivity" />
-        <activity android:name="com.github.andrei1993ak.finances.app.addEditActivities.CurrencyAddActivity" />
-        <activity android:name="com.github.andrei1993ak.finances.app.addEditActivities.CurrencyEditActivity" />
-        <activity android:name="com.github.andrei1993ak.finances.app.activities.WalletActivity" />
-        <activity android:name="com.github.andrei1993ak.finances.app.addEditActivities.WalletAddActivity" />
-        <activity android:name="com.github.andrei1993ak.finances.app.addEditActivities.WalletEditActivity" />
-        <activity android:name="com.github.andrei1993ak.finances.app.activities.CategoryStartingActivity" />
-        <activity android:name="com.github.andrei1993ak.finances.app.activities.CategoryIncomeActivity" />
-        <activity android:name="com.github.andrei1993ak.finances.app.activities.CategoryCostActivity" />
-        <activity android:name="com.github.andrei1993ak.finances.app.addEditActivities.IncomeCategoryAddActivity" />
-        <activity android:name="com.github.andrei1993ak.finances.app.addEditActivities.CostCategoryAddActivity" />
-        <activity android:name="com.github.andrei1993ak.finances.app.addEditActivities.IncomeCategoryEditActivity" />
-        <activity android:name="com.github.andrei1993ak.finances.app.addEditActivities.CostCategoryEditActivity" />
-        <activity android:name="com.github.andrei1993ak.finances.app.activities.IncomeActivity" />
-        <activity android:name="com.github.andrei1993ak.finances.app.addEditActivities.IncomeAddActivity" />
-        <activity android:name="com.github.andrei1993ak.finances.app.addEditActivities.IncomeEditActivity" />
-        <activity android:name="com.github.andrei1993ak.finances.app.activities.CostActivity" />
-        <activity android:name="com.github.andrei1993ak.finances.app.addEditActivities.CostAddActivity" />
-        <activity android:name="com.github.andrei1993ak.finances.app.addEditActivities.CostEditActivity" />
-        <activity android:name="com.github.andrei1993ak.finances.app.activities.TransferActivity" />
-        <activity android:name="com.github.andrei1993ak.finances.app.addEditActivities.TransferAddActivity" />
-        <activity android:name="com.github.andrei1993ak.finances.app.addEditActivities.TransferEditActivity" />
-        <activity android:name="com.github.andrei1993ak.finances.app.activities.ReportsActivity" />
-        <activity android:name="com.github.andrei1993ak.finances.app.reportsActivities.PieChartActivity" />
-        <activity android:name="com.github.andrei1993ak.finances.app.reportsActivities.PieChartActivityNext" />
-        <activity android:name="com.github.andrei1993ak.finances.app.reportsActivities.BalanceChartActivity" />
-        <activity android:name="com.github.andrei1993ak.finances.app.activities.SettingsActivity" />
+        <activity android:name=".app.activities.CurrencyActivity" />
+        <activity android:name=".app.addEditActivities.CurrencyAddActivity" />
+        <activity android:name=".app.addEditActivities.CurrencyEditActivity" />
+        <activity android:name=".app.activities.WalletActivity" />
+        <activity android:name=".app.addEditActivities.WalletAddActivity" />
+        <activity android:name=".app.addEditActivities.WalletEditActivity" />
+        <activity android:name=".app.activities.CategoryStartingActivity" />
+        <activity android:name=".app.activities.CategoryIncomeActivity" />
+        <activity android:name=".app.activities.CategoryCostActivity" />
+        <activity android:name=".app.addEditActivities.IncomeCategoryAddActivity" />
+        <activity android:name=".app.addEditActivities.CostCategoryAddActivity" />
+        <activity android:name=".app.addEditActivities.IncomeCategoryEditActivity" />
+        <activity android:name=".app.addEditActivities.CostCategoryEditActivity" />
+        <activity android:name=".app.activities.IncomeActivity" />
+        <activity android:name=".app.addEditActivities.IncomeAddActivity" />
+        <activity android:name=".app.addEditActivities.IncomeEditActivity" />
+        <activity android:name=".app.activities.CostActivity" />
+        <activity android:name=".app.addEditActivities.CostAddActivity" />
+        <activity android:name=".app.addEditActivities.CostEditActivity" />
+        <activity android:name=".app.activities.TransferActivity" />
+        <activity android:name=".app.addEditActivities.TransferAddActivity" />
+        <activity android:name=".app.addEditActivities.TransferEditActivity" />
+        <activity android:name=".app.activities.ReportsActivity" />
+        <activity android:name=".app.reportsActivities.PieChartActivity" />
+        <activity android:name=".app.reportsActivities.PieChartActivityNext" />
+        <activity android:name=".app.reportsActivities.BalanceChartActivity" />
+        <activity android:name=".app.activities.SettingsActivity" />
         <activity android:name=".model.newModel.TestActivity" />
         <activity android:name=".signinByAppEngine.SignInActivity" />
         <activity android:name=".signinByAppEngine.IdTokenActivity" />

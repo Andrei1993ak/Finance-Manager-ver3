@@ -1,8 +1,5 @@
 package com.example.andre.myapplication.backend;
 
-/**
- * The object model for the data we are sending through endpoints
- */
 public class MyBean {
 
     private String myData;

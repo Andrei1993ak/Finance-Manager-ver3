@@ -3,6 +3,7 @@ package com.github.andrei1993ak.finances.app.activities;
 import android.app.Dialog;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -39,8 +40,9 @@ import com.github.andrei1993ak.finances.model.dbHelpers.DBHelperCost;
 import com.github.andrei1993ak.finances.model.models.Cost;
 import com.github.andrei1993ak.finances.util.Constants;
 import com.github.andrei1993ak.finances.util.ContextHolder;
+import com.github.andrei1993ak.finances.util.universalLoader.IUniversalLoader;
 import com.github.andrei1993ak.finances.util.universalLoader.ImageNameGenerator;
-import com.github.andrei1993ak.finances.util.universalLoader.loaders.BitmapLoader;
+import com.github.andrei1993ak.finances.util.universalLoader.BitmapLoader;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -158,7 +160,7 @@ public class CostActivity extends BaseActivity implements LoaderManager.LoaderCa
             builder.requestWindowFeature(Window.FEATURE_NO_TITLE);
             builder.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             final ImageView imageView = new ImageView(this);
-            final BitmapLoader bitmapLoader = BitmapLoader.getInstance(this);
+            final IUniversalLoader<Bitmap, ImageView> bitmapLoader = ((App)getApplicationContext()).getImageLoader();
             try {
                 bitmapLoader.load(file.toURI().toURL().toString(), imageView);
             } catch (final MalformedURLException e) {

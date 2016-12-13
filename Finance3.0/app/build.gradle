@@ -17,7 +17,17 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    return void
+
+    useLibrary 'org.apache.http.legacy'
+    packagingOptions {
+        exclude 'META-INF/ASL2.0'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/MANIFEST.MF'
+        exclude 'META-INF/DEPENDENCIES'
+    }
 }
 
 ext.versions = [
@@ -42,6 +52,9 @@ dependencies {
     compile "com.android.support:percent:$versions.percent"
     compile "com.google.code.findbugs:jsr305:$versions.findBags"
     compile group: 'org.achartengine', name: 'achartengine', version: "$versions.aChartEngine"
+    compile files('libs/httpmime-4.3.6.jar')
+    compile files('libs/httpcore-4.4.3.jar')
+    compile group: 'commons-net', name: 'commons-net', version: '2.0'
     compile 'com.google.android.gms:play-services-auth:10.0.1'
     testCompile "junit:junit:$versions.jUnit"
     compile project(path: ':backend', configuration: 'android-endpoints')

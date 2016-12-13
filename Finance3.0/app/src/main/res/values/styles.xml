@@ -4,7 +4,7 @@
         <item name="colorPrimary">#ffab40</item>
         <item name="colorPrimaryDark">#ffab40</item>
         <item name="colorAccent">#FF4081</item>
-        <item name="colorBackgroundFloating">@android:color/background_light</item>
+        <item name="colorBackgroundFloating">#D5D6D7</item>
         <item name="colorControlNormal">#ffcc80</item>
         <item name="textColorSearchUrl">#757575</item>
     </style>

@@ -16,6 +16,9 @@
             android:layout_margin="@dimen/background_margin"
             android:background="@drawable/shape"
             android:stretchColumns="1">
+            <!--android:background="?attr/colorBackgroundFloating"-->
+
+
 
             <TableRow>
 

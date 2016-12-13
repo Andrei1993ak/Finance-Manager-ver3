@@ -114,5 +114,7 @@
     <string name="rate">Rate</string>
     <string name="Communicate">Communicate</string>
     <string name="google_auth">google auth</string>
+    <string name="cloud_backup">Cloud Backup</string>
+    <string name="cloud_restore">Cloud Restore</string>
 
 </resources>
