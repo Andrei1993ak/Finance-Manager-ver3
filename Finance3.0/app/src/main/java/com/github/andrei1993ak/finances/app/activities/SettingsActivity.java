@@ -21,8 +21,6 @@ import com.github.andrei1993ak.finances.app.SetPinActivity;
 import com.github.andrei1993ak.finances.model.backupUtil.DBBackupUtils;
 import com.github.andrei1993ak.finances.model.backupUtil.OnBackupOperationCompleted;
 import com.github.andrei1993ak.finances.notification.AlarmReceiver;
-import com.github.andrei1993ak.finances.signinByAppEngine.IdTokenActivity;
-import com.github.andrei1993ak.finances.signinByAppEngine.ServerAuthCodeActivity;
 import com.github.andrei1993ak.finances.util.Constants;
 
 import java.util.Calendar;
@@ -30,6 +28,9 @@ import java.util.Calendar;
 public class SettingsActivity extends BaseActivity implements OnBackupOperationCompleted {
 
     private Switch pinSwitch;
+    private Switch autoBackupSwitch;
+    private Switch notificationSwitch;
+    private Switch themeSwitch;
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
@@ -45,6 +46,7 @@ public class SettingsActivity extends BaseActivity implements OnBackupOperationC
         initThemes();
         initNotification(this);
         initPin();
+        initAutoBackup();
 
         final Button buttonOnlineBackup = (Button) findViewById(R.id.button_online_backup);
         buttonOnlineBackup.setOnClickListener(new View.OnClickListener() {
@@ -80,19 +82,23 @@ public class SettingsActivity extends BaseActivity implements OnBackupOperationC
             }
         });
 
-        final Button buttonToken = (Button) findViewById(R.id.button_token_id);
-        buttonToken.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View view) {
-                startActivity(new Intent(SettingsActivity.this, IdTokenActivity.class));
-            }
-        });
+    }
 
-        final Button buttonServerAuthCode = (Button) findViewById(R.id.button_server_auth_code);
-        buttonServerAuthCode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View view) {
-                startActivity(new Intent(SettingsActivity.this, ServerAuthCodeActivity.class));
+    private void initAutoBackup() {
+        autoBackupSwitch = (Switch) findViewById(R.id.autoBackupSwitch);
+        if (getSharedPreferences(Constants.PREFS, Context.MODE_PRIVATE).getBoolean(Constants.AUTO_BACKUP_ENABLED, false)) {
+            autoBackupSwitch.setChecked(true);
+        }
+        autoBackupSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(final CompoundButton buttonView, final boolean isChecked) {
+                final SharedPreferences prefs = getSharedPreferences(Constants.PREFS, Context.MODE_PRIVATE);
+                final SharedPreferences.Editor editor = prefs.edit();
+                if (isChecked) {
+                    editor.putBoolean(Constants.AUTO_BACKUP_ENABLED, true);
+                } else {
+                    editor.putBoolean(Constants.AUTO_BACKUP_ENABLED, false);
+                }
+                editor.apply();
             }
         });
     }
@@ -113,7 +119,7 @@ public class SettingsActivity extends BaseActivity implements OnBackupOperationC
     }
 
     private void initNotification(final Context context) {
-        final Switch notificationSwitch = (Switch) findViewById(R.id.notificationSwitch);
+        notificationSwitch = (Switch) findViewById(R.id.notificationSwitch);
         if (getSharedPreferences(Constants.PREFS, Context.MODE_PRIVATE).getBoolean(Constants.NOTIFICATION, false)) {
             notificationSwitch.setChecked(true);
         }
@@ -152,7 +158,7 @@ public class SettingsActivity extends BaseActivity implements OnBackupOperationC
     }
 
     private void initThemes() {
-        final Switch themeSwitch = (Switch) findViewById(R.id.themeSwitch);
+        themeSwitch = (Switch) findViewById(R.id.themeSwitch);
         if (getSharedPreferences(Constants.PREFS, Context.MODE_PRIVATE).getBoolean(Constants.THEME, false)) {
             themeSwitch.setChecked(true);
         }

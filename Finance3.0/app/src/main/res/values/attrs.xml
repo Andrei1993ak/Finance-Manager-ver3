@@ -3,4 +3,7 @@
     <declare-styleable name="BottomBorderTextView">
         <attr name="mBorderColor" format="color"/>
     </declare-styleable>
+
+    <attr name="shape" format="reference" />
+
 </resources>

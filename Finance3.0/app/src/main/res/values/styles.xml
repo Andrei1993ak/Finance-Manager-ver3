@@ -4,15 +4,15 @@
         <item name="colorPrimary">#ffab40</item>
         <item name="colorPrimaryDark">#ffab40</item>
         <item name="colorAccent">#FF4081</item>
-        <item name="colorBackgroundFloating">#D5D6D7</item>
         <item name="colorControlNormal">#ffcc80</item>
         <item name="textColorSearchUrl">#757575</item>
+        <item name="shape">@drawable/shape_light</item>
     </style>
 
     <style name="Dark" parent="Theme.AppCompat">
         <item name="colorPrimary">#383a3b</item>
         <item name="colorAccent">#FF4081</item>
-        <item name="colorBackgroundFloating">#727678</item>
+        <item name="shape">@drawable/shape_dark</item>
         <item name="colorControlNormal">#383a3b</item>
         <item name="textColorSearchUrl">#D5D6D7</item>
     </style>
@@ -20,9 +20,9 @@
     <style name="DarkNoActionBar" parent="Theme.AppCompat.NoActionBar">
         <item name="colorPrimary">#383a3b</item>
         <item name="colorAccent">#FF4081</item>
-        <item name="colorBackgroundFloating">#727678</item>
         <item name="colorControlNormal">#383a3b</item>
         <item name="textColorSearchUrl">#D5D6D7</item>
+        <item name="shape">@drawable/shape_dark</item>
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
     </style>
@@ -31,7 +31,7 @@
         <item name="colorPrimary">#ffab40</item>
         <item name="colorPrimaryDark">#ffab40</item>
         <item name="colorAccent">#FF4081</item>
-        <item name="colorBackgroundFloating">@android:color/background_light</item>
+        <item name="shape">@drawable/shape_light</item>
         <item name="colorControlNormal">#ffcc80</item>
         <item name="textColorSearchUrl">#757575</item>
         <item name="windowNoTitle">true</item>

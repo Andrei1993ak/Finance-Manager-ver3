@@ -67,4 +67,6 @@
     <string name="google_auth">Авторизация google</string>
     <string name="cloud_backup">Копию бд в облако</string>
     <string name="cloud_restore">Восстановить из облака</string>
+    <string name="alarm_label">Финансовый менеджер</string>
+    <string name="autoBackup">Автоматическое резераное копирование</string>
 </resources>

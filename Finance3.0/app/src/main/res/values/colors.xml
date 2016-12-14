@@ -5,6 +5,7 @@
     <color name="colorGrayText">#d0c0c4be</color>
     <color name="colorRedText">#d4ec4832</color>
     <color name="colorSeparator">@android:color/darker_gray</color>
+    <color name="colorBackgroundDarkShape">#727678</color>
 
     <array name="pieChartColors">
         <item>0xFFA5EA8C</item>

@@ -116,5 +116,6 @@
     <string name="google_auth">google auth</string>
     <string name="cloud_backup">Cloud Backup</string>
     <string name="cloud_restore">Cloud Restore</string>
+    <string name="autoBackup">Auto Backup</string>
 
 </resources>

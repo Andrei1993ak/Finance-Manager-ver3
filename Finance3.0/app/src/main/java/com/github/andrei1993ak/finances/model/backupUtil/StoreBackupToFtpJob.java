@@ -49,19 +49,12 @@ public class StoreBackupToFtpJob extends AsyncTask<Void, Void, Boolean> {
                 in = new FileInputStream(db.getPath());
                 final String path = "Backups/" + email + ".db";
                 result = ftpClient.storeFile(path, in);
-
+                ftpClient.logout();
+                ftpClient.disconnect();
             }
         } catch (final Exception e) {
             return false;
         } finally {
-            try {
-                if (ftpClient != null) {
-                    ftpClient.logout();
-                    ftpClient.disconnect();
-                }
-            } catch (final IOException e) {
-                e.printStackTrace();
-            }
             if (in != null) {
                 try {
                     in.close();

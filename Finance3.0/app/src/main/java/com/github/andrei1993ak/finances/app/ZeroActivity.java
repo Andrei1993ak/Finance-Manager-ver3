@@ -7,8 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 import com.github.andrei1993ak.finances.api.UpdateCurrenciesJob;
-import com.github.andrei1993ak.finances.model.TableQueryGenerator;
-import com.github.andrei1993ak.finances.model.models.Cost;
+import com.github.andrei1993ak.finances.services.BackupToCloudService;
 import com.github.andrei1993ak.finances.util.Constants;
 
 public class ZeroActivity extends AppCompatActivity {
@@ -20,7 +19,15 @@ public class ZeroActivity extends AppCompatActivity {
         if (System.currentTimeMillis() - lastTimeUpdate > Constants.ONE_DAY_IN_MILLIS) {
             new UpdateCurrenciesJob().execute();
         }
+        if (autoBackupEnabled()) {
+            startService(new Intent(this, BackupToCloudService.class));
+        }
         redirect();
+
+    }
+
+    private boolean autoBackupEnabled() {
+        return getSharedPreferences(Constants.PREFS, Context.MODE_PRIVATE).getBoolean(Constants.AUTO_BACKUP_ENABLED, false);
     }
 
     private void redirect() {

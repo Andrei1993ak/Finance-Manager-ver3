@@ -48,18 +48,12 @@ public class GetBackupFromFtpJob extends AsyncTask<Void, Void, Boolean> {
                 final String path = "Backups/" + email + ".db";
                 output = new FileOutputStream(db.getPath());
                 ftpClient.retrieveFile(path, output);
+                ftpClient.logout();
+                ftpClient.disconnect();
             }
         } catch (final Exception e) {
             return false;
         } finally {
-            try {
-                if (ftpClient != null) {
-                    ftpClient.logout();
-                    ftpClient.disconnect();
-                }
-            } catch (final IOException e) {
-                e.printStackTrace();
-            }
             if (output != null) {
                 try {
                     output.close();

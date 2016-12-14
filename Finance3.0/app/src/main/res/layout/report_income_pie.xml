@@ -27,7 +27,7 @@
         android:layout_height="@dimen/background_margin"
         android:layout_margin="@dimen/background_margin"
         android:layout_weight="7"
-        android:background="@drawable/shape"
+        android:background="@drawable/shape_light"
         android:clickable="false"
         android:orientation="vertical" />
 
