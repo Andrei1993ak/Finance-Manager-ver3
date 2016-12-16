@@ -1,5 +1,6 @@
 package com.github.andrei1993ak.finances.util.universalLoader;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.widget.ImageView;
 
@@ -21,8 +22,8 @@ public interface IUniversalLoader<K, V> {
 
     final class Impl {
 
-        public static IUniversalLoader<Bitmap, ImageView> newInstance() {
-            return new BitmapLoader(ContextHolder.getInstance().getContext());
+        public static IUniversalLoader<Bitmap, ImageView> newInstance(Context context) {
+            return new BitmapLoader(context);
         }
     }
 }

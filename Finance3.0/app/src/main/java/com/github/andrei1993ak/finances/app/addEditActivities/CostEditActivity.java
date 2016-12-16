@@ -77,7 +77,7 @@ public class CostEditActivity extends BaseActivity implements IOnTaskCompleted {
 
         initFields();
 
-        bitmapLoader = ((App) getApplicationContext()).getImageLoader();
+        bitmapLoader = ((App) getApplicationContext()).getImageLoader(this);
         editCostId = getIntent().getLongExtra(Cost.ID, -1);
         new CostExecutor(this).execute(new RequestAdapter<Cost>().get(editCostId));
     }
@@ -319,7 +319,7 @@ public class CostEditActivity extends BaseActivity implements IOnTaskCompleted {
             try {
                 Files.move(file, toFile);
                 photo = BitmapFactory.decodeFile(toFile.getPath());
-                final IUniversalLoader<Bitmap, ImageView> bitmapLoader = ((App) getApplicationContext()).getImageLoader();
+                final IUniversalLoader<Bitmap, ImageView> bitmapLoader = ((App) getApplicationContext()).getImageLoader(this);
 
                 bitmapLoader.clearCashes(toFile.toURI().toURL().toString());
                 view.setImageBitmap(photo);

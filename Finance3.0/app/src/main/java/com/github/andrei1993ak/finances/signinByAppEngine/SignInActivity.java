@@ -104,7 +104,7 @@ public class SignInActivity extends AppCompatActivity implements
             final Uri photoUri = acct.getPhotoUrl();
             if (photoUri != null) {
                 editor.putString(Constants.USER_PHOTO_URI, photoUri.toString());
-                ((App) getApplicationContext()).getImageLoader().clearCashes(photoUri.toString());
+                ((App) getApplicationContext()).getImageLoader(this).clearCashes(photoUri.toString());
             }
             editor.apply();
             setResult(RESULT_OK);

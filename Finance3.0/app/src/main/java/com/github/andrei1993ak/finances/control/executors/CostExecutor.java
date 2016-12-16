@@ -53,7 +53,7 @@ public class CostExecutor extends PojoExecutor<Cost> {
         if (dbHelperCost.get(id).getPhoto() == 1) {
             final File file = new File(path);
             try {
-                ((App) ContextHolder.getInstance().getContext()).getImageLoader().clearCashes(file.toURI().toURL().toString());
+                ((App) ContextHolder.getInstance().getContext()).getImageLoader(ContextHolder.getInstance().getContext()).clearCashes(file.toURI().toURL().toString());
                 file.delete();
             } catch (final MalformedURLException e) {
                 e.printStackTrace();
@@ -66,7 +66,7 @@ public class CostExecutor extends PojoExecutor<Cost> {
     public Result<Integer> updatePojo(final Cost cost) {
         final String path = ImageNameGenerator.getImagePath(DBHelper.getInstance(ContextHolder.getInstance().getContext()).getNextCostId());        try {
             final File file = new File(path);
-            ((App) ContextHolder.getInstance().getContext()).getImageLoader().clearCashes(file.toURI().toURL().toString());
+            ((App) ContextHolder.getInstance().getContext()).getImageLoader(ContextHolder.getInstance().getContext()).clearCashes(file.toURI().toURL().toString());
         } catch (final MalformedURLException e) {
             e.printStackTrace();
         }

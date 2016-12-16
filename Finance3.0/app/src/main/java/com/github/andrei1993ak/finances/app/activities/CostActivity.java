@@ -160,7 +160,7 @@ public class CostActivity extends BaseActivity implements LoaderManager.LoaderCa
             builder.requestWindowFeature(Window.FEATURE_NO_TITLE);
             builder.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             final ImageView imageView = new ImageView(this);
-            final IUniversalLoader<Bitmap, ImageView> bitmapLoader = ((App)getApplicationContext()).getImageLoader();
+            final IUniversalLoader<Bitmap, ImageView> bitmapLoader = ((App)getApplicationContext()).getImageLoader(this);
             try {
                 bitmapLoader.load(file.toURI().toURL().toString(), imageView);
             } catch (final MalformedURLException e) {

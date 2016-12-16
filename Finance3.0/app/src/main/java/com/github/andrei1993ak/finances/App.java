@@ -1,6 +1,7 @@
 package com.github.andrei1993ak.finances;
 
 import android.app.Application;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.annotation.Nullable;
 import android.widget.ImageView;
@@ -31,9 +32,9 @@ public class App extends Application {
         return dbHelpersManager.getDBHelper(clazz);
     }
 
-    public IUniversalLoader<Bitmap, ImageView> getImageLoader() {
+    public IUniversalLoader<Bitmap, ImageView> getImageLoader(Context context) {
         if (loader == null) {
-            loader = IUniversalLoader.Impl.newInstance();
+            loader = IUniversalLoader.Impl.newInstance(context);
         }
         return loader;
     }

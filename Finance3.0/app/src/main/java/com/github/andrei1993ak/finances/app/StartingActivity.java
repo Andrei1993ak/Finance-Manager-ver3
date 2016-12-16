@@ -194,7 +194,7 @@ public class StartingActivity extends AppCompatActivity implements LoaderManager
             ((TextView) headerView.findViewById(R.id.google_acc_name)).setText(sharedPreferences.getString(Constants.GOOGLE_ACC_NAME, ""));
             final String photoUri = sharedPreferences.getString(Constants.USER_PHOTO_URI, "null");
             if (!photoUri.equals("null")) {
-                ((App) getApplicationContext()).getImageLoader().load(photoUri, photo);
+                ((App) getApplicationContext()).getImageLoader(this).load(photoUri, photo);
             }
         }
     }
