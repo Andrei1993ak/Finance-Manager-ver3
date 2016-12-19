@@ -37,7 +37,7 @@
                     android:scheme="http" />
             </intent-filter>
         </activity>
-        <activity android:name=".app.StartingActivity"/>
+        <activity android:name=".app.StartingActivity" />
         <activity android:name=".app.activities.CurrencyActivity" />
         <activity android:name=".app.addEditActivities.CurrencyAddActivity" />
         <activity android:name=".app.addEditActivities.CurrencyEditActivity" />
@@ -69,11 +69,9 @@
         <activity android:name=".signinByAppEngine.SignInActivity" />
         <activity android:name=".signinByAppEngine.IdTokenActivity" />
         <activity android:name=".signinByAppEngine.ServerAuthCodeActivity" />
-        <activity android:name=".app.PinEntryActivity"/>
-        <activity android:name=".app.SetPinActivity"/>
-
-        <!--TODO add service-->
-
+        <activity android:name=".app.PinEntryActivity" />
+        <activity android:name=".app.SetPinActivity" />
+        
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.github.andrei1993ak.finances.fileProvider"
@@ -84,7 +82,15 @@
                 android:resource="@xml/file_provider_path" />
         </provider>
 
-        <receiver android:process=":remote" android:enabled="true" android:exported="true" android:name=".notification.AlarmReceiver"/>
+        <service
+            android:name=".services.BackupToCloudService"
+            android:enabled="true" />
+
+        <receiver
+            android:name=".notification.AlarmReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:process=":remote" />
     </application>
 
 </manifest>

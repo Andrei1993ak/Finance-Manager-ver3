@@ -1,5 +1,6 @@
 package com.github.andrei1993ak.finances.signinByAppEngine;
 
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
