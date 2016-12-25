@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="60dp"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     android:stretchColumns="1">
 
@@ -12,8 +12,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
-            android:text="Test"
             android:paddingLeft="@dimen/line_indent"
+            android:text="Test"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -24,8 +24,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
-            android:text="25.00 BYN"
             android:paddingRight="@dimen/line_indent"
+            android:text="25.00 BYN"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@android:color/holo_red_light"
             android:textSize="18sp"
@@ -33,9 +33,10 @@
 
     </TableRow>
 
-    <TableRow android:paddingBottom="4dp"
+    <TableRow
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:paddingBottom="4dp">
 
         <TextView
             android:id="@+id/LiCostCategory"
@@ -54,4 +55,10 @@
             android:text="03.01.2016"
             android:textSize="14sp" />
     </TableRow>
+
+    <ImageView
+        android:id="@+id/LiCostPhoto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scaleType="fitXY"/>
 </TableLayout>

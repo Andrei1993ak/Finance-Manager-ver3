@@ -63,7 +63,7 @@ public class StartingActivity extends AppCompatActivity implements LoaderManager
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         final DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
                 DividerItemDecoration.VERTICAL);
-        recyclerView.addItemDecoration(dividerItemDecoration);
+        //recyclerView.addItemDecoration(dividerItemDecoration);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);

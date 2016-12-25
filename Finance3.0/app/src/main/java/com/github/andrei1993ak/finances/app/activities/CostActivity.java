@@ -162,7 +162,8 @@ public class CostActivity extends BaseActivity implements LoaderManager.LoaderCa
             final ImageView imageView = new ImageView(this);
             final IUniversalLoader<Bitmap, ImageView> bitmapLoader = ((App)getApplicationContext()).getImageLoader(this);
             try {
-                bitmapLoader.load(file.toURI().toURL().toString(), imageView);
+                String s = file.toURI().toURL().toString();
+                bitmapLoader.load(s, imageView);
             } catch (final MalformedURLException e) {
                 Toast.makeText(this, R.string.noPhoto, Toast.LENGTH_LONG).show();
             }
