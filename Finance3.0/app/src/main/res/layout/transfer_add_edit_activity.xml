@@ -25,139 +25,143 @@
             android:layout_margin="@dimen/background_margin"
             android:background="?shape">
 
-            <TableLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:layout_margin="@dimen/background_margin"
-                android:stretchColumns="1">
+                android:orientation="vertical">
 
-                <TableRow>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-                    <TextView
+                    <LinearLayout
+                        android:id="@+id/transfer_fields"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="bottom"
-                        android:layout_marginRight="@dimen/table_indent"
-                        android:text="@string/name"
-                        android:textSize="@dimen/table_text_size" />
+                        android:orientation="vertical">
 
-                    <EditText
-                        android:id="@+id/transfer_name"
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:layout_marginBottom="@dimen/table_indent_bottom"
+                            android:layout_marginRight="@dimen/table_indent"
+                            android:layout_marginTop="@dimen/table_indent_bottom"
+                            android:text="@string/name"
+                            android:textSize="@dimen/table_text_size" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:layout_marginBottom="@dimen/table_indent_bottom"
+                            android:layout_marginRight="@dimen/table_indent"
+                            android:text="@string/fromWallet"
+                            android:textSize="@dimen/table_text_size" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:layout_marginBottom="@dimen/table_indent_bottom"
+                            android:layout_marginRight="@dimen/table_indent"
+                            android:text="@string/amount"
+                            android:textSize="@dimen/table_text_size" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:layout_marginBottom="@dimen/table_indent_bottom"
+                            android:layout_marginRight="@dimen/table_indent"
+                            android:text="@string/toWallet"
+                            android:textSize="@dimen/table_text_size" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:layout_marginBottom="@dimen/table_indent_bottom"
+                            android:layout_marginRight="@dimen/table_indent"
+                            android:text="@string/amount"
+                            android:textSize="@dimen/table_text_size" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:layout_marginBottom="@dimen/table_indent_bottom"
+                            android:layout_marginRight="@dimen/table_indent"
+                            android:text="@string/date"
+                            android:textSize="@dimen/table_text_size" />
+                    </LinearLayout>
+
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="@dimen/line_indent"
-                        android:background="@drawable/shape_green_field"
-                        android:inputType="text"
-                        android:paddingLeft="@dimen/table_padding_left" />
-                </TableRow>
+                        android:layout_toRightOf="@+id/transfer_fields"
+                        android:orientation="vertical">
 
-                <TableRow>
+                        <EditText
+                            android:id="@+id/transfer_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/line_indent"
+                            android:background="@drawable/shape_green_field"
+                            android:inputType="text"
+                            android:paddingLeft="@dimen/table_padding_left" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="bottom"
-                        android:layout_marginRight="@dimen/table_indent"
-                        android:text="@string/fromWallet"
-                        android:textSize="@dimen/table_text_size" />
+                        <android.support.v7.widget.AppCompatSpinner
+                            android:id="@+id/transfer_from_wallet"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:layout_marginBottom="@dimen/line_indent"
+                            android:layout_marginRight="@dimen/line_indent"
+                            android:layout_marginTop="@dimen/line_indent"
+                            android:background="@drawable/shape_green_field" />
 
-                    <android.support.v7.widget.AppCompatSpinner
-                        android:id="@+id/transfer_from_wallet"
-                        android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        android:layout_marginBottom="@dimen/line_indent"
-                        android:layout_marginRight="@dimen/line_indent"
-                        android:layout_marginTop="@dimen/line_indent"
-                        android:background="@drawable/shape_green_field" />
+                        <EditText
+                            android:id="@+id/transfer_from_amount"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/line_indent"
+                            android:layout_marginTop="@dimen/line_indent"
+                            android:background="@drawable/shape_green_field"
+                            android:ems="10"
+                            android:inputType="numberDecimal"
+                            android:paddingLeft="@dimen/table_padding_left" />
 
-                </TableRow>
+                        <android.support.v7.widget.AppCompatSpinner
+                            android:id="@+id/transfer_to_wallet"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:layout_marginBottom="@dimen/line_indent"
+                            android:layout_marginRight="@dimen/line_indent"
+                            android:layout_marginTop="@dimen/line_indent"
+                            android:background="@drawable/shape_green_field" />
 
-                <TableRow>
+                        <EditText
+                            android:id="@+id/transfer_to_amount"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/line_indent"
+                            android:layout_marginTop="@dimen/line_indent"
+                            android:background="@drawable/shape_green_field"
+                            android:ems="10"
+                            android:inputType="numberDecimal"
+                            android:paddingLeft="@dimen/table_padding_left" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="bottom"
-                        android:layout_marginRight="@dimen/table_indent"
-                        android:text="@string/amount"
-                        android:textSize="@dimen/table_text_size" />
-
-                    <EditText
-                        android:id="@+id/transfer_from_amount"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="@dimen/line_indent"
-                        android:layout_marginTop="@dimen/line_indent"
-                        android:background="@drawable/shape_green_field"
-                        android:ems="10"
-                        android:inputType="numberDecimal"
-                        android:paddingLeft="@dimen/table_padding_left" />
-                </TableRow>
-
-                <TableRow>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="bottom"
-                        android:layout_marginRight="@dimen/table_indent"
-                        android:text="@string/toWallet"
-                        android:textSize="@dimen/table_text_size" />
-
-                    <android.support.v7.widget.AppCompatSpinner
-                        android:id="@+id/transfer_to_wallet"
-                        android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        android:layout_marginBottom="@dimen/line_indent"
-                        android:layout_marginRight="@dimen/line_indent"
-                        android:layout_marginTop="@dimen/line_indent"
-                        android:background="@drawable/shape_green_field" />
-
-                </TableRow>
-
-                <TableRow>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="bottom"
-                        android:layout_marginRight="@dimen/table_indent"
-                        android:text="@string/amount"
-                        android:textSize="@dimen/table_text_size" />
-
-                    <EditText
-                        android:id="@+id/transfer_to_amount"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="@dimen/line_indent"
-                        android:layout_marginTop="@dimen/line_indent"
-                        android:background="@drawable/shape_green_field"
-                        android:ems="10"
-                        android:inputType="numberDecimal"
-                        android:paddingLeft="@dimen/table_padding_left" />
-                </TableRow>
-
-                <TableRow>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="bottom"
-                        android:layout_marginRight="@dimen/table_indent"
-                        android:text="@string/date"
-                        android:textSize="@dimen/table_text_size" />
-
-                    <TextView
-                        android:id="@+id/transfer_date"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="@dimen/line_indent"
-                        android:layout_marginTop="@dimen/line_indent"
-                        android:background="@drawable/shape_green_field"
-                        android:paddingLeft="@dimen/table_padding_left" />
-
-                </TableRow>
+                        <TextView
+                            android:id="@+id/transfer_date"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/line_indent"
+                            android:layout_marginTop="@dimen/line_indent"
+                            android:background="@drawable/shape_green_field"
+                            android:paddingLeft="@dimen/table_padding_left" />
+                    </LinearLayout>
+                </RelativeLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -181,7 +185,7 @@
                 </LinearLayout>
 
 
-            </TableLayout>
+            </LinearLayout>
         </ScrollView>
     </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>

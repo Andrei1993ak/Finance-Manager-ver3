@@ -16,12 +16,17 @@ import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
-public abstract class UniversalLoader<MyObj, Destination> implements IUniversalLoader<MyObj,Destination> {
+public abstract class UniversalLoader<MyObj, Destination> implements IUniversalLoader<MyObj, Destination> {
 
     private static final int CONNECTION_TIMEOUT = 3000;
     private static final int READ_TIMEOUT = 3000;
     private static final int PRE_SIZE = 400;
+    private static final int MIN_THREADS = 2;
+    public static final int KEEP_ALIVE_TIME = 20;
 
     private final int connectTimeout;
     private final int readTimeout;
@@ -44,10 +49,12 @@ public abstract class UniversalLoader<MyObj, Destination> implements IUniversalL
                 return getSizeObj(myObj);
             }
         };
-        this.executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+        this.executorService = new ThreadPoolExecutor(MIN_THREADS, Runtime.getRuntime().availableProcessors(), KEEP_ALIVE_TIME, TimeUnit.SECONDS,
+                new LifoBlockingDeque<Runnable>());
+
     }
 
-    public UniversalLoader(final Context context, final int connectTimeout, final int readTimeout, final int threadsCount, final int maxPreSize) {
+    public UniversalLoader(final Context context, final int connectTimeout, final int readTimeout, final int threadsCount, final int maxPreSize, boolean isLifo) {
         this.connectTimeout = connectTimeout;
         this.readTimeout = readTimeout;
         this.maxPreSize = maxPreSize;
@@ -59,7 +66,12 @@ public abstract class UniversalLoader<MyObj, Destination> implements IUniversalL
                 return getSizeObj(myObj);
             }
         };
-        this.executorService = Executors.newFixedThreadPool(threadsCount);
+        if (isLifo) {
+            this.executorService = new ThreadPoolExecutor(MIN_THREADS, Runtime.getRuntime().availableProcessors(), KEEP_ALIVE_TIME, TimeUnit.SECONDS,
+                    new LifoBlockingDeque<Runnable>());
+        } else {
+            this.executorService = Executors.newFixedThreadPool(threadsCount);
+        }
     }
 
     public void clearCashes(final String url) {
@@ -112,7 +124,6 @@ public abstract class UniversalLoader<MyObj, Destination> implements IUniversalL
                     assert os != null;
                     os.close();
                 } catch (final IOException e) {
-                    e.printStackTrace();
                 }
             }
         }
@@ -190,4 +201,25 @@ public abstract class UniversalLoader<MyObj, Destination> implements IUniversalL
         }
     }
 
+    private class LifoBlockingDeque<E> extends LinkedBlockingDeque<E> {
+        @Override
+        public boolean offer(E e) {
+            return super.offerFirst(e);
+        }
+
+        @Override
+        public boolean offer(E e, long timeout, TimeUnit unit) throws InterruptedException {
+            return super.offerFirst(e, timeout, unit);
+        }
+
+        @Override
+        public boolean add(E e) {
+            return super.offerFirst(e);
+        }
+
+        @Override
+        public void put(E e) throws InterruptedException {
+            super.putFirst(e);
+        }
+    }
 }

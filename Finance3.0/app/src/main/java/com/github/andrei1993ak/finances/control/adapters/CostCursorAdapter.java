@@ -56,11 +56,14 @@ public class CostCursorAdapter extends CursorAdapter {
         final TextView textViewName = (TextView) view.findViewById(R.id.LICostName);
         final String name = CursorUtils.getString(cursor, Cost.NAME);
         textViewName.setText(name);
+        ImageView imageView = (ImageView) view.findViewById(R.id.LiCostPhoto);
         if (CursorUtils.getInteger(cursor, Cost.PHOTO) == Constants.COST_HAS_PHOTO) {
+            imageView.getLayoutParams().height = 1000;
             final String imageUri = String.format(uriTemplate, String.valueOf(CursorUtils.getLong(cursor, Cost.ID)));
-            bitmapLoader.load(imageUri, (ImageView) view.findViewById(R.id.LiCostPhoto));
+            bitmapLoader.load(imageUri, imageView);
         } else {
-            ((ImageView) view.findViewById(R.id.LiCostPhoto)).setImageResource(0);
+            imageView.setImageResource(0);
+            imageView.getLayoutParams().height = 0;
         }
         final TextView textViewDate = (TextView) view.findViewById(R.id.LICostDate);
         final SimpleDateFormat dateFormatter = new SimpleDateFormat(Constants.MAIN_DATE_FORMAT, Locale.getDefault());

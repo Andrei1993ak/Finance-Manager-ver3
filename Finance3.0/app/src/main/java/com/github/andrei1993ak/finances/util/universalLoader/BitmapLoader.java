@@ -3,10 +3,8 @@ package com.github.andrei1993ak.finances.util.universalLoader;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.widget.ImageView;
-
-import com.github.andrei1993ak.finances.R;
-import com.github.andrei1993ak.finances.util.universalLoader.UniversalLoader;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -57,7 +55,8 @@ public class BitmapLoader extends UniversalLoader<Bitmap, ImageView> {
         if (bitmap != null) {
             imageView.setImageBitmap(bitmap);
         } else {
-            imageView.setImageResource(R.drawable.demo);
+            imageView.setBackgroundColor(Color.WHITE);
+            imageView.setImageResource(0);
         }
     }
 }
