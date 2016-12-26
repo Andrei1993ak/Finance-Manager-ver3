@@ -42,7 +42,6 @@ import com.github.andrei1993ak.finances.util.Constants;
 import com.github.andrei1993ak.finances.util.ContextHolder;
 import com.github.andrei1993ak.finances.util.universalLoader.IUniversalLoader;
 import com.github.andrei1993ak.finances.util.universalLoader.ImageNameGenerator;
-import com.github.andrei1993ak.finances.util.universalLoader.BitmapLoader;
 
 import java.io.File;
 import java.net.MalformedURLException;

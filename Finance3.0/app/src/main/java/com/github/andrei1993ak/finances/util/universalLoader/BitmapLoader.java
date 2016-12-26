@@ -6,12 +6,13 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.widget.ImageView;
 
+import com.github.andrei1993ak.finances.util.universalLoader.UniversalLoader;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 public class BitmapLoader extends UniversalLoader<Bitmap, ImageView> {
-
 
     BitmapLoader(final Context context) {
         super(context);
@@ -21,8 +22,9 @@ public class BitmapLoader extends UniversalLoader<Bitmap, ImageView> {
     public int getSizeObj(final Bitmap bitmap) {
         if (bitmap != null) {
             return bitmap.getRowBytes() * bitmap.getHeight();
-        } else
+        } else {
             return 0;
+        }
     }
 
     @Override
@@ -35,8 +37,9 @@ public class BitmapLoader extends UniversalLoader<Bitmap, ImageView> {
             int width_tmp = o.outWidth, height_tmp = o.outHeight;
             int scale = 1;
             while (true) {
-                if (width_tmp / 2 < preSize || height_tmp / 2 < preSize)
+                if (width_tmp / 2 < preSize || height_tmp / 2 < preSize) {
                     break;
+                }
                 width_tmp /= 2;
                 height_tmp /= 2;
                 scale *= 2;

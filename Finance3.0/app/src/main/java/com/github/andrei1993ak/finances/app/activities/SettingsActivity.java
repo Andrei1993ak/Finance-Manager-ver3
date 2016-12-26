@@ -119,7 +119,7 @@ public class SettingsActivity extends BaseActivity implements OnBackupOperationC
     }
 
     private void initNotification(final Context context) {
-        notificationSwitch = (Switch) findViewById(R.id.notificationSwitch);
+        final Switch notificationSwitch = (Switch) findViewById(R.id.notificationSwitch);
         if (getSharedPreferences(Constants.PREFS, Context.MODE_PRIVATE).getBoolean(Constants.NOTIFICATION, false)) {
             notificationSwitch.setChecked(true);
         }
@@ -128,6 +128,7 @@ public class SettingsActivity extends BaseActivity implements OnBackupOperationC
                 final SharedPreferences prefs = getSharedPreferences(Constants.PREFS, Context.MODE_PRIVATE);
                 final SharedPreferences.Editor editor = prefs.edit();
                 final Intent intent = new Intent(context, AlarmReceiver.class);
+//                final PendingIntent alarmSender = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
                 final PendingIntent alarmSender = PendingIntent.getBroadcast(context, 0, intent, 0);
                 final AlarmManager alarmManager = (AlarmManager) SettingsActivity.this.getSystemService(ALARM_SERVICE);
                 if (!isChecked) {

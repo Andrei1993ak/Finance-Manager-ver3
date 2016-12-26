@@ -21,7 +21,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import com.github.andrei1993ak.finances.App;
 import com.github.andrei1993ak.finances.R;
 import com.github.andrei1993ak.finances.app.activities.CategoryStartingActivity;
 import com.github.andrei1993ak.finances.app.activities.CostActivity;
@@ -36,6 +35,7 @@ import com.github.andrei1993ak.finances.control.loaders.WalletCursorLoader;
 import com.github.andrei1993ak.finances.signinByAppEngine.SignInActivity;
 import com.github.andrei1993ak.finances.util.Constants;
 import com.github.andrei1993ak.finances.util.RoundedImageView;
+import com.github.andrei1993ak.finances.util.universalLoader.SignInImageLoader;
 
 public class StartingActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -68,6 +68,7 @@ public class StartingActivity extends AppCompatActivity implements LoaderManager
 
         final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+
             @Override
             public boolean onNavigationItemSelected(@NonNull final MenuItem item) {
                 return onNavigationMenuSelected(item.getItemId());
@@ -76,7 +77,6 @@ public class StartingActivity extends AppCompatActivity implements LoaderManager
         checkForAuthorisation();
         getSupportLoaderManager().restartLoader(Constants.MAIN_LOADER_ID, null, this);
     }
-
 
     private void setStyle() {
         if (getSharedPreferences(Constants.PREFS, Context.MODE_PRIVATE).getBoolean(Constants.THEME, false)) {
@@ -95,7 +95,6 @@ public class StartingActivity extends AppCompatActivity implements LoaderManager
         }
         return super.onOptionsItemSelected(item);
     }
-
 
     @Override
     protected void onResume() {
@@ -194,7 +193,7 @@ public class StartingActivity extends AppCompatActivity implements LoaderManager
             ((TextView) headerView.findViewById(R.id.google_acc_name)).setText(sharedPreferences.getString(Constants.GOOGLE_ACC_NAME, ""));
             final String photoUri = sharedPreferences.getString(Constants.USER_PHOTO_URI, "null");
             if (!photoUri.equals("null")) {
-                ((App) getApplicationContext()).getImageLoader(this).load(photoUri, photo);
+                new SignInImageLoader(this).load(photoUri, photo);
             }
         }
     }

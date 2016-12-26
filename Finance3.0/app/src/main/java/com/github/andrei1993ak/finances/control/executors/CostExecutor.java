@@ -9,7 +9,6 @@ import com.github.andrei1993ak.finances.model.DBHelper;
 import com.github.andrei1993ak.finances.model.dbHelpers.DBHelperCost;
 import com.github.andrei1993ak.finances.util.ContextHolder;
 import com.github.andrei1993ak.finances.util.universalLoader.ImageNameGenerator;
-import com.github.andrei1993ak.finances.util.universalLoader.BitmapLoader;
 import com.github.andrei1993ak.finances.control.base.IOnTaskCompleted;
 import com.github.andrei1993ak.finances.model.models.Cost;
 

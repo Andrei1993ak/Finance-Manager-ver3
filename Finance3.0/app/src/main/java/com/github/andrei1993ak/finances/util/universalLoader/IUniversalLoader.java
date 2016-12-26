@@ -4,8 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.widget.ImageView;
 
-import com.github.andrei1993ak.finances.util.ContextHolder;
-
 import java.io.File;
 
 public interface IUniversalLoader<K, V> {
@@ -22,7 +20,7 @@ public interface IUniversalLoader<K, V> {
 
     final class Impl {
 
-        public static IUniversalLoader<Bitmap, ImageView> newInstance(Context context) {
+        public static IUniversalLoader<Bitmap, ImageView> newInstance(final Context context) {
             return new BitmapLoader(context);
         }
     }
