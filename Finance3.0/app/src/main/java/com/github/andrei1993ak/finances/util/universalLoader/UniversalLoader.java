@@ -44,6 +44,7 @@ public abstract class UniversalLoader<MyObj, Destination> implements IUniversalL
         this.context = context;
         this.fileCache = FileCache.getInstance(context);
         this.memoryCache = new MemoryCache<MyObj>() {
+
             @Override
             int getSize(final MyObj myObj) {
                 return getSizeObj(myObj);
@@ -54,13 +55,14 @@ public abstract class UniversalLoader<MyObj, Destination> implements IUniversalL
 
     }
 
-    public UniversalLoader(final Context context, final int connectTimeout, final int readTimeout, final int threadsCount, final int maxPreSize, boolean isLifo) {
+    public UniversalLoader(final Context context, final int connectTimeout, final int readTimeout, final int threadsCount, final int maxPreSize, final boolean isLifo) {
         this.connectTimeout = connectTimeout;
         this.readTimeout = readTimeout;
         this.maxPreSize = maxPreSize;
         this.context = context;
         this.fileCache = FileCache.getInstance(context);
         this.memoryCache = new MemoryCache<MyObj>() {
+
             @Override
             int getSize(final MyObj myObj) {
                 return getSizeObj(myObj);
@@ -114,8 +116,9 @@ public abstract class UniversalLoader<MyObj, Destination> implements IUniversalL
                 myObj = decodeFromFile(file, maxPreSize);
                 return myObj;
             } catch (final Throwable ex) {
-                if (ex instanceof OutOfMemoryError)
+                if (ex instanceof OutOfMemoryError) {
                     memoryCache.clear();
+                }
                 return null;
             } finally {
                 try {
@@ -135,8 +138,9 @@ public abstract class UniversalLoader<MyObj, Destination> implements IUniversalL
         int count;
         for (; ; ) {
             count = is.read(bytes, 0, buffer_size);
-            if (count == -1)
+            if (count == -1) {
                 break;
+            }
             os.write(bytes, 0, count);
         }
     }
@@ -167,12 +171,14 @@ public abstract class UniversalLoader<MyObj, Destination> implements IUniversalL
 
         @Override
         public void run() {
-            if (isReused(comparison))
+            if (isReused(comparison)) {
                 return;
+            }
             final MyObj myObj = getMyObjFromFileOrUrl(comparison.url);
             memoryCache.putToMemoryCache(comparison.url, myObj);
-            if (isReused(comparison))
+            if (isReused(comparison)) {
                 return;
+            }
             final Activity a = (Activity) UniversalLoader.this.context;
             final UIWorker runnable = new UIWorker(myObj, comparison);
             a.runOnUiThread(runnable);
@@ -181,6 +187,7 @@ public abstract class UniversalLoader<MyObj, Destination> implements IUniversalL
     }
 
     private class UIWorker implements Runnable {
+
         private final MyObj myObj;
         private final Comparison comparison;
 
@@ -202,23 +209,24 @@ public abstract class UniversalLoader<MyObj, Destination> implements IUniversalL
     }
 
     private class LifoBlockingDeque<E> extends LinkedBlockingDeque<E> {
+
         @Override
-        public boolean offer(E e) {
+        public boolean offer(final E e) {
             return super.offerFirst(e);
         }
 
         @Override
-        public boolean offer(E e, long timeout, TimeUnit unit) throws InterruptedException {
+        public boolean offer(final E e, final long timeout, final TimeUnit unit) throws InterruptedException {
             return super.offerFirst(e, timeout, unit);
         }
 
         @Override
-        public boolean add(E e) {
+        public boolean add(final E e) {
             return super.offerFirst(e);
         }
 
         @Override
-        public void put(E e) throws InterruptedException {
+        public void put(final E e) throws InterruptedException {
             super.putFirst(e);
         }
     }

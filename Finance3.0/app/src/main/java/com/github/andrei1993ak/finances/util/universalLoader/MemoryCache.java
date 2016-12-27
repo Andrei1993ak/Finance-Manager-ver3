@@ -15,14 +15,12 @@ abstract class MemoryCache<MyObj> {
     abstract int getSize(MyObj myObj);
 
     MyObj getFromMemoryCache(final String id) {
-        try {
-            if (!cache.containsKey(id)) {
-                return null;
-            }
-            return cache.get(id);
-        } catch (final NullPointerException ex) {
+
+        if (!cache.containsKey(id)) {
             return null;
         }
+        return cache.get(id);
+
     }
 
     void putToMemoryCache(final String id, final MyObj myObj) {
